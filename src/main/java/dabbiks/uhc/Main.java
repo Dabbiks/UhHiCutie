@@ -1,5 +1,6 @@
 package dabbiks.uhc;
 
+import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
@@ -20,7 +21,7 @@ public final class Main extends JavaPlugin {
     public static SymbolUtils symbolU;
     public static TimeUtils timeU;
     public static TitleUtils titleU;
-    public static ParryUtils parryU;
+    public static ItemUtils itemU;
     public static PlayerListUtils playerListU;
 
     public static TabManager tabManager;

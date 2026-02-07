@@ -1,7 +1,6 @@
 package dabbiks.uhc.game.gameplay.items.potions;
 
 import org.bukkit.Color;
-import org.bukkit.potion.PotionType;
 
 public class PotionData {
 

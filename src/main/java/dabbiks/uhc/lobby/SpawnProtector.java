@@ -124,7 +124,7 @@ public class SpawnProtector implements Listener {
                     hand.resetData(DataComponentTypes.BLOCKS_ATTACKS);
                     victim.setCooldown(hand, 30);
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        parryU.addParryingComponent(hand);
+                        itemU.addParryingComponent(hand);
                     }, 30L);
                 });
                 soundU.playSoundAtLocation(victim.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.3f, (new Random().nextFloat(1.4f, 1.7f)));
