@@ -143,7 +143,14 @@ public class ItemBuilder {
 
         if (instance.getAttributes() != null) {
             for (AttributeData attributeData : instance.getAttributes()) {
-                nbtItem.setDouble(attributeData.getAttributeType().getName(), attributeData.getAttributeValue());
+                String key = attributeData.getAttributeType().getName();
+                nbtItem.setDouble(key, attributeData.getAttributeValue());
+
+                if (attributeData.getEquipmentSlot() != null) {
+                    nbtItem.setString(key + "_SLOT", attributeData.getEquipmentSlot().name());
+                }
+
+                nbtItem.setBoolean(key + "_PERCENT", attributeData.isPercent());
             }
         }
 
