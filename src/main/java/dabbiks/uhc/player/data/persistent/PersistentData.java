@@ -1,6 +1,7 @@
 package dabbiks.uhc.player.data.persistent;
 
 import com.google.gson.annotations.Expose;
+import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.player.rank.RankTypes;
 
 import java.util.*;
@@ -35,12 +36,12 @@ public class PersistentData {
     private Integer playerLastCrockpotRecipeIndex;
 
     @Expose
-    private UHCRecipe playerLastRecipeType;
+    private RecipeInstance playerLastRecipeType;
 
     // ODBLOKOWANE
 
     @Expose
-    private List<UHCRecipe> playerUnlockedRecipes = new ArrayList<>();
+    private List<RecipeInstance> playerUnlockedRecipes = new ArrayList<>();
 
     // USTAWIENIA
 
@@ -123,34 +124,16 @@ public class PersistentData {
 
     // PRZEPISY
 
-    public String getPlayerLastRecipeCategoryType() {return playerLastRecipeCategoryType;}
+    public String getPlayerLastRecipeCategory() { return playerLastRecipeCategoryType; }
 
-    public void setPlayerLastRecipeCategoryType(String categoryType) {
+    public void setPlayerLastRecipeCategory(String categoryType) {
         playerLastRecipeCategoryType = categoryType;
     }
 
-    public UHCRecipe getPlayerLastRecipeType() {return playerLastRecipeType;}
+    public RecipeInstance getPlayerLastRecipe() { return playerLastRecipeType; }
 
-    public void setPlayerLastRecipeType(UHCRecipe recipeType) {
-        playerLastRecipeType = recipeType;
-    }
-
-    public List<UHCRecipe> getPlayerUnlockedRecipes() {return playerUnlockedRecipes;}
-
-    public void addPlayerUnlockedRecipe(UHCRecipe recipeType) {
-        playerUnlockedRecipes.add(recipeType);
-    }
-
-    public void removePlayerUnlockedRecipe(UHCRecipe recipeType) {
-        playerUnlockedRecipes.remove(recipeType);
-    }
-
-    public Integer getPlayerLastCrockpotRecipeIndex() {
-        return playerLastCrockpotRecipeIndex;
-    }
-
-    public void setPlayerLastCrockpotRecipeIndex(Integer playerLastCrockpotRecipe) {
-        this.playerLastCrockpotRecipeIndex = playerLastCrockpotRecipe;
+    public void setPlayerLastRecipe(RecipeInstance recipe) {
+        playerLastRecipeType = recipe;
     }
 
     // DŹWIĘKI ZABÓJSTWA

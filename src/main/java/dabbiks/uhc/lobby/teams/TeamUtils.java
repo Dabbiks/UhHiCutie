@@ -218,7 +218,7 @@ public class TeamUtils {
                 }
                 Player player = playersToTeleport.get(index);
                 Location loc = locationsByPlayer.get(index);
-                playerU.cleanseState(player);
+//                playerU.cleanseState(player);
                 player.teleport(loc);
                 index++;
             }

@@ -140,8 +140,8 @@ public class SpawnProtector implements Listener {
                 event.setCancelled(true);
                 soundU.playSoundAtPlayer(victim, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1, 1);
                 victim.teleport(new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5));
-                playerU.addHealth(attacker, 100);
-                playerU.addHealth(victim, 100);
+//                playerU.addHealth(attacker, 100);
+//                playerU.addHealth(victim, 100);
                 if (stateU.getGameState() != GameState.IN_GAME) {
                     messageU.sendMessageToPlayers(playerListU.getWaitingPlayers(), "§e" + attacker.getName() + " §frozbroił §e" + victim.getName());
                 }
@@ -153,7 +153,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onFireworkDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Firework && stateU.getGameState() == GameState.ENDING) {
+        if (event.getDamager() instanceof Firework && stateU.getGameState() != GameState.IN_GAME) {
             event.setCancelled(true);
         }
     }
