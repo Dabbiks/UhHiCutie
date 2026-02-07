@@ -17,5 +17,6 @@ public enum EnchantSlot {
     LEGGINGS,
     BOOTS,
     ARMOR,
-    FISHING_ROD
+    FISHING_ROD,
+    ALL
 }

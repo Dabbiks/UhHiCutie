@@ -36,7 +36,7 @@ public class RecipeListener implements Listener {
     @EventHandler
     public void onPrepareCraft(PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || !(event.getRecipe() instanceof Keyed keyed)) return;
-        if (!"uhc".equals(keyed.getKey().getNamespace())) return;
+        if (!"uhhicutie".equals(keyed.getKey().getNamespace())) return;
 
         Player player = (Player) event.getView().getPlayer();
         String recipeId = getRealRecipeId(keyed.getKey().getKey());
@@ -59,7 +59,7 @@ public class RecipeListener implements Listener {
     public void onCraft(CraftItemEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (!(event.getRecipe() instanceof Keyed keyed)) return;
-        if (!"uhc".equals(keyed.getKey().getNamespace())) return;
+        if (!"uhhicutie".equals(keyed.getKey().getNamespace())) return;
 
         String recipeId = getRealRecipeId(keyed.getKey().getKey());
         Optional<RecipeInstance> recipeOpt = recipeManager.getRecipeById(recipeId);

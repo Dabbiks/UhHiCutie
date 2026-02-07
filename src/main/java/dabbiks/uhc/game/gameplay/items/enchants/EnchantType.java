@@ -12,7 +12,41 @@ public enum EnchantType {
     SLUDGE("Lepka maź", 1, EnchantTier.EPIC, EnchantSlot.SWORD, null),
     POISON("Zatrucie", 1, EnchantTier.MYTHIC, EnchantSlot.SWORD, null),
     IGNITE("Zaklęty ogień", 3, EnchantTier.MYTHIC, EnchantSlot.SWORD, Enchantment.FIRE_ASPECT),
-    SHATTER("Strzaskanie", 2, EnchantTier.LEGENDARY, EnchantSlot.MELEE, null);
+    SHATTER("Strzaskanie", 2, EnchantTier.LEGENDARY, EnchantSlot.MELEE, null),
+
+    EFFICIENCY("Wydajność", 5, EnchantTier.COMMON, EnchantSlot.TOOL, Enchantment.EFFICIENCY),
+    UNBREAKING("Niezniszczalność", 3, EnchantTier.COMMON, EnchantSlot.TOOL, Enchantment.UNBREAKING),
+    FORTUNE("Fortuna", 3, EnchantTier.EPIC, EnchantSlot.PICKAXE, null),
+    SMELTING("Przepalanie", 1, EnchantTier.EPIC, EnchantSlot.PICKAXE, null),
+
+    PROTECTION("Ochrona", 3, EnchantTier.COMMON, EnchantSlot.ARMOR, null),
+    STONE_SKIN("Kamienna skóra", 3, EnchantTier.RARE, EnchantSlot.ARMOR, null),
+    SWIFTNESS("Swoboda", 1, EnchantTier.EPIC, EnchantSlot.BOOTS, null),
+    INSULATION("Izolacja", 3, EnchantTier.EPIC, EnchantSlot.LEGGINGS, null),
+    THORNS("Ciernie", 3, EnchantTier.EPIC, EnchantSlot.CHESTPLATE, null),
+    INVULNERABILITY("Nietykalność", 3, EnchantTier.LEGENDARY, EnchantSlot.HELMET, null),
+
+    POWER("Moc", 3, EnchantTier.COMMON, EnchantSlot.BOW, null),
+    GLOWING("Odblask", 1, EnchantTier.RARE, EnchantSlot.BOW, null),
+    FLAME("Płomień", 1, EnchantTier.EPIC, EnchantSlot.BOW, Enchantment.FLAME),
+    MAGIC_ARROW("Magiczna strzała", 3, EnchantTier.MYTHIC, EnchantSlot.BOW, null),
+    INFINITY("Nieskończoność", 1, EnchantTier.LEGENDARY, EnchantSlot.BOW, Enchantment.INFINITY),
+
+    QUICK_CHARGE("Szybkie ładowanie", 3, EnchantTier.COMMON, EnchantSlot.CROSSBOW, Enchantment.QUICK_CHARGE),
+    PYROTECHNICS("Pirotechnika", 2, EnchantTier.EPIC, EnchantSlot.CROSSBOW, null),
+
+    LOYALTY("Lojalność", 5, EnchantTier.COMMON, EnchantSlot.TRIDENT, Enchantment.LOYALTY),
+    GROUNDING("Uziemienie", 1, EnchantTier.EPIC, EnchantSlot.TRIDENT, null),
+    CHANNELING("Piorunotwórca", 1, EnchantTier.MYTHIC, EnchantSlot.TRIDENT, null),
+
+    IRON_FEET("Stalowe stopy", 3, EnchantTier.COMMON, EnchantSlot.MACE, null),
+    LEAPING("Wyskok", 3, EnchantTier.RARE, EnchantSlot.MACE, null),
+    UNSTABLE_CORE("Niestabilny rdzeń", 1, EnchantTier.MYTHIC, EnchantSlot.MACE, null),
+
+    LUNGE("Szarża", 3, EnchantTier.COMMON, EnchantSlot.SPEAR, Enchantment.LUNGE),
+
+    LUCK_OF_THE_SEA("Morska fortuna", 5, EnchantTier.COMMON, EnchantSlot.FISHING_ROD, Enchantment.LUCK_OF_THE_SEA),
+    LURE("Przynęta", 5, EnchantTier.RARE, EnchantSlot.FISHING_ROD, Enchantment.LURE);
 
     private String name;
     private int maxLevel;
