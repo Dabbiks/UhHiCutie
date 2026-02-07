@@ -1,7 +1,5 @@
 package dabbiks.uhc;
 
-import dabbiks.uhc.game.gameplay.recipes.CraftLimitTracker;
-import dabbiks.uhc.game.gameplay.recipes.RecipeManager;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
@@ -30,8 +28,6 @@ public final class Main extends JavaPlugin {
     public static IndicatorManager indicatorManager;
 
     public static PersistentDataJson persistentDataJson;
-    public static RecipeManager recipeManager;
-    private CraftLimitTracker craftLimitTracker;
 
     @Override
     public void onEnable() {

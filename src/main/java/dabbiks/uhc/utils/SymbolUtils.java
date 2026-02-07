@@ -17,7 +17,7 @@ public class SymbolUtils {
     public String knockback_power = "\uE091";
     public String knockback_resistance = "\uE092";
     public String burning_time = "\uE093";
-    public String lifesteal = "\uE094";
+    public String life_steal = "\uE094";
     public String armor_penetration = "\uE095";
     public String regeneration = "\uE096";
     public String attack_speed = "\uE097";
@@ -28,6 +28,8 @@ public class SymbolUtils {
     public String electric_damage = "\uE09F";
 
     public String enchant_common = "\uE09C";
+    public String enchant_rare = "\uE09C";
     public String enchant_epic = "\uE09D";
     public String enchant_mythic = "\uE09E";
+    public String enchant_legendary = "\uE09C";
 }

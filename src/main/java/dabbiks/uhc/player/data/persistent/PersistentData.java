@@ -1,9 +1,7 @@
 package dabbiks.uhc.player.data.persistent;
 
 import com.google.gson.annotations.Expose;
-import dabbiks.uhc.game.gameplay.recipes.UHCRecipe;
 import dabbiks.uhc.player.rank.RankTypes;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
