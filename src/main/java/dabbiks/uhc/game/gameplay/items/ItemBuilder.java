@@ -36,7 +36,7 @@ public class ItemBuilder {
     }
 
     public ItemStack build() {
-        Material material = Material.matchMaterial(instance.getMaterial());
+        Material material = instance.getMaterial();
         if (material == null) material = Material.BARRIER;
 
         ItemStack item = new ItemStack(material, instance.getAmount() > 0 ? instance.getAmount() : 1);

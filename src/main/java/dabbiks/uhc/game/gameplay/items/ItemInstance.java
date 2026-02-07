@@ -5,6 +5,7 @@ import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
 import dabbiks.uhc.game.gameplay.items.fireworks.FireworkData;
 import dabbiks.uhc.game.gameplay.items.perks.PerkType;
 import dabbiks.uhc.game.gameplay.items.potions.PotionData;
+import org.bukkit.Material;
 import org.bukkit.block.data.type.Fire;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class ItemInstance {
     private List<PotionData> potion;
     private FireworkData firework;
 
-    public String getMaterial() { return material; }
+    public Material getMaterial() { return Material.valueOf(material.toUpperCase()); }
     public void setMaterial(String material) { this.material = material; }
 
     public int getAmount() { return amount; }

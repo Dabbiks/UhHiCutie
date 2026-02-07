@@ -4,12 +4,18 @@ import static dabbiks.uhc.Main.symbolU;
 
 public class EnchantManager {
 
-    public void combineLevel(EnchantData data1, EnchantData data2) {
-        if (data1.getType() != data2.getType()) return;
-        if (data1.getLevel() > data2.getLevel()) return;
-        if (data2.getLevel() > data1.getLevel()) data1.setLevel(data2.getLevel());
-        if (data1.getLevel() == data2.getLevel() && data1.getLevel() < data1.getType().getMaxLevel()) data1.setLevel(data1.getLevel()+1);
-        data1.setLevel(data1.getLevel());
+    public static void combineLevel(EnchantData data1, EnchantData data2) {
+        if (!data1.getType().equals(data2.getType())) return;
+
+        int lvl1 = data1.getLevel();
+        int lvl2 = data2.getLevel();
+        int maxLvl = data1.getType().getMaxLevel();
+
+        if (lvl2 > lvl1) {
+            data1.setLevel(lvl2);
+        } else if (lvl1 == lvl2 && lvl1 < maxLvl) {
+            data1.setLevel(lvl1 + 1);
+        }
     }
 
     private static String numberToRoman(int number) {
