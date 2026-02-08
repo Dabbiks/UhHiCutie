@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.items;
 
 import dabbiks.uhc.game.gameplay.items.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
+import dabbiks.uhc.game.gameplay.items.enchants.EnchantSlot;
 import dabbiks.uhc.game.gameplay.items.fireworks.FireworkData;
 import dabbiks.uhc.game.gameplay.items.perks.PerkType;
 import dabbiks.uhc.game.gameplay.items.potions.PotionData;
@@ -26,6 +27,7 @@ public class ItemInstance {
 
     private List<AttributeData> attributes;
     private List<EnchantData> enchants;
+    private EnchantSlot enchantSlot;
     private List<PerkType> perks;
     private List<PotionData> potion;
     private FireworkData firework;
@@ -65,6 +67,9 @@ public class ItemInstance {
 
     public List<EnchantData> getEnchants() { return enchants; }
     public void setEnchants(List<EnchantData> data) { this.enchants = data; }
+
+    public EnchantSlot getEnchantSlot() { return enchantSlot; }
+    public void setEnchantSlot(EnchantSlot enchantSlot) { this.enchantSlot = enchantSlot; }
 
     public List<PerkType> getPerks() { return perks; }
     public void setPerks(List<PerkType> perks) { this.perks = perks; }

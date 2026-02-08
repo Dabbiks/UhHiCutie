@@ -16,7 +16,8 @@ public class ConsoleLogger {
         PLAYER_DATA,
         TASK_MANAGER,
         TEAMS,
-        RECIPES
+        RECIPES,
+        ENCHANTS
     }
 
 }
