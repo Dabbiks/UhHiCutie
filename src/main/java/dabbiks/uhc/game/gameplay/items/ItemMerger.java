@@ -30,6 +30,8 @@ public class ItemMerger {
             instance.setName(firstItem.getName());
         }
 
+        instance.setMaterial(firstItem.getMaterial().name());
+
         if (firstItem.getCustomModelData() != null) {
             instance.setCustomModelData(firstItem.getCustomModelData());
         } else if (secondItem.getCustomModelData() != null) {
@@ -53,7 +55,7 @@ public class ItemMerger {
         }
 
         if (firstItem.canBeForged()) {
-            instance.setCanParry(true);
+            instance.setCanBeForged(true);
         }
 
         return instance;

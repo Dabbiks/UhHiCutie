@@ -1,6 +1,5 @@
-package dabbiks.uhc.game.gameplay.items.enchants.table;
+package dabbiks.uhc.game.gameplay.items.stations.table;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;

@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.items.enchants.table;
+package dabbiks.uhc.game.gameplay.items.stations.table;
 
 import dabbiks.uhc.ConsoleLogger;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
@@ -6,8 +6,6 @@ import dabbiks.uhc.game.gameplay.items.ItemDeconstructor;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.enchants.EnchantCalculator;
 import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantManager;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantSlot;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Location;
@@ -24,7 +22,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +30,9 @@ import static dabbiks.uhc.Main.soundU;
 
 public class TableManager implements Listener {
 
-    private Map<Location, TableInstance> tables = new HashMap<>();
-    private final RecipeManager recipeManager;
+    private final Map<Location, TableInstance> tables = new HashMap<>();
 
-    public TableManager(RecipeManager recipeManager) {
-        this.recipeManager = recipeManager;
+    public TableManager() {
     }
 
     @EventHandler
@@ -83,19 +78,20 @@ public class TableManager implements Listener {
             return;
         }
 
+        if (item.isEmpty()) return;
         NBTItem nbtItem = new NBTItem(item);
         if (nbtItem.getInteger("CAN_BE_ENCHANTED") == null) {
             player.sendMessage("§cTego przedmiotu nie da się zakląć");
             return;
         }
 
-        player.setLevel(player.getLevel() - 3);
         ItemInstance itemInstance = new ItemDeconstructor(item).deconstruct();
         if (itemInstance.getEnchants() != null && !itemInstance.getEnchants().isEmpty()) {
             player.sendMessage("§cTen przedmiot jest już zaklęty");
             return;
         }
 
+        player.setLevel(player.getLevel() - 3);
         List<EnchantData> enchants = EnchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot());
         if (enchants.isEmpty()) ConsoleLogger.sendWarning(ConsoleLogger.LogType.ENCHANTS, "Error while calculating possible enchants");
         itemInstance.setEnchants(enchants);

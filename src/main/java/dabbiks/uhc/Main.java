@@ -5,6 +5,8 @@ import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeLimitTracker;
 import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeListener;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeLoader;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
+import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
+import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
@@ -58,6 +60,8 @@ public final class Main extends JavaPlugin {
         recipeLimitTracker = new RecipeLimitTracker();
         new RecipeLoader(recipeManager).loadRecipes();
         Bukkit.getPluginManager().registerEvents(new RecipeListener(recipeManager, recipeLimitTracker), this);
+        Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);
+        Bukkit.getPluginManager().registerEvents(new TableManager(), this);
     }
 
     @Override
