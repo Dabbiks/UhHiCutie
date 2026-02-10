@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.items.conversion;
 
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
+import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantCalculator;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class ItemConverter {
 
     private final RecipeManager recipeManager;
+    private final EnchantCalculator enchantCalculator = new EnchantCalculator();
 
     public ItemConverter(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
@@ -25,7 +27,7 @@ public class ItemConverter {
         if (!item.hasItemMeta()) return item;
 
         NBTItem nbtItem = new NBTItem(item);
-        if (!nbtItem.hasKey("UHC_ITEM")) return item;
+        if (!nbtItem.hasKey(ItemTags.UHC_ITEM.name())) return item;
 
         String recipeId = item.getType().name().toLowerCase();
         Optional<RecipeInstance> optional = recipeManager.getRecipeById(recipeId);
@@ -36,10 +38,10 @@ public class ItemConverter {
         ItemInstance itemInstance = recipe.getResult().clone();
 
         ItemMeta meta = item.getItemMeta();
-        int power = EnchantCalculator.convertVanillaToPower(meta);
+        int power = enchantCalculator.convertVanillaToPower(meta);
 
         if (power > 1) {
-            itemInstance.setEnchants(EnchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot()));
+            itemInstance.setEnchants(enchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot()));
         }
 
         return new ItemBuilder(itemInstance).build();

@@ -4,6 +4,7 @@ import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeManager;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import org.bukkit.Material;
@@ -14,6 +15,8 @@ public class ItemMerger {
 
     private final ItemInstance firstItem;
     private final ItemInstance secondItem;
+
+    EnchantManager enchantManager = new EnchantManager();
 
     public ItemMerger(ItemInstance firstItem, ItemInstance secondItem) {
         this.firstItem = firstItem;
@@ -58,23 +61,35 @@ public class ItemMerger {
             instance.setCanBeForged(true);
         }
 
+        if (firstItem.getEnchantSlot() != null) {
+            instance.setEnchantSlot(firstItem.getEnchantSlot());
+        }
+
         return instance;
     }
 
     private List<EnchantData> mergeEnchants() {
         Map<EnchantType, EnchantData> mergedMap = new LinkedHashMap<>();
+        EnchantSlot targetSlot = firstItem.getEnchantSlot();
 
         if (firstItem.getEnchants() != null) {
             for (EnchantData data : firstItem.getEnchants()) {
-                mergedMap.put(data.getType(), new EnchantData(data.getType(), data.getLevel()));
+                if (enchantManager.isCompatible(targetSlot, data.getType().getSlot())) {
+                    mergedMap.put(data.getType(), new EnchantData(data.getType(), data.getLevel()));
+                }
             }
         }
 
         if (secondItem.getEnchants() != null) {
             for (EnchantData secondData : secondItem.getEnchants()) {
                 EnchantType type = secondData.getType();
+
+                if (!enchantManager.isCompatible(targetSlot, type.getSlot())) {
+                    continue;
+                }
+
                 if (mergedMap.containsKey(type)) {
-                    EnchantManager.combineLevel(mergedMap.get(type), secondData);
+                    enchantManager.combineLevel(mergedMap.get(type), secondData);
                 } else {
                     mergedMap.put(type, new EnchantData(type, secondData.getLevel()));
                 }
@@ -114,6 +129,10 @@ public class ItemMerger {
                     ));
                 }
             }
+        }
+
+        for (AttributeData attributeData : mergedMap.values()) {
+            attributeData.setAttributeValue(Math.round(attributeData.getAttributeValue() * 100.0) / 100.0);
         }
 
         return new ArrayList<>(mergedMap.values());

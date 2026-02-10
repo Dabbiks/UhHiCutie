@@ -4,7 +4,7 @@ import static dabbiks.uhc.Main.symbolU;
 
 public class EnchantManager {
 
-    public static void combineLevel(EnchantData data1, EnchantData data2) {
+    public void combineLevel(EnchantData data1, EnchantData data2) {
         if (!data1.getType().equals(data2.getType())) return;
 
         int lvl1 = data1.getLevel();
@@ -16,6 +16,33 @@ public class EnchantManager {
         } else if (lvl1 == lvl2 && lvl1 < maxLvl) {
             data1.setLevel(lvl1 + 1);
         }
+    }
+
+    public boolean isCompatible(EnchantSlot itemSlot, EnchantSlot enchantSlot) {
+        if (itemSlot == enchantSlot) return true;
+        if (enchantSlot == EnchantSlot.ALL) return true;
+
+        if (enchantSlot == EnchantSlot.MELEE) {
+            return itemSlot == EnchantSlot.SWORD || itemSlot == EnchantSlot.AXE ||
+                    itemSlot == EnchantSlot.MACE || itemSlot == EnchantSlot.SPEAR ||
+                    itemSlot == EnchantSlot.TRIDENT;
+        }
+
+        if (enchantSlot == EnchantSlot.ARMOR) {
+            return itemSlot == EnchantSlot.HELMET || itemSlot == EnchantSlot.CHESTPLATE ||
+                    itemSlot == EnchantSlot.LEGGINGS || itemSlot == EnchantSlot.BOOTS;
+        }
+
+        if (enchantSlot == EnchantSlot.TOOL) {
+            return itemSlot == EnchantSlot.PICKAXE || itemSlot == EnchantSlot.AXE;
+        }
+
+        if (enchantSlot == EnchantSlot.RANGED) {
+            return itemSlot == EnchantSlot.BOW || itemSlot == EnchantSlot.CROSSBOW ||
+                    itemSlot == EnchantSlot.TRIDENT;
+        }
+
+        return false;
     }
 
     private static String numberToRoman(int number) {

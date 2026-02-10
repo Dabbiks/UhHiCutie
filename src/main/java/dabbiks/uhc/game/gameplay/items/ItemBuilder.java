@@ -161,8 +161,18 @@ public class ItemBuilder {
         }
 
         if (instance.canBeForged()) {
-            nbtItem.setInteger("CAN_BE_FORGED", 1);
+            nbtItem.setInteger(ItemTags.CAN_BE_FORGED.name(), 1);
         }
+
+        if (instance.canBeEnchanted()) {
+            nbtItem.setInteger(ItemTags.CAN_BE_ENCHANTED.name(), 1);
+        }
+
+        if (instance.getEnchantSlot() != null) {
+            nbtItem.setInteger(instance.getEnchantSlot().name(), 1);
+        }
+
+        nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
 
         item = nbtItem.getItem();
 

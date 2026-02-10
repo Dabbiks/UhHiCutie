@@ -10,9 +10,10 @@ import java.util.Random;
 
 public class EnchantCalculator {
 
-    private static final Random random = new Random();
+    private final Random random = new Random();
+    private final EnchantManager enchantManager = new EnchantManager();
 
-    public static int convertVanillaToPower(ItemMeta meta) {
+    public int convertVanillaToPower(ItemMeta meta) {
         if (meta == null || !meta.hasEnchants()) {
             return 1;
         }
@@ -43,7 +44,7 @@ public class EnchantCalculator {
         return Math.min(30, Math.max(1, totalPower));
     }
 
-    public static List<EnchantData> calculateEnchants(int power, EnchantSlot itemSlot) {
+    public List<EnchantData> calculateEnchants(int power, EnchantSlot itemSlot) {
         List<EnchantData> result = new ArrayList<>();
         int modifiedLevel = power + random.nextInt(power / 4 + 1) + random.nextInt(4);
         int tierOffset = random.nextInt(5) - 2;
@@ -74,11 +75,11 @@ public class EnchantCalculator {
         return result;
     }
 
-    private static List<EnchantType> getPossibleEnchants(EnchantSlot itemSlot, int modifiedLevel, int tierOffset) {
+    private List<EnchantType> getPossibleEnchants(EnchantSlot itemSlot, int modifiedLevel, int tierOffset) {
         List<EnchantType> valid = new ArrayList<>();
 
         for (EnchantType type : EnchantType.values()) {
-            if (!isSlotCompatible(itemSlot, type.getSlot())) {
+            if (!enchantManager.isCompatible(itemSlot, type.getSlot())) {
                 continue;
             }
 
@@ -92,31 +93,7 @@ public class EnchantCalculator {
         return valid;
     }
 
-    private static boolean isSlotCompatible(EnchantSlot itemSlot, EnchantSlot enchantSlot) {
-        if (itemSlot == enchantSlot) return true;
-
-        // Obsługa ALL - pasuje do wszystkiego i przyjmuje wszystko
-        if (itemSlot == EnchantSlot.ALL || enchantSlot == EnchantSlot.ALL) return true;
-
-        if (enchantSlot == EnchantSlot.MELEE) {
-            return itemSlot == EnchantSlot.SWORD || itemSlot == EnchantSlot.AXE ||
-                    itemSlot == EnchantSlot.MACE || itemSlot == EnchantSlot.SPEAR;
-        }
-
-        if (enchantSlot == EnchantSlot.RANGED) {
-            return itemSlot == EnchantSlot.BOW || itemSlot == EnchantSlot.CROSSBOW ||
-                    itemSlot == EnchantSlot.TRIDENT;
-        }
-
-        if (enchantSlot == EnchantSlot.ARMOR) {
-            return itemSlot == EnchantSlot.HELMET || itemSlot == EnchantSlot.CHESTPLATE ||
-                    itemSlot == EnchantSlot.LEGGINGS || itemSlot == EnchantSlot.BOOTS;
-        }
-
-        return false;
-    }
-
-    private static EnchantType pickWeightedEnchant(List<EnchantType> candidates) {
+    private EnchantType pickWeightedEnchant(List<EnchantType> candidates) {
         int totalWeight = candidates.stream().mapToInt(e -> getWeight(e.getTier())).sum();
         if (totalWeight <= 0) return null;
 
@@ -132,7 +109,7 @@ public class EnchantCalculator {
         return candidates.get(0);
     }
 
-    private static EnchantData createEnchantData(EnchantType type, int modifiedLevel) {
+    private EnchantData createEnchantData(EnchantType type, int modifiedLevel) {
         double percentage = Math.min(1.0, modifiedLevel / 40.0);
         int calculatedLevel = (int) Math.ceil(percentage * type.getMaxLevel());
         calculatedLevel = Math.max(1, Math.min(calculatedLevel, type.getMaxLevel()));
@@ -140,7 +117,7 @@ public class EnchantCalculator {
         return new EnchantData(type, calculatedLevel);
     }
 
-    private static int getWeight(EnchantTier tier) {
+    private int getWeight(EnchantTier tier) {
         switch (tier) {
             case COMMON: return 6;
             case RARE, EPIC: return 3;
@@ -150,7 +127,7 @@ public class EnchantCalculator {
         }
     }
 
-    private static int getMinPowerForTier(EnchantTier tier) {
+    private int getMinPowerForTier(EnchantTier tier) {
         switch (tier) {
             case COMMON: return 1;
             case RARE: return 8;

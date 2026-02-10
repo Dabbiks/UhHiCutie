@@ -15,6 +15,8 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 public class AnvilManager implements Listener {
 
     @EventHandler
@@ -33,22 +35,33 @@ public class AnvilManager implements Listener {
             return;
         }
 
-        if (event.isShiftClick()) {
-            event.setCancelled(true);
-            return;
-        }
+        event.setCancelled(true);
 
-        if (event.getCursor().getType() != Material.AIR) {
-            event.setCancelled(true);
-            return;
+        if (event.isShiftClick()) {
+            ItemStack resultClone = result.clone();
+            HashMap<Integer, ItemStack> leftovers = player.getInventory().addItem(resultClone);
+
+            if (!leftovers.isEmpty()) {
+                int addedAmount = resultClone.getAmount() - leftovers.get(0).getAmount();
+                if (addedAmount > 0) {
+                    ItemStack toRemove = resultClone.clone();
+                    toRemove.setAmount(addedAmount);
+                    player.getInventory().removeItem(toRemove);
+                }
+                player.sendMessage("§cTwój ekwipunek jest pełny!");
+                return;
+            }
+        } else {
+            if (event.getCursor() != null && event.getCursor().getType() != Material.AIR) {
+                return;
+            }
+            player.setItemOnCursor(result);
         }
 
         if (player.getGameMode() != org.bukkit.GameMode.CREATIVE) {
             player.setLevel(player.getLevel() - repairCost);
         }
 
-        event.setCancelled(true);
-        player.setItemOnCursor(result);
         inventory.setFirstItem(null);
         inventory.setSecondItem(null);
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.0f);
@@ -66,7 +79,9 @@ public class AnvilManager implements Listener {
 
         ItemInstance firstInstance = new ItemDeconstructor(firstItem).deconstruct();
         ItemInstance secondInstance = new ItemDeconstructor(secondItem).deconstruct();
+
         if (!firstInstance.canBeForged() || !secondInstance.canBeForged()) return;
+
         ItemInstance resultInstance = new ItemMerger(firstInstance, secondInstance).merge();
 
         if (resultInstance == null) return;

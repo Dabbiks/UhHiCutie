@@ -4,6 +4,7 @@ import dabbiks.uhc.ConsoleLogger;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemDeconstructor;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
+import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantCalculator;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
 import de.tr7zw.nbtapi.NBTItem;
@@ -30,9 +31,7 @@ import static dabbiks.uhc.Main.soundU;
 public class TableManager implements Listener {
 
     private final Map<Location, TableInstance> tables = new HashMap<>();
-
-    public TableManager() {
-    }
+    private final EnchantCalculator enchantCalculator = new EnchantCalculator();
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
@@ -79,7 +78,7 @@ public class TableManager implements Listener {
 
         if (item.isEmpty()) return;
         NBTItem nbtItem = new NBTItem(item);
-        if (nbtItem.getInteger("CAN_BE_ENCHANTED") == null) {
+        if (nbtItem.getInteger(ItemTags.CAN_BE_ENCHANTED.name()) == null) {
             player.sendMessage("§cTego przedmiotu nie da się zakląć");
             return;
         }
@@ -91,7 +90,7 @@ public class TableManager implements Listener {
         }
 
         player.setLevel(player.getLevel() - 3);
-        List<EnchantData> enchants = EnchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot());
+        List<EnchantData> enchants = enchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot());
         if (enchants.isEmpty()) ConsoleLogger.sendWarning(ConsoleLogger.LogType.ENCHANTS, "Error while calculating possible enchants");
         itemInstance.setEnchants(enchants);
 

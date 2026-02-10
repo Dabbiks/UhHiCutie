@@ -1,8 +1,10 @@
 package dabbiks.uhc.game.gameplay.items;
 
+import com.google.common.base.Enums;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import de.tr7zw.nbtapi.NBTItem;
@@ -114,8 +116,18 @@ public class ItemDeconstructor {
             instance.setPerks(perks);
         }
 
-        if (nbtItem.hasKey("CAN_BE_FORGED")) {
+        if (nbtItem.hasKey(ItemTags.CAN_BE_FORGED.name())) {
             instance.setCanBeForged(true);
+        }
+
+        if (nbtItem.hasKey(ItemTags.CAN_BE_ENCHANTED.name())) {
+            instance.setCanBeEnchanted(true);
+        }
+
+        for (EnchantSlot enchantSlot : EnchantSlot.values()) {
+            if (nbtItem.getInteger(enchantSlot.name()) != 1) continue;
+            instance.setEnchantSlot(enchantSlot);
+            break;
         }
 
         return instance;

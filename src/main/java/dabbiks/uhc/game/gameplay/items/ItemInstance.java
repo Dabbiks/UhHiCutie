@@ -20,6 +20,7 @@ public class ItemInstance {
     private Integer customModelData;
     private boolean tags;
     private boolean canBeForged;
+    private boolean canBeEnchanted;
     private boolean canParry;
     private String armorSlot;
     private String armorTexture;
@@ -57,6 +58,9 @@ public class ItemInstance {
 
     public boolean canBeForged() { return canBeForged; }
     public void setCanBeForged(boolean canBeForged) { this.canBeForged = canBeForged; }
+
+    public boolean canBeEnchanted() { return canBeEnchanted; }
+    public void setCanBeEnchanted(boolean canBeEnchanted) { this.canBeEnchanted = canBeEnchanted; }
 
     public boolean canParry() { return canParry; }
     public void setCanParry(boolean canParry) { this.canParry = canParry; }
