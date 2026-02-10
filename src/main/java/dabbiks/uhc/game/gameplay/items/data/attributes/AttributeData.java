@@ -1,7 +1,5 @@
-package dabbiks.uhc.game.gameplay.items.attributes;
+package dabbiks.uhc.game.gameplay.items.data.attributes;
 
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class AttributeData {

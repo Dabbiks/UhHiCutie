@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.items.attributes;
+package dabbiks.uhc.game.gameplay.items.data.attributes;
 
 import org.bukkit.attribute.Attribute;
 

@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.items.fireworks;
+package dabbiks.uhc.game.gameplay.items.data.fireworks;
 
 import java.util.List;
 

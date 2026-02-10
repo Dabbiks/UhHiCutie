@@ -1,13 +1,13 @@
 package dabbiks.uhc.game.gameplay.items;
 
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeData;
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeManager;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantManager;
-import dabbiks.uhc.game.gameplay.items.fireworks.ExplosionData;
-import dabbiks.uhc.game.gameplay.items.fireworks.FireworkData;
-import dabbiks.uhc.game.gameplay.items.perks.PerkType;
-import dabbiks.uhc.game.gameplay.items.potions.PotionData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeManager;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
+import dabbiks.uhc.game.gameplay.items.data.fireworks.ExplosionData;
+import dabbiks.uhc.game.gameplay.items.data.fireworks.FireworkData;
+import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
+import dabbiks.uhc.game.gameplay.items.data.potions.PotionData;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;

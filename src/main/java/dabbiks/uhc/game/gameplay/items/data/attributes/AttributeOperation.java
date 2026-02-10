@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.items.attributes;
+package dabbiks.uhc.game.gameplay.items.data.attributes;
 
 public enum AttributeOperation {
     ROUND,

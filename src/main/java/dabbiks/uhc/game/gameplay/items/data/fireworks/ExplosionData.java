@@ -1,7 +1,7 @@
-package dabbiks.uhc.game.gameplay.items.fireworks;
+package dabbiks.uhc.game.gameplay.items.data.fireworks;
 
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
+
 import java.util.ArrayList;
 import java.util.List;
 

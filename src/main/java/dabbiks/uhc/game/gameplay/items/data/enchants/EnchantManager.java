@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.items.enchants;
+package dabbiks.uhc.game.gameplay.items.data.enchants;
 
 import static dabbiks.uhc.Main.symbolU;
 

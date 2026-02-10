@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.items.potions;
+package dabbiks.uhc.game.gameplay.items.data.potions;
 
 import org.bukkit.potion.PotionEffectType;
 

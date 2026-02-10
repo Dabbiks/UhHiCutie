@@ -1,11 +1,11 @@
 package dabbiks.uhc.game.gameplay.items;
 
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeData;
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeManager;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantManager;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantType;
-import dabbiks.uhc.game.gameplay.items.perks.PerkType;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeManager;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import org.bukkit.Material;
 
 import java.util.*;

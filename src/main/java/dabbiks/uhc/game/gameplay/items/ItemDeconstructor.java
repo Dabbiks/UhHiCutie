@@ -1,10 +1,10 @@
 package dabbiks.uhc.game.gameplay.items;
 
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeData;
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeType;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantType;
-import dabbiks.uhc.game.gameplay.items.perks.PerkType;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import de.tr7zw.nbtapi.NBTItem;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Equippable;

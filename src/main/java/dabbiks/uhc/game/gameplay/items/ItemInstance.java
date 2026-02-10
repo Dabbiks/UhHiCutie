@@ -1,16 +1,15 @@
 package dabbiks.uhc.game.gameplay.items;
 
-import dabbiks.uhc.game.gameplay.items.attributes.AttributeData;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantData;
-import dabbiks.uhc.game.gameplay.items.enchants.EnchantSlot;
-import dabbiks.uhc.game.gameplay.items.fireworks.FireworkData;
-import dabbiks.uhc.game.gameplay.items.perks.PerkType;
-import dabbiks.uhc.game.gameplay.items.potions.PotionData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
+import dabbiks.uhc.game.gameplay.items.data.fireworks.FireworkData;
+import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
+import dabbiks.uhc.game.gameplay.items.data.potions.PotionData;
 import org.bukkit.Material;
-import org.bukkit.block.data.type.Fire;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ItemInstance {
 
@@ -79,4 +78,21 @@ public class ItemInstance {
 
     public String getArmorTexture() { return armorTexture; }
     public void setArmorTexture(String armorTexture) { this.armorTexture = armorTexture; }
+
+    @Override
+    public ItemInstance clone() {
+        try {
+            ItemInstance cloned = (ItemInstance) super.clone();
+
+            if (this.lore != null) cloned.lore = new ArrayList<>(this.lore);
+            if (this.attributes != null) cloned.attributes = new ArrayList<>(this.attributes);
+            if (this.enchants != null) cloned.enchants = new ArrayList<>(this.enchants);
+            if (this.perks != null) cloned.perks = new ArrayList<>(this.perks);
+            if (this.potion != null) cloned.potion = new ArrayList<>(this.potion);
+
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Error cloning ItemInstance", e);
+        }
+    }
 }

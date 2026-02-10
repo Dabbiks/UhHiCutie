@@ -1,6 +1,5 @@
-package dabbiks.uhc.game.gameplay.items.perks;
+package dabbiks.uhc.game.gameplay.items.data.perks;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 public enum PerkType {
