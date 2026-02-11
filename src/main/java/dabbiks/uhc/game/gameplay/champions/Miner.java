@@ -1,8 +1,12 @@
 package dabbiks.uhc.game.gameplay.champions;
 
 import dabbiks.uhc.game.gameplay.champions.Champion;
+import dabbiks.uhc.game.gameplay.items.conversion.ItemConverter;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.data.session.SessionTags;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -44,29 +48,26 @@ public class Miner extends Champion {
 
     @Override
     public void onStart(Player player, int level) {
-        if (level >= 1) {
-            player.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 5));
-        }
+        ItemConverter itemConverter = new ItemConverter();
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        sessionData.addTag(SessionTags.MINER);
 
         switch (level) {
-            case 1 -> {
-                player.getInventory().addItem(new ItemStack(Material.STONE_PICKAXE));
-                player.getInventory().addItem(new ItemStack(Material.TORCH, 16));
+            case 1, 2, 3, 4 -> {
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.STONE_PICKAXE)));
+                player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
             }
-            case 2 -> {
-                player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE));
-                player.getInventory().addItem(new ItemStack(Material.TORCH, 32));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+            case 5, 6, 7, 8, 9 -> {
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
+                player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
+                sessionData.addTag(SessionTags.SMALL_ANVIL_DISCOUNT);
             }
-            case 3 -> {
-                ItemStack pickaxe = new ItemStack(Material.IRON_PICKAXE);
-                pickaxe.addEnchantment(Enchantment.EFFICIENCY, 1);
-
-                player.getInventory().addItem(pickaxe);
-                player.getInventory().addItem(new ItemStack(Material.TORCH, 64));
-
-                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 20 * 60 * 10, 0, false, false));
+            case 10 -> {
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
+                player.getInventory().addItem(new ItemStack(Material.BREAD, 10));
+                sessionData.addTag(SessionTags.BIG_ANVIL_DISCOUNT);
+                sessionData.addTag(SessionTags.IMMORTAL_EXPERIENCE);
             }
         }
     }
@@ -110,7 +111,7 @@ public class Miner extends Champion {
         List<String> desc = new ArrayList<>();
         if (!persistentData.hasUnlockedChampion(getId())) {
             if (persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) >= getCost()) {
-                desc.add(symbolU.mouseLeft + " §6Zakup górnika za " + getCost() + " monet!");
+                desc.add(symbolU.mouseLeft + " §fZakup górnika za " + getCost() + " monet!");
             } else {
                 desc.add(symbolU.mouseLeft + " §cDo zakupu potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
             }

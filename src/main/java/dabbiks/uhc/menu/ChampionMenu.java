@@ -1,4 +1,4 @@
-package dabbiks.uhc.menu.champions;
+package dabbiks.uhc.menu;
 
 import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.champions.ChampionManager;
