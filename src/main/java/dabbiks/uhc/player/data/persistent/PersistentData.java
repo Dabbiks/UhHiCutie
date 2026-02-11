@@ -11,182 +11,121 @@ public class PersistentData {
     /*-----------------------------------------------------------------------------------------------------------------*/
 
     @Expose
-    private UUID playerId;
+    private UUID uuid;
 
     @Expose
-    private String playerName;
+    private String name;
 
     @Expose
-    private Map<PersistentStats, Integer> persistentStatsMap = new HashMap<>();
+    private Map<PersistentStats, Integer> stats = new HashMap<>();
 
     @Expose
     private boolean isManager;
 
-    //  RANGA
+    @Expose
+    private RankTypes rank;
+
+
+    // * RECIPES
 
     @Expose
-    private RankTypes playerRank;
-
-    // WYBRANE OPCJE W PRZEPISACH
+    private String recipeCategory;
 
     @Expose
-    private String playerLastRecipeCategoryType;
+    private RecipeInstance recipe;
+
+    // * CHAMPIONS
 
     @Expose
-    private Integer playerLastCrockpotRecipeIndex;
+    private String champion;
 
     @Expose
-    private RecipeInstance playerLastRecipeType;
-
-    // ODBLOKOWANE
+    private List<String> unlockedChampions = new ArrayList<>();
 
     @Expose
-    private List<RecipeInstance> playerUnlockedRecipes = new ArrayList<>();
+    private Map<String, Integer> championMastery = new HashMap<>();
 
-    // USTAWIENIA
-
-
+    @Expose
+    private Map<String, Integer> championLevel = new HashMap<>();
 
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
 
-    public UUID getPlayerId() {
-        return playerId;
+    public UUID getUUID() {
+        return uuid;
     }
 
-    public void setPlayerId(UUID playerId) {
-        this.playerId = playerId;
+    public void setUUID(UUID uuid) {
+        this.uuid = uuid;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getName() {
+        return name;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    // RANGA
-
-    public RankTypes getPlayerRank() {
-        return playerRank;
-    }
-
-    public void setPlayerRank(RankTypes playerRank) {
-        this.playerRank = playerRank;
-    }
-
-    // STATYSTYKI
-
-    public Map<PersistentStats, Integer> getPersistentStats() {
-        return persistentStatsMap;
-    }
-
-    public void addPersistentStats(PersistentStats persistentStats, int number) {
-        persistentStatsMap.put(persistentStats, getPersistentStats().getOrDefault(persistentStats, 0) + number);
-    }
-
-    public void setPersistentStats(PersistentStats persistentStats, int number) {
-        persistentStatsMap.put(persistentStats, number);
-    }
-
-    public void removePersistentStats(PersistentStats persistentStats, int number) {
-        persistentStatsMap.put(persistentStats, getPersistentStats().getOrDefault(persistentStats, 0) - number);
-    }
-
-    // KLASY
-
-    @Expose
-    private String playerClassName;
-    @Expose
-    private List<String> playerUnlockedClassNames = new ArrayList<>();
-
-    public String getPlayerClassName() {
-        return playerClassName;
-    }
-
-    public void setPlayerClassName(String className) {
-        playerClassName = className;
-    }
-
-    public List<String> getPlayerUnlockedClassNames() {
-        return playerUnlockedClassNames;
-    }
-
-    public void addPlayerUnlockedClassName(String className) {
-        if (!playerUnlockedClassNames.contains(className))
-            playerUnlockedClassNames.add(className);
-    }
-
-    public void removePlayerUnlockedClassName(String className) {
-        playerUnlockedClassNames.remove(className);
-    }
-
-    // PRZEPISY
-
-    public String getPlayerLastRecipeCategory() { return playerLastRecipeCategoryType; }
-
-    public void setPlayerLastRecipeCategory(String categoryType) {
-        playerLastRecipeCategoryType = categoryType;
-    }
-
-    public RecipeInstance getPlayerLastRecipe() { return playerLastRecipeType; }
-
-    public void setPlayerLastRecipe(RecipeInstance recipe) {
-        playerLastRecipeType = recipe;
-    }
-
-    // DŹWIĘKI ZABÓJSTWA
-
-    @Expose private String playerSelectedKillSound;
-    @Expose private List<String> unlockedKillSounds = new ArrayList<>();
-
-    public String getPlayerSelectedKillSound() { return playerSelectedKillSound; }
-    public void setPlayerSelectedKillSound(String sound) { this.playerSelectedKillSound = sound; }
-
-    public List<String> getUnlockedKillSounds() { return unlockedKillSounds; }
-    public void addUnlockedKillSound(String sound) {
-        if (!unlockedKillSounds.contains(sound)) unlockedKillSounds.add(sound);
-    }
-
-    /*-----------------------------------------------------------------------------------------------------------------*/
-
-    @Expose private boolean inviteReward;
-
-    public boolean getInviteReward() { return inviteReward; }
-    public void setInviteReward(boolean bool) { inviteReward = bool; }
-
-    /*-----------------------------------------------------------------------------------------------------------------*/
 
     public boolean getIsManager() {
         return isManager;
     }
 
-    /*-----------------------------------------------------------------------------------------------------------------*/
-
-    @Expose private int dropMessagesStyle;
-    @Expose private boolean disableTips;
-    @Expose private boolean enableGamma;
-
-    public void setDropMessagesStyle(int i) {
-        dropMessagesStyle = i;
-    }
-    public int getDropMessagesStyle() {
-        return dropMessagesStyle;
+    public RankTypes getRank() {
+        return rank;
     }
 
-    public void setDisableTips(boolean bool) {
-        disableTips = bool;
+    public void setRank(RankTypes rank) {
+        this.rank = rank;
     }
-    public boolean getDisableTips() {
-        return disableTips;
+
+    public Map<PersistentStats, Integer> getStats() {
+        return stats;
     }
-    public void setEnableGamma(boolean bool) {
-        enableGamma = bool;
+
+    public void addStats(PersistentStats stats, int value) {
+        this.stats.put(stats, getStats().getOrDefault(stats, 0) + value);
     }
-    public boolean getEnableGamma() {
-        return enableGamma;
+
+    public void setStats(PersistentStats stats, int number) {
+        this.stats.put(stats, number);
     }
+
+    public void removeStats(PersistentStats stats, int number) {
+        this.stats.put(stats, getStats().getOrDefault(stats, 0) - number);
+    }
+
+    // * RECIPES
+
+    public String getRecipeCategory() { return recipeCategory; }
+
+    public void setRecipeCategory(String recipeCategory) {
+        this.recipeCategory = recipeCategory;
+    }
+
+    public RecipeInstance getRecipe() { return recipe; }
+
+    public void setRecipe(RecipeInstance recipe) { this.recipe = recipe; }
+
+    // * CHAMPIONS
+
+    public String getChampion() { return champion; }
+
+    public void setChampion(String champion) { this.champion = champion; }
+
+    public int getChampionMastery(String champion) { return championMastery.getOrDefault(champion, 0); }
+
+    public void addChampionMastery(String champion, int amount) { championMastery.put(champion, championMastery.getOrDefault(champion, 0) + amount); }
+
+    public int getChampionLevel(String champion) { return championLevel.getOrDefault(champion, 0); }
+
+    public void setChampionLevel(String champion, int level) { championLevel.put(champion, level); }
+
+    public List<String> getUnlockedChampions() { return unlockedChampions; }
+
+    public boolean hasUnlockedChampion(String champion) { return unlockedChampions.contains(champion); }
+
+    public void addUnlockedChampion(String champion) { unlockedChampions.add(champion); }
 
     /*-----------------------------------------------------------------------------------------------------------------*/
 

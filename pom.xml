@@ -61,6 +61,27 @@
                     </relocations>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>fr.mrmicky.fastinv</pattern>
+                            <shadedPattern>dabbiks.fastinv</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -177,6 +198,13 @@
             <artifactId>item-nbt-api-plugin</artifactId>
             <version>2.15.2</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- INVUI -->
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastinv</artifactId>
+            <version>3.1.2</version>
         </dependency>
     </dependencies>
 </project>

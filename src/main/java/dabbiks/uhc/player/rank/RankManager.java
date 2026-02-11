@@ -17,11 +17,11 @@ public class RankManager {
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
         // Statystyki gracza
-        double kills = persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONKILLS, 0);
-        double assists = persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONASSISTS, 0);
-        double wins = persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONWINS, 0);
-        double perfectWins = persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
-        double played = persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONPLAYED, 0);
+        double kills = persistentData.getStats().getOrDefault(PersistentStats.SEASONKILLS, 0);
+        double assists = persistentData.getStats().getOrDefault(PersistentStats.SEASONASSISTS, 0);
+        double wins = persistentData.getStats().getOrDefault(PersistentStats.SEASONWINS, 0);
+        double perfectWins = persistentData.getStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
+        double played = persistentData.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0);
 
         if (played < 5) {
             sessionData.setRankPRModifier(100); // neutralny dla nowych
@@ -40,14 +40,14 @@ public class RankManager {
         double performanceScore = kdaScore + winScore; // 0–40
 
         // --- OPPONENT STRENGTH (bazowe 60) ---
-        int playerRank = persistentData.getPersistentStats().getOrDefault(PersistentStats.RANKPR, 800);
+        int playerRank = persistentData.getStats().getOrDefault(PersistentStats.RANKPR, 800);
 
         int players = 0;
         int totalRank = 0;
         for (Player p : playerListU.getAllPlayers()) { // zakładam że tu masz wszystkich uczestników
             if (p.equals(player)) continue;
             PersistentData pd = PersistentDataManager.getData(p.getUniqueId());
-            totalRank += pd.getPersistentStats().getOrDefault(PersistentStats.RANKPR, 800);
+            totalRank += pd.getStats().getOrDefault(PersistentStats.RANKPR, 800);
             players++;
         }
 
@@ -66,13 +66,13 @@ public class RankManager {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
-        if (persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < 5) return;
+        if (persistentData.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < 5) return;
 
-        persistentData.setPersistentStats(PersistentStats.PREVIOUSRANKPR, persistentData.getPersistentStats().getOrDefault(PersistentStats.RANKPR, 0));
-        persistentData.addPersistentStats(PersistentStats.RANKPR, rankPR);
-        if (persistentData.getPersistentStats().getOrDefault(PersistentStats.RANKPR, 0) < 1) {
-            persistentData.setPersistentStats(PersistentStats.RANKPR, 1);
-            persistentData.setPersistentStats(PersistentStats.PREVIOUSRANKPR, 1);
+        persistentData.setStats(PersistentStats.PREVIOUSRANKPR, persistentData.getStats().getOrDefault(PersistentStats.RANKPR, 0));
+        persistentData.addStats(PersistentStats.RANKPR, rankPR);
+        if (persistentData.getStats().getOrDefault(PersistentStats.RANKPR, 0) < 1) {
+            persistentData.setStats(PersistentStats.RANKPR, 1);
+            persistentData.setStats(PersistentStats.PREVIOUSRANKPR, 1);
         }
         updatePlayerRank(player);
     }
@@ -81,8 +81,8 @@ public class RankManager {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
         RankTypes previousThresholdRank = null;
         RankTypes actualThresholdRank = null;
-        int previousRankPR = persistentData.getPersistentStats().getOrDefault(PersistentStats.PREVIOUSRANKPR, 0);
-        int rankPR = persistentData.getPersistentStats().getOrDefault(PersistentStats.RANKPR, 0);
+        int previousRankPR = persistentData.getStats().getOrDefault(PersistentStats.PREVIOUSRANKPR, 0);
+        int rankPR = persistentData.getStats().getOrDefault(PersistentStats.RANKPR, 0);
 
         for (RankTypes rankTypes : RankTypes.values()) {
             if (previousRankPR >= rankTypes.getMinThreshold() && previousRankPR <= rankTypes.getMaxThreshold()) {
@@ -111,7 +111,7 @@ public class RankManager {
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "§a" + player.getName() + "§f awansuje: " + lastRank.getIcon() + " §a>>§f " + actualRank.getIcon());
         }
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
-        persistentData.setPlayerRank(actualRank);
+        persistentData.setRank(actualRank);
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
         sessionData.updatePlayerPrefix(player);
     }
@@ -122,7 +122,7 @@ public class RankManager {
         } else {
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "§c" + player.getName() + "§f degraduje: " + lastRank.getIcon() + " §a>>§f " + actualRank.getIcon());
         }        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
-        persistentData.setPlayerRank(actualRank);
+        persistentData.setRank(actualRank);
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
         sessionData.updatePlayerPrefix(player);
     }
@@ -130,18 +130,18 @@ public class RankManager {
     public static void processPlacements(Player player) {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
 
-        int rank = 30 * persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONKILLS, 0);
-        rank = rank + 10 * persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONASSISTS, 0);
-        rank = rank + 75 * persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONWINS, 0);
-        rank = rank + 75 * persistentData.getPersistentStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
+        int rank = 30 * persistentData.getStats().getOrDefault(PersistentStats.SEASONKILLS, 0);
+        rank = rank + 10 * persistentData.getStats().getOrDefault(PersistentStats.SEASONASSISTS, 0);
+        rank = rank + 75 * persistentData.getStats().getOrDefault(PersistentStats.SEASONWINS, 0);
+        rank = rank + 75 * persistentData.getStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
         if (rank < 1) rank = 1;
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
         for (RankTypes rankTypes : RankTypes.values()) {
             if (rankTypes.getMinThreshold() > rank) continue;
             if (rankTypes.getMaxThreshold() < rank) continue;
-            persistentData.setPersistentStats(PersistentStats.RANKPR, rank);
-            persistentData.setPlayerRank(rankTypes);
+            persistentData.setStats(PersistentStats.RANKPR, rank);
+            persistentData.setRank(rankTypes);
             PersistentDataManager.saveData(player.getUniqueId());
 
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "§e" + player.getName() + "§f ukończył gry rozstawiające: " + rankTypes.getIcon());

@@ -34,7 +34,7 @@ public class TeamChat implements Listener {
             for (String member : team.getEntries()) {
                 Player teamMember = Bukkit.getPlayer(member);
                 if (teamMember != null) {
-                    teamMember.sendMessage("§c[DRUŻYNA] §6" + persistentData.getPlayerClassName() + " §e" + player.getName() + "§f " + message);
+                    teamMember.sendMessage("§c[DRUŻYNA] §6" + persistentData.get() + " §e" + player.getName() + "§f " + message);
                 }
             }
         } else {

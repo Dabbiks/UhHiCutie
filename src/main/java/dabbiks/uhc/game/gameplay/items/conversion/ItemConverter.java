@@ -15,12 +15,7 @@ import java.util.Optional;
 
 public class ItemConverter {
 
-    private final RecipeManager recipeManager;
     private final EnchantCalculator enchantCalculator = new EnchantCalculator();
-
-    public ItemConverter(RecipeManager recipeManager) {
-        this.recipeManager = recipeManager;
-    }
 
     public ItemStack convert(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return item;
@@ -30,7 +25,7 @@ public class ItemConverter {
         if (!nbtItem.hasKey(ItemTags.UHC_ITEM.name())) return item;
 
         String recipeId = item.getType().name().toLowerCase();
-        Optional<RecipeInstance> optional = recipeManager.getRecipeById(recipeId);
+        Optional<RecipeInstance> optional = RecipeManager.getRecipeById(recipeId);
 
         if (optional.isEmpty()) return item;
 

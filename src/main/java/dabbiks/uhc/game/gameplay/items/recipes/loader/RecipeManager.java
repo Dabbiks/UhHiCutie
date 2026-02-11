@@ -16,7 +16,7 @@ import static dabbiks.uhc.Main.plugin;
 
 public class RecipeManager {
 
-    public final Map<String, RecipeInstance> recipes = new HashMap<>();
+    private static final Map<String, RecipeInstance> recipes = new HashMap<>();
     private final Map<String, List<RecipeType>> recipeCategories = new HashMap<>();
 
     private void categorizeRecipe(RecipeInstance recipe) {
@@ -73,7 +73,7 @@ public class RecipeManager {
         return new RecipeChoice.MaterialChoice(material);
     }
 
-    public Optional<RecipeInstance> getRecipeById(String id) {
+    public static Optional<RecipeInstance> getRecipeById(String id) {
         return Optional.ofNullable(recipes.get(id));
     }
 

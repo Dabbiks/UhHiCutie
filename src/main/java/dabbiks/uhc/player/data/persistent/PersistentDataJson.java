@@ -35,12 +35,11 @@ public class PersistentDataJson {
 
         try (FileReader reader = new FileReader(file)) {
             PersistentData persistentData = gson.fromJson(reader, PersistentData.class);
-            persistentData.setPlayerId(playerId);
+            persistentData.setUUID(playerId);
 
-            // TU DODAJEMY ustawienie playerName jeśli jest null
             String name = Bukkit.getOfflinePlayer(playerId).getName();
             if (name == null) name = "Unknown";
-            persistentData.setPlayerName(name);
+            persistentData.setName(name);
 
             return persistentData;
         } catch (IOException exception) {
@@ -50,7 +49,7 @@ public class PersistentDataJson {
     }
 
     public void savePlayerData(PersistentData persistentData) {
-        File file = new File(dataFolder, persistentData.getPlayerId().toString() + ".json");
+        File file = new File(dataFolder, persistentData.getUUID().toString() + ".json");
         try (FileWriter writer = new FileWriter(file)) {
             gson.toJson(persistentData, writer);
         } catch (IOException exception) {

@@ -74,7 +74,7 @@ public class AnvilManager implements Listener {
 
         if (firstItem == null || secondItem == null) return;
 
-        boolean isBook = secondItem.getType() == Material.ENCHANTED_BOOK || secondItem.getType() == Material.BOOK;
+        boolean isBook = secondItem.getType() == Material.ENCHANTED_BOOK;
         if (firstItem.getType() != secondItem.getType() && !isBook) return;
 
         ItemInstance firstInstance = new ItemDeconstructor(firstItem).deconstruct();

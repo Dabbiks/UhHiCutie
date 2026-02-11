@@ -15,11 +15,7 @@ import java.util.Set;
 
 public class ConversionManager implements Listener {
 
-    private final ItemConverter itemConverter;
-
-    public ConversionManager(RecipeManager recipeManager) {
-        this.itemConverter = new ItemConverter(recipeManager);
-    }
+    private final ItemConverter itemConverter = new ItemConverter();
 
     @EventHandler
     public void onPickup(EntityPickupItemEvent event) {
