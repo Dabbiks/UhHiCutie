@@ -1,6 +1,5 @@
 package dabbiks.uhc.game.gameplay.champions;
 
-import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.items.conversion.ItemConverter;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -8,11 +7,8 @@ import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionTags;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,28 +107,28 @@ public class Miner extends Champion {
         List<String> desc = new ArrayList<>();
         if (!persistentData.hasUnlockedChampion(getId())) {
             if (persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) >= getCost()) {
-                desc.add(symbolU.mouseLeft + " §fZakup górnika za " + getCost() + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §fZakup górnika za " + getCost() + " monet!");
             } else {
-                desc.add(symbolU.mouseLeft + " §cDo zakupu potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §cDo zakupu potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
             }
             return desc;
         }
 
         if (persistentData.getChampionLevel(getId()) < 10) {
             if (persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) >= getCost()) {
-                desc.add(symbolU.mouseLeft + " §fUlepsz do poziomu " + (level + 1) + " za " + getUpgradeCost(getCost(), level) + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §fUlepsz do poziomu " + (level + 1) + " za " + getUpgradeCost(getCost(), level) + " monet!");
             } else {
-                desc.add(symbolU.mouseLeft + " §fDo ulepszenia potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §fDo ulepszenia potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
             }
         } else {
             desc.add("§fZdobyta maestria: §e" + persistentData.getChampionMastery(getId()) + " pkt.");
-            desc.add(symbolU.mouseLeft + " §fOsiągnąłeś najwyższy poziom górnika!");
+            desc.add(symbolU.MOUSE_LEFT + " §fOsiągnąłeś najwyższy poziom górnika!");
         }
 
         if (!persistentData.getChampion().equals(getId())) {
-            desc.add(symbolU.mouseRight + " §cKLIKNIJ, ŻEBY WYBRAĆ");
+            desc.add(symbolU.MOUSE_RIGHT + " §cKLIKNIJ, ŻEBY WYBRAĆ");
         } else {
-            desc.add(symbolU.mouseRight + " §aWYBRANA KLASA");
+            desc.add(symbolU.MOUSE_RIGHT + " §aWYBRANA KLASA");
         }
         return desc;
     }

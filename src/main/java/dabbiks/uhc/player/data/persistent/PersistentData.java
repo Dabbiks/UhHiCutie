@@ -2,7 +2,7 @@ package dabbiks.uhc.player.data.persistent;
 
 import com.google.gson.annotations.Expose;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
-import dabbiks.uhc.player.rank.RankTypes;
+import dabbiks.uhc.player.rank.RankType;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ public class PersistentData {
     private boolean isManager;
 
     @Expose
-    private RankTypes rank;
+    private RankType rank;
 
 
     // * RECIPES
@@ -71,11 +71,11 @@ public class PersistentData {
         return isManager;
     }
 
-    public RankTypes getRank() {
+    public RankType getRank() {
         return rank;
     }
 
-    public void setRank(RankTypes rank) {
+    public void setRank(RankType rank) {
         this.rank = rank;
     }
 

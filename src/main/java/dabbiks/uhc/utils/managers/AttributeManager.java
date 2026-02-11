@@ -60,6 +60,18 @@ public class AttributeManager {
     }
 
     /**
+     * Pobiera aktualną całkowitą wartość atrybutu (wartość bazowa + wszystkie modyfikatory).
+     * @return Wartość atrybutu lub 0.0, jeśli atrybut nie występuje u tego bytu.
+     */
+    public double getAttributeValue(LivingEntity entity, Attribute attribute) {
+        AttributeInstance instance = entity.getAttribute(attribute);
+        if (instance == null) {
+            return 0.0;
+        }
+        return instance.getValue();
+    }
+
+    /**
      * Czyści WSZYSTKIE modyfikatory ze WSZYSTKICH atrybutów danego entity.
      * Przywraca entity do stanu bazowego (resetuje statystyki).
      */

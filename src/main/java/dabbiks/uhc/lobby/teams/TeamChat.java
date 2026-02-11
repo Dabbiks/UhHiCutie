@@ -4,7 +4,7 @@ import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
-import dabbiks.uhc.player.rank.RankTypes;
+import dabbiks.uhc.player.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +41,7 @@ public class TeamChat implements Listener {
             SessionData memberSessionData = SessionDataManager.getData(player.getUniqueId());
             if (persistentData == null) return;
             if (persistentData.getPlayerRank() == null) {
-                persistentData.setPlayerRank(RankTypes.UNRANKED);
+                persistentData.setPlayerRank(RankType.UNRANKED);
             }
             memberSessionData.rankIcon = persistentData.getPlayerRank().getIcon();
             String prefix = "";

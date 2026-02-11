@@ -7,6 +7,7 @@ import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeLoader;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
+import dabbiks.uhc.game.world.events.WorldBorder;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
@@ -39,6 +40,7 @@ public final class Main extends JavaPlugin {
 
     private RecipeManager recipeManager;
     private RecipeLimitTracker recipeLimitTracker;
+    private WorldBorder worldBorder;
 
     @Override
     public void onEnable() {
@@ -62,10 +64,16 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new RecipeListener(recipeManager, recipeLimitTracker), this);
         Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);
         Bukkit.getPluginManager().registerEvents(new TableManager(), this);
+
+        worldBorder = new WorldBorder();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public WorldBorder getWorldBorder() {
+        return worldBorder;
     }
 }

@@ -15,7 +15,6 @@ public class BossBarManager {
         this.bossBar.setVisible(false);
     }
 
-    // Pokaż wszystkim graczom
     public void show() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             bossBar.addPlayer(player);
@@ -23,35 +22,29 @@ public class BossBarManager {
         bossBar.setVisible(true);
     }
 
-    // Ukryj wszystkim graczom
     public void hide() {
         bossBar.removeAll();
         bossBar.setVisible(false);
     }
 
-    // Zaktualizuj tytuł
     public void updateTitle(String newTitle) {
         bossBar.setTitle(newTitle);
     }
 
-    // Zaktualizuj postęp (0.0 - 1.0)
     public void updateProgress(double progress) {
         bossBar.setProgress(Math.max(0, Math.min(1, progress)));
     }
 
-    // Zaktualizuj kolor
     public void updateColor(BarColor color) {
         bossBar.setColor(color);
     }
 
-    // Dodaj bossbar graczowi (np. nowy gracz)
     public void addPlayer(Player player) {
         if (!bossBar.getPlayers().contains(player)) {
             bossBar.addPlayer(player);
         }
     }
 
-    // Usuń bossbar jednemu graczowi
     public void removePlayer(Player player) {
         if (bossBar.getPlayers().contains(player)) {
             bossBar.removePlayer(player);

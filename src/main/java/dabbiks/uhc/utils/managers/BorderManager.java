@@ -15,7 +15,7 @@ public class BorderManager {
      * @param players Collection of players to send to
      * @param centerX Center X coordinate
      * @param centerZ Center Z coordinate
-     * @param size Current border size (diameter)
+     * @param size Current border SIZE (diameter)
      * @param warningBlocks Warning distance in blocks
      * @param warningTime Warning time in seconds
      */
@@ -85,7 +85,7 @@ public class BorderManager {
     }
 
     /**
-     * Sets the world border size instantly
+     * Sets the world border SIZE instantly
      * @param players Collection of players
      * @param diameter New border diameter
      */
@@ -107,14 +107,14 @@ public class BorderManager {
     }
 
     /**
-     * Sets world border size for a single player
+     * Sets world border SIZE for a single player
      */
     public static void setWorldBorderSize(Player player, double diameter) {
         setWorldBorderSize(java.util.Collections.singletonList(player), diameter);
     }
 
     /**
-     * Animates world border size change over time
+     * Animates world border SIZE change over time
      * @param players Collection of players
      * @param oldDiameter Current border diameter
      * @param newDiameter Target border diameter
@@ -139,7 +139,7 @@ public class BorderManager {
     }
 
     /**
-     * Animates world border size for a single player
+     * Animates world border SIZE for a single player
      */
     public static void animateWorldBorderSize(Player player, double oldDiameter,
                                               double newDiameter, long speed) {
@@ -217,11 +217,11 @@ public class BorderManager {
     }
 
     /**
-     * Removes world border by setting it to maximum size
+     * Removes world border by setting it to maximum SIZE
      * @param players Collection of players
      */
     public static void removeWorldBorder(Collection<Player> players) {
-        setWorldBorderSize(players, 59999968); // Maximum border size
+        setWorldBorderSize(players, 59999968); // Maximum border SIZE
         setWorldBorderWarningDistance(players, 0);
         setWorldBorderWarningTime(players, 0);
     }
@@ -238,8 +238,8 @@ public class BorderManager {
      * @param players Collection of players
      * @param centerX Center X coordinate
      * @param centerZ Center Z coordinate
-     * @param startSize Starting border size
-     * @param endSize Final border size
+     * @param startSize Starting border SIZE
+     * @param endSize Final border SIZE
      * @param durationSeconds Duration of shrinking in seconds
      */
     public static void createShrinkingBorder(Collection<Player> players, double centerX, double centerZ,
@@ -267,16 +267,16 @@ public class BorderManager {
      * @param players Collection of players
      * @param centerX Center X
      * @param centerZ Center Z
-     * @param minSize Minimum size
-     * @param maxSize Maximum size
+     * @param minSize Minimum SIZE
+     * @param maxSize Maximum SIZE
      * @param pulseTime Time for one pulse cycle in seconds
      */
     public static void createPulsingBorder(Collection<Player> players, double centerX, double centerZ,
                                            double minSize, double maxSize, int pulseTime) {
-        // Initialize at min size
+        // Initialize at min SIZE
         sendWorldBorderInit(players, centerX, centerZ, minSize, 10, 5);
 
-        // Animate to max size
+        // Animate to max SIZE
         animateWorldBorderSize(players, minSize, maxSize, pulseTime * 500L);
     }
 

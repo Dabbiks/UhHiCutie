@@ -3,7 +3,7 @@ package dabbiks.uhc.player.data.session;
 import dabbiks.uhc.game.configs.SegmentConfig;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
-import dabbiks.uhc.player.rank.RankTypes;
+import dabbiks.uhc.player.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -111,7 +111,7 @@ public class SessionData {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
         if (persistentData == null) return;
         if (persistentData.getPlayerRank() == null) {
-            persistentData.setPlayerRank(RankTypes.UNRANKED);
+            persistentData.setPlayerRank(RankType.UNRANKED);
         }
         rankIcon = persistentData.getPlayerRank().getIcon();
         String prefix = "";

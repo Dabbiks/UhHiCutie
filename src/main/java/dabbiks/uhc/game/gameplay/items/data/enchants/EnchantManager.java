@@ -63,11 +63,11 @@ public class EnchantManager {
 
     private static String tierToIcon(EnchantTier tier) {
         return switch (tier) {
-            case COMMON -> symbolU.enchant_common;
-            case RARE -> symbolU.enchant_rare;
-            case EPIC -> symbolU.enchant_epic;
-            case MYTHIC -> symbolU.enchant_mythic;
-            case LEGENDARY -> symbolU.enchant_legendary;
+            case COMMON -> symbolU.ENCHANT_COMMON;
+            case RARE -> symbolU.ENCHANT_RARE;
+            case EPIC -> symbolU.ENCHANT_EPIC;
+            case MYTHIC -> symbolU.ENCHANT_MYTHIC;
+            case LEGENDARY -> symbolU.ENCHANT_LEGENDARY;
         };
     }
 

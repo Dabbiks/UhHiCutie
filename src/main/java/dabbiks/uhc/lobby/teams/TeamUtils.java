@@ -178,19 +178,16 @@ public class TeamUtils {
         Random random = new Random();
         Map<Team, Location> teamLocations = new HashMap<>();
 
-        // Losujemy pozycje dla każdej drużyny w zakresie ±100
         for (Team team : scoreboard.getTeams()) {
-            int x = random.nextInt(maxX * 2 + 1) - maxX; // losowe od -maxX do maxX
-            int z = random.nextInt(maxZ * 2 + 1) - maxZ; // losowe od -maxZ do maxZ
+            int x = random.nextInt(maxX * 2 + 1) - maxX;
+            int z = random.nextInt(maxZ * 2 + 1) - maxZ;
 
-            // Pobieramy najwyższy blok nie będący powietrzem
             int y = world.getHighestBlockYAt(x, z);
 
             Location loc = new Location(world, x + 0.5, y+1, z + 0.5); // +0.5 żeby środkiem bloku
             teamLocations.put(team, loc);
         }
 
-        // Zbieramy wszystkich graczy w kolejności po drużynach
         List<Player> playersToTeleport = new ArrayList<>();
         List<Location> locationsByPlayer = new ArrayList<>();
 
@@ -218,7 +215,6 @@ public class TeamUtils {
                 }
                 Player player = playersToTeleport.get(index);
                 Location loc = locationsByPlayer.get(index);
-//                playerU.cleanseState(player);
                 player.teleport(loc);
                 index++;
             }
