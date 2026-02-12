@@ -15,7 +15,6 @@ public class ProjectileEnchantHandler {
         NBTEntity nbt = new NBTEntity(projectile);
         double baseDamage = damage;
 
-        // Obsługa Arrow
         if (projectile instanceof Arrow) {
             if (nbt.hasTag(EnchantType.POWER.getName())) {
                 damage += power(nbt.getInteger(EnchantType.POWER.getName()));
@@ -58,7 +57,6 @@ public class ProjectileEnchantHandler {
     }
 
     private void grounding(int level, LivingEntity victim) {
-        // Logika ściągania w dół (np. przerwanie lotu Elytrą)
         if (victim.isGliding()) {
             victim.setGliding(false);
         }
@@ -66,7 +64,6 @@ public class ProjectileEnchantHandler {
     }
 
     private void channeling(int level, LivingEntity victim) {
-        // Logika pioruna (standardowy Channeling działa tylko w burzy, tu można wymusić)
         victim.getWorld().strikeLightning(victim.getLocation());
     }
 }
