@@ -76,4 +76,5 @@ public final class Main extends JavaPlugin {
     public WorldBorder getWorldBorder() {
         return worldBorder;
     }
+    public RecipeManager getRecipeManager() { return recipeManager; }
 }

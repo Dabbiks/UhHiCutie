@@ -1,8 +1,41 @@
 package dabbiks.uhc.game.gameplay.items.data.enchants;
 
+import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
+
 import static dabbiks.uhc.Main.symbolU;
 
 public class EnchantManager {
+
+    public int getItemLevel(NBTItem nbtItem, EnchantType type) {
+        return nbtItem.getInteger(type.toString());
+    }
+
+    public int getArmorLevel(LivingEntity entity, EnchantType type) {
+        int totalLevel = 0;
+
+        if (entity.getEquipment() == null) {
+            return 0;
+        }
+
+        ItemStack[] armorContents = entity.getEquipment().getArmorContents();
+
+        for (ItemStack item : armorContents) {
+            if (item == null || item.getType().isAir()) {
+                continue;
+            }
+
+            NBTItem nbt = new NBTItem(item);
+            String key = type.toString();
+
+            if (nbt.hasKey(key)) {
+                totalLevel += nbt.getInteger(key);
+            }
+        }
+
+        return totalLevel;
+    }
 
     public void combineLevel(EnchantData data1, EnchantData data2) {
         if (!data1.getType().equals(data2.getType())) return;
