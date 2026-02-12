@@ -95,7 +95,7 @@ public class PersistentData {
         this.stats.put(stats, getStats().getOrDefault(stats, 0) - number);
     }
 
-    // * RECIPES
+    // ? RECIPES
 
     public String getRecipeCategory() { return recipeCategory; }
 
@@ -107,7 +107,7 @@ public class PersistentData {
 
     public void setRecipe(RecipeInstance recipe) { this.recipe = recipe; }
 
-    // * CHAMPIONS
+    // ? CHAMPIONS
 
     public String getChampion() { return champion; }
 

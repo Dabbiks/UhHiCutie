@@ -79,6 +79,14 @@ public class RankManager {
     public static void processPlacements(Player player) {
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
+        if (data.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < MIN_GAMES_FOR_RANKED) {
+            return;
+        }
+
+        if (data.getRank() != RankType.UNRANKED) {
+            return;
+        }
+
         int calculatedPoints = RankCalculator.calculatePlacementRank(data);
         RankType resultRank = RankType.getByPoints(calculatedPoints);
 
