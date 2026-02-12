@@ -79,7 +79,7 @@ public class ItemBuilder {
                         attributeData.getAttributeType().getName(),
                         attributeData.getAttributeValue(),
                         operation,
-                        attributeData.getEquipmentSlot()
+                        instance.getEquipmentSlot()
                 );
                 meta.addAttributeModifier(attributeData.getAttributeType().getAttribute(), modifier);
             }
@@ -145,13 +145,12 @@ public class ItemBuilder {
             for (AttributeData attributeData : instance.getAttributes()) {
                 String key = attributeData.getAttributeType().getName();
                 nbtItem.setDouble(key, attributeData.getAttributeValue());
-
-                if (attributeData.getEquipmentSlot() != null) {
-                    nbtItem.setString(key + "_SLOT", attributeData.getEquipmentSlot().name());
-                }
-
                 nbtItem.setBoolean(key + "_PERCENT", attributeData.isPercent());
             }
+        }
+
+        if (instance.getEquipmentSlot() != null) {
+            nbtItem.setString("SLOT", instance.getEquipmentSlot().name());
         }
 
         if (instance.getPerks() != null && !instance.getPerks().isEmpty()) {

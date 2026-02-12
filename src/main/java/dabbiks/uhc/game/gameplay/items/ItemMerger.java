@@ -8,6 +8,7 @@ import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import org.bukkit.Material;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.*;
 
@@ -65,6 +66,10 @@ public class ItemMerger {
             instance.setEnchantSlot(firstItem.getEnchantSlot());
         }
 
+        if (firstItem.getEquipmentSlot() != null) {
+            instance.setEquipmentSlot(firstItem.getEquipmentSlot());
+        }
+
         return instance;
     }
 
@@ -104,9 +109,8 @@ public class ItemMerger {
 
         if (firstItem.getAttributes() != null) {
             for (AttributeData data : firstItem.getAttributes()) {
-                String key = data.getAttributeType().name() + ":" + data.getEquipmentSlot().name();
+                String key = data.getAttributeType().name();
                 mergedMap.put(key, new AttributeData(
-                        data.getEquipmentSlot(),
                         data.getAttributeType(),
                         data.getAttributeValue(),
                         data.isPercent()
@@ -116,13 +120,12 @@ public class ItemMerger {
 
         if (secondItem.getAttributes() != null) {
             for (AttributeData secondData : secondItem.getAttributes()) {
-                String key = secondData.getAttributeType().name() + ":" + secondData.getEquipmentSlot().name();
+                String key = secondData.getAttributeType().name();
 
                 if (mergedMap.containsKey(key)) {
                     AttributeManager.combineValue(mergedMap.get(key), secondData);
                 } else {
                     mergedMap.put(key, new AttributeData(
-                            secondData.getEquipmentSlot(),
                             secondData.getAttributeType(),
                             secondData.getAttributeValue(),
                             secondData.isPercent()

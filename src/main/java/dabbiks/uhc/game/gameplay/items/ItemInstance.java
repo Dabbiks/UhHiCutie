@@ -7,6 +7,7 @@ import dabbiks.uhc.game.gameplay.items.data.fireworks.FireworkData;
 import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import dabbiks.uhc.game.gameplay.items.data.potions.PotionData;
 import org.bukkit.Material;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class ItemInstance {
     private String armorTexture;
 
     private List<AttributeData> attributes;
+    private EquipmentSlot equipmentSlot;
     private List<EnchantData> enchants;
     private EnchantSlot enchantSlot;
     private List<PerkType> perks;
@@ -67,6 +69,9 @@ public class ItemInstance {
 
     public List<AttributeData> getAttributes() { return attributes; }
     public void setAttributes(List<AttributeData> data) { this.attributes = data; }
+
+    public EquipmentSlot getEquipmentSlot() { return equipmentSlot; }
+    public void setEquipmentSlot(EquipmentSlot equipmentSlot) { this.equipmentSlot = equipmentSlot; }
 
     public List<EnchantData> getEnchants() { return enchants; }
     public void setEnchants(List<EnchantData> data) { this.enchants = data; }

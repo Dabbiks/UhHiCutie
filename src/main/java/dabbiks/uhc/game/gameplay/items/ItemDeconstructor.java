@@ -86,20 +86,12 @@ public class ItemDeconstructor {
             if (nbtItem.hasKey(type.getName())) {
                 double value = nbtItem.getDouble(type.getName());
 
-                EquipmentSlot slot = EquipmentSlot.HAND;
-                if (nbtItem.hasKey(type.getName() + "_SLOT")) {
-                    try {
-                        slot = EquipmentSlot.valueOf(nbtItem.getString(type.getName() + "_SLOT"));
-                    } catch (IllegalArgumentException ignored) {
-                    }
-                }
-
                 boolean percent = false;
                 if (nbtItem.hasKey(type.getName() + "_PERCENT")) {
                     percent = nbtItem.getBoolean(type.getName() + "_PERCENT");
                 }
 
-                attributes.add(new AttributeData(slot, type, value, percent));
+                attributes.add(new AttributeData(type, value, percent));
             }
         }
         if (!attributes.isEmpty()) {
@@ -122,6 +114,10 @@ public class ItemDeconstructor {
 
         if (nbtItem.hasKey(ItemTags.CAN_BE_ENCHANTED.name())) {
             instance.setCanBeEnchanted(true);
+        }
+
+        if (nbtItem.hasKey("SLOT")) {
+            instance.setEquipmentSlot(EquipmentSlot.valueOf(nbtItem.getString("SLOT")));
         }
 
         for (EnchantSlot enchantSlot : EnchantSlot.values()) {
