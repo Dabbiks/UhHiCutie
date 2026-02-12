@@ -4,6 +4,7 @@ import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.tasks.Task;
+import dabbiks.uhc.utils.managers.StartManager;
 import org.bukkit.Bukkit;
 
 import static dabbiks.uhc.Main.*;
@@ -41,8 +42,10 @@ public class StartTask extends Task {
         if (stateU.getGameState() == GameState.STARTING && countdown <= 0) {
             stateU.setGameState(GameState.IN_GAME);
             Bukkit.getWorld(WorldConfig.worldName).setTime(0);
-            // ! START
+            new StartManager().processStart();
         }
+
+
     }
 
 }

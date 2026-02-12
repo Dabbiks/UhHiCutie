@@ -3,11 +3,10 @@ package dabbiks.uhc.utils.managers;
 import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.champions.ChampionManager;
 import dabbiks.uhc.game.world.events.WeatherCycle;
-import dabbiks.uhc.lobby.teams.TeamUtils;
+import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
-import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.rank.RankManager;
 import dabbiks.uhc.player.tab.TabUtils;
 import org.bukkit.attribute.Attribute;
@@ -19,7 +18,10 @@ import static dabbiks.uhc.Main.*;
 public class StartManager {
 
     public void processStart() {
-
+        prepareWorldBorder();
+        prepareTeams();
+        prepareTab();
+        preparePlayers();
     }
 
     private void prepareWorldBorder() {
