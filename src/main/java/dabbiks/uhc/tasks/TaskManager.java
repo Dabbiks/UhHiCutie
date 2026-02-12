@@ -1,5 +1,8 @@
 package dabbiks.uhc.tasks;
 
+import dabbiks.uhc.tasks.tasks.BorderTask;
+import dabbiks.uhc.tasks.tasks.StartTask;
+import dabbiks.uhc.tasks.tasks.TimeTask;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -15,8 +18,9 @@ public class TaskManager extends BukkitRunnable {
     public TaskManager() {
         executors = new ArrayList<>();
 
-        //executors.add(new GameStart());
-
+        executors.add(new StartTask());
+        executors.add(new BorderTask());
+        executors.add(new TimeTask());
 
         runTaskTimer(plugin, 0, 1);
     }

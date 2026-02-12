@@ -1,14 +1,20 @@
 package dabbiks.uhc.utils.managers;
 
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
 import static dabbiks.uhc.Main.plugin;
+import static org.bukkit.inventory.EquipmentSlot.HAND;
 
 public class AttributeManager {
 
@@ -63,13 +69,64 @@ public class AttributeManager {
      * Pobiera aktualną całkowitą wartość atrybutu (wartość bazowa + wszystkie modyfikatory).
      * @return Wartość atrybutu lub 0.0, jeśli atrybut nie występuje u tego bytu.
      */
-    public double getAttributeValue(LivingEntity entity, Attribute attribute) {
-        AttributeInstance instance = entity.getAttribute(attribute);
-        if (instance == null) {
+    public double getAttributeValue(LivingEntity entity, AttributeType type) {
+        if (type.getAttribute() != null) {
+            AttributeInstance instance = entity.getAttribute(type.getAttribute());
+            return instance != null ? instance.getValue() : 0.0;
+        }
+
+        double flatValue = 0.0;
+        double percentValue = 0.0;
+        EntityEquipment equipment = entity.getEquipment();
+
+        if (equipment == null) {
             return 0.0;
         }
-        return instance.getValue();
+
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack item;
+            switch (slot) {
+                case HAND: item = equipment.getItemInMainHand(); break;
+                case OFF_HAND: item = equipment.getItemInOffHand(); break;
+                case HEAD: item = equipment.getHelmet(); break;
+                case CHEST: item = equipment.getChestplate(); break;
+                case LEGS: item = equipment.getLeggings(); break;
+                case FEET: item = equipment.getBoots(); break;
+                default: continue;
+            }
+
+            if (item == null || item.getType().isAir()) {
+                continue;
+            }
+
+            NBTItem nbt = new NBTItem(item);
+            String key = type.getName();
+
+            if (!nbt.hasKey(key)) {
+                continue;
+            }
+
+            if (nbt.hasKey("SLOT")) {
+                String slotName = nbt.getString("SLOT");
+                if (!slotName.equals(slot.name())) {
+                    continue;
+                }
+            }
+
+            double value = nbt.getDouble(key);
+            boolean isPercent = nbt.hasKey(key + "_PERCENT") && nbt.getBoolean(key + "_PERCENT");
+
+            if (isPercent) {
+                percentValue += value;
+            } else {
+                flatValue += value;
+            }
+        }
+
+        return flatValue * (1.0 + percentValue);
     }
+
+
 
     /**
      * Czyści WSZYSTKIE modyfikatory ze WSZYSTKICH atrybutów danego entity.

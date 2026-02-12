@@ -1,4 +1,4 @@
-package dabbiks.uhc.lobby.teams;
+package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.configs.WorldConfig;

@@ -1,4 +1,4 @@
-package dabbiks.uhc.lobby.teams;
+package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static dabbiks.uhc.Main.messageU;
 import static dabbiks.uhc.Main.stateU;
-import static dabbiks.uhc.lobby.teams.TeamUtils.scoreboard;
+import static dabbiks.uhc.game.teams.TeamUtils.scoreboard;
 
 public class TeamManager implements Listener {
 

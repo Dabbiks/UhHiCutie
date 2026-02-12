@@ -1,4 +1,4 @@
-package dabbiks.uhc.lobby.teams;
+package dabbiks.uhc.game.teams;
 
 public class TeamCreator {
 

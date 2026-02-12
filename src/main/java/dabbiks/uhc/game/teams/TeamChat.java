@@ -1,4 +1,4 @@
-package dabbiks.uhc.lobby.teams;
+package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;

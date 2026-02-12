@@ -1,4 +1,4 @@
-package dabbiks.uhc.lobby.teams;
+package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.player.data.session.SessionData;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import static dabbiks.uhc.Main.plugin;
 import static dabbiks.uhc.Main.soundU;
-import static dabbiks.uhc.lobby.teams.TeamUtils.scoreboard;
+import static dabbiks.uhc.game.teams.TeamUtils.scoreboard;
 
 public class TeamDisplay {
 

@@ -4,20 +4,14 @@ import org.bukkit.inventory.EquipmentSlot;
 
 public class AttributeData {
 
-    private EquipmentSlot equipmentSlot;
     private AttributeType attributeType;
     private double attributeValue;
     private boolean percent;
 
-    public AttributeData(EquipmentSlot equipmentSlot, AttributeType attributeType, double attributeValue, boolean percent) {
-        this.equipmentSlot = equipmentSlot;
+    public AttributeData(AttributeType attributeType, double attributeValue, boolean percent) {
         this.attributeType = attributeType;
         this.attributeValue = attributeValue;
         this.percent = percent;
-    }
-
-    public EquipmentSlot getEquipmentSlot() {
-        return equipmentSlot;
     }
 
     public AttributeType getAttributeType() {
