@@ -1,8 +1,10 @@
 package dabbiks.uhc.game.gameplay.damage;
 
 import dabbiks.uhc.game.gameplay.damage.handlers.*;
+import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.MeleeEnchantHandler;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import org.bukkit.entity.Entity;
@@ -16,14 +18,16 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import static dabbiks.uhc.Main.stateU;
 
-public class MeleeDamageEvent implements Listener {
+public class MeleeHit implements Listener {
 
     ParryingHandler parryingHandler = new ParryingHandler();
     CriticalHitHandler criticalHitHandler = new CriticalHitHandler();
     TagHandler tagHandler = new TagHandler();
     ArmorHandler armorHandler = new ArmorHandler();
     AttributeHandler attributeHandler = new AttributeHandler();
+
     MeleeEnchantHandler meleeEnchantHandler = new MeleeEnchantHandler();
+    ArmorEnchantHandler armorEnchantHandler = new ArmorEnchantHandler();
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
@@ -51,6 +55,7 @@ public class MeleeDamageEvent implements Listener {
         double damage = baseDamage;
 
         damage += tagHandler.handle(victim, null, baseDamage);
+
         damage = armorHandler.handle(null, victim, damage);
     }
 
@@ -76,6 +81,14 @@ public class MeleeDamageEvent implements Listener {
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.ELECTRIC_DAMAGE);
 
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SHARPNESS);
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SUNDER);
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SLUDGE);
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.POISON);
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.IGNITE);
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SHATTER);
+        damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.UNSTABLE_CORE);
+
         damage = armorHandler.handle(damager, (LivingEntity) victim, damage);
         attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.LIFE_STEAL);
     }
@@ -93,9 +106,26 @@ public class MeleeDamageEvent implements Listener {
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
-        damage += attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.ELECTRIC_DAMAGE);
+        damage += attributeHandler.handle(damager, victim, damage, AttributeType.ELECTRIC_DAMAGE);
+
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SHARPNESS);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SUNDER);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.HASTE);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SLUDGE);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.POISON);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.IGNITE);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SHATTER);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.LEAPING);
+        damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.UNSTABLE_CORE);
+
+        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.PROTECTION);
+        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.STONE_SKIN);
+        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SWIFTNESS);
+        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.INSULATION);
+        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.THORNS);
+        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.INVULNERABILITY);
 
         damage = armorHandler.handle(damager, victim, damage);
-        attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.LIFE_STEAL);
+        attributeHandler.handle(damager, victim, damage, AttributeType.LIFE_STEAL);
     }
 }

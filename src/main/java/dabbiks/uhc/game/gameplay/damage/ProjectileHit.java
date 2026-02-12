@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class ProjectileDamageEvent implements Listener {
+public class ProjectileHit implements Listener {
 
     @EventHandler
     public void onProjectileDamage(EntityDamageByEntityEvent event) {
@@ -22,12 +22,10 @@ public class ProjectileDamageEvent implements Listener {
     }
 
     public void processProjectileToPlayer(EntityDamageByEntityEvent event, Player victim, Entity shooter) {
-        if (shooter instanceof Player) {
-        } else {
-        }
+        if (!(shooter instanceof Player)) return;
     }
 
     public void processProjectileToMonster(EntityDamageByEntityEvent event, Entity shooter, Entity victim) {
-        // Logika gdy mob obrywa strzałą od gracza
+
     }
 }

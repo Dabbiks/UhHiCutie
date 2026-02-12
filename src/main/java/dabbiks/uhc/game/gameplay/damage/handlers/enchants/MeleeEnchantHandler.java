@@ -34,6 +34,9 @@ public class MeleeEnchantHandler {
     public double handle(Player damager, LivingEntity victim, double damage,
                          EntityDamageByEntityEvent event, EnchantType type) {
 
+        double baseDamage = damage;
+        damage = baseDamage;
+
         ItemStack item = damager.getInventory().getItemInMainHand();
         NBTItem nbtItem = new NBTItem(item);
 
@@ -51,9 +54,10 @@ public class MeleeEnchantHandler {
 
             case IRON_FEET -> damage -= iron_feet(level, damage);
             case LEAPING -> leaping(level, damager);
-            case UNSTABLE_CORE ->unstable_core(damager, victim, damage);
+            case UNSTABLE_CORE -> unstable_core(damager, victim, damage);
         }
 
+        damage -= baseDamage;
         return damage;
     }
 
