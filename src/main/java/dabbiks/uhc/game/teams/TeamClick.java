@@ -2,6 +2,7 @@ package dabbiks.uhc.game.teams;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTEntity;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +28,7 @@ public class TeamClick implements Listener {
         }
         messageU.sendMessageToPlayer(event.getPlayer(), "TEST 2");
 
-        String teamName = NBT.get(interaction, nbt -> (String) nbt.getString("TEAM_INTERACTION"));
+        String teamName = NBT.getPersistentData(interaction, nbt -> nbt.getString("team_interaction"));
         if (teamName == null) return;
 
         messageU.sendMessageToPlayer(event.getPlayer(), "TEST 3");

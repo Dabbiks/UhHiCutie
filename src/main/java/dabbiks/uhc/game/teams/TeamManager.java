@@ -44,7 +44,7 @@ public class TeamManager {
         player.sendMessage("AAA 4");
         team.addEntry(player.getName());
         int size = team.getEntries().size();
-        TextDisplay display = teamDisplays.get(name + size);
+        TextDisplay display = teamDisplays.get(name.toUpperCase() + size);
         if (display != null) display.setText("§7" + player.getName());
         for (String entry : team.getEntries()) {
             Player p = Bukkit.getPlayer(entry);
@@ -64,7 +64,7 @@ public class TeamManager {
 
         int startSlot = -1;
         for (int i = 1; i <= LobbyConfig.teamSize; i++) {
-            TextDisplay display = teamDisplays.get(teamName + i);
+            TextDisplay display = teamDisplays.get(teamName.toUpperCase() + i);
             if (display != null && playerName.equals(display.getText().replace("§7", ""))) {
                 startSlot = i;
                 break;
@@ -88,13 +88,13 @@ public class TeamManager {
         if (startSlot == -1) return;
 
         for (int i = startSlot; i < LobbyConfig.teamSize; i++) {
-            TextDisplay current = teamDisplays.get(teamName + i);
-            TextDisplay next = teamDisplays.get(teamName + (i + 1));
+            TextDisplay current = teamDisplays.get(teamName.toUpperCase() + i);
+            TextDisplay next = teamDisplays.get(teamName.toUpperCase() + (i + 1));
             String nextText = (next != null) ? next.getText() : "";
             if (current != null) current.setText(nextText);
         }
 
-        TextDisplay last = teamDisplays.get(teamName + LobbyConfig.teamSize);
+        TextDisplay last = teamDisplays.get(teamName.toUpperCase() + LobbyConfig.teamSize);
         if (last != null) last.setText("");
     }
 
@@ -104,8 +104,8 @@ public class TeamManager {
         for (TextDisplay textDisplay : teamDisplays.values()) textDisplay.remove();
 
         for (Entity entity : Bukkit.getWorld("world").getEntities()) {
-            boolean has = NBT.get(entity, nbt -> (boolean) nbt.hasTag("TEAM_ENTITY"));
-
+            boolean isTeamEntity = NBT.getPersistentData(entity, nbt -> nbt.hasTag("team_entity"));
+            if (isTeamEntity) entity.remove();
         }
 
         interactions.clear();

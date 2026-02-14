@@ -70,18 +70,19 @@ public class TeamInitializer {
             applyDisplaySettings(display, rotation);
 
             int finalI = i;
-            NBT.modify(display, nbt -> {
+            NBT.modifyPersistentData(display, nbt -> {
                 nbt.setInteger(name.toUpperCase(), finalI);
-                nbt.setInteger("TEAM_ENTITY", 1);
+                nbt.setInteger("team_entity", 1);
             });
+
             teamManager.getTeamDisplays().put(name.toUpperCase() + i, display);
         }
 
-        Interaction interaction = (Interaction) Bukkit.getWorld(location.getWorld().getName()).spawnEntity(location.clone().subtract(0, 0.4, 0), org.bukkit.entity.EntityType.INTERACTION);
+        Interaction interaction = (Interaction) location.getWorld().spawnEntity(location.clone().subtract(0, 0.4, 0), EntityType.INTERACTION);
 
-        NBT.modify(interaction, nbt -> {
-            nbt.setString("TEAM_INTERACTION", name);
-            nbt.setInteger("TEAM_ENTITY", 1);
+        NBT.modifyPersistentData(interaction, nbt -> {
+            nbt.setString("team_interaction", name);
+            nbt.setInteger("team_entity", 1);
         });
 
         interaction.setInteractionHeight(1.2f);
