@@ -126,7 +126,7 @@ public class TeamDisplay {
         if (teamData != null) {
             SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
             sessionData.setTeamIcon(teamData.smallIcon);
-            sessionData.updatePlayerPrefix(player);
+//            sessionData.updatePlayerPrefix(player);
         }
 
         identifier = "TITLE";
@@ -147,7 +147,7 @@ public class TeamDisplay {
         reloadTeamDisplay(team);
 
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
-        sessionData.updatePlayerPrefix(player);
+//        sessionData.updatePlayerPrefix(player);
 
         int count = TeamUtils.getPlayerCountInTeam(teamName);
         String identifier = "TITLE";

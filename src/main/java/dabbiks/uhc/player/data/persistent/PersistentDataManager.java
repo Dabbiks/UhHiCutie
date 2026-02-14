@@ -20,13 +20,12 @@ public class PersistentDataManager {
     public static void loadData(UUID uuid) {
         PersistentData persistentData = Main.persistentDataJson.loadPlayerData(uuid);
 
-        // Jeśli dane nie istnieją (nowy gracz), tworzymy je i USTAWIAMY NICK
         if (persistentData == null) {
             persistentData = new PersistentData();
-            persistentData.setPlayerId(uuid);
+            persistentData.setUUID(uuid);
 
             String name = Bukkit.getOfflinePlayer(uuid).getName();
-            persistentData.setPlayerName(name != null ? name : "Unknown");
+            persistentData.setName(name != null ? name : "Unknown");
         }
 
         dataMap.put(uuid, persistentData);

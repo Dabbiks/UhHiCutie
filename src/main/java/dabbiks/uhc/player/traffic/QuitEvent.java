@@ -85,7 +85,7 @@ public class QuitEvent implements Listener {
     }
 
     private void handleInGameQuit(Player player, SessionData sessionData) {
-        Damage.processDeath(player);
+//        Damage.processDeath(player);
         stateU.removePlayerState(player);
         sessionData.clearTags();
     }

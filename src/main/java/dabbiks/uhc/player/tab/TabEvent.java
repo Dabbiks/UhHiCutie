@@ -21,9 +21,9 @@ public class TabEvent implements EventHandler<PlayerLoadEvent> {
         tabU.setTabHeader(player, "");
         tabU.setTabFooter(player, "");
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
-        sessionData.updatePlayerPrefix(player);
+//        sessionData.updatePlayerPrefix(player);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            SessionDataManager.getData(player.getUniqueId()).updatePlayerPrefix(player);
+//            SessionDataManager.getData(player.getUniqueId()).updatePlayerPrefix(player);
         }, 20L);
     }
 

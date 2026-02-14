@@ -23,7 +23,7 @@ public class RankManager {
         double avgOpponentRank = calculateAverageOpponentRank(player);
         int modifier = RankCalculator.calculateMatchModifier(pData, avgOpponentRank);
 
-        sData.setRankPRModifier(modifier);
+        sData.setModifier(modifier);
     }
 
     public static void modifyPlayerRankPR(Player player, int changeAmount) {
@@ -58,7 +58,7 @@ public class RankManager {
         SessionData sData = SessionDataManager.getData(player.getUniqueId());
 
         data.setRank(newRank);
-        sData.updatePlayerPrefix(player);
+//        sData.updatePlayerPrefix(player);
 
         boolean isDivisionChange = !oldRank.getIcon().equals(newRank.getIcon());
         String arrow = isPromotion ? " §a>>§f " : " §c<<§f ";
@@ -99,7 +99,7 @@ public class RankManager {
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (player.isOnline()) {
-                SessionDataManager.getData(player.getUniqueId()).updatePlayerPrefix(player);
+//                SessionDataManager.getData(player.getUniqueId()).updatePlayerPrefix(player);
             }
         }, 30L);
     }

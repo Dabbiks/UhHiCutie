@@ -29,26 +29,26 @@ public class TeamChat implements Listener {
 
         event.setCancelled(true);
 
-        if (isTeamMessage && team != null) {
-            // Wiadomość drużynowa
-            for (String member : team.getEntries()) {
-                Player teamMember = Bukkit.getPlayer(member);
-                if (teamMember != null) {
-                    teamMember.sendMessage("§c[DRUŻYNA] §6" + persistentData.get() + " §e" + player.getName() + "§f " + message);
-                }
-            }
-        } else {
-            SessionData memberSessionData = SessionDataManager.getData(player.getUniqueId());
-            if (persistentData == null) return;
-            if (persistentData.getPlayerRank() == null) {
-                persistentData.setPlayerRank(RankType.UNRANKED);
-            }
-            memberSessionData.rankIcon = persistentData.getPlayerRank().getIcon();
-            String prefix = "";
-            if (!memberSessionData.rankIcon.isEmpty()) prefix = prefix + memberSessionData.rankIcon + " ";
-            if (!memberSessionData.teamIcon.isEmpty()) prefix = prefix + memberSessionData.teamIcon + " ";
-            if (persistentData.getIsManager()) prefix = prefix + "\uE088" + " ";
-            Bukkit.broadcastMessage(prefix + "§e" + player.getName() + "§f " + message);
-        }
+//        if (isTeamMessage && team != null) {
+//            // Wiadomość drużynowa
+//            for (String member : team.getEntries()) {
+//                Player teamMember = Bukkit.getPlayer(member);
+//                if (teamMember != null) {
+//                    teamMember.sendMessage("§c[DRUŻYNA] §6" + persistentData.get() + " §e" + player.getName() + "§f " + message);
+//                }
+//            }
+//        } else {
+//            SessionData memberSessionData = SessionDataManager.getData(player.getUniqueId());
+//            if (persistentData == null) return;
+//            if (persistentData.getPlayerRank() == null) {
+//                persistentData.setPlayerRank(RankType.UNRANKED);
+//            }
+//            memberSessionData.rankIcon = persistentData.getPlayerRank().getIcon();
+//            String prefix = "";
+//            if (!memberSessionData.rankIcon.isEmpty()) prefix = prefix + memberSessionData.rankIcon + " ";
+//            if (!memberSessionData.teamIcon.isEmpty()) prefix = prefix + memberSessionData.teamIcon + " ";
+//            if (persistentData.getIsManager()) prefix = prefix + "\uE088" + " ";
+//            Bukkit.broadcastMessage(prefix + "§e" + player.getName() + "§f " + message);
+//        }
     }
 }
