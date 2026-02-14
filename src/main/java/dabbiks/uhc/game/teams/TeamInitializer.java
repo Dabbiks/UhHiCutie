@@ -1,6 +1,7 @@
 package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.configs.LobbyConfig;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -68,15 +69,20 @@ public class TeamInitializer {
 
             applyDisplaySettings(display, rotation);
 
-            NBTEntity nbt = new NBTEntity(display);
-            nbt.setInteger(name.toUpperCase(), i);
+            int finalI = i;
+            NBT.modify(display, nbt -> {
+                nbt.setInteger(name.toUpperCase(), finalI);
+                nbt.setInteger("TEAM_ENTITY", 1);
+            });
             teamManager.getTeamDisplays().put(name.toUpperCase() + i, display);
         }
 
         Interaction interaction = (Interaction) Bukkit.getWorld(location.getWorld().getName()).spawnEntity(location.clone().subtract(0, 0.4, 0), org.bukkit.entity.EntityType.INTERACTION);
 
-        NBTEntity nbt = new NBTEntity(interaction);
-        nbt.setString("TEAM_INTERACTION", name);
+        NBT.modify(interaction, nbt -> {
+            nbt.setString("TEAM_INTERACTION", name);
+            nbt.setInteger("TEAM_ENTITY", 1);
+        });
 
         interaction.setInteractionHeight(1.2f);
         interaction.setInteractionWidth(1.2f);

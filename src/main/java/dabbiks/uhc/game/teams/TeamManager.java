@@ -1,8 +1,11 @@
 package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.configs.LobbyConfig;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
@@ -26,28 +29,30 @@ public class TeamManager {
 
     public void addPlayer(Player player, String name) {
         Team team = scoreboard.getTeam(name);
+        player.sendMessage("AAA 1");
         if (team == null) return;
-
+        player.sendMessage("AAA 2");
         if (team.getEntries().size() >= LobbyConfig.teamSize) {
             player.sendMessage("§cTa drużyna jest już pełna!");
             return;
         }
+        player.sendMessage("AAA 3");
         if (team.hasEntry(player.getName())) {
             player.sendMessage("§eJesteś już w tej drużynie.");
             return;
         }
-
+        player.sendMessage("AAA 4");
         team.addEntry(player.getName());
         int size = team.getEntries().size();
         TextDisplay display = teamDisplays.get(name + size);
         if (display != null) display.setText("§7" + player.getName());
-
         for (String entry : team.getEntries()) {
             Player p = Bukkit.getPlayer(entry);
             if (p == null) continue;
             p.sendMessage("§a+ §7Gracz §f" + player.getName() + " §7dołączył do drużyny.");
             soundU.playSoundAtLocation(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         }
+        player.sendMessage("AAA 5");
     }
 
     public void removePlayer(Player player) {
@@ -97,6 +102,11 @@ public class TeamManager {
         for (Team team : scoreboard.getTeams()) team.unregister();
         for (Interaction interaction : interactions) interaction.remove();
         for (TextDisplay textDisplay : teamDisplays.values()) textDisplay.remove();
+
+        for (Entity entity : Bukkit.getWorld("world").getEntities()) {
+            boolean has = NBT.get(entity, nbt -> (boolean) nbt.hasTag("TEAM_ENTITY"));
+
+        }
 
         interactions.clear();
         teamDisplays.clear();

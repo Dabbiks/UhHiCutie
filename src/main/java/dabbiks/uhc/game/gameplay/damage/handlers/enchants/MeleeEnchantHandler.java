@@ -101,7 +101,7 @@ public class MeleeEnchantHandler {
     private void unstable_core(Player damager, LivingEntity victim, double damage) {
         for (Entity entity : victim.getNearbyEntities(8, 5, 8)) {
             if (!(entity instanceof LivingEntity) || entity == victim) continue;
-            if (entity instanceof Player player && TeamUtils.isTargetAlly(damager, player)) continue;
+            if (entity instanceof Player player && TeamUtils.isPlayerAlly(damager, player)) continue;
 
             ParticleUtils.spawnParticleFollower(
                     plugin,

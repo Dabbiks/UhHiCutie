@@ -110,7 +110,7 @@ public class MeleeHit implements Listener {
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;
-        if (TeamUtils.isTargetAlly(damager, victim)) return;
+        if (TeamUtils.isPlayerAlly(damager, victim)) return;
         if (stateU.getPlayerState(damager) != PlayerState.ALIVE
                 || stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
 

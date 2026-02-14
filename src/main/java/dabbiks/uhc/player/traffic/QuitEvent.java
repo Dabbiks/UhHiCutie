@@ -3,7 +3,7 @@ package dabbiks.uhc.player.traffic;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.configs.SegmentConfig;
-import dabbiks.uhc.game.teams.TeamDisplay;
+import dabbiks.uhc.game.teams.TeamManager;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
@@ -21,6 +21,8 @@ import static dabbiks.uhc.game.gameplay.bossbar.SegmentBossBar.mainBossBar;
 import static dabbiks.uhc.player.traffic.JoinEvent.boards;
 
 public class QuitEvent implements Listener {
+
+    private TeamManager teamManager = INSTANCE.getTeamManager();
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
@@ -64,17 +66,7 @@ public class QuitEvent implements Listener {
         messageU.sendMessageToPlayers(playerListU.getAllPlayers(), msg);
 
         stateU.removePlayerState(player);
-
-        Team previousTeam = TeamUtils.getPlayerTeam(player);
-        if (previousTeam != null) {
-            String teamName = previousTeam.getName();
-            TeamUtils.removePlayerFromTeam(player, teamName);
-            TeamDisplay.processTeamQuit(player, teamName);
-            sessionData.teamIcon = "";
-
-            Bukkit.getScheduler().runTaskLater(plugin, () -> TeamDisplay.reloadTeamDisplay(previousTeam), 2L);
-        }
-
+        teamManager.removePlayer(player);
         sessionData.clearTags();
     }
 
