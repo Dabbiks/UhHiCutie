@@ -1,83 +1,109 @@
 package dabbiks.uhc.game.teams;
 
-import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.metadata.MetadataValue;
+import org.bukkit.entity.TextDisplay;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static dabbiks.uhc.Main.messageU;
-import static dabbiks.uhc.Main.stateU;
-import static dabbiks.uhc.game.teams.TeamUtils.scoreboard;
+import static dabbiks.uhc.Main.soundU;
 
-public class TeamManager implements Listener {
+public class TeamManager {
 
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Interaction interaction)) {
+    private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
+    private final Scoreboard scoreboard = scoreboardManager.getMainScoreboard();
+    private final Map<String, TextDisplay> teamDisplays = new HashMap<>();
+    private final List<Interaction> interactions = new ArrayList<>();
+
+    public void addPlayer(Player player, String name) {
+        Team team = scoreboard.getTeam(name);
+        if (team == null) return;
+
+        if (team.getEntries().size() >= LobbyConfig.teamSize) {
+            player.sendMessage("§cTa drużyna jest już pełna!");
+            return;
+        }
+        if (team.hasEntry(player.getName())) {
+            player.sendMessage("§eJesteś już w tej drużynie.");
             return;
         }
 
-        if (stateU.getGameState() == GameState.IN_GAME) {
-            return;
-        }
+        team.addEntry(player.getName());
+        int size = team.getEntries().size();
+        TextDisplay display = teamDisplays.get(name + size);
+        if (display != null) display.setText("§7" + player.getName());
 
-        if (!TeamDisplay.containsInteraction(interaction)) {
-            return;
-        }
-
-        if (!interaction.hasMetadata("TEAM_DISPLAY_ID_IDENTIFIER")) return;
-        List<MetadataValue> metadataValues = interaction.getMetadata("TEAM_DISPLAY_ID_IDENTIFIER");
-
-        Player player = event.getPlayer();
-
-        for (TeamData team : TeamLoader.getTeams()) {
-            for (MetadataValue value : metadataValues) {
-                if (value.asString().equals(team.name + "DISPLAY")) {
-                    Team sbTeam = scoreboard.getTeam(team.name);
-                    if (sbTeam != null) {
-                        processClick(sbTeam, player);
-                    }
-                    break;
-                }
-            }
+        for (String entry : team.getEntries()) {
+            Player p = Bukkit.getPlayer(entry);
+            if (p == null) continue;
+            p.sendMessage("§a+ §7Gracz §f" + player.getName() + " §7dołączył do drużyny.");
+            soundU.playSoundAtLocation(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         }
     }
 
-    public void processClick(Team team, Player player) {
+    public void removePlayer(Player player) {
+        Team team = scoreboard.getEntryTeam(player.getName());
+        if (team == null) return;
 
-        if (TeamUtils.getPlayerTeam(player) != null && TeamUtils.getPlayerTeam(player).getName().equals(team.getName())) {
-            messageU.sendMessageToPlayer(player, messageU.gamePrefix + "§cJesteś już w tej drużynie!");
-            return;
-        }
+        String teamName = team.getName();
+        String playerName = player.getName();
 
-        if (TeamUtils.getPlayerCountInTeam(team.getName()) >= LobbyConfig.teamSize) {
-            messageU.sendMessageToPlayer(player, messageU.gamePrefix + "§cTa drużyna jest pełna!");
-            return;
-        }
-
-        if (TeamUtils.getPlayerTeam(player) != null) {
-            Team previousTeam = TeamUtils.getPlayerTeam(player);
-            TeamUtils.removePlayerFromTeam(player, previousTeam.getName());
-            TeamDisplay.processTeamQuit(player, previousTeam.getName());
-        }
-
-        TeamUtils.addPlayerToTeam(player, team.getName());
-        TeamDisplay.processTeamJoin(player, TeamUtils.getPlayerTeam(player).getName());
-        messageU.sendMessageToPlayer(player, messageU.gamePrefix + "§fDołączyłeś do drużyny!");
-        for (String member : TeamUtils.getPlayerTeam(player).getEntries()) {
-            Player playerMember = Bukkit.getPlayer(member);
-            if (playerMember == null || playerMember == player) {
-                continue;
+        int startSlot = -1;
+        for (int i = 1; i <= LobbyConfig.teamSize; i++) {
+            TextDisplay display = teamDisplays.get(teamName + i);
+            if (display != null && playerName.equals(display.getText().replace("§7", ""))) {
+                startSlot = i;
+                break;
             }
-            messageU.sendMessageToPlayer(playerMember, messageU.gamePrefix + "§f" + player.getName() + " §fdołączył do drużyny!");
         }
+
+        team.removeEntry(playerName);
+
+        if (player.isOnline()) {
+            player.sendMessage("§eOpuściłeś drużynę §6" + teamName);
+        }
+
+        for (String entry : team.getEntries()) {
+            Player p = Bukkit.getPlayer(entry);
+            if (p == null || p.getName().equals(playerName)) continue;
+
+            p.sendMessage("§c- §7Gracz §f" + playerName + " §7opuścił drużynę.");
+            soundU.playSoundAtLocation(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 0.5f);
+        }
+
+        if (startSlot == -1) return;
+
+        for (int i = startSlot; i < LobbyConfig.teamSize; i++) {
+            TextDisplay current = teamDisplays.get(teamName + i);
+            TextDisplay next = teamDisplays.get(teamName + (i + 1));
+            String nextText = (next != null) ? next.getText() : "";
+            if (current != null) current.setText(nextText);
+        }
+
+        TextDisplay last = teamDisplays.get(teamName + LobbyConfig.teamSize);
+        if (last != null) last.setText("");
     }
+
+    public void deleteTeams() {
+        for (Team team : scoreboard.getTeams()) team.unregister();
+        for (Interaction interaction : interactions) interaction.remove();
+        for (TextDisplay textDisplay : teamDisplays.values()) textDisplay.remove();
+
+        interactions.clear();
+        teamDisplays.clear();
+    }
+
+    public Map<String, TextDisplay> getTeamDisplays() { return teamDisplays; }
+    public Scoreboard getScoreboard() { return scoreboard; }
+    public ScoreboardManager getScoreboardManager() { return scoreboardManager; }
+    public List<Interaction> getInteractions() { return interactions; }
 }

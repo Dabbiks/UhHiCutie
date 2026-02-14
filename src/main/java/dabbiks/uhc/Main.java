@@ -50,6 +50,7 @@ public final class Main extends JavaPlugin {
     private RecipeManager recipeManager;
     private RecipeLimitTracker recipeLimitTracker;
     private WorldBorder worldBorder;
+    private TeamManager teamManager;
 
     @Override
     public void onEnable() {
@@ -70,6 +71,8 @@ public final class Main extends JavaPlugin {
         tabManager = new TabManager();
         attributeManager = new AttributeManager();
         indicatorManager = new IndicatorManager();
+        teamManager = new TeamManager();
+
         persistentDataJson = new PersistentDataJson();
         worldBorder = new WorldBorder();
         recipeManager = new RecipeManager();
@@ -82,33 +85,31 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new RecipeListener(recipeManager, recipeLimitTracker), this);
         Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);
         Bukkit.getPluginManager().registerEvents(new TableManager(), this);
-        Bukkit.getPluginManager().registerEvents(new TeamManager(), this);
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
 
         Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileLaunch(), this);
 
-        Bukkit.getPluginManager().registerEvents(new TeamChat(), this);
+        Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);
 
-        TeamDisplay.deleteTeamDisplays();
-        TeamUtils.removeAllTeams();
-        TeamCreator.initializeTeams();
+        teamManager.deleteTeams();
+        new TeamInitializer();
     }
 
     @Override
     public void onDisable() {
-        TeamDisplay.deleteTeamDisplays();
-        TeamUtils.removeAllTeams();
+        teamManager.deleteTeams();
     }
 
     public WorldBorder getWorldBorder() {
         return worldBorder;
     }
     public RecipeManager getRecipeManager() { return recipeManager; }
+    public TeamManager getTeamManager() { return teamManager; }
 }

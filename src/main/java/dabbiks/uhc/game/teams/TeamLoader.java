@@ -14,9 +14,9 @@ import static dabbiks.uhc.Main.plugin;
 
 public class TeamLoader {
 
-    private static List<TeamData> teams = new ArrayList<>();
+    private List<TeamData> teams = new ArrayList<>();
 
-    public static void loadTeams() {
+    public void loadTeams() {
         File folder = new File(plugin.getDataFolder(), "teams");
         if (!folder.exists()) folder.mkdirs();
 
@@ -36,14 +36,7 @@ public class TeamLoader {
         }
     }
 
-    public static List<TeamData> getTeams() {
+    public List<TeamData> getTeams() {
         return teams;
-    }
-
-    public static TeamData getTeamByName(String name) {
-        for (TeamData team : teams) {
-            if (team.name.equalsIgnoreCase(name)) return team;
-        }
-        return null;
     }
 }
