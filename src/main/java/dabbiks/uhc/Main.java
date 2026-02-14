@@ -1,18 +1,28 @@
 package dabbiks.uhc;
 
+import dabbiks.uhc.game.gameplay.damage.MeleeHit;
+import dabbiks.uhc.game.gameplay.damage.ProjectileHit;
+import dabbiks.uhc.game.gameplay.damage.ProjectileLaunch;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
+import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
 import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeLimitTracker;
 import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeListener;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeLoader;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
+import dabbiks.uhc.game.teams.*;
 import dabbiks.uhc.game.world.events.WorldBorder;
+import dabbiks.uhc.lobby.LobbyItems;
+import dabbiks.uhc.lobby.SpawnProtector;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
+import dabbiks.uhc.player.traffic.JoinEvent;
+import dabbiks.uhc.player.traffic.QuitEvent;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
 import dabbiks.uhc.utils.managers.IndicatorManager;
 import dabbiks.uhc.utils.managers.TabManager;
+import fr.mrmicky.fastinv.FastInvManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +47,6 @@ public final class Main extends JavaPlugin {
     public static IndicatorManager indicatorManager;
 
     public static PersistentDataJson persistentDataJson;
-
     private RecipeManager recipeManager;
     private RecipeLimitTracker recipeLimitTracker;
     private WorldBorder worldBorder;
@@ -58,19 +67,44 @@ public final class Main extends JavaPlugin {
         itemU = new ItemUtils();
         playerListU = new PlayerListUtils();
 
+        tabManager = new TabManager();
+        attributeManager = new AttributeManager();
+        indicatorManager = new IndicatorManager();
+        persistentDataJson = new PersistentDataJson();
+        worldBorder = new WorldBorder();
         recipeManager = new RecipeManager();
         recipeLimitTracker = new RecipeLimitTracker();
+
         new RecipeLoader(recipeManager).loadRecipes();
+
+        FastInvManager.register(this);
+
         Bukkit.getPluginManager().registerEvents(new RecipeListener(recipeManager, recipeLimitTracker), this);
         Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);
         Bukkit.getPluginManager().registerEvents(new TableManager(), this);
+        Bukkit.getPluginManager().registerEvents(new TeamManager(), this);
+        Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
 
-        worldBorder = new WorldBorder();
+        Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);
+        Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
+        Bukkit.getPluginManager().registerEvents(new ProjectileLaunch(), this);
+
+        Bukkit.getPluginManager().registerEvents(new TeamChat(), this);
+        Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
+
+        Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);
+
+        TeamDisplay.deleteTeamDisplays();
+        TeamUtils.removeAllTeams();
+        TeamCreator.initializeTeams();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        TeamDisplay.deleteTeamDisplays();
+        TeamUtils.removeAllTeams();
     }
 
     public WorldBorder getWorldBorder() {

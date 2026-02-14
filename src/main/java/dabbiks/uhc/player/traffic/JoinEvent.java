@@ -45,7 +45,7 @@ public class JoinEvent implements Listener {
         setupPlayerState(player);
 
         player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5));
-        player.setRotation(90, -15);
+        player.setRotation(0, -5);
 
         handleJoinMessages(player);
     }
@@ -83,9 +83,8 @@ public class JoinEvent implements Listener {
         playerU.cleanseState(player);
         attributeManager.clearAllAttributes(player);
 
-        LobbyItems lobbyItems = new LobbyItems();
-        player.getInventory().setItem(0, lobbyItems.championBook);
-        player.getInventory().setItem(1, lobbyItems.recipeBook);
+        player.getInventory().setItem(0, LobbyItems.championBook);
+        player.getInventory().setItem(1, LobbyItems.recipeBook);
     }
 
     private void sendDiscordInvite(Player player) {
@@ -93,7 +92,7 @@ public class JoinEvent implements Listener {
             player.sendMessage(Component.empty());
             Component message = Component.text("§4§l! §r§fNajedź na mnie")
                     .clickEvent(ClickEvent.openUrl("https://discord.gg/ueAFMTYRQA"))
-                    .hoverEvent(HoverEvent.showText(Component.text("§f" + symbolU.MOUSE_LEFT + " Dołącz do discorda :)", NamedTextColor.GRAY)));
+                    .hoverEvent(HoverEvent.showText(Component.text("§f" + symbolU.MOUSE_LEFT + " Kliknij i dołącz do discorda :)", NamedTextColor.GRAY)));
             player.sendMessage(message);
             player.sendMessage(Component.empty());
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);

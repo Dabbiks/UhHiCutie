@@ -25,9 +25,7 @@ import static dabbiks.uhc.game.teams.TeamUtils.scoreboard;
 
 public class TeamDisplay {
 
-    // Klucze: teamName+identifier, wartości: entity (TextDisplay)
     private static final Map<String, TextDisplay> teamTextDisplays = new HashMap<>();
-    // Klucze: UUID entity Interaction, wartości: Interaction
     private static final Map<UUID, Interaction> teamInteractionDisplays = new HashMap<>();
 
     public static void createTeamDisplay(TeamData team) {

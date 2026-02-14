@@ -31,8 +31,12 @@ public class MeleeHit implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (!(event instanceof EntityDamageByEntityEvent entityEvent)) {
+        if (!(event instanceof EntityDamageByEntityEvent) && event.getEntity() instanceof Player) {
             processEnvironmentDamage(event);
+            return;
+        }
+
+        if (!(event instanceof EntityDamageByEntityEvent entityEvent)) {
             return;
         }
 
@@ -62,6 +66,9 @@ public class MeleeHit implements Listener {
     public void processDamageByMonster(EntityDamageByEntityEvent event) {
         Player victim = (Player) event.getEntity();
         Entity damager = event.getDamager();
+
+        if (!(damager instanceof LivingEntity)) return;
+
         final double baseDamage = event.getDamage();
         double damage = baseDamage;
 
@@ -74,6 +81,9 @@ public class MeleeHit implements Listener {
     public void processDamageToMonster(EntityDamageByEntityEvent event) {
         Player damager = (Player) event.getDamager();
         Entity victim = event.getEntity();
+
+        if (!(victim instanceof LivingEntity)) return;
+
         final double baseDamage = event.getDamage();
         double damage = baseDamage;
 

@@ -109,7 +109,7 @@ public class Miner extends Champion {
             if (persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) >= getCost()) {
                 desc.add(symbolU.MOUSE_LEFT + " §fZakup górnika za " + getCost() + " monet!");
             } else {
-                desc.add(symbolU.MOUSE_LEFT + " §cDo zakupu potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §cDo zakupu potrzebujesz jeszcze " + (getCost() - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
             }
             return desc;
         }

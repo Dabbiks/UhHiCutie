@@ -6,10 +6,8 @@ import dabbiks.uhc.menu.RecipeMenu;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import de.tr7zw.nbtapi.NBTItem;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import fr.mrmicky.fastinv.FastInv;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,12 +21,22 @@ import static dabbiks.uhc.Main.*;
 
 public class LobbyItems implements Listener {
 
-    public ItemStack championBook = createLobbyItem(Material.IRON_PICKAXE, 1, "§f" + symbolU.MOUSE_LEFT + " Przeglądaj klasy", 10000, "CHAMPIONS");
-    public ItemStack recipeBook = createLobbyItem(Material.BOOK, 1, "§f" + symbolU.MOUSE_LEFT + " Przeglądaj przepisy", 10000, "RECIPE_BOOK");
-    public ItemStack spectate = createLobbyItem(Material.ENDER_EYE, 1, "§f" + symbolU.MOUSE_LEFT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
+    public static ItemStack championBook;
+    public static ItemStack recipeBook;
+    public static ItemStack spectate;
 
-    public static ItemStack createLobbyItem(Material material, int amount, String name, int model, String id) {
-        ItemStack item = new ItemStack(material, amount);
+    public LobbyItems() {
+        init();
+    }
+
+    private void init() {
+        championBook = createLobbyItem(Material.IRON_PICKAXE, "§f" + symbolU.MOUSE_LEFT + " Przeglądaj klasy", 10000, "CHAMPIONS");
+        recipeBook = createLobbyItem(Material.BOOK, "§f" + symbolU.MOUSE_LEFT + " Przeglądaj przepisy", 10000, "RECIPE_BOOK");
+        spectate = createLobbyItem(Material.ENDER_EYE, "§f" + symbolU.MOUSE_LEFT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
+    }
+
+    private ItemStack createLobbyItem(Material material, String name, int model, String id) {
+        ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setCustomModelData(model);
@@ -43,7 +51,7 @@ public class LobbyItems implements Listener {
     public void onPlayerRightClickEvent(PlayerInteractEvent event) {
         if (event.getItem() == null) return;
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (!event.getPlayer().getLocation().getWorld().getName().equals(WorldConfig.worldName)) return;
+        if (!event.getPlayer().getLocation().getWorld().getName().equals("world")) return;
 
         event.setCancelled(true);
 
@@ -53,11 +61,11 @@ public class LobbyItems implements Listener {
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
         if (nbtItem.hasTag("CHAMPIONS")) {
-            new ChampionMenu(player, data);
+            new ChampionMenu(player, data).open(player);
         }
 
         if (nbtItem.hasTag("RECIPE_BOOK")) {
-            new RecipeMenu(player, INSTANCE.getRecipeManager());
+            new RecipeMenu(player, INSTANCE.getRecipeManager()).open(player);
         }
 
         if (nbtItem.hasTag("SPECTATOR")) {
