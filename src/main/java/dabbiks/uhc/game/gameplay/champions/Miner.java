@@ -71,64 +71,77 @@ public class Miner extends Champion {
     @Override
     protected List<String> getClassDescription() {
         List<String> desc = new ArrayList<>();
-        desc.add("§7Klasa specjalizująca się w");
-        desc.add("§7szybkim pozyskiwaniu surowców.");
+        desc.add("§7Klasa skupiona na efektywnym");
+        desc.add("§7pozyskiwaniu surowców z mapy.");
         return desc;
     }
 
     @Override
     protected List<String> getLevelDescription(int level) {
         List<String> desc = new ArrayList<>();
-        switch (level) {
-            case 1, 2, 3, 4 -> {
-                desc.add("§e» §fKamienny kilof");
-                desc.add("§e» §fChleb §8(5)");
-                desc.add("§b» §f" + level * 2 + "% na podwojenie surowców z rudy");
-            }
-            case 5, 6, 7, 8, 9 -> {
-                desc.add("§e» §fŻelazny kilof");
-                desc.add("§e» §fChleb §8(5)");
-                desc.add("§b» §f" + level * 2 + "% na podwojenie surowców z rudy");
-                desc.add("§b» §fUżycie kowadeł tańsze o 30%");
-            }
-            case 10 -> {
-                desc.add("§e» §fŻelazny kilof");
-                desc.add("§e» §fChleb §8(10)");
-                desc.add("§b» §f" + level * 2 + "% na podwojenie surowców z rudy");
-                desc.add("§b» §fUżycie kowadeł jest tańsze o 50%");
-                desc.add("§b» §fPasek doświadczenia działa jednorazowo jak totem");
-            }
+        int doubleOreChance = level * 2;
+
+        desc.add("§6Ekwipunek startowy:");
+        if (level <= 4) {
+            desc.add(" §8■ §fKamienny kilof");
+            desc.add(" §8■ §fChleb §7(5 szt.)");
+        } else if (level <= 9) {
+            desc.add(" §8■ §fŻelazny kilof");
+            desc.add(" §8■ §fChleb §7(5 szt.)");
+        } else {
+            desc.add(" §8■ §fŻelazny kilof");
+            desc.add(" §8■ §fChleb §7(10 szt.)");
         }
+
+        desc.add("");
+        desc.add("§6Bonusy pasywne:");
+        desc.add(" §e» §fSzanse na podwójną rudę: §a" + doubleOreChance + "%");
+
+        if (level >= 5 && level <= 9) {
+            desc.add(" §e» §fZniżka na kowadła: §a30%");
+        } else if (level == 10) {
+            desc.add(" §e» §fZniżka na kowadła: §a50%");
+            desc.add(" §e» §fOchrona: §bPasek EXP działa jak totem");
+        }
+
         return desc;
     }
 
     @Override
     protected List<String> getClickDescription(PersistentData persistentData, int level) {
         List<String> desc = new ArrayList<>();
+        int playerCoins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
+
         if (!persistentData.hasUnlockedChampion(getId())) {
-            if (persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) >= getCost()) {
-                desc.add(symbolU.MOUSE_LEFT + " §fZakup górnika za " + getCost() + " monet!");
+            if (playerCoins >= getCost()) {
+                desc.add(symbolU.MOUSE_LEFT + " §aKliknij, aby zakupić klasę!");
+                desc.add(" §8• §7Koszt: §6" + getCost() + " monet");
             } else {
-                desc.add(symbolU.MOUSE_LEFT + " §cDo zakupu potrzebujesz jeszcze " + (getCost() - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §cBrakuje Ci §n" + (getCost() - playerCoins) + "§c monet!");
             }
             return desc;
         }
 
         if (persistentData.getChampionLevel(getId()) < 10) {
-            if (persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) >= getCost()) {
-                desc.add(symbolU.MOUSE_LEFT + " §fUlepsz do poziomu " + (level + 1) + " za " + getUpgradeCost(getCost(), level) + " monet!");
+            int upgradeCost = getUpgradeCost(getCost(), level);
+            if (playerCoins >= upgradeCost) {
+                desc.add(symbolU.MOUSE_LEFT + " §eUlepsz na poziom " + (level + 1));
+                desc.add(" §8• §7Koszt: §6" + upgradeCost + " monet");
             } else {
-                desc.add(symbolU.MOUSE_LEFT + " §fDo ulepszenia potrzebujesz jeszcze " + (getUpgradeCost(getCost(), level) - persistentData.getStats().getOrDefault(PersistentStats.COINS, 0)) + " monet!");
+                desc.add(symbolU.MOUSE_LEFT + " §cPotrzebujesz jeszcze §n" + (upgradeCost - playerCoins) + "§c monet!");
             }
         } else {
-            desc.add("§fZdobyta maestria: §e" + persistentData.getChampionMastery(getId()) + " pkt.");
-            desc.add(symbolU.MOUSE_LEFT + " §fOsiągnąłeś najwyższy poziom górnika!");
+            desc.add("§6§lMAESTRIA");
+            desc.add(" §8• §7Punkty: §e" + persistentData.getChampionMastery(getId()));
+            desc.add("");
+            desc.add("§8" + symbolU.MOUSE_LEFT + " §7Osiągnięto maksymalny poziom.");
         }
 
+        desc.add("");
         if (!persistentData.getChampion().equals(getId())) {
-            desc.add(symbolU.MOUSE_RIGHT + " §cKLIKNIJ, ŻEBY WYBRAĆ");
+            desc.add(symbolU.MOUSE_RIGHT + " §eKliknij, aby wybrać tę klasę");
         } else {
-            desc.add(symbolU.MOUSE_RIGHT + " §aWYBRANA KLASA");
+            desc.add(symbolU.MOUSE_RIGHT + " §aKlasa jest aktualnie wybrana");
         }
         return desc;
     }

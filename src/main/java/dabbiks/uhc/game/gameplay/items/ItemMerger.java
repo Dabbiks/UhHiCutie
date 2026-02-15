@@ -112,8 +112,7 @@ public class ItemMerger {
                 String key = data.getAttributeType().name();
                 mergedMap.put(key, new AttributeData(
                         data.getAttributeType(),
-                        data.getAttributeValue(),
-                        data.isPercent()
+                        data.getAttributeValue()
                 ));
             }
         }
@@ -127,8 +126,7 @@ public class ItemMerger {
                 } else {
                     mergedMap.put(key, new AttributeData(
                             secondData.getAttributeType(),
-                            secondData.getAttributeValue(),
-                            secondData.isPercent()
+                            secondData.getAttributeValue()
                     ));
                 }
             }

@@ -133,7 +133,7 @@ public class MeleeHit implements Listener {
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SWIFTNESS);
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.INSULATION);
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.THORNS);
-        damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.INVULNERABILITY);
+        damage = armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
 
         damage = armorHandler.handle(damager, victim, damage);
         attributeHandler.handle(damager, victim, damage, AttributeType.LIFE_STEAL);

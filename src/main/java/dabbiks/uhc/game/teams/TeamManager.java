@@ -2,7 +2,6 @@ package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.configs.LobbyConfig;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -29,30 +28,27 @@ public class TeamManager {
 
     public void addPlayer(Player player, String name) {
         Team team = scoreboard.getTeam(name);
-        player.sendMessage("AAA 1");
         if (team == null) return;
-        player.sendMessage("AAA 2");
+
         if (team.getEntries().size() >= LobbyConfig.teamSize) {
             player.sendMessage("§cTa drużyna jest już pełna!");
             return;
         }
-        player.sendMessage("AAA 3");
+
         if (team.hasEntry(player.getName())) {
             player.sendMessage("§eJesteś już w tej drużynie.");
             return;
         }
-        player.sendMessage("AAA 4");
+
         team.addEntry(player.getName());
-        int size = team.getEntries().size();
-        TextDisplay display = teamDisplays.get(name.toUpperCase() + size);
-        if (display != null) display.setText("§7" + player.getName());
+        updateTeamVisuals(name);
+
         for (String entry : team.getEntries()) {
             Player p = Bukkit.getPlayer(entry);
             if (p == null) continue;
             p.sendMessage("§a+ §7Gracz §f" + player.getName() + " §7dołączył do drużyny.");
             soundU.playSoundAtLocation(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         }
-        player.sendMessage("AAA 5");
     }
 
     public void removePlayer(Player player) {
@@ -62,16 +58,8 @@ public class TeamManager {
         String teamName = team.getName();
         String playerName = player.getName();
 
-        int startSlot = -1;
-        for (int i = 1; i <= LobbyConfig.teamSize; i++) {
-            TextDisplay display = teamDisplays.get(teamName.toUpperCase() + i);
-            if (display != null && playerName.equals(display.getText().replace("§7", ""))) {
-                startSlot = i;
-                break;
-            }
-        }
-
         team.removeEntry(playerName);
+        updateTeamVisuals(teamName);
 
         if (player.isOnline()) {
             player.sendMessage("§eOpuściłeś drużynę §6" + teamName);
@@ -84,18 +72,36 @@ public class TeamManager {
             p.sendMessage("§c- §7Gracz §f" + playerName + " §7opuścił drużynę.");
             soundU.playSoundAtLocation(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 0.5f);
         }
+    }
 
-        if (startSlot == -1) return;
+    private void updateTeamVisuals(String teamName) {
+        Team team = scoreboard.getTeam(teamName);
+        if (team == null) return;
 
-        for (int i = startSlot; i < LobbyConfig.teamSize; i++) {
-            TextDisplay current = teamDisplays.get(teamName.toUpperCase() + i);
-            TextDisplay next = teamDisplays.get(teamName.toUpperCase() + (i + 1));
-            String nextText = (next != null) ? next.getText() : "";
-            if (current != null) current.setText(nextText);
+        List<String> entries = new ArrayList<>(team.getEntries());
+
+        for (int i = 1; i <= LobbyConfig.teamSize; i++) {
+            String key = teamName.toUpperCase() + i;
+            TextDisplay display = teamDisplays.get(key);
+
+            if (display == null) continue;
+
+            if (!display.isValid()) {
+                Entity freshEntity = Bukkit.getEntity(display.getUniqueId());
+                if (freshEntity instanceof TextDisplay textDisplay) {
+                    display = textDisplay;
+                    teamDisplays.put(key, display);
+                } else {
+                    continue;
+                }
+            }
+
+            if (i <= entries.size()) {
+                display.setText("§7" + entries.get(i - 1));
+            } else {
+                display.setText("---");
+            }
         }
-
-        TextDisplay last = teamDisplays.get(teamName.toUpperCase() + LobbyConfig.teamSize);
-        if (last != null) last.setText("");
     }
 
     public void deleteTeams() {

@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.damage.handlers;
 
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTEntity;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.entity.Arrow;
@@ -35,16 +36,17 @@ public class ProjectileHandler {
         applyTag(nbt, trident, EnchantType.CHANNELING.getName(), "int");
     }
 
-    private void applyTag(NBTItem nbt, Projectile projectile, String key, String type) {
-        if (!nbt.hasTag(key)) return;
+    private void applyTag(NBTItem nbtItem, Projectile projectile, String key, String type) {
+        if (!nbtItem.hasTag(key)) return;
 
-        NBTEntity nbtEntity = new NBTEntity(projectile);
         if (type.equals("double")) {
-            double value = nbt.getDouble(key);
-            if (value > 0) nbtEntity.setDouble(key, value);
+            NBT.modifyPersistentData(projectile, nbt -> {
+                nbt.setDouble(key, nbtItem.getDouble(key));
+            });
         } else {
-            int value = nbt.getInteger(key);
-            if (value > 0) nbtEntity.setInteger(key, value);
+            NBT.modifyPersistentData(projectile, nbt -> {
+                nbt.setInteger(key, nbtItem.getInteger(key));
+            });
         }
     }
 }

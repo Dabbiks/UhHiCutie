@@ -19,7 +19,7 @@ public class AttributeManager {
     }
 
     public static String formatLoreLine(AttributeData attributeData) {
-        String percent = attributeData.isPercent() ? "%" : "";
+        String percent = attributeData.getAttributeType().isPercentage() ? "%" : "";
         return attributeData.getAttributeType().getSymbol() + " " + attributeData.getAttributeValue() + percent + " " + attributeData.getAttributeType().getName();
     }
 

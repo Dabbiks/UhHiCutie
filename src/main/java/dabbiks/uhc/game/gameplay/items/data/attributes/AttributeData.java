@@ -6,12 +6,10 @@ public class AttributeData {
 
     private AttributeType attributeType;
     private double attributeValue;
-    private boolean percent;
 
-    public AttributeData(AttributeType attributeType, double attributeValue, boolean percent) {
+    public AttributeData(AttributeType attributeType, double attributeValue) {
         this.attributeType = attributeType;
         this.attributeValue = attributeValue;
-        this.percent = percent;
     }
 
     public AttributeType getAttributeType() {
@@ -24,9 +22,5 @@ public class AttributeData {
 
     public void setAttributeValue(double attributeValue) {
         this.attributeValue = attributeValue;
-    }
-
-    public boolean isPercent() {
-        return percent;
     }
 }

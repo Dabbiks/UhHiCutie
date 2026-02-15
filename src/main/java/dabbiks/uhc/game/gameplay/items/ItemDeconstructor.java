@@ -83,15 +83,9 @@ public class ItemDeconstructor {
 
         List<AttributeData> attributes = new ArrayList<>();
         for (AttributeType type : AttributeType.values()) {
-            if (nbtItem.hasKey(type.getName())) {
-                double value = nbtItem.getDouble(type.getName());
-
-                boolean percent = false;
-                if (nbtItem.hasKey(type.getName() + "_PERCENT")) {
-                    percent = nbtItem.getBoolean(type.getName() + "_PERCENT");
-                }
-
-                attributes.add(new AttributeData(type, value, percent));
+            if (nbtItem.hasKey(type.name())) {
+                double value = nbtItem.getDouble(type.name());
+                attributes.add(new AttributeData(type, value));
             }
         }
         if (!attributes.isEmpty()) {

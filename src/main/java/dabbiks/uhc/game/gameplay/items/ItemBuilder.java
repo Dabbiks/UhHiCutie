@@ -43,8 +43,6 @@ public class ItemBuilder {
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
 
-        // * META
-
         if (meta == null) return item;
 
         if (instance.getName() != null) {
@@ -73,11 +71,19 @@ public class ItemBuilder {
             for (AttributeData attributeData : instance.getAttributes()) {
                 lore.add(AttributeManager.formatLoreLine(attributeData));
                 if (attributeData.getAttributeType().getAttribute() == null) continue;
-                AttributeModifier.Operation operation = attributeData.isPercent() ? AttributeModifier.Operation.ADD_SCALAR : AttributeModifier.Operation.ADD_NUMBER;
+
+                double value = attributeData.getAttributeValue();
+                AttributeModifier.Operation operation = AttributeModifier.Operation.ADD_NUMBER;
+
+                if (attributeData.getAttributeType().isPercentage()) {
+                    operation = AttributeModifier.Operation.ADD_SCALAR;
+                    value = value / 100.0;
+                }
+
                 AttributeModifier modifier = new AttributeModifier(
                         UUID.randomUUID(),
                         attributeData.getAttributeType().getName(),
-                        attributeData.getAttributeValue(),
+                        value,
                         operation,
                         instance.getEquipmentSlot()
                 );
@@ -89,7 +95,6 @@ public class ItemBuilder {
         if (instance.getPotion() != null && meta instanceof PotionMeta potionMeta) {
             if (!lore.isEmpty()) { lore.add(""); }
             for (PotionData potionData : instance.getPotion()) {
-                // ! lore
                 PotionEffectType type = potionData.getType().getBukkitType();
                 int level = potionData.getAmplifier();
                 int duration = potionData.getDuration();
@@ -131,8 +136,6 @@ public class ItemBuilder {
         meta.setLore(lore);
         item.setItemMeta(meta);
 
-        // * NBT
-
         NBTItem nbtItem = new NBTItem(item);
 
         if (instance.getEnchants() != null) {
@@ -143,9 +146,7 @@ public class ItemBuilder {
 
         if (instance.getAttributes() != null) {
             for (AttributeData attributeData : instance.getAttributes()) {
-                String key = attributeData.getAttributeType().getName();
-                nbtItem.setDouble(key, attributeData.getAttributeValue());
-                nbtItem.setBoolean(key + "_PERCENT", attributeData.isPercent());
+                nbtItem.setDouble(attributeData.getAttributeType().name(), attributeData.getAttributeValue());
             }
         }
 
@@ -174,8 +175,6 @@ public class ItemBuilder {
         nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
 
         item = nbtItem.getItem();
-
-        // * ADDITIONAL MODIFIERS
 
         if (instance.canParry()) {
             itemU.addParryingComponent(item);

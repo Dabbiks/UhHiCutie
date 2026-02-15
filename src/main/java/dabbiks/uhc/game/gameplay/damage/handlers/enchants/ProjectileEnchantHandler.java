@@ -1,41 +1,46 @@
 package dabbiks.uhc.game.gameplay.damage.handlers.enchants;
 
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTEntity;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 public class ProjectileEnchantHandler {
 
     public double handle(Projectile projectile, LivingEntity victim, double damage) {
-        NBTEntity nbt = new NBTEntity(projectile);
-        double baseDamage = damage;
-
         if (projectile instanceof Arrow) {
-            if (nbt.hasTag(EnchantType.POWER.getName())) {
-                damage += power(nbt.getInteger(EnchantType.POWER.getName()));
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.POWER.getName()))) {
+                damage += power(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.POWER.getName())));
             }
-            if (nbt.hasTag(EnchantType.GLOWING.getName())) {
-                glowing(nbt.getInteger(EnchantType.GLOWING.getName()), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GLOWING.getName()))) {
+                glowing(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GLOWING.getName())), victim);
             }
-            if (nbt.hasTag(EnchantType.MAGIC_ARROW.getName())) {
-                magic_arrow(nbt.getInteger(EnchantType.MAGIC_ARROW.getName()), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.MAGIC_ARROW.getName()))) {
+                magic_arrow(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.MAGIC_ARROW.getName())), victim);
             }
-            if (nbt.hasTag(EnchantType.PYROTECHNICS.getName())) {
-                pyrotechnics(nbt.getInteger(EnchantType.PYROTECHNICS.getName()), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.PYROTECHNICS.getName()))) {
+                pyrotechnics(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.PYROTECHNICS.getName())), victim);
             }
         }
 
         else if (projectile instanceof Trident) {
-            if (nbt.hasTag(EnchantType.GROUNDING.getName())) {
-                grounding(nbt.getInteger(EnchantType.GROUNDING.getName()), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GROUNDING.getName()))) {
+                grounding(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GROUNDING.getName())), victim);
             }
-            if (nbt.hasTag(EnchantType.CHANNELING.getName())) {
-                channeling(nbt.getInteger(EnchantType.CHANNELING.getName()), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.CHANNELING.getName()))) {
+                channeling(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.CHANNELING.getName())), victim);
             }
         }
 
@@ -45,7 +50,7 @@ public class ProjectileEnchantHandler {
     private double power(int level) { return level * 1.25; }
 
     private void glowing(int level, LivingEntity victim) {
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * level * 2, 0, false, true));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 40 * level, 0, false, true));
     }
 
     private void magic_arrow(int level, LivingEntity victim) {
@@ -53,7 +58,27 @@ public class ProjectileEnchantHandler {
     }
 
     private void pyrotechnics(int level, LivingEntity victim) {
-        victim.setFireTicks(40 * level);
+        Location loc = victim.getLocation();
+        World world = loc.getWorld();
+        if (world == null) return;
+
+        world.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.2f);
+        world.spawnParticle(Particle.EXPLOSION, loc, 1);
+
+        world.getNearbyEntities(loc, 3.5, 3.5, 3.5).forEach(entity -> {
+            if (entity instanceof LivingEntity target) {
+                target.damage(5.0 * level);
+
+                target.setFireTicks(40 * level);
+
+                Vector push = target.getLocation().toVector()
+                        .subtract(loc.toVector())
+                        .normalize()
+                        .multiply(0.8)
+                        .setY(0.4);
+                target.setVelocity(push);
+            }
+        });
     }
 
     private void grounding(int level, LivingEntity victim) {
@@ -64,6 +89,14 @@ public class ProjectileEnchantHandler {
     }
 
     private void channeling(int level, LivingEntity victim) {
-        victim.getWorld().strikeLightning(victim.getLocation());
+        Location loc = victim.getLocation();
+        World world = loc.getWorld();
+        if (world == null) return;
+
+        world.strikeLightningEffect(loc);
+        victim.damage(2.0 * level);
+
+        world.spawnParticle(Particle.ELECTRIC_SPARK, loc, 15, 0.5, 1.0, 0.5, 0.1);
+        world.playSound(loc, Sound.ITEM_TRIDENT_THUNDER, 1.0f, 1.0f);
     }
 }
