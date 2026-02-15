@@ -76,7 +76,7 @@ public class MeleeHit implements Listener {
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, false);
 
-        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processDamageByMonster(EntityDamageByEntityEvent event) {
@@ -99,7 +99,7 @@ public class MeleeHit implements Listener {
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
 
-        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processDamageToMonster(EntityDamageByEntityEvent event) {
@@ -176,6 +176,6 @@ public class MeleeHit implements Listener {
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
 
-        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 }

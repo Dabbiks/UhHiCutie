@@ -75,7 +75,7 @@ public class ProjectileHit implements Listener {
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
 
-        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processProjectileToMonster(EntityDamageByEntityEvent event, Player damager, Projectile projectile, Entity entityVictim) {

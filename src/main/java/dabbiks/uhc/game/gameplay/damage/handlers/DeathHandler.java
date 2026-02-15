@@ -34,12 +34,12 @@ public class DeathHandler {
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
                     "§c§lELIMINACJA! §7" + sessionData.getDamager().getName() + " zabija " + player.getName() + "!");
             return;
+        } else {
+            rewardU.death(player);
+            rewardU.summary(player);
+            messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
+                    "§c§lELIMINACJA! §7" + player.getName() + " umiera!");
         }
-
-        rewardU.death(player);
-        rewardU.summary(player);
-        messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
-                "§c§lELIMINACJA! §7" + player.getName() + " umiera!");
 
         Victory.processWin();
     }
