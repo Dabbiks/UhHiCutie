@@ -9,6 +9,9 @@ import dabbiks.uhc.player.data.session.SessionStats;
 import dabbiks.uhc.player.rank.RankManager;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RewardUtils {
 
     private final int WIN_COINS = 750;
@@ -102,5 +105,54 @@ public class RewardUtils {
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
 
         PersistentDataManager.saveData(player.getUniqueId());
+    }
+
+    public void summary(Player player) {
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
+
+        List<String> summary = new ArrayList<>();
+        summary.add("§8§m-------------------------");
+        summary.add("");
+
+        addCoinBreakdown(summary, sessionData);
+
+        int totalCoins = sessionData.getStats(SessionStats.KILLCOINS) +
+                sessionData.getStats(SessionStats.ASSISTCOINS) +
+                sessionData.getStats(SessionStats.TIMECOINS) +
+                sessionData.getStats(SessionStats.WINCOINS);
+        summary.add("  §e+ " + totalCoins + " §7(Łącznie)");
+        summary.add("");
+
+        int gamesPlayed = persistentData.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0);
+        if (gamesPlayed <= 5) {
+            summary.add("  §fGra rozstawiająca: §6" + gamesPlayed + "§f/§65");
+        } else {
+            int ranking = sessionData.getStats(SessionStats.RANKING);
+            String sign = ranking >= 0 ? "§a+ " : "§c- ";
+            summary.add(" " + sign + "§f" + Math.abs(ranking) + "PR");
+        }
+
+        summary.add("");
+        summary.add("§8§m-------------------------");
+
+        for (String string : summary) {
+            player.sendMessage(string);
+        }
+    }
+
+    private void addCoinBreakdown(List<String> summary, SessionData sessionData) {
+        if (sessionData.getStats(SessionStats.KILLCOINS) > 0) {
+            summary.add("  §e+ " + sessionData.getStats(SessionStats.KILLCOINS) + " §7(Zabójstwa)");
+        }
+        if (sessionData.getStats(SessionStats.ASSISTCOINS) > 0) {
+            summary.add("  §e+ " + sessionData.getStats(SessionStats.ASSISTCOINS) + " §7(Asysty)");
+        }
+        if (sessionData.getStats(SessionStats.TIMECOINS) > 0) {
+            summary.add("  §e+ " + sessionData.getStats(SessionStats.TIMECOINS) + " §7(Czas gry)");
+        }
+        if (sessionData.getStats(SessionStats.WINCOINS) > 0) {
+            summary.add("  §e+ " + sessionData.getStats(SessionStats.WINCOINS) + " §7(Zwycięstwo)");
+        }
     }
 }

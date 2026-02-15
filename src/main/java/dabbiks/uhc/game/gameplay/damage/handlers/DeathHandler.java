@@ -1,5 +1,6 @@
 package dabbiks.uhc.game.gameplay.damage.handlers;
 
+import dabbiks.uhc.game.gameplay.Victory;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
@@ -27,6 +28,7 @@ public class DeathHandler {
         if (sessionData.getDamager() != null && timeU.getTime() - sessionData.getDamagerTime() < 60) {
             rewardU.kill(sessionData.getDamager());
             rewardU.death(player);
+            rewardU.summary(player);
             for (Player assistPlayer : sessionData.getAssists()) rewardU.assist(assistPlayer);
 
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
@@ -35,8 +37,11 @@ public class DeathHandler {
         }
 
         rewardU.death(player);
+        rewardU.summary(player);
         messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
                 "§c§lELIMINACJA! §7" + player.getName() + " umiera!");
+
+        Victory.processWin();
     }
 
     private void dropFullInventory(Player player) {

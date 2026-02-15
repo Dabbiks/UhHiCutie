@@ -2,6 +2,7 @@ package dabbiks.uhc.game.teams;
 
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.configs.WorldConfig;
+import dabbiks.uhc.player.PlayerState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -133,6 +134,30 @@ public class TeamUtils {
                 index++;
             }
         }.runTaskTimer(plugin, 0L, 5);
+    }
+
+    public static Team getLastAliveTeam() {
+        Team lastTeam = null;
+        int aliveTeams = 0;
+
+        for (Team team : teamManager.getScoreboard().getTeams()) {
+            boolean hasAlive = false;
+            for (String playerName : team.getEntries()) {
+                Player player = Bukkit.getPlayer(playerName);
+                if (player == null) continue;
+                if (stateU.getPlayerState(player) == PlayerState.ALIVE) {
+                    hasAlive = true;
+                    break;
+                }
+            }
+            if (hasAlive) {
+                aliveTeams++;
+                lastTeam = team;
+            }
+        }
+
+        if (aliveTeams != 1) return null;
+        return lastTeam;
     }
 
 }

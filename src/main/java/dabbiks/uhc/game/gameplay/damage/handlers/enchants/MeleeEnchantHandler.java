@@ -39,11 +39,11 @@ public class MeleeEnchantHandler {
         damage = baseDamage;
 
         ItemStack item = damager.getInventory().getItemInMainHand();
-        if (item.isEmpty() || item.getType() == Material.AIR) return damage;
+        if (item.isEmpty() || item.getType() == Material.AIR) return 0;
         NBTItem nbtItem = new NBTItem(item);
 
         int level = enchantManager.getItemLevel(nbtItem, type);
-        if (level == 0) return damage;
+        if (level == 0) return 0;
 
         switch (type) {
             case SHARPNESS -> damage += sharpness(level, event.isCritical());

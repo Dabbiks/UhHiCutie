@@ -7,6 +7,11 @@ import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
+import dabbiks.uhc.player.data.persistent.PersistentData;
+import dabbiks.uhc.player.data.persistent.PersistentDataManager;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -66,11 +71,12 @@ public class MeleeHit implements Listener {
 
         damage = armorHandler.handle(null, victim, damage);
 
-        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, false);
 
-        if (damage > victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processDamageByMonster(EntityDamageByEntityEvent event) {
@@ -88,11 +94,12 @@ public class MeleeHit implements Listener {
 
         damage = armorHandler.handle(null, victim, damage);
 
-        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
 
-        if (damage > victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processDamageToMonster(EntityDamageByEntityEvent event) {
@@ -119,7 +126,8 @@ public class MeleeHit implements Listener {
         damage = armorHandler.handle(damager, (LivingEntity) victim, damage);
         attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.LIFE_STEAL);
 
-        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
     }
@@ -131,6 +139,9 @@ public class MeleeHit implements Listener {
         if (stateU.getPlayerState(damager) != PlayerState.ALIVE) return;
         if (stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
 
+        SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
+        sessionData.setDamager(victim, damager);
+
         final double baseDamage = event.getDamage();
         double damage = baseDamage;
 
@@ -140,7 +151,6 @@ public class MeleeHit implements Listener {
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += attributeHandler.handle(damager, victim, damage, AttributeType.ELECTRIC_DAMAGE);
-
         damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SHARPNESS);
         damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SUNDER);
         damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.HASTE);
@@ -156,15 +166,16 @@ public class MeleeHit implements Listener {
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SWIFTNESS);
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.INSULATION);
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.THORNS);
-        damage = armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
+        damage += armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
 
         damage = armorHandler.handle(damager, victim, damage);
         attributeHandler.handle(damager, victim, damage, AttributeType.LIFE_STEAL);
 
-        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
 
-        if (damage > victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 }

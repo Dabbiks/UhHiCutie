@@ -14,14 +14,14 @@ public class AttributeHandler {
     public double handle(Player damager, LivingEntity victim, double damage, AttributeType attributeType) {
         if (attributeType == AttributeType.ELECTRIC_DAMAGE) return handleElectricDamage(damager, victim, damage);
         if (attributeType == AttributeType.LIFE_STEAL) return damage;
-        return damage;
+        return 0;
     }
 
     private double handleElectricDamage(Player damager, LivingEntity victim, double damage) {
-        if (Objects.equals(WeatherCycle.getWeatherIcon(), symbolU.WEATHER_SUNNY)) return damage;
+        if (Objects.equals(WeatherCycle.getWeatherIcon(), symbolU.WEATHER_SUNNY)) return 0;
         double electricDamage = attributeManager.getAttributeValue(damager, AttributeType.ELECTRIC_DAMAGE);
-        if (victim.getLocation().getBlockY() < victim.getWorld().getHighestBlockYAt(victim.getLocation().getBlockX(), victim.getLocation().getBlockZ())) return damage;
-        return damage + electricDamage;
+        if (victim.getLocation().getBlockY() < victim.getWorld().getHighestBlockYAt(victim.getLocation().getBlockX(), victim.getLocation().getBlockZ())) return 0;
+        return electricDamage;
     }
 
     private void handleLifeSteal(Player damager, LivingEntity victim, double damage) {

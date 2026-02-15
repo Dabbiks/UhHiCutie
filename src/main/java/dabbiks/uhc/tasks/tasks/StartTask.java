@@ -22,8 +22,6 @@ public class StartTask extends Task {
     protected void tick() {
         int playerCount = playerListU.getAllPlayers().size();
 
-        Bukkit.broadcastMessage(WorldConfig.isWorldGenerated + ", " + playerCount + ", " + LobbyConfig.minPlayerCount);
-
         if (!(WorldConfig.isWorldGenerated)) return;
         if (stateU.getGameState() == null) stateU.setGameState(GameState.WAITING);
 

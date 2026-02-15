@@ -4,6 +4,7 @@ import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,18 +22,20 @@ public class ArmorHandler {
         if (victim instanceof Player) armor = handlePlayer((Player) victim);
         else armor = handleMob(victim);
 
+
         if (damager != null) {
             armor -= (int) attributeManager.getAttributeValue(damager, AttributeType.ARMOR_PENETRATION);
 
             ItemStack item = damager.getInventory().getItemInMainHand();
-            if (item.isEmpty() || item.getType() == Material.AIR) return damage;
+            if (item.isEmpty() || item.getType() == Material.AIR) {
+                return damage;
+            }
             NBTItem nbtItem = new NBTItem(item);
 
             int level = enchantManager.getItemLevel(nbtItem, EnchantType.LETHALITY);
             if (level > 0) armor -= level * 2;
         }
         if (armor < 0) armor = 0;
-
         double reduction = armor / (armor + 20.0);
         return damage * (1 - reduction);
     }

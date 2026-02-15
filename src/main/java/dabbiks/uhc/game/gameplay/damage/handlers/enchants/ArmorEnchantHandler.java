@@ -23,39 +23,43 @@ public class ArmorEnchantHandler {
                          EntityDamageByEntityEvent event, EnchantType type) {
 
         double baseDamage = damage;
-        damage = baseDamage;
-
         int level = enchantManager.getArmorLevel(victim, type);
-        if (level == 0) return damage;
+        if (level == 0) return 0;
 
         switch (type) {
             case PROTECTION -> damage = protection(level, damage, event.isCritical());
             case STONE_SKIN -> damage = stone_skin(level, damage, event.isCritical());
-            case SWIFTNESS -> swiftness(level, damager);
-            case INSULATION -> damage = insulation(level, damage);
+            case SWIFTNESS -> swiftness(level, victim);
+            case INSULATION -> damage = insulation(level, damage, event.getCause());
             case THORNS -> thorns(victim, damager);
             case INVULNERABILITY -> damage = invulnerability(level, damage);
         }
 
-        damage -= baseDamage;
-        return damage;
+        return damage - baseDamage;
     }
 
     private double protection(int level, double damage, boolean isCritical) {
-        return isCritical ? 0 : damage * (1 - 0.02 * level);
+        if (isCritical) return damage;
+        return damage * (1 - 0.03 * level);
     }
 
     private double stone_skin(int level, double damage, boolean isCritical) {
-        return isCritical ? damage * (1 - 0.02 * level) : 0;
+        if (!isCritical) return damage;
+        return damage * (1 - 0.03 * level);
     }
 
-    private void swiftness(int level, Player damager) {
-        if (damager.getHealth() > damager.getMaxHealth() / 3) return;
-        damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * level, 0, false, true));
+    private void swiftness(int level, Player victim) {
+        if (victim.getHealth() > victim.getMaxHealth() / 3) return;
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * level, 0, false, true));
     }
 
-    private double insulation(int level, double damage) {
-        return damage / level;
+    private double insulation(int level, double damage, org.bukkit.event.entity.EntityDamageEvent.DamageCause cause) {
+        if (cause == org.bukkit.event.entity.EntityDamageEvent.DamageCause.FIRE
+                || cause == org.bukkit.event.entity.EntityDamageEvent.DamageCause.FIRE_TICK
+                || cause == org.bukkit.event.entity.EntityDamageEvent.DamageCause.LAVA) {
+            return damage * (1 - 0.10 * level);
+        }
+        return damage;
     }
 
     private void thorns(Player victim, Player damager) {
@@ -93,7 +97,7 @@ public class ArmorEnchantHandler {
     }
 
     private double invulnerability(int level, double damage) {
-        return Math.min((double) 10 / level + 4, damage);
+        double cap = 20.0 - (level * 2.0);
+        return Math.min(damage, cap);
     }
-
 }

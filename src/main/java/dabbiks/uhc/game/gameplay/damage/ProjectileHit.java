@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.damage;
 
 import dabbiks.uhc.game.gameplay.damage.handlers.ArmorHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.AttributeHandler;
+import dabbiks.uhc.game.gameplay.damage.handlers.DeathHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.TagHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ProjectileEnchantHandler;
@@ -9,6 +10,8 @@ import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
 import de.tr7zw.nbtapi.NBT;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -28,6 +31,7 @@ public class ProjectileHit implements Listener {
     private final ArmorEnchantHandler armorEnchantHandler = new ArmorEnchantHandler();
     private final ArmorHandler armorHandler = new ArmorHandler();
     private final TagHandler tagHandler = new TagHandler();
+    private final DeathHandler deathHandler = new DeathHandler();
 
     @EventHandler
     public void onProjectileDamage(EntityDamageByEntityEvent event) {
@@ -54,6 +58,9 @@ public class ProjectileHit implements Listener {
             return;
         }
 
+        SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
+        sessionData.setDamager(victim, damager);
+
         final double baseDamage = event.getDamage();
         double damage = baseDamage;
 
@@ -63,9 +70,12 @@ public class ProjectileHit implements Listener {
         damage = armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
         damage = armorHandler.handle(damager, victim, damage);
 
-        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
+
+        if (damage >= victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processProjectileToMonster(EntityDamageByEntityEvent event, Player damager, Projectile projectile, Entity entityVictim) {
@@ -80,7 +90,8 @@ public class ProjectileHit implements Listener {
 
         damage = armorHandler.handle(damager, victim, damage);
 
-        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
     }
