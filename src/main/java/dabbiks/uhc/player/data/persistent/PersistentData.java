@@ -125,7 +125,10 @@ public class PersistentData {
 
     public boolean hasUnlockedChampion(String champion) { return unlockedChampions.contains(champion); }
 
-    public void addUnlockedChampion(String champion) { unlockedChampions.add(champion); }
+    public void addUnlockedChampion(String champion) { unlockedChampions.add(champion);
+        championLevel.put(champion, 1);
+        championMastery.put(champion, 0);
+    }
 
     /*-----------------------------------------------------------------------------------------------------------------*/
 

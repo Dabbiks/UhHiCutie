@@ -72,9 +72,12 @@ public class JoinEvent implements Listener {
 
     private void setupPlayerUI(Player player) {
         FastBoard board = new FastBoard(player);
-        board.updateTitle("§f\uE0DE  §c§lDABBEST  §f\uE0DF");
+        board.updateTitle("§d§lSUPERGLI.DE");
+
         boards.put(player, board);
         mainBossBar.addPlayer(player);
+        tabManager.setTabFooter(player, "");
+        tabManager.setTabHeader(player, "");
     }
 
     private void setupPlayerState(Player player) {

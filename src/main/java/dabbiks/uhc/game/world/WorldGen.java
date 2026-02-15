@@ -3,12 +3,11 @@ package dabbiks.uhc.game.world;
 import dabbiks.uhc.game.configs.WorldConfig;
 import org.bukkit.*;
 import org.popcraft.chunky.api.ChunkyAPI;
-import org.popcraft.chunky.api.event.task.GenerationProgressEvent;
+import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
 
 import java.io.File;
 
-import static dabbiks.uhc.Main.*;
-import static org.bukkit.Bukkit.broadcast;
+import static org.bukkit.Bukkit.broadcastMessage;
 import static org.bukkit.Bukkit.getLogger;
 
 public class WorldGen {
@@ -32,7 +31,7 @@ public class WorldGen {
         }
 
         world.setSpawnLocation(0, 100, 0);
-        world.setPVP(false);
+        world.setPVP(true);
         world.setDifficulty(Difficulty.EASY);
 
         setGameRule(world, "show_advancement_messages", false);
@@ -54,10 +53,13 @@ public class WorldGen {
 
         ChunkyAPI chunky = Bukkit.getServer().getServicesManager().load(ChunkyAPI.class);
         if (chunky != null) {
-            chunky.startTask(WorldConfig.worldName, "square", 0, 0, 500, 500, "region");
+
+            chunky.startTask(WorldConfig.worldName, "square", 0, 0, 200, 200, "region");
 
             WorldConfig.isWorldGenerated = false;
         }
+
+        chunky.onGenerationComplete(event -> { WorldConfig.isWorldGenerated = true; } );
     }
 
     private static <T> void setGameRule(World world, String ruleName, T value) {
@@ -69,7 +71,7 @@ public class WorldGen {
         }
     }
 
-    public static void deleteFolder(File source) {
+    private static void deleteFolder(File source) {
         try {
             if (!source.exists()) {
                 return;

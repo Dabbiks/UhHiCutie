@@ -1,6 +1,7 @@
 package dabbiks.uhc.game.gameplay.items.data.enchants;
 
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,6 +27,7 @@ public class EnchantManager {
                 continue;
             }
 
+            if (item.isEmpty() || item.getType() == Material.AIR) continue;
             NBTItem nbt = new NBTItem(item);
             String key = type.toString();
 

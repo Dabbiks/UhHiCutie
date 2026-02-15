@@ -11,6 +11,7 @@ public class ChampionManager {
 
     public ChampionManager() {
         register(new Miner());
+        register(new Default());
     }
 
     private void register(Champion champion) {

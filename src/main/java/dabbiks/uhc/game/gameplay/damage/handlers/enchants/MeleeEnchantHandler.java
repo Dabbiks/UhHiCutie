@@ -8,6 +8,7 @@ import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionTags;
 import dabbiks.uhc.utils.ParticleUtils;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
@@ -38,6 +39,7 @@ public class MeleeEnchantHandler {
         damage = baseDamage;
 
         ItemStack item = damager.getInventory().getItemInMainHand();
+        if (item.isEmpty() || item.getType() == Material.AIR) return damage;
         NBTItem nbtItem = new NBTItem(item);
 
         int level = enchantManager.getItemLevel(nbtItem, type);

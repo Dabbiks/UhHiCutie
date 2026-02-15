@@ -12,12 +12,14 @@ import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
 import dabbiks.uhc.game.teams.*;
+import dabbiks.uhc.game.world.WorldGen;
 import dabbiks.uhc.game.world.events.WorldBorder;
 import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.lobby.SpawnProtector;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.player.traffic.JoinEvent;
 import dabbiks.uhc.player.traffic.QuitEvent;
+import dabbiks.uhc.tasks.TaskManager;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
 import dabbiks.uhc.utils.managers.IndicatorManager;
@@ -41,6 +43,7 @@ public final class Main extends JavaPlugin {
     public static TitleUtils titleU;
     public static ItemUtils itemU;
     public static PlayerListUtils playerListU;
+    public static RewardUtils rewardU;
 
     public static TabManager tabManager;
     public static AttributeManager attributeManager;
@@ -67,6 +70,7 @@ public final class Main extends JavaPlugin {
         titleU = new TitleUtils();
         itemU = new ItemUtils();
         playerListU = new PlayerListUtils();
+        rewardU = new RewardUtils();
 
         tabManager = new TabManager();
         attributeManager = new AttributeManager();
@@ -93,13 +97,16 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
-//        Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);
 
         teamManager.deleteTeams();
         new TeamInitializer();
+
+        WorldGen.createWorld();
+        new TaskManager();
     }
 
     @Override

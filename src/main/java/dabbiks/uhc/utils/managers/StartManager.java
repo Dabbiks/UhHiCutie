@@ -49,6 +49,7 @@ public class StartManager {
             attributeManager.addModifier(player, Attribute.WAYPOINT_TRANSMIT_RANGE, "waypoint_transmit", 1000, AttributeModifier.Operation.ADD_NUMBER);
 
             PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
+            if (persistentData.getChampion() == null) persistentData.addUnlockedChampion("default");
             if (persistentData.getChampion() == null) persistentData.setChampion("default");
             Champion champion = championManager.getChampion(persistentData.getChampion());
             champion.onStart(player, persistentData.getChampionLevel(persistentData.getChampion()));

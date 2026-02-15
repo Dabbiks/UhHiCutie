@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -30,9 +31,9 @@ public class LobbyItems implements Listener {
     }
 
     private void init() {
-        championBook = createLobbyItem(Material.IRON_PICKAXE, "§f" + symbolU.MOUSE_LEFT + " Przeglądaj klasy", 10000, "CHAMPIONS");
-        recipeBook = createLobbyItem(Material.BOOK, "§f" + symbolU.MOUSE_LEFT + " Przeglądaj przepisy", 10000, "RECIPE_BOOK");
-        spectate = createLobbyItem(Material.ENDER_EYE, "§f" + symbolU.MOUSE_LEFT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
+        championBook = createLobbyItem(Material.IRON_PICKAXE, "§f" + symbolU.MOUSE_RIGHT + " Przeglądaj klasy", 10000, "CHAMPIONS");
+        recipeBook = createLobbyItem(Material.BOOK, "§f" + symbolU.MOUSE_RIGHT + " Przeglądaj przepisy", 10000, "RECIPE_BOOK");
+        spectate = createLobbyItem(Material.ENDER_EYE, "§f" + symbolU.MOUSE_RIGHT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
     }
 
     private ItemStack createLobbyItem(Material material, String name, int model, String id) {
@@ -40,6 +41,8 @@ public class LobbyItems implements Listener {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setCustomModelData(model);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
 
         NBTItem nbtItem = new NBTItem(item);

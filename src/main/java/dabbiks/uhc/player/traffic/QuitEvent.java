@@ -33,6 +33,11 @@ public class QuitEvent implements Listener {
 
         cleanupPlayerData(player);
         handleQuitLogic(player, sessionData);
+
+        String msg = (stateU.getGameState() == GameState.WAITING || stateU.getGameState() == GameState.STARTING)
+                ? "§c" + player.getName() + " §7(§f" + (Bukkit.getOnlinePlayers().size() - 1) + "/" + LobbyConfig.maxPlayerCount + "§7)"
+                : "§c- §7" + player.getName();
+        messageU.sendMessageToPlayers(playerListU.getAllPlayers(), msg);
     }
 
     private void cleanupPlayerData(Player player) {

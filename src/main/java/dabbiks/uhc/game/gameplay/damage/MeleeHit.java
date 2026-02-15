@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import static dabbiks.uhc.Main.indicatorManager;
 import static dabbiks.uhc.Main.stateU;
 
 public class MeleeHit implements Listener {
@@ -25,6 +26,7 @@ public class MeleeHit implements Listener {
     TagHandler tagHandler = new TagHandler();
     ArmorHandler armorHandler = new ArmorHandler();
     AttributeHandler attributeHandler = new AttributeHandler();
+    DeathHandler deathHandler = new DeathHandler();
 
     MeleeEnchantHandler meleeEnchantHandler = new MeleeEnchantHandler();
     ArmorEnchantHandler armorEnchantHandler = new ArmorEnchantHandler();
@@ -55,16 +57,25 @@ public class MeleeHit implements Listener {
 
     public void processEnvironmentDamage(EntityDamageEvent event) {
         Player victim = (Player) event.getEntity();
+        if (stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
+
         final double baseDamage = event.getDamage();
         double damage = baseDamage;
 
         damage += tagHandler.handle(victim, null, baseDamage);
 
         damage = armorHandler.handle(null, victim, damage);
+
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        damage = event.getFinalDamage();
+        indicatorManager.spawnDamageIndicator(victim, damage, false);
+
+        if (damage > victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processDamageByMonster(EntityDamageByEntityEvent event) {
         Player victim = (Player) event.getEntity();
+        if (stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
         Entity damager = event.getDamager();
 
         if (!(damager instanceof LivingEntity)) return;
@@ -76,6 +87,12 @@ public class MeleeHit implements Listener {
         damage += tagHandler.handle(damager, victim, baseDamage);
 
         damage = armorHandler.handle(null, victim, damage);
+
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        damage = event.getFinalDamage();
+        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
+
+        if (damage > victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 
     public void processDamageToMonster(EntityDamageByEntityEvent event) {
@@ -101,18 +118,24 @@ public class MeleeHit implements Listener {
 
         damage = armorHandler.handle(damager, (LivingEntity) victim, damage);
         attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.LIFE_STEAL);
+
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        damage = event.getFinalDamage();
+        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
     }
 
     public void processPlayerDamage(EntityDamageByEntityEvent event) {
         Player damager = (Player) event.getDamager();
         Player victim = (Player) event.getEntity();
+
+        if (stateU.getPlayerState(damager) != PlayerState.ALIVE) return;
+        if (stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
+
         final double baseDamage = event.getDamage();
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;
         if (TeamUtils.isPlayerAlly(damager, victim)) return;
-        if (stateU.getPlayerState(damager) != PlayerState.ALIVE
-                || stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
@@ -137,5 +160,11 @@ public class MeleeHit implements Listener {
 
         damage = armorHandler.handle(damager, victim, damage);
         attributeHandler.handle(damager, victim, damage, AttributeType.LIFE_STEAL);
+
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        damage = event.getFinalDamage();
+        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
+
+        if (damage > victim.getMaxHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
     }
 }

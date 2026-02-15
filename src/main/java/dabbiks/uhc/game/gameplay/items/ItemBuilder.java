@@ -57,15 +57,6 @@ public class ItemBuilder {
             meta.setCustomModelData(instance.getCustomModelData());
         }
 
-        if (instance.getEnchants() != null) {
-            if (!lore.isEmpty()) { lore.add(""); }
-            for (EnchantData enchantData : instance.getEnchants()) {
-                lore.add(EnchantManager.formatLoreLine(enchantData));
-                if (enchantData.getType().getEnchantment() == null) continue;
-                meta.addEnchant(enchantData.getType().getEnchantment(), enchantData.getLevel(), true);
-            }
-        }
-
         if (instance.getAttributes() != null) {
             if (!lore.isEmpty()) { lore.add(""); }
             for (AttributeData attributeData : instance.getAttributes()) {
@@ -89,7 +80,15 @@ public class ItemBuilder {
                 );
                 meta.addAttributeModifier(attributeData.getAttributeType().getAttribute(), modifier);
             }
+        }
 
+        if (instance.getEnchants() != null) {
+            if (!lore.isEmpty()) { lore.add(""); }
+            for (EnchantData enchantData : instance.getEnchants()) {
+                lore.add(EnchantManager.formatLoreLine(enchantData));
+                if (enchantData.getType().getEnchantment() == null) continue;
+                meta.addEnchant(enchantData.getType().getEnchantment(), enchantData.getLevel(), true);
+            }
         }
 
         if (instance.getPotion() != null && meta instanceof PotionMeta potionMeta) {

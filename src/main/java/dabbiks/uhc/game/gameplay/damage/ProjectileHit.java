@@ -17,7 +17,9 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
+import static dabbiks.uhc.Main.indicatorManager;
 import static dabbiks.uhc.Main.stateU;
 
 public class ProjectileHit implements Listener {
@@ -61,7 +63,9 @@ public class ProjectileHit implements Listener {
         damage = armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
         damage = armorHandler.handle(damager, victim, damage);
 
-        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        damage = event.getFinalDamage();
+        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
     }
 
     public void processProjectileToMonster(EntityDamageByEntityEvent event, Player damager, Projectile projectile, Entity entityVictim) {
@@ -76,7 +80,9 @@ public class ProjectileHit implements Listener {
 
         damage = armorHandler.handle(damager, victim, damage);
 
-        event.setDamage(damage);
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, damage);
+        damage = event.getFinalDamage();
+        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
     }
 
     private double getProjectileBonusDamage(Projectile projectile) {

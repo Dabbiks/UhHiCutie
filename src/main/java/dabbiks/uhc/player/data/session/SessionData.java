@@ -20,13 +20,13 @@ public class SessionData {
 
     // * DAMAGER
 
-    public Player damager;
-    public int damagerTime;
-    public Map<Player, Integer> assists = new HashMap<>();
+    private Player damager;
+    private int damagerTime;
+    private Map<Player, Integer> assists = new HashMap<>();
 
     // * RANK
 
-    public int rankPRModifier;
+    private int rankPRModifier;
 
     // * STATS
 
@@ -39,8 +39,8 @@ public class SessionData {
 
     // * CHAT
 
-    public String teamIcon = "";
-    public String rankIcon = "";
+    private String teamIcon = "";
+    private String rankIcon = "";
 
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/

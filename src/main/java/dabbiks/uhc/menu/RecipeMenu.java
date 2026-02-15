@@ -116,7 +116,7 @@ public class RecipeMenu extends FastInv {
                 meta.addEnchant(org.bukkit.enchantments.Enchantment.UNBREAKING, 1, true);
                 meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS);
             } else {
-                lore.add(symbolU.MOUSE_LEFT + "§eKliknij, aby zobaczyć przepis");
+                lore.add(symbolU.MOUSE_LEFT + " §eKliknij, aby zobaczyć przepis");
             }
             meta.setLore(lore);
             icon.setItemMeta(meta);

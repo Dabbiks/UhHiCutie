@@ -14,7 +14,7 @@ import static dabbiks.uhc.Main.*;
 
 public class RankManager {
 
-    private static final int MIN_GAMES_FOR_RANKED = 5;
+    public static final int MIN_GAMES_FOR_RANKED = 5;
 
     public static void calculatePlayerModifier(Player player) {
         PersistentData pData = PersistentDataManager.getData(player.getUniqueId());
@@ -26,21 +26,21 @@ public class RankManager {
         sData.setModifier(modifier);
     }
 
-    public static void modifyPlayerRankPR(Player player, int changeAmount) {
+    public static void modifyRankPoints(Player player, int amount) {
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
         if (data.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < MIN_GAMES_FOR_RANKED) {
             return;
         }
 
-        int currentRank = data.getStats().getOrDefault(PersistentStats.RANKPR, 0);
+        int currentPoints = data.getStats().getOrDefault(PersistentStats.RANKPR, 0);
 
-        data.setStats(PersistentStats.PREVIOUSRANKPR, currentRank);
+        data.setStats(PersistentStats.PREVIOUSRANKPR, currentPoints);
 
-        int newRank = Math.max(1, currentRank + changeAmount);
-        data.setStats(PersistentStats.RANKPR, newRank);
+        int newPoints = Math.max(1, currentPoints + amount);
+        data.setStats(PersistentStats.RANKPR, newPoints);
 
-        checkRankUpdate(player, currentRank, newRank);
+        checkRankUpdate(player, currentPoints, newPoints);
     }
 
     private static void checkRankUpdate(Player player, int oldPoints, int newPoints) {
