@@ -22,16 +22,13 @@ public class TeamClick implements Listener {
 
     @EventHandler
     public void onInteractionClick(PlayerInteractEntityEvent event) {
-        messageU.sendMessageToPlayer(event.getPlayer(), "TEST 1");
         if (!(event.getRightClicked() instanceof Interaction interaction)) {
             return;
         }
-        messageU.sendMessageToPlayer(event.getPlayer(), "TEST 2");
 
         String teamName = NBT.getPersistentData(interaction, nbt -> nbt.getString("team_interaction"));
         if (teamName == null) return;
 
-        messageU.sendMessageToPlayer(event.getPlayer(), "TEST 3");
 
         Player player = event.getPlayer();
 
@@ -42,11 +39,9 @@ public class TeamClick implements Listener {
                 player.sendMessage("§eJesteś już w tej drużynie.");
                 return;
             }
-            messageU.sendMessageToPlayer(event.getPlayer(), "TEST 4");
 
             teamManager.removePlayer(player);
         }
-        messageU.sendMessageToPlayer(event.getPlayer(), "TEST 5");
 
         teamManager.addPlayer(player, teamName);
     }

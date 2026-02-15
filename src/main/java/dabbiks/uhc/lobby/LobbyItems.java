@@ -53,22 +53,23 @@ public class LobbyItems implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (!event.getPlayer().getLocation().getWorld().getName().equals("world")) return;
 
-        event.setCancelled(true);
-
         ItemStack item = event.getItem();
         NBTItem nbtItem = new NBTItem(item);
         Player player = event.getPlayer();
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
         if (nbtItem.hasTag("CHAMPIONS")) {
+            event.setCancelled(true);
             new ChampionMenu(player, data).open(player);
         }
 
         if (nbtItem.hasTag("RECIPE_BOOK")) {
+            event.setCancelled(true);
             new RecipeMenu(player, INSTANCE.getRecipeManager()).open(player);
         }
 
         if (nbtItem.hasTag("SPECTATOR")) {
+            event.setCancelled(true);
             player.teleport(playerListU.getPlayingPlayers().getFirst().getLocation());
             playerU.clearInventory(player);
         }

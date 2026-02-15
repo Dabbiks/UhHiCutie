@@ -93,7 +93,7 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
-        Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
+//        Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);

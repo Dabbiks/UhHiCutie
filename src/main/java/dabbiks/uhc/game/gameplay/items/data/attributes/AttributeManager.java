@@ -1,5 +1,7 @@
 package dabbiks.uhc.game.gameplay.items.data.attributes;
 
+import java.text.DecimalFormat;
+
 public class AttributeManager {
 
     public static void combineValue(AttributeData data1, AttributeData data2) {
@@ -18,9 +20,13 @@ public class AttributeManager {
         }
     }
 
+    private static final DecimalFormat FORMATTER = new DecimalFormat("###.##");
+
     public static String formatLoreLine(AttributeData attributeData) {
         String percent = attributeData.getAttributeType().isPercentage() ? "%" : "";
-        return attributeData.getAttributeType().getSymbol() + " " + attributeData.getAttributeValue() + percent + " " + attributeData.getAttributeType().getName();
+        String value = FORMATTER.format(attributeData.getAttributeValue());
+
+        return "§r§f" + attributeData.getAttributeType().getSymbol() + "§f " + value + percent + " §7" + attributeData.getAttributeType().getName();
     }
 
 }

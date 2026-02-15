@@ -105,7 +105,7 @@ public class EnchantManager {
     }
 
     public static String formatLoreLine(EnchantData data) {
-        return tierToIcon(data.getType().getTier()) + " " + data.getType().getName() + " " + numberToRoman(data.getLevel());
+        return "§r§f" + tierToIcon(data.getType().getTier()) + "§r§7 " + data.getType().getName() + " " + numberToRoman(data.getLevel());
     }
 
 }

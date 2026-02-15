@@ -33,6 +33,7 @@ public class RecipeManager {
         recipes.putIfAbsent(recipe.getId(), recipe);
 
         registerBase(recipe, result, recipe.getId(), recipe.getShape());
+        categorizeRecipe(recipe);
 
         if (recipe.isShaped()) {
             List<String> reversedShape = recipe.getShape().stream()

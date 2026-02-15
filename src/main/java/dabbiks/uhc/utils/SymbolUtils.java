@@ -2,46 +2,46 @@ package dabbiks.uhc.utils;
 
 public class SymbolUtils {
 
-    // * BUTTONS (Najkrótszy > Najdłuższy)
+    // * BUTTONS
     public final String SHIFT = "";
     public final String MOUSE_LEFT = "\uE02C";
     public final String MOUSE_RIGHT = "\uE02D";
 
-    // * ATTRIBUTES (Najdłuższy > Najkrótszy)
-    public final String KNOCKBACK_RESISTANCE = "\uE092";
-    public final String ARMOR_PENETRATION = "\uE095";
-    public final String ELECTRIC_DAMAGE = "\uE09F";
-    public final String MOVEMENT_SPEED = "\uE099";
-    public final String KNOCKBACK_POWER = "\uE091";
-    public final String CRITICAL_DAMAGE = "\uE098";
-    public final String JUMP_STRENGTH = "\uE090";
-    public final String ATTACK_DAMAGE = "\uE089";
-    public final String ARROW_DAMAGE = "\uE089";
-    public final String HEALTH_BOOST = "\uE08B";
-    public final String BURNING_TIME = "\uE093";
-    public final String REGENERATION = "\uE096";
-    public final String ATTACK_SPEED = "\uE097";
-    public final String ATTACK_RANGE = "\uE09B";
-    public final String SNEAK_SPEED = "\uE08C";
-    public final String FALL_DAMAGE = "\uE08F";
-    public final String LIFE_STEAL = "\uE094";
-    public final String GRAVITY = "\uE08E";
-    public final String ARMOR = "\uE09A";
-    public final String SIZE = "\uE08D";
+    // * ATTRIBUTES
+    public final String KNOCKBACK_RESISTANCE = "";
+    public final String ARMOR_PENETRATION = "";
+    public final String ELECTRIC_DAMAGE = "";
+    public final String MOVEMENT_SPEED = "";
+    public final String KNOCKBACK_POWER = "";
+    public final String CRITICAL_DAMAGE = "";
+    public final String JUMP_STRENGTH = "";
+    public final String ATTACK_DAMAGE = "";
+    public final String ARROW_DAMAGE = "";
+    public final String HEALTH_BOOST = "";
+    public final String BURNING_TIME = "";
+    public final String REGENERATION = "";
+    public final String ATTACK_SPEED = "";
+    public final String ATTACK_RANGE = "";
+    public final String SNEAK_SPEED = "";
+    public final String FALL_DAMAGE = "";
+    public final String LIFE_STEAL = "";
+    public final String GRAVITY = "";
+    public final String ARMOR = "";
+    public final String SIZE = "";
 
-    // * ENCHANTS (Najkrótszy > Najdłuższy)
-    public final String ENCHANT_RARE = "\uE09C";
-    public final String ENCHANT_EPIC = "\uE09D";
-    public final String ENCHANT_COMMON = "\uE09C";
-    public final String ENCHANT_MYTHIC = "\uE09E";
-    public final String ENCHANT_LEGENDARY = "\uE09C";
+    // * ENCHANTS
+    public final String ENCHANT_RARE = "\uE072";
+    public final String ENCHANT_EPIC = "\uE073";
+    public final String ENCHANT_COMMON = "\uE071";
+    public final String ENCHANT_MYTHIC = "\uE074";
+    public final String ENCHANT_LEGENDARY = "\uE075";
 
-    // * WEATHER (Najdłuższy > Najkrótszy)
+    // * WEATHER
     public final String WEATHER_STORM = "";
     public final String WEATHER_SUNNY = "";
     public final String WEATHER_RAINY = "";
 
-    // * SEGMENTS (Najkrótszy > Najdłuższy)
+    // * SEGMENTS
     public final String SEGMENT_1 = "";
     public final String SEGMENT_2 = "";
     public final String SEGMENT_3 = "";

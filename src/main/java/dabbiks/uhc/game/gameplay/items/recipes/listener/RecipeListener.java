@@ -40,7 +40,7 @@ public class RecipeListener implements Listener {
 
         Player player = (Player) event.getView().getPlayer();
         String recipeId = getRealRecipeId(keyed.getKey().getKey());
-        Optional<RecipeInstance> recipeOpt = recipeManager.getRecipeById(recipeId);
+        Optional<RecipeInstance> recipeOpt = RecipeManager.getRecipeById(recipeId);
 
         if (recipeOpt.isEmpty()) return;
         RecipeInstance recipe = recipeOpt.get();
@@ -62,7 +62,7 @@ public class RecipeListener implements Listener {
         if (!"uhhicutie".equals(keyed.getKey().getNamespace())) return;
 
         String recipeId = getRealRecipeId(keyed.getKey().getKey());
-        Optional<RecipeInstance> recipeOpt = recipeManager.getRecipeById(recipeId);
+        Optional<RecipeInstance> recipeOpt = RecipeManager.getRecipeById(recipeId);
         if (recipeOpt.isEmpty()) return;
 
         RecipeInstance recipe = recipeOpt.get();
