@@ -33,7 +33,6 @@ public class DeathHandler {
 
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
                     "§c§lELIMINACJA! §7" + sessionData.getDamager().getName() + " zabija " + player.getName() + "!");
-            return;
         } else {
             rewardU.death(player);
             rewardU.summary(player);
