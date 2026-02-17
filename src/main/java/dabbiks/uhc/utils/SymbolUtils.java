@@ -2,6 +2,9 @@ package dabbiks.uhc.utils;
 
 public class SymbolUtils {
 
+    // * INVENTORIES
+    public final String RECIPE_MENU = "§f\uE085";
+
     // * BUTTONS
     public final String SHIFT = "§f\uE080";
     public final String MOUSE_LEFT = "§f\uE07E";

@@ -43,7 +43,7 @@ public class RecipeMenu extends FastInv {
     private static final int NEXT_PAGE_SLOT = 49;
 
     public RecipeMenu(Player player, RecipeManager recipeManager) {
-        super(54, "Książka z przepisami");
+        super(54, "\uF808" + symbolU.RECIPE_MENU);
         this.player = player;
         this.recipeManager = recipeManager;
 
@@ -75,21 +75,24 @@ public class RecipeMenu extends FastInv {
         for (RecipeType type : RecipeType.values()) {
             if (index >= CATEGORY_SLOTS.length) break;
 
-            ItemStack icon = getCategoryIcon(type);
+            ItemStack icon = new ItemStack(Material.PAPER);
+            ItemMeta meta = icon.getItemMeta();
+            meta.setDisplayName(symbolU.MOUSE_LEFT + " §fPrzeglądaj " + type.getName());
+            meta.setCustomModelData(10);
 
             if (type == currentCategory) {
-                ItemMeta meta = icon.getItemMeta();
-                meta.addEnchant(org.bukkit.enchantments.Enchantment.UNBREAKING, 1, true);
-                meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS);
-                icon.setItemMeta(meta);
+                meta.setDisplayName(symbolU.MOUSE_LEFT + " §aWybrane");
+                meta.setCustomModelData(getCategoryModel(type));
             }
+
+            icon.setItemMeta(meta);
 
             setItem(CATEGORY_SLOTS[index], icon, e -> {
                 if (currentCategory != type) {
                     currentCategory = type;
                     loadRecipes();
                     refresh();
-                    soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
+                    soundU.playSoundToPlayer(player, Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
                 }
             });
             index++;
@@ -124,7 +127,7 @@ public class RecipeMenu extends FastInv {
             setItem(RECIPE_SLOTS[slotIndex], icon, e -> {
                 selectedRecipe = recipe;
                 refresh();
-                soundU.playSoundToPlayer(player, Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
+                soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
             });
         }
 
@@ -187,28 +190,15 @@ public class RecipeMenu extends FastInv {
         }
     }
 
-    private ItemStack getCategoryIcon(RecipeType type) {
-        Material mat = switch (type) {
-            case WEAPON -> Material.IRON_SWORD;
-            case ARMOR -> Material.IRON_CHESTPLATE;
-            case TOOL -> Material.IRON_PICKAXE;
-            case CONSUMABLE -> Material.COOKED_BEEF;
-            case USABLE -> Material.ENDER_PEARL;
-            default -> Material.BOOK;
+    private int getCategoryModel(RecipeType type) {
+        int model = switch (type) {
+            case WEAPON -> 12;
+            case ARMOR -> 11;
+            case TOOL -> 13;
+            case CONSUMABLE -> 15;
+            case USABLE -> 14;
+            default -> 10;
         };
-
-        ItemStack item = new ItemStack(mat);
-        ItemMeta meta = item.getItemMeta();
-        String name = switch (type) {
-            case WEAPON -> "Bronie";
-            case ARMOR -> "Opancerzenie";
-            case TOOL -> "Narzędzia";
-            case CONSUMABLE -> "Jedzenie i dodatki";
-            case USABLE -> "Ze specjalnym użyciem";
-        };
-        meta.setDisplayName(name);
-        meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
-        return item;
+        return model;
     }
 }
