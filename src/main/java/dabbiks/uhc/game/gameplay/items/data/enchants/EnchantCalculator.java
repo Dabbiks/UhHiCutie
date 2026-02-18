@@ -14,14 +14,25 @@ public class EnchantCalculator {
     private final EnchantManager enchantManager = new EnchantManager();
 
     public int convertVanillaToPower(ItemMeta meta) {
-        if (meta == null || !meta.hasEnchants()) {
+        if (meta == null) {
+            return 1;
+        }
+
+        Map<org.bukkit.enchantments.Enchantment, Integer> enchants;
+        if (meta instanceof org.bukkit.inventory.meta.EnchantmentStorageMeta) {
+            enchants = ((org.bukkit.inventory.meta.EnchantmentStorageMeta) meta).getStoredEnchants();
+        } else {
+            enchants = meta.getEnchants();
+        }
+
+        if (enchants == null || enchants.isEmpty()) {
             return 1;
         }
 
         int totalPower = 0;
 
-        for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-            Enchantment enchant = entry.getKey();
+        for (Map.Entry<org.bukkit.enchantments.Enchantment, Integer> entry : enchants.entrySet()) {
+            org.bukkit.enchantments.Enchantment enchant = entry.getKey();
             int level = entry.getValue();
 
             if (enchant.isCursed()) {
@@ -46,56 +57,81 @@ public class EnchantCalculator {
 
     public List<EnchantData> calculateEnchants(int power, EnchantSlot itemSlot) {
         List<EnchantData> result = new ArrayList<>();
-        int modifiedLevel = power + random.nextInt(power / 4 + 1) + random.nextInt(4);
-        int tierOffset = random.nextInt(5) - 2;
+        int modifiedLevel = power + random.nextInt(Math.max(1, power / 3)) + 2;
 
-        List<EnchantType> candidates = getPossibleEnchants(itemSlot, modifiedLevel, tierOffset);
+        List<EnchantType> allCompatible = getAllCompatibleEnchants(itemSlot);
 
-        if (candidates.isEmpty()) {
+        if (allCompatible.isEmpty()) {
             return result;
         }
 
-        EnchantType firstEnchant = pickWeightedEnchant(candidates);
-        if (firstEnchant != null) {
-            result.add(createEnchantData(firstEnchant, modifiedLevel));
-            candidates.remove(firstEnchant);
+        List<EnchantType> candidates = getCandidatesForPower(allCompatible, modifiedLevel, power);
+
+        if (candidates.isEmpty()) {
+            candidates = new ArrayList<>(allCompatible);
         }
 
-        int currentLevel = modifiedLevel / 2;
+        EnchantType firstEnchant = pickWeightedEnchant(candidates);
 
-        while (!candidates.isEmpty() && random.nextInt(50) <= currentLevel) {
-            EnchantType extraEnchant = pickWeightedEnchant(candidates);
+        if (firstEnchant == null && !candidates.isEmpty()) {
+            firstEnchant = candidates.get(random.nextInt(candidates.size()));
+        }
+
+        if (firstEnchant != null) {
+            result.add(createEnchantData(firstEnchant, modifiedLevel));
+            EnchantType finalFirstEnchant = firstEnchant;
+            allCompatible.removeIf(e -> e == finalFirstEnchant);
+        }
+
+        int currentChance = modifiedLevel * 2;
+
+        while (!allCompatible.isEmpty() && random.nextInt(100) < currentChance) {
+            EnchantType extraEnchant = pickWeightedEnchant(allCompatible);
+
             if (extraEnchant != null) {
                 result.add(createEnchantData(extraEnchant, modifiedLevel));
-                candidates.remove(extraEnchant);
+                EnchantType finalExtra = extraEnchant;
+                allCompatible.removeIf(e -> e == finalExtra);
             }
-            currentLevel /= 2;
+
+            currentChance /= 2;
         }
 
         return result;
     }
 
-    private List<EnchantType> getPossibleEnchants(EnchantSlot itemSlot, int modifiedLevel, int tierOffset) {
+    private List<EnchantType> getAllCompatibleEnchants(EnchantSlot itemSlot) {
         List<EnchantType> valid = new ArrayList<>();
-
         for (EnchantType type : EnchantType.values()) {
-            if (!enchantManager.isCompatible(itemSlot, type.getSlot())) {
-                continue;
+            if (enchantManager.isCompatible(itemSlot, type.getSlot())) {
+                valid.add(type);
             }
-
-            int minPower = getMinPowerForTier(type.getTier()) + tierOffset;
-            if (modifiedLevel < minPower) {
-                continue;
-            }
-
-            valid.add(type);
         }
         return valid;
     }
 
+    private List<EnchantType> getCandidatesForPower(List<EnchantType> source, int modifiedLevel, int originalPower) {
+        List<EnchantType> filtered = new ArrayList<>();
+
+        for (EnchantType type : source) {
+            int minPower = getMinPowerForTier(type.getTier());
+
+            if (originalPower > 20 && type.getTier() == EnchantTier.COMMON) {
+                continue;
+            }
+
+            if (modifiedLevel >= minPower) {
+                filtered.add(type);
+            }
+        }
+        return filtered;
+    }
+
     private EnchantType pickWeightedEnchant(List<EnchantType> candidates) {
+        if (candidates.isEmpty()) return null;
+
         int totalWeight = candidates.stream().mapToInt(e -> getWeight(e.getTier())).sum();
-        if (totalWeight <= 0) return null;
+        if (totalWeight <= 0) return candidates.get(0);
 
         int randomValue = random.nextInt(totalWeight);
         int currentSum = 0;
@@ -110,7 +146,7 @@ public class EnchantCalculator {
     }
 
     private EnchantData createEnchantData(EnchantType type, int modifiedLevel) {
-        double percentage = Math.min(1.0, modifiedLevel / 40.0);
+        double percentage = (modifiedLevel + random.nextInt(10)) / 45.0;
         int calculatedLevel = (int) Math.ceil(percentage * type.getMaxLevel());
         calculatedLevel = Math.max(1, Math.min(calculatedLevel, type.getMaxLevel()));
 
@@ -119,8 +155,9 @@ public class EnchantCalculator {
 
     private int getWeight(EnchantTier tier) {
         switch (tier) {
-            case COMMON: return 6;
-            case RARE, EPIC: return 3;
+            case COMMON: return 10;
+            case RARE: return 5;
+            case EPIC: return 2;
             case MYTHIC: return 1;
             case LEGENDARY: return 1;
             default: return 1;
@@ -130,10 +167,10 @@ public class EnchantCalculator {
     private int getMinPowerForTier(EnchantTier tier) {
         switch (tier) {
             case COMMON: return 1;
-            case RARE: return 8;
-            case EPIC: return 16;
-            case MYTHIC: return 22;
-            case LEGENDARY: return 28;
+            case RARE: return 10;
+            case EPIC: return 20;
+            case MYTHIC: return 25;
+            case LEGENDARY: return 30;
             default: return 1;
         }
     }

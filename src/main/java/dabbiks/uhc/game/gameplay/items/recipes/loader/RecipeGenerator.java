@@ -8,6 +8,7 @@ import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeIngredient;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import org.bukkit.Material;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -29,17 +30,21 @@ public class RecipeGenerator {
         registerTier("DIAMOND", Material.DIAMOND, 7.0, 3.0, 0);
         registerTier("NETHERITE", Material.NETHERITE_INGOT, 8.0, 3.0, 0);
 
+        registerArmorSet("LEATHER", Material.LEATHER, 1.0, 0);
+        registerArmorSet("CHAINMAIL", Material.FIRE_CHARGE, 1.5, 0);
+
         registerSpears();
         registerMace();
+        registerTrident();
         registerRanged();
     }
 
     private void registerTier(String prefix, Material ingredient, double baseDmg, double baseArmor, int modelData) {
         registerSword(prefix + "_SWORD", ingredient, baseDmg, modelData);
-        registerTool(prefix + "_PICKAXE", ingredient, "PICKAXE", EnchantSlot.PICKAXE, modelData, "III", " S ", " S ");
-        registerTool(prefix + "_AXE", ingredient, "AXE", EnchantSlot.AXE, modelData, "II", "IS", " S");
-        registerTool(prefix + "_SHOVEL", ingredient, "SHOVEL", EnchantSlot.TOOL, modelData, "I", "S", "S");
-        registerTool(prefix + "_HOE", ingredient, "HOE", EnchantSlot.TOOL, modelData, "II", " S", " S");
+        registerTool(prefix + "_PICKAXE", ingredient, baseDmg - 2, "PICKAXE", EnchantSlot.PICKAXE, modelData, "III", " S ", " S ");
+        registerTool(prefix + "_AXE", ingredient, baseDmg + 1, "AXE", EnchantSlot.AXE, modelData, "II", "IS", " S");
+        registerTool(prefix + "_SHOVEL", ingredient, baseDmg - 2, "SHOVEL", EnchantSlot.TOOL, modelData, "I", "S", "S");
+        registerTool(prefix + "_HOE", ingredient, baseDmg - 3, "HOE", EnchantSlot.TOOL, modelData, "II", " S", " S");
 
         if (baseArmor > 0) {
             registerArmorSet(prefix, ingredient, baseArmor, modelData);
@@ -47,21 +52,42 @@ public class RecipeGenerator {
     }
 
     private void registerSword(String matName, Material ingredient, double damage, int modelData) {
-        AttributeData dmgAttr = new AttributeData(AttributeType.ATTACK_DAMAGE, damage);
+        AttributeData attackDamage = new AttributeData(AttributeType.ATTACK_DAMAGE, damage);
+        AttributeData attackSpeed = new AttributeData(AttributeType.ATTACK_SPEED, -2);
+        AttributeData critDamage = new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 25);
         registerRecipe(matName.toLowerCase(), Material.valueOf(matName), ingredient, modelData,
-                EnchantSlot.SWORD, EquipmentSlot.HAND, RecipeType.WEAPON, List.of(dmgAttr), "I", "I", "S");
+                EnchantSlot.SWORD, EquipmentSlot.HAND, RecipeType.WEAPON, List.of(attackDamage, attackSpeed, critDamage), "I", "I", "S");
     }
 
-    private void registerTool(String matName, Material ingredient, String type, EnchantSlot slot, int modelData, String... shape) {
-        double damage = switch (type) {
-            case "AXE" -> 9.0;
-            case "PICKAXE" -> 5.0;
-            case "SHOVEL" -> 5.5;
-            default -> 1.0;
-        };
-        AttributeData dmgAttr = new AttributeData(AttributeType.ATTACK_DAMAGE, damage);
+    private void registerTool(String matName, Material ingredient, double damage, String type, EnchantSlot slot, int modelData, String... shape) {
+        List<AttributeData> attributes = getAttributeData(damage, type);
+
         registerRecipe(matName.toLowerCase(), Material.valueOf(matName), ingredient, modelData,
-                slot, EquipmentSlot.HAND, RecipeType.TOOL, List.of(dmgAttr), shape);
+                slot, EquipmentSlot.HAND, RecipeType.TOOL, attributes, shape);
+
+        if (type.equals("AXE") || type.equals("HOE")) {
+            String[] mirroredShape = new String[shape.length];
+            for (int i = 0; i < shape.length; i++) {
+                mirroredShape[i] = new StringBuilder(shape[i]).reverse().toString();
+            }
+            registerRecipe(matName.toLowerCase() + "_mirrored", Material.valueOf(matName), ingredient, modelData,
+                    slot, EquipmentSlot.HAND, RecipeType.TOOL, attributes, mirroredShape);
+        }
+    }
+
+    private @NonNull List<AttributeData> getAttributeData(double damage, String type) {
+        AttributeData attackDamage = new AttributeData(AttributeType.ATTACK_DAMAGE, damage);
+        AttributeData attackSpeed = new AttributeData(AttributeType.ATTACK_SPEED, switch (type) {
+            case "PICKAXE" -> -2.5;
+            case "AXE" -> -3.5;
+            default -> -2;
+        });
+        AttributeData critDamage = new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 40);
+
+        List<AttributeData> attributes = type.equals("AXE")
+                ? List.of(attackDamage, attackSpeed, critDamage)
+                : List.of(attackDamage, attackSpeed);
+        return attributes;
     }
 
     private void registerArmorSet(String prefix, Material ingredient, double baseArmor, int modelData) {
@@ -83,13 +109,13 @@ public class RecipeGenerator {
     }
 
     private void registerSpears() {
-        registerSpear("WOODEN", Material.OAK_PLANKS, 4.0);
-        registerSpear("STONE", Material.COBBLESTONE, 5.0);
-        registerSpear("COPPER", Material.COPPER_INGOT, 5.0);
-        registerSpear("IRON", Material.IRON_INGOT, 6.0);
-        registerSpear("GOLDEN", Material.GOLD_INGOT, 4.0);
-        registerSpear("DIAMOND", Material.DIAMOND, 7.0);
-        registerSpear("NETHERITE", Material.NETHERITE_INGOT, 8.0);
+        registerSpear("WOODEN", Material.OAK_PLANKS, 1.0);
+        registerSpear("STONE", Material.COBBLESTONE, 1.5);
+        registerSpear("COPPER", Material.COPPER_INGOT, 2.0);
+        registerSpear("IRON", Material.IRON_INGOT, 2.5);
+        registerSpear("GOLDEN", Material.GOLD_INGOT, 3.0);
+        registerSpear("DIAMOND", Material.DIAMOND, 3.5);
+        registerSpear("NETHERITE", Material.NETHERITE_INGOT, 4.0);
     }
 
     private void registerSpear(String prefix, Material ingredient, double baseDmg) {
@@ -98,6 +124,7 @@ public class RecipeGenerator {
 
         List<AttributeData> attrs = new ArrayList<>();
         attrs.add(new AttributeData(AttributeType.ATTACK_DAMAGE, baseDmg));
+        attrs.add(new AttributeData(AttributeType.ATTACK_SPEED, -2.5));
 
         EnchantSlot slot = EnchantSlot.SPEAR;
 
@@ -110,9 +137,22 @@ public class RecipeGenerator {
         ingredients.put('B', createIngredient("BREEZE_ROD", 0));
 
         List<AttributeData> attrs = List.of(new AttributeData(AttributeType.ATTACK_DAMAGE, 7.0));
-        ItemInstance result = createResult(Material.MACE, "Mace", 0, EnchantSlot.MACE, EquipmentSlot.HAND, attrs);
+        ItemInstance result = createResult(Material.MACE, "Buzdygan", 0, EnchantSlot.MACE, EquipmentSlot.HAND, attrs);
 
         createAndRegister("mace", "shaped", List.of("H", "B"), ingredients, result, RecipeType.WEAPON);
+    }
+
+    private void registerTrident() {
+        Map<Character, RecipeIngredient> ingredients = new HashMap<>();
+        ingredients.put('X', createIngredient("BEDROCK", 0));
+
+        List<AttributeData> attrs = List.of(
+                new AttributeData(AttributeType.ATTACK_DAMAGE, 9.0),
+                new AttributeData(AttributeType.ATTACK_SPEED, -2.9)
+        );
+        ItemInstance result = createResult(Material.TRIDENT, "Trójząb", 0, EnchantSlot.TRIDENT, EquipmentSlot.HAND, attrs);
+
+        createAndRegister("trident", "shaped", List.of("XXX", " X ", " X "), ingredients, result, RecipeType.WEAPON);
     }
 
     private void registerRanged() {
@@ -193,7 +233,11 @@ public class RecipeGenerator {
 
             Field modelField = RecipeIngredient.class.getDeclaredField("customModelData");
             modelField.setAccessible(true);
-            modelField.set(ingredient, modelData);
+            if (modelData == 0) {
+                modelField.set(ingredient, null);
+            } else {
+                modelField.set(ingredient, modelData);
+            }
 
             return ingredient;
         } catch (Exception e) {

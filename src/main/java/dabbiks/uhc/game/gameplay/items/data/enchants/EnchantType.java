@@ -3,16 +3,16 @@ package dabbiks.uhc.game.gameplay.items.data.enchants;
 import org.bukkit.enchantments.Enchantment;
 
 public enum EnchantType {
-    SHARPNESS("Ostrość", 5, EnchantTier.COMMON, EnchantSlot.MELEE, null),
+    SHARPNESS("Ostrość", 5, EnchantTier.COMMON, EnchantSlot.SWORD, null),
     KNOCKBACK("Odrzut", 3, EnchantTier.COMMON, EnchantSlot.SWORD, Enchantment.KNOCKBACK),
     LOOTING("Grabież", 2, EnchantTier.RARE, EnchantSlot.SWORD, Enchantment.LOOTING),
-    SUNDER("Mocne ciosy", 3, EnchantTier.RARE, EnchantSlot.MELEE, null),
-    LETHALITY("Przebicie pancerza", 10, EnchantTier.RARE, EnchantSlot.MELEE, null),
+    SUNDER("Mocne ciosy", 3, EnchantTier.RARE, EnchantSlot.SWORD, null),
+    LETHALITY("Przebicie pancerza", 10, EnchantTier.RARE, EnchantSlot.SWORD, null),
     HASTE("Zręczność", 2, EnchantTier.EPIC, EnchantSlot.SWORD, null),
     SLUDGE("Lepka maź", 1, EnchantTier.EPIC, EnchantSlot.SWORD, null),
     POISON("Zatrucie", 1, EnchantTier.MYTHIC, EnchantSlot.SWORD, null),
     IGNITE("Zaklęty ogień", 3, EnchantTier.MYTHIC, EnchantSlot.SWORD, Enchantment.FIRE_ASPECT),
-    SHATTER("Strzaskanie", 2, EnchantTier.LEGENDARY, EnchantSlot.MELEE, null),
+    SHATTER("Strzaskanie", 2, EnchantTier.LEGENDARY, EnchantSlot.SWORD, null),
 
     EFFICIENCY("Wydajność", 5, EnchantTier.COMMON, EnchantSlot.TOOL, Enchantment.EFFICIENCY),
     UNBREAKING("Niezniszczalność", 3, EnchantTier.COMMON, EnchantSlot.TOOL, Enchantment.UNBREAKING),

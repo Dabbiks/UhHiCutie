@@ -58,9 +58,7 @@ public class EnchantManager {
         if (enchantSlot == EnchantSlot.ALL) return true;
 
         if (enchantSlot == EnchantSlot.MELEE) {
-            return itemSlot == EnchantSlot.SWORD || itemSlot == EnchantSlot.AXE ||
-                    itemSlot == EnchantSlot.MACE || itemSlot == EnchantSlot.SPEAR ||
-                    itemSlot == EnchantSlot.TRIDENT;
+            return itemSlot == EnchantSlot.SWORD || itemSlot == EnchantSlot.AXE;
         }
 
         if (enchantSlot == EnchantSlot.ARMOR) {

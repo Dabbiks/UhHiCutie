@@ -19,10 +19,9 @@ public class ItemConverter {
 
     public ItemStack convert(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return item;
-        if (!item.hasItemMeta()) return item;
 
         NBTItem nbtItem = new NBTItem(item);
-        if (!nbtItem.hasKey(ItemTags.UHC_ITEM.name())) return item;
+        if (nbtItem.hasKey(ItemTags.UHC_ITEM.name())) return item;
 
         String recipeId = item.getType().name().toLowerCase();
         Optional<RecipeInstance> optional = RecipeManager.getRecipeById(recipeId);

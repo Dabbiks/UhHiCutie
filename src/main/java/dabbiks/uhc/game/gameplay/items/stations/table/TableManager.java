@@ -76,7 +76,7 @@ public class TableManager implements Listener {
             return;
         }
 
-        if (item.isEmpty()) return;
+        if (item.isEmpty() || item.getType().equals(Material.AIR)) return;
         NBTItem nbtItem = new NBTItem(item);
         if (nbtItem.getInteger(ItemTags.CAN_BE_ENCHANTED.name()) == null) {
             player.sendMessage("§cTego przedmiotu nie da się zakląć");
