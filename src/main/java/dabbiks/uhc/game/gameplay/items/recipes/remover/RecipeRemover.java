@@ -2,10 +2,12 @@ package dabbiks.uhc.game.gameplay.items.recipes.remover;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
 
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class RecipeRemover {
@@ -55,7 +57,21 @@ public class RecipeRemover {
                 iterator.remove();
             }
         }
-        Bukkit.getLogger().info("Usunięto vanilla przepisy dla broni, narzędzi i zbroi.");
+        Bukkit.getLogger().info("Vanilla recipes removed");
+    }
+
+    public List<org.bukkit.NamespacedKey> getRemovedRecipeKeys() {
+        List<NamespacedKey> keys = new java.util.ArrayList<>();
+        java.util.Iterator<org.bukkit.inventory.Recipe> iterator = Bukkit.recipeIterator();
+        while (iterator.hasNext()) {
+            org.bukkit.inventory.Recipe recipe = iterator.next();
+            if (VANILLA_ITEMS_TO_REMOVE.contains(recipe.getResult().getType())) {
+                if (recipe instanceof org.bukkit.Keyed keyed) {
+                    keys.add(keyed.getKey());
+                }
+            }
+        }
+        return keys;
     }
 
 }

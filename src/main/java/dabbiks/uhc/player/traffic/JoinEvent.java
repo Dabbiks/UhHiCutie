@@ -2,6 +2,7 @@ package dabbiks.uhc.player.traffic;
 
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
+import dabbiks.uhc.game.gameplay.items.recipes.remover.RecipeRemover;
 import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentData;
@@ -22,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static dabbiks.uhc.Main.*;
@@ -35,6 +37,9 @@ public class JoinEvent implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.setJoinMessage("");
+
+        List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
+        player.undiscoverRecipes(toRemove);
 
         PersistentDataManager.loadData(player.getUniqueId());
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());

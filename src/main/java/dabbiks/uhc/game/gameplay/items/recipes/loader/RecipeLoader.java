@@ -3,6 +3,7 @@ package dabbiks.uhc.game.gameplay.items.recipes.loader;
 import com.google.gson.Gson;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.remover.RecipeRemover;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -25,7 +26,7 @@ public class RecipeLoader {
         File folder = new File(plugin.getDataFolder(), "recipes");
         if (!folder.exists()) folder.mkdirs();
 
-        new RecipeRemover().removeVanillaRecipes();
+        new RecipeRemover();
         new RecipeGenerator(manager).registerAll();
         scanAndLoad(folder, new Gson());
     }

@@ -6,6 +6,7 @@ import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeType;
 import fr.mrmicky.fastinv.FastInv;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -52,6 +53,7 @@ public class RecipeMenu extends FastInv {
         loadRecipes();
 
         refresh();
+        Bukkit.getScheduler().runTaskLater(dabbiks.uhc.Main.plugin, this::refresh, 1L);
     }
 
     private void loadRecipes() {
@@ -162,55 +164,56 @@ public class RecipeMenu extends FastInv {
     }
 
     private void renderCraftingGrid() {
-        if (selectedRecipe == null) return;
+        if (selectedRecipe == null || !selectedRecipe.showInRecipeBook()) return;
 
         ItemStack resultItem = new ItemBuilder(selectedRecipe.getResult()).build();
         setItem(RESULT_SLOT, resultItem, e -> e.setCancelled(true));
 
         Map<Character, RecipeIngredient> ingredients = selectedRecipe.getIngredients();
 
-        if (selectedRecipe.isShaped()) {
-            List<String> shape = selectedRecipe.getShape();
+        if (!selectedRecipe.isShaped()) {
+            renderShapelessGrid(ingredients);
+            return;
+        }
 
-            int height = shape.size();
-            int width = 0;
-            for (String rowStr : shape) {
-                width = Math.max(width, rowStr.length());
-            }
+        List<String> shape = selectedRecipe.getShape();
+        int height = shape.size();
+        int width = shape.stream().mapToInt(String::length).max().orElse(0);
 
-            int rowOffset = (3 - height) / 2;
-            int colOffset = (3 - width) / 2;
+        int rowOffset = (3 - height) / 2;
+        int colOffset = (3 - width) / 2;
 
-            for (int row = 0; row < shape.size(); row++) {
-                String rowStr = shape.get(row);
-                for (int col = 0; col < rowStr.length(); col++) {
-                    char key = rowStr.charAt(col);
-                    if (key == ' ') continue;
+        for (int row = 0; row < shape.size(); row++) {
+            String rowStr = shape.get(row);
+            for (int col = 0; col < rowStr.length(); col++) {
+                char key = rowStr.charAt(col);
+                RecipeIngredient ingredient = ingredients.get(key);
 
-                    RecipeIngredient ingredient = ingredients.get(key);
-                    if (ingredient != null) {
-                        int targetRow = row + rowOffset;
-                        int targetCol = col + colOffset;
-                        int gridIndex = targetRow * 3 + targetCol;
+                if (key == ' ' || ingredient == null) continue;
 
-                        if (gridIndex >= 0 && gridIndex < GRID_SLOTS.length) {
-                            setItem(GRID_SLOTS[gridIndex], ingredient.build(), e -> e.setCancelled(true));
-                        }
-                    }
+                int targetRow = row + rowOffset;
+                int targetCol = col + colOffset;
+                int gridIndex = targetRow * 3 + targetCol;
+
+                if (gridIndex >= 0 && gridIndex < GRID_SLOTS.length) {
+                    setItem(GRID_SLOTS[gridIndex], ingredient.build(), e -> e.setCancelled(true));
                 }
             }
-        } else {
-            List<RecipeIngredient> ingredientList = new ArrayList<>(ingredients.values());
+        }
+    }
 
-            if (ingredientList.size() == 1) {
-                setItem(GRID_SLOTS[4], ingredientList.get(0).build(), e -> e.setCancelled(true));
-            } else {
-                int slotIdx = 0;
-                for (RecipeIngredient ingredient : ingredientList) {
-                    if (slotIdx >= GRID_SLOTS.length) break;
-                    setItem(GRID_SLOTS[slotIdx++], ingredient.build(), e -> e.setCancelled(true));
-                }
-            }
+    private void renderShapelessGrid(Map<Character, RecipeIngredient> ingredients) {
+        List<RecipeIngredient> ingredientList = new ArrayList<>(ingredients.values());
+
+        if (ingredientList.size() == 1) {
+            setItem(GRID_SLOTS[4], ingredientList.get(0).build(), e -> e.setCancelled(true));
+            return;
+        }
+
+        int slotIdx = 0;
+        for (RecipeIngredient ingredient : ingredientList) {
+            if (slotIdx >= GRID_SLOTS.length) break;
+            setItem(GRID_SLOTS[slotIdx++], ingredient.build(), e -> e.setCancelled(true));
         }
     }
 
