@@ -24,21 +24,28 @@ public class RecipeLoader {
         File folder = new File(plugin.getDataFolder(), "recipes");
         if (!folder.exists()) folder.mkdirs();
 
-        Gson gson = new Gson();
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
+        scanAndLoad(folder, new Gson());
+    }
+
+    private void scanAndLoad(File folder, Gson gson) {
+        File[] files = folder.listFiles();
         if (files == null) return;
 
         for (File file : files) {
-            try (Reader reader = new FileReader(file)) {
+            if (file.isDirectory()) {
+                scanAndLoad(file, gson);
+                continue;
+            }
+
+            if (!file.getName().endsWith(".json")) continue;
+
+            try (FileReader reader = new FileReader(file)) {
                 RecipeInstance recipe = gson.fromJson(reader, RecipeInstance.class);
-                if (recipe == null || recipe.getId() == null || recipe.getResult() == null) continue;
-
-                manager.registerRecipe(recipe);
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                if (recipe != null && recipe.getId() != null && recipe.getResult() != null) {
+                    manager.registerRecipe(recipe);
+                }
             } catch (Exception e) {
-                System.err.println("Błąd podczas ładowania przepisu z pliku: " + file.getName());
+                System.err.println("Błąd podczas ładowania: " + file.getAbsolutePath());
                 e.printStackTrace();
             }
         }

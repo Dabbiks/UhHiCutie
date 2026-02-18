@@ -31,6 +31,7 @@ public class ItemUtils {
     public void setEquippableTexture(ItemStack item, String slot, String assetId) {
         if (item == null || item.getType().isAir()) return;
         EquipmentSlot eqSlot = EquipmentSlot.HEAD;
+        slot = slot.toLowerCase();
         if (slot.equals("head")) eqSlot = EquipmentSlot.HEAD;
         if (slot.equals("chest")) eqSlot = EquipmentSlot.CHEST;
         if (slot.equals("legs")) eqSlot = EquipmentSlot.LEGS;

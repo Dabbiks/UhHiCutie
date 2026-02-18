@@ -54,7 +54,7 @@ public class WorldGen {
         ChunkyAPI chunky = Bukkit.getServer().getServicesManager().load(ChunkyAPI.class);
         if (chunky != null) {
 
-            chunky.startTask(WorldConfig.worldName, "square", 0, 0, 200, 200, "region");
+            chunky.startTask(WorldConfig.worldName, "square", 0, 0, 400, 400, "region");
 
             WorldConfig.isWorldGenerated = false;
         }

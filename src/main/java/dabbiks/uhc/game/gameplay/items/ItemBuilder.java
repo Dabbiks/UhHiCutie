@@ -46,7 +46,7 @@ public class ItemBuilder {
         if (meta == null) return item;
 
         if (instance.getName() != null) {
-            meta.setDisplayName(instance.getName());
+            meta.setDisplayName("§f" + instance.getName());
         }
 
         if (instance.getLore() != null) {
@@ -125,6 +125,7 @@ public class ItemBuilder {
         if (instance.getPerks() != null && !instance.getPerks().isEmpty()) {
             if (!lore.isEmpty()) { lore.add(""); }
             for (PerkType perkType : instance.getPerks()) {
+                lore.add("§b⭐ §f" + perkType.getName());
                 lore.addAll(perkType.getLore());
             }
         }
