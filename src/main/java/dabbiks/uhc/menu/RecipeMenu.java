@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static dabbiks.uhc.Main.soundU;
 import static dabbiks.uhc.Main.symbolU;
@@ -100,12 +101,16 @@ public class RecipeMenu extends FastInv {
     }
 
     private void renderRecipeList() {
+        List<RecipeInstance> visibleRecipes = currentRecipes.stream()
+                .filter(RecipeInstance::showInRecipeBook)
+                .toList();
+
         int recipesPerPage = RECIPE_SLOTS.length;
         int startIndex = page * recipesPerPage;
-        int endIndex = Math.min(startIndex + recipesPerPage, currentRecipes.size());
+        int endIndex = Math.min(startIndex + recipesPerPage, visibleRecipes.size());
 
         for (int i = startIndex; i < endIndex; i++) {
-            RecipeInstance recipe = currentRecipes.get(i);
+            RecipeInstance recipe = visibleRecipes.get(i);
             int slotIndex = i - startIndex;
 
             ItemStack icon = new ItemBuilder(recipe.getResult()).build();
@@ -143,7 +148,7 @@ public class RecipeMenu extends FastInv {
             });
         }
 
-        if (endIndex < currentRecipes.size()) {
+        if (endIndex < visibleRecipes.size()) {
             ItemStack next = new ItemStack(Material.ARROW);
             ItemMeta meta = next.getItemMeta();
             meta.setDisplayName("§eNastępna strona »");
@@ -166,6 +171,16 @@ public class RecipeMenu extends FastInv {
 
         if (selectedRecipe.isShaped()) {
             List<String> shape = selectedRecipe.getShape();
+
+            int height = shape.size();
+            int width = 0;
+            for (String rowStr : shape) {
+                width = Math.max(width, rowStr.length());
+            }
+
+            int rowOffset = (3 - height) / 2;
+            int colOffset = (3 - width) / 2;
+
             for (int row = 0; row < shape.size(); row++) {
                 String rowStr = shape.get(row);
                 for (int col = 0; col < rowStr.length(); col++) {
@@ -174,18 +189,27 @@ public class RecipeMenu extends FastInv {
 
                     RecipeIngredient ingredient = ingredients.get(key);
                     if (ingredient != null) {
-                        int gridIndex = row * 3 + col;
-                        if (gridIndex < GRID_SLOTS.length) {
+                        int targetRow = row + rowOffset;
+                        int targetCol = col + colOffset;
+                        int gridIndex = targetRow * 3 + targetCol;
+
+                        if (gridIndex >= 0 && gridIndex < GRID_SLOTS.length) {
                             setItem(GRID_SLOTS[gridIndex], ingredient.build(), e -> e.setCancelled(true));
                         }
                     }
                 }
             }
         } else {
-            int slotIdx = 0;
-            for (RecipeIngredient ingredient : ingredients.values()) {
-                if (slotIdx >= GRID_SLOTS.length) break;
-                setItem(GRID_SLOTS[slotIdx++], ingredient.build(), e -> e.setCancelled(true));
+            List<RecipeIngredient> ingredientList = new ArrayList<>(ingredients.values());
+
+            if (ingredientList.size() == 1) {
+                setItem(GRID_SLOTS[4], ingredientList.get(0).build(), e -> e.setCancelled(true));
+            } else {
+                int slotIdx = 0;
+                for (RecipeIngredient ingredient : ingredientList) {
+                    if (slotIdx >= GRID_SLOTS.length) break;
+                    setItem(GRID_SLOTS[slotIdx++], ingredient.build(), e -> e.setCancelled(true));
+                }
             }
         }
     }

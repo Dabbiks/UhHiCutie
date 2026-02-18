@@ -12,7 +12,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemInstance {
+public class ItemInstance implements Cloneable {
 
     private String material;
     private int amount;
