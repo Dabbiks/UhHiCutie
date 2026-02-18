@@ -1,10 +1,12 @@
 package dabbiks.uhc.game.gameplay.items.recipes.remover;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -12,12 +14,7 @@ import java.util.Set;
 
 public class RecipeRemover {
 
-    public RecipeRemover() {
-        removeVanillaRecipes();
-    }
-
     private final Set<Material> VANILLA_ITEMS_TO_REMOVE = EnumSet.of(
-
             Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD,
             Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD,
 
@@ -53,25 +50,37 @@ public class RecipeRemover {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         while (iterator.hasNext()) {
             Recipe recipe = iterator.next();
-            if (VANILLA_ITEMS_TO_REMOVE.contains(recipe.getResult().getType())) {
-                iterator.remove();
+
+            if (!VANILLA_ITEMS_TO_REMOVE.contains(recipe.getResult().getType())) {
+                continue;
             }
+
+            if (recipe instanceof Keyed keyed) {
+                String namespace = keyed.getKey().getNamespace();
+
+                if (!namespace.equals("minecraft")) {
+                    continue;
+                }
+            }
+
+            iterator.remove();
         }
         Bukkit.getLogger().info("Vanilla recipes removed");
     }
 
-    public List<org.bukkit.NamespacedKey> getRemovedRecipeKeys() {
-        List<NamespacedKey> keys = new java.util.ArrayList<>();
-        java.util.Iterator<org.bukkit.inventory.Recipe> iterator = Bukkit.recipeIterator();
+    public List<NamespacedKey> getRemovedRecipeKeys() {
+        List<NamespacedKey> keys = new ArrayList<>();
+        Iterator<Recipe> iterator = Bukkit.recipeIterator();
         while (iterator.hasNext()) {
-            org.bukkit.inventory.Recipe recipe = iterator.next();
+            Recipe recipe = iterator.next();
             if (VANILLA_ITEMS_TO_REMOVE.contains(recipe.getResult().getType())) {
-                if (recipe instanceof org.bukkit.Keyed keyed) {
-                    keys.add(keyed.getKey());
+                if (recipe instanceof Keyed keyed) {
+                    if (keyed.getKey().getNamespace().equals("minecraft")) {
+                        keys.add(keyed.getKey());
+                    }
                 }
             }
         }
         return keys;
     }
-
 }

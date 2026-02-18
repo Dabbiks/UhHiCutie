@@ -32,13 +32,13 @@ import static dabbiks.uhc.game.gameplay.bossbar.SegmentBossBar.mainBossBar;
 public class JoinEvent implements Listener {
 
     public static Map<Player, FastBoard> boards = new HashMap<>();
+    List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.setJoinMessage("");
 
-        List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
         player.undiscoverRecipes(toRemove);
 
         PersistentDataManager.loadData(player.getUniqueId());

@@ -26,7 +26,7 @@ public class RecipeLoader {
         File folder = new File(plugin.getDataFolder(), "recipes");
         if (!folder.exists()) folder.mkdirs();
 
-        new RecipeRemover();
+        new RecipeRemover().removeVanillaRecipes();
         new RecipeGenerator(manager).registerAll();
         scanAndLoad(folder, new Gson());
     }
