@@ -140,7 +140,7 @@ public class ItemBuilder {
 
         if (instance.getEnchants() != null) {
             for (EnchantData enchantData : instance.getEnchants()) {
-                nbtItem.setInteger(enchantData.getType().getName(), enchantData.getLevel());
+                nbtItem.setInteger(enchantData.getType().name(), enchantData.getLevel());
             }
         }
 

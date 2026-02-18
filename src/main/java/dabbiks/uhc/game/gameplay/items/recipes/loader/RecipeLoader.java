@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.items.recipes.loader;
 
 import com.google.gson.Gson;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
+import dabbiks.uhc.game.gameplay.items.recipes.remover.RecipeRemover;
 
 import java.io.File;
 import java.io.FileReader;
@@ -14,7 +15,7 @@ import static dabbiks.uhc.Main.plugin;
 
 public class RecipeLoader {
 
-    private RecipeManager manager;
+    private final RecipeManager manager;
 
     public RecipeLoader(RecipeManager manager) {
         this.manager = manager;
@@ -24,6 +25,8 @@ public class RecipeLoader {
         File folder = new File(plugin.getDataFolder(), "recipes");
         if (!folder.exists()) folder.mkdirs();
 
+        new RecipeRemover().removeVanillaRecipes();
+        new RecipeGenerator(manager).registerAll();
         scanAndLoad(folder, new Gson());
     }
 

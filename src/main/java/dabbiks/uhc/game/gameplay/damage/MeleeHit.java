@@ -68,6 +68,7 @@ public class MeleeHit implements Listener {
         double damage = baseDamage;
 
         damage += tagHandler.handle(victim, null, baseDamage);
+        damage += meleeEnchantHandler.handle(victim, victim, damage, null, EnchantType.IRON_FEET);
 
         damage = armorHandler.handle(null, victim, damage);
 

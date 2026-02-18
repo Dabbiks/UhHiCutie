@@ -54,7 +54,7 @@ public class MeleeEnchantHandler {
             case IGNITE -> ignite(level, victim);
             case SHATTER -> damage += level;
 
-            case IRON_FEET -> damage -= iron_feet(level, damage);
+            case IRON_FEET -> damage -= iron_feet(level, damage, victim);
             case LEAPING -> leaping(level, damager);
             case UNSTABLE_CORE -> unstable_core(damager, victim, damage);
         }
@@ -90,8 +90,10 @@ public class MeleeEnchantHandler {
         victim.setFireTicks(40 * level);
     }
 
-    private double iron_feet(int level, double damage) {
-        return (damage / 4) * level + 1;
+    private double iron_feet(int level, double damage, LivingEntity victim) {
+        if (!(victim instanceof Player)) return 0;
+        double reduction = (damage / 4.0) * level + 1.0;
+        return Math.min(damage, reduction);
     }
 
     private void leaping(int level, Player damager) {

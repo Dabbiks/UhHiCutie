@@ -73,8 +73,8 @@ public class ItemDeconstructor {
 
         List<EnchantData> enchants = new ArrayList<>();
         for (EnchantType type : EnchantType.values()) {
-            if (nbtItem.hasKey(type.getName())) {
-                enchants.add(new EnchantData(type, nbtItem.getInteger(type.getName())));
+            if (nbtItem.hasKey(type.name())) {
+                enchants.add(new EnchantData(type, nbtItem.getInteger(type.name())));
             }
         }
         if (!enchants.isEmpty()) {
