@@ -23,7 +23,7 @@ public class CriticalHitHandler {
         if (item == null || item.getType().isAir()) return damage;
 
         NBTItem nbtItem = new NBTItem(item);
-        String key = AttributeType.CRIT_DAMAGE.getName();
+        String key = AttributeType.CRIT_DAMAGE.name();
 
         if (!nbtItem.hasTag(key)) return damage;
 

@@ -21,12 +21,35 @@ public class AttributeManager {
     }
 
     private static final DecimalFormat FORMATTER = new DecimalFormat("###.##");
+    private static final DecimalFormat ATTACK_SPEED_FORMATTER = new DecimalFormat("###.#");
 
     public static String formatLoreLine(AttributeData attributeData) {
-        String percent = attributeData.getAttributeType().isPercentage() ? "%" : "";
-        String value = FORMATTER.format(attributeData.getAttributeValue());
+        double val = attributeData.getAttributeValue();
+        AttributeType type = attributeData.getAttributeType();
+        String color = "§f";
 
-        return "§r§f" + attributeData.getAttributeType().getSymbol() + "§f " + value + percent + " §7" + attributeData.getAttributeType().getName();
+        if (type == AttributeType.ATTACK_SPEED) {
+            val = 4.0 * Math.pow(0.632, -val / 2.0);
+        }
+
+        String typeName = type.toString().toUpperCase();
+        boolean isNegativeBenefit = typeName.startsWith("SIZE") ||
+                typeName.startsWith("BURNING_TIME") ||
+                typeName.startsWith("FALL_DAMAGE");
+
+        if (isNegativeBenefit) {
+            if (val > 0) {
+                color = "§c";
+            }
+        } else {
+            if (val < 0) {
+                color = "§c";
+            }
+        }
+
+        String percent = type.isPercentage() ? "%" : "";
+        String value = (type == AttributeType.ATTACK_SPEED) ? ATTACK_SPEED_FORMATTER.format(val) : FORMATTER.format(val);
+
+        return "§r§f" + type.getSymbol() + " " + color + value + percent + " §7" + type.getName();
     }
-
 }

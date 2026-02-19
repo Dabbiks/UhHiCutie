@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.items;
 
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeManager;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
 import dabbiks.uhc.game.gameplay.items.data.fireworks.ExplosionData;
@@ -59,7 +60,46 @@ public class ItemBuilder {
 
         if (instance.getAttributes() != null) {
             if (!lore.isEmpty()) { lore.add(""); }
-            for (AttributeData attributeData : instance.getAttributes()) {
+
+            List<AttributeData> attributes = new ArrayList<>(instance.getAttributes());
+
+            attributes.sort((a, b) -> {
+                double valA = a.getAttributeValue();
+                double valB = b.getAttributeValue();
+
+                if (a.getAttributeType() == AttributeType.ATTACK_SPEED) {
+                    valA = 4.0 * Math.pow(0.632, -valA / 2.0);
+                }
+                if (b.getAttributeType() == AttributeType.ATTACK_SPEED) {
+                    valB = 4.0 * Math.pow(0.632, -valB / 2.0);
+                }
+
+                String typeNameA = a.getAttributeType().toString().toUpperCase();
+                String typeNameB = b.getAttributeType().toString().toUpperCase();
+
+                boolean isNegTypeA = typeNameA.startsWith("SIZE") ||
+                        typeNameA.startsWith("BURNING_TIME") ||
+                        typeNameA.startsWith("FALL_DAMAGE");
+                boolean isNegTypeB = typeNameB.startsWith("SIZE") ||
+                        typeNameB.startsWith("BURNING_TIME") ||
+                        typeNameB.startsWith("FALL_DAMAGE");
+
+                boolean isPositiveA = isNegTypeA ? valA <= 0 : valA >= 0;
+                boolean isPositiveB = isNegTypeB ? valB <= 0 : valB >= 0;
+
+                int groupA = isPositiveA ? (a.getAttributeType().isPercentage() ? 1 : 0)
+                        : (a.getAttributeType().isPercentage() ? 3 : 2);
+                int groupB = isPositiveB ? (b.getAttributeType().isPercentage() ? 1 : 0)
+                        : (b.getAttributeType().isPercentage() ? 3 : 2);
+
+                if (groupA != groupB) {
+                    return Integer.compare(groupA, groupB);
+                }
+
+                return a.getAttributeType().getName().compareToIgnoreCase(b.getAttributeType().getName());
+            });
+
+            for (AttributeData attributeData : attributes) {
                 lore.add(AttributeManager.formatLoreLine(attributeData));
                 if (attributeData.getAttributeType().getAttribute() == null) continue;
 

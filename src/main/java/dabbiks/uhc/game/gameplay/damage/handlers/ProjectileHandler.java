@@ -21,19 +21,19 @@ public class ProjectileHandler {
     public void handleArrow(Player player, Arrow arrow) {
         NBTItem nbt = new NBTItem(player.getInventory().getItemInMainHand());
 
-        applyTag(nbt, arrow, AttributeType.ARROW_DAMAGE.getName(), "double");
-        applyTag(nbt, arrow, EnchantType.POWER.getName(), "int");
-        applyTag(nbt, arrow, EnchantType.GLOWING.getName(), "int");
-        applyTag(nbt, arrow, EnchantType.MAGIC_ARROW.getName(), "int");
-        applyTag(nbt, arrow, EnchantType.PYROTECHNICS.getName(), "int");
+        applyTag(nbt, arrow, AttributeType.RANGED_DAMAGE.name(), "double");
+        applyTag(nbt, arrow, EnchantType.POWER.name(), "int");
+        applyTag(nbt, arrow, EnchantType.GLOWING.name(), "int");
+        applyTag(nbt, arrow, EnchantType.MAGIC_ARROW.name(), "int");
+        applyTag(nbt, arrow, EnchantType.PYROTECHNICS.name(), "int");
     }
 
     public void handleTrident(Player player, Trident trident) {
         NBTItem nbt = new NBTItem(player.getInventory().getItemInMainHand());
 
-        applyTag(nbt, trident, AttributeType.ARROW_DAMAGE.getName(), "double");
-        applyTag(nbt, trident, EnchantType.GROUNDING.getName(), "int");
-        applyTag(nbt, trident, EnchantType.CHANNELING.getName(), "int");
+        applyTag(nbt, trident, AttributeType.RANGED_DAMAGE.name(), "double");
+        applyTag(nbt, trident, EnchantType.GROUNDING.name(), "int");
+        applyTag(nbt, trident, EnchantType.CHANNELING.name(), "int");
     }
 
     private void applyTag(NBTItem nbtItem, Projectile projectile, String key, String type) {

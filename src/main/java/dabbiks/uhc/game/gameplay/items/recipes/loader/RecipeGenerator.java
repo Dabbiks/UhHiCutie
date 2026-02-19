@@ -136,7 +136,12 @@ public class RecipeGenerator {
         ingredients.put('H', createIngredient("HEAVY_CORE", 0));
         ingredients.put('B', createIngredient("BREEZE_ROD", 0));
 
-        List<AttributeData> attrs = List.of(new AttributeData(AttributeType.ATTACK_DAMAGE, 7.0));
+        List<AttributeData> attrs = List.of(
+                new AttributeData(AttributeType.ATTACK_DAMAGE, 3.5),
+                new AttributeData(AttributeType.ATTACK_SPEED, -3.5),
+                new AttributeData(AttributeType.CRIT_DAMAGE, 3.5),
+                new AttributeData(AttributeType.FALL_DAMAGE_PERCENT, 25.0)
+        );
         ItemInstance result = createResult(Material.MACE, "Buzdygan", 0, EnchantSlot.MACE, EquipmentSlot.HAND, attrs);
 
         createAndRegister("mace", "shaped", List.of("H", "B"), ingredients, result, RecipeType.WEAPON);
@@ -147,8 +152,9 @@ public class RecipeGenerator {
         ingredients.put('X', createIngredient("BEDROCK", 0));
 
         List<AttributeData> attrs = List.of(
-                new AttributeData(AttributeType.ATTACK_DAMAGE, 9.0),
-                new AttributeData(AttributeType.ATTACK_SPEED, -2.9)
+                new AttributeData(AttributeType.ATTACK_DAMAGE, 8.0),
+                new AttributeData(AttributeType.RANGED_DAMAGE, 10.0),
+                new AttributeData(AttributeType.ATTACK_SPEED, -2.5)
         );
         ItemInstance result = createResult(Material.TRIDENT, "Trójząb", 0, EnchantSlot.TRIDENT, EquipmentSlot.HAND, attrs);
 
@@ -156,11 +162,14 @@ public class RecipeGenerator {
     }
 
     private void registerRanged() {
+        List<AttributeData> attrs = List.of(
+                new AttributeData(AttributeType.RANGED_DAMAGE, 8.0)
+        );
         Map<Character, RecipeIngredient> bowIng = new HashMap<>();
         bowIng.put('S', createIngredient("STICK", 0));
         bowIng.put('T', createIngredient("STRING", 0));
         createAndRegister("bow", "shaped", List.of(" ST", "S T", " ST"), bowIng,
-                createResult(Material.BOW, "Łuk", 0, EnchantSlot.BOW, EquipmentSlot.HAND, Collections.emptyList()), RecipeType.WEAPON);
+                createResult(Material.BOW, "Łuk", 0, EnchantSlot.BOW, EquipmentSlot.HAND, attrs), RecipeType.WEAPON);
 
         Map<Character, RecipeIngredient> crossIng = new HashMap<>();
         crossIng.put('S', createIngredient("STICK", 0));
@@ -168,7 +177,7 @@ public class RecipeGenerator {
         crossIng.put('I', createIngredient("IRON_INGOT", 0));
         crossIng.put('H', createIngredient("TRIPWIRE_HOOK", 0));
         createAndRegister("crossbow", "shaped", List.of("SIS", "THT", " S "), crossIng,
-                createResult(Material.CROSSBOW, "Kusza", 0, EnchantSlot.CROSSBOW, EquipmentSlot.HAND, Collections.emptyList()), RecipeType.WEAPON);
+                createResult(Material.CROSSBOW, "Kusza", 0, EnchantSlot.CROSSBOW, EquipmentSlot.HAND, attrs), RecipeType.WEAPON);
 
         Map<Character, RecipeIngredient> fishIng = new HashMap<>();
         fishIng.put('S', createIngredient("STICK", 0));

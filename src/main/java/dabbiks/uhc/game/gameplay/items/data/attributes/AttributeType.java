@@ -17,8 +17,8 @@ public enum AttributeType {
     REGENERATION(        symbolU.REGENERATION,         "Regeneracja",           AttributeOperation.INCREASE, 0.5,  null, false),
     REGENERATION_PERCENT(symbolU.REGENERATION,         "Regeneracja",           AttributeOperation.INCREASE, 0.5,  null, true),
 
-    ARROW_DAMAGE(        symbolU.ARROW_DAMAGE,         "Obrażenia",             AttributeOperation.INCREASE, 0.2,  null, false),
-    ARROW_DAMAGE_PERCENT(symbolU.ARROW_DAMAGE,         "Obrażenia",             AttributeOperation.INCREASE, 0.2,  null, true),
+    RANGED_DAMAGE(        symbolU.RANGED_DAMAGE,         "Obrażenia zasięgowe",             AttributeOperation.INCREASE, 0.2,  null, false),
+    RANGED_DAMAGE_PERCENT(symbolU.RANGED_DAMAGE,         "Obrażenia zasięgowe",             AttributeOperation.INCREASE, 0.2,  null, true),
 
     GRAVITY(             symbolU.GRAVITY,              "Grawitacja",            AttributeOperation.DECREASE, 0.5,  Attribute.GRAVITY, false),
     GRAVITY_PERCENT(     symbolU.GRAVITY,              "Grawitacja",            AttributeOperation.DECREASE, 0.5,  Attribute.GRAVITY, true),
