@@ -55,10 +55,8 @@ public class RankManager {
 
     private static void handleRankChange(Player player, RankType oldRank, RankType newRank, boolean isPromotion) {
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
-        SessionData sData = SessionDataManager.getData(player.getUniqueId());
 
         data.setRank(newRank);
-//        sData.updatePlayerPrefix(player);
 
         boolean isDivisionChange = !oldRank.getIcon().equals(newRank.getIcon());
         String arrow = isPromotion ? " §a>>§f " : " §c<<§f ";
@@ -74,6 +72,12 @@ public class RankManager {
         }
 
         messageU.sendMessageToPlayers(playerListU.getAllPlayers(), message);
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (player.isOnline()) {
+                INSTANCE.getPrefixManager().update(player);
+            }
+        }, 5L);
     }
 
     public static void processPlacements(Player player) {
@@ -99,9 +103,9 @@ public class RankManager {
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (player.isOnline()) {
-//                SessionDataManager.getData(player.getUniqueId()).updatePlayerPrefix(player);
+                INSTANCE.getPrefixManager().update(player);
             }
-        }, 30L);
+        }, 5L);
     }
 
     private static double calculateAverageOpponentRank(Player excludedPlayer) {

@@ -23,6 +23,7 @@ import dabbiks.uhc.tasks.TaskManager;
 import dabbiks.uhc.utils.*;
 import dabbiks.uhc.utils.managers.AttributeManager;
 import dabbiks.uhc.utils.managers.IndicatorManager;
+import dabbiks.uhc.utils.managers.PrefixManager;
 import dabbiks.uhc.utils.managers.TabManager;
 import fr.mrmicky.fastinv.FastInvManager;
 import org.bukkit.Bukkit;
@@ -54,6 +55,7 @@ public final class Main extends JavaPlugin {
     private RecipeLimitTracker recipeLimitTracker;
     private WorldBorder worldBorder;
     private TeamManager teamManager;
+    private PrefixManager prefixManager;
 
     @Override
     public void onEnable() {
@@ -76,6 +78,7 @@ public final class Main extends JavaPlugin {
         attributeManager = new AttributeManager();
         indicatorManager = new IndicatorManager();
         teamManager = new TeamManager();
+        prefixManager = new PrefixManager();
 
         persistentDataJson = new PersistentDataJson();
         worldBorder = new WorldBorder();
@@ -105,8 +108,8 @@ public final class Main extends JavaPlugin {
         teamManager.deleteTeams();
         new TeamInitializer();
 
-        WorldGen.createWorld();
-        new TaskManager();
+        new TaskManager().run();
+        Bukkit.getScheduler().runTaskLater(this, WorldGen::createWorld, 10L);
     }
 
     @Override
@@ -119,4 +122,5 @@ public final class Main extends JavaPlugin {
     }
     public RecipeManager getRecipeManager() { return recipeManager; }
     public TeamManager getTeamManager() { return teamManager; }
+    public PrefixManager getPrefixManager() { return prefixManager; }
 }

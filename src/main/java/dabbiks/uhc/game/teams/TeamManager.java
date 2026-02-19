@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dabbiks.uhc.Main.soundU;
+import static dabbiks.uhc.Main.*;
 
 public class TeamManager {
 
@@ -36,19 +36,30 @@ public class TeamManager {
         }
 
         if (team.hasEntry(player.getName())) {
-            player.sendMessage("§eJesteś już w tej drużynie.");
+            player.sendMessage("§cJesteś już w tej drużynie!");
             return;
         }
 
         team.addEntry(player.getName());
         updateTeamVisuals(name);
 
+        if (player.isOnline()) {
+            player.sendMessage("§a» §7Dołączyłeś do §e" + team.getName() + "§7!");
+        }
+
         for (String entry : team.getEntries()) {
             Player p = Bukkit.getPlayer(entry);
-            if (p == null) continue;
-            p.sendMessage("§a+ §7Gracz §f" + player.getName() + " §7dołączył do drużyny.");
+            if (p == null || p.getName().equals(player.getName())) continue;
+
+            p.sendMessage("§a» §7Gracz §e" + player.getName() + " §7dołączył do drużyny.");
             soundU.playSoundAtLocation(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         }
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (player.isOnline()) {
+                INSTANCE.getPrefixManager().update(player);
+            }
+        }, 5L);
     }
 
     public void removePlayer(Player player) {
@@ -62,16 +73,22 @@ public class TeamManager {
         updateTeamVisuals(teamName);
 
         if (player.isOnline()) {
-            player.sendMessage("§eOpuściłeś drużynę §6" + teamName);
+            player.sendMessage("§c« §7Opuściłeś §e" + teamName + "§7!");
         }
 
         for (String entry : team.getEntries()) {
             Player p = Bukkit.getPlayer(entry);
             if (p == null || p.getName().equals(playerName)) continue;
 
-            p.sendMessage("§c- §7Gracz §f" + playerName + " §7opuścił drużynę.");
+            p.sendMessage("§c« §7Gracz §e" + playerName + " §7opuścił drużynę.");
             soundU.playSoundAtLocation(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 0.5f);
         }
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (player.isOnline()) {
+                INSTANCE.getPrefixManager().update(player);
+            }
+        }, 5L);
     }
 
     private void updateTeamVisuals(String teamName) {
@@ -97,9 +114,9 @@ public class TeamManager {
             }
 
             if (i <= entries.size()) {
-                display.setText("§7" + entries.get(i - 1));
+                display.setText("§e" + entries.get(i - 1));
             } else {
-                display.setText("---");
+                display.setText("§8---");
             }
         }
     }

@@ -11,6 +11,7 @@ import dabbiks.uhc.player.data.persistent.PersistentStats;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.rank.RankManager;
 import dabbiks.uhc.player.rank.RankType;
+import dabbiks.uhc.utils.managers.PrefixManager;
 import fr.mrmicky.fastboard.FastBoard;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.checkerframework.checker.units.qual.Prefix;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,7 @@ public class JoinEvent implements Listener {
 
     public static Map<Player, FastBoard> boards = new HashMap<>();
     List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
+    private final PrefixManager prefixManager = INSTANCE.getPrefixManager();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -77,12 +80,15 @@ public class JoinEvent implements Listener {
 
     private void setupPlayerUI(Player player) {
         FastBoard board = new FastBoard(player);
-        board.updateTitle("§d§lSUPERGLI.DE");
+        board.updateTitle("§6SUPERGLIDE");
 
         boards.put(player, board);
         mainBossBar.addPlayer(player);
-        tabManager.setTabFooter(player, "");
-        tabManager.setTabHeader(player, "");
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            tabManager.setTabFooter(player, "");
+            tabManager.setTabHeader(player, "");
+            prefixManager.update(player);
+        }, 3L);
     }
 
     private void setupPlayerState(Player player) {

@@ -52,13 +52,8 @@ public class WorldGen {
         getLogger().info("Hello Mr. Dabbiks!");
 
         ChunkyAPI chunky = Bukkit.getServer().getServicesManager().load(ChunkyAPI.class);
-        if (chunky != null) {
 
-            chunky.startTask(WorldConfig.worldName, "square", 0, 0, 400, 400, "region");
-
-            WorldConfig.isWorldGenerated = false;
-        }
-
+        chunky.startTask(WorldConfig.worldName, "square", 0, 0, 400, 400, "region");
         chunky.onGenerationComplete(event -> { WorldConfig.isWorldGenerated = true; } );
     }
 

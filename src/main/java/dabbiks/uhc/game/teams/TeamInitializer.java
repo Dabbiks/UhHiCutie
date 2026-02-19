@@ -61,7 +61,7 @@ public class TeamInitializer {
             String text = switch (i) {
                 case -1 -> icon;
                 case 0 -> name;
-                default -> "---";
+                default -> "§8---";
             };
 
             TextDisplay display = (TextDisplay) location.getWorld().spawnEntity(location.clone().add(0, yOffset, 0), EntityType.TEXT_DISPLAY);

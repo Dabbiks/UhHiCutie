@@ -84,6 +84,7 @@ public class ItemBuilder {
 
         if (instance.getEnchants() != null) {
             if (!lore.isEmpty()) { lore.add(""); }
+            meta.setEnchantmentGlintOverride(true);
             for (EnchantData enchantData : instance.getEnchants()) {
                 lore.add(EnchantManager.formatLoreLine(enchantData));
                 if (enchantData.getType().getEnchantment() == null) continue;

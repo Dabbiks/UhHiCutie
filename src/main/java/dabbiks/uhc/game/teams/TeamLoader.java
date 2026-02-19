@@ -14,7 +14,7 @@ import static dabbiks.uhc.Main.plugin;
 
 public class TeamLoader {
 
-    private List<TeamData> teams = new ArrayList<>();
+    private static List<TeamData> teams = new ArrayList<>();
 
     public void loadTeams() {
         File folder = new File(plugin.getDataFolder(), "teams");
@@ -36,7 +36,7 @@ public class TeamLoader {
         }
     }
 
-    public List<TeamData> getTeams() {
+    public static List<TeamData> getTeams() {
         return teams;
     }
 }

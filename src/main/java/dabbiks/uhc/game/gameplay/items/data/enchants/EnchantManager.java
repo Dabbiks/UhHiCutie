@@ -55,6 +55,7 @@ public class EnchantManager {
 
     public boolean isCompatible(EnchantSlot itemSlot, EnchantSlot enchantSlot) {
         if (itemSlot == enchantSlot) return true;
+        if (itemSlot == EnchantSlot.ALL) return true;
         if (enchantSlot == EnchantSlot.ALL) return true;
 
         if (enchantSlot == EnchantSlot.MELEE) {

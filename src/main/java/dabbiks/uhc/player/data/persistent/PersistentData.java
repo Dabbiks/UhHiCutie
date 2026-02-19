@@ -67,7 +67,7 @@ public class PersistentData {
         this.name = name;
     }
 
-    public boolean getIsManager() {
+    public boolean isManager() {
         return isManager;
     }
 
