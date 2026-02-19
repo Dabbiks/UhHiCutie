@@ -33,8 +33,7 @@ public class StartManager {
     }
 
     private void prepareTab() {
-        new TabUtils().setGlobalTabFooter("\n" + WeatherCycle.getWeatherIcon()
-        + "\n\n" + symbolU.SEGMENT_1 + "\n");
+        new TabUtils().setGlobalTabFooter("\n" + WeatherCycle.getWeatherIcon() + "\n");
     }
 
     private void preparePlayers() {

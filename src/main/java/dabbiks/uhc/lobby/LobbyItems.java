@@ -1,12 +1,12 @@
 package dabbiks.uhc.lobby;
 
-import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.menu.ChampionMenu;
 import dabbiks.uhc.menu.RecipeMenu;
+import dabbiks.uhc.menu.cosmetics.CosmeticsMainMenu;
+import dabbiks.uhc.menu.wiki.WikiMainMenu;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import de.tr7zw.nbtapi.NBTItem;
-import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,24 +16,27 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import static dabbiks.uhc.Main.*;
 
 public class LobbyItems implements Listener {
 
-    public static ItemStack championBook;
-    public static ItemStack recipeBook;
-    public static ItemStack spectate;
+    public static ItemStack champions;
+    public static ItemStack recipes;
+    public static ItemStack wiki;
+    public static ItemStack cosmetics;
+    public static ItemStack spectator;
 
     public LobbyItems() {
         init();
     }
 
     private void init() {
-        championBook = createLobbyItem(Material.IRON_PICKAXE, "§f" + symbolU.MOUSE_RIGHT + " Przeglądaj klasy", 10000, "CHAMPIONS");
-        recipeBook = createLobbyItem(Material.BOOK, "§f" + symbolU.MOUSE_RIGHT + " Przeglądaj przepisy", 10000, "RECIPE_BOOK");
-        spectate = createLobbyItem(Material.ENDER_EYE, "§f" + symbolU.MOUSE_RIGHT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
+        champions = createLobbyItem(Material.IRON_PICKAXE, "§f" + symbolU.MOUSE_RIGHT + " Przeglądaj klasy", 10000, "CHAMPIONS");
+        recipes = createLobbyItem(Material.BOOK, "§f" + symbolU.MOUSE_RIGHT + " Przeglądaj przepisy", 10000, "RECIPE_BOOK");
+        wiki = createLobbyItem(Material.FLOW_BANNER_PATTERN, "§f" + symbolU.MOUSE_RIGHT + " Wikipedia", 10000, "WIKI");
+        cosmetics = createLobbyItem(Material.EMERALD, "§f" + symbolU.MOUSE_RIGHT + " Dodatki", 10000, "COSMETICS");
+        spectator = createLobbyItem(Material.ENDER_EYE, "§f" + symbolU.MOUSE_RIGHT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
     }
 
     private ItemStack createLobbyItem(Material material, String name, int model, String id) {
@@ -69,6 +72,16 @@ public class LobbyItems implements Listener {
         if (nbtItem.hasTag("RECIPE_BOOK")) {
             event.setCancelled(true);
             new RecipeMenu(player, INSTANCE.getRecipeManager()).open(player);
+        }
+
+        if (nbtItem.hasTag("WIKI")) {
+            event.setCancelled(true);
+            new WikiMainMenu(player).open(player);
+        }
+
+        if (nbtItem.hasTag("COSMETICS")) {
+            event.setCancelled(true);
+            new CosmeticsMainMenu(player, data).open(player);
         }
 
         if (nbtItem.hasTag("SPECTATOR")) {

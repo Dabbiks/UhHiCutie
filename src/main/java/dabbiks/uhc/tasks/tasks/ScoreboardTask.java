@@ -49,15 +49,15 @@ public class ScoreboardTask extends Task {
 
                 board.updateLines(
                         "",
-                        "  §dɪɪɪ ꜱᴇᴢᴏɴ ʀᴀɴᴋɪɴɢᴏᴡʏ§a",
+                        "  §cɪɪɪ ꜱᴇᴢᴏɴ ʀᴀɴᴋɪɴɢᴏᴡʏ",
                         "  §f" + persistentData.getRank().getIcon() + " §7" + persistentData.getRank().getName()
-                                + " §8(" + (persistentData.getStats().getOrDefault(PersistentStats.RANKPR, 0) % 100) + "PR§8)",
+                                + " §8(" + (persistentData.getStats().getOrDefault(PersistentStats.RANK_PR, 0) % 100) + "PR§8)",
                         "",
                         "  §f" + symbolU.SCOREBOARD_COIN + " ᴍᴏɴᴇᴛʏ: §e" + persistentData.getStats().getOrDefault(PersistentStats.COINS, 0),
-                        "  §f" + symbolU.SCOREBOARD_SWORD + " ᴇʟɪᴍɪɴᴀᴄᴊᴇ: §e" + persistentData.getStats().getOrDefault(PersistentStats.SEASONKILLS, 0) +
-                                " §8(" + persistentData.getStats().getOrDefault(PersistentStats.SEASONASSISTS, 0) + ")",
-                        "  §f" + symbolU.SCOREBOARD_CROWN + " ᴡʏɢʀᴀɴᴇ: §e" + (persistentData.getStats().getOrDefault(PersistentStats.SEASONWINS, 0)) +
-                        " §8(" + persistentData.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) + ")",
+                        "  §f" + symbolU.SCOREBOARD_SWORD + " ᴇʟɪᴍɪɴᴀᴄᴊᴇ: §e" + persistentData.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0) +
+                                " §8(" + persistentData.getStats().getOrDefault(PersistentStats.SEASON_ASSISTS, 0) + ")",
+                        "  §f" + symbolU.SCOREBOARD_CROWN + " ᴡʏɢʀᴀɴᴇ: §e" + (persistentData.getStats().getOrDefault(PersistentStats.SEASON_WINS, 0)) +
+                        " §8(" + persistentData.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0) + ")",
                         "",
                         "§8  s ᴜ ᴘ ᴇ ʀ ɢ ʟ ɪ  .  ᴅ ᴇ"
                 );

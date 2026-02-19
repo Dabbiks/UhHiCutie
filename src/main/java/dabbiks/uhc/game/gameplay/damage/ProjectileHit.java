@@ -98,8 +98,8 @@ public class ProjectileHit implements Listener {
 
     private double getProjectileBonusDamage(Projectile projectile) {
         return NBT.getPersistentData(projectile, nbt -> {
-            if (nbt.hasTag(AttributeType.ARROW_DAMAGE.getName())) {
-                return nbt.getDouble(AttributeType.ARROW_DAMAGE.getName());
+            if (nbt.hasTag(AttributeType.RANGED_DAMAGE.name())) {
+                return nbt.getDouble(AttributeType.RANGED_DAMAGE.name());
             }
             return 0.0;
         });

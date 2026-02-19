@@ -22,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.checkerframework.checker.units.qual.Prefix;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,14 +72,14 @@ public class JoinEvent implements Listener {
             data.setRank(RankType.UNRANKED);
         }
 
-        if (data.getStats().getOrDefault(PersistentStats.PLAYED, 0) < 5) {
+        if (data.getStats().getOrDefault(PersistentStats.PLAYED, 0) < 10) {
             sendDiscordInvite(player);
         }
     }
 
     private void setupPlayerUI(Player player) {
         FastBoard board = new FastBoard(player);
-        board.updateTitle("§6SUPERGLIDE");
+        board.updateTitle("§8  s ᴜ ᴘ ᴇ ʀ ɢ ʟ ɪ  .  ᴅ ᴇ");
 
         boards.put(player, board);
         mainBossBar.addPlayer(player);
@@ -97,8 +96,11 @@ public class JoinEvent implements Listener {
         playerU.cleanseState(player);
         attributeManager.clearAllAttributes(player);
 
-        player.getInventory().setItem(0, LobbyItems.championBook);
-        player.getInventory().setItem(1, LobbyItems.recipeBook);
+        player.getInventory().setItem(0, LobbyItems.champions);
+        player.getInventory().setItem(1, LobbyItems.recipes);
+        player.getInventory().setItem(7, LobbyItems.wiki);
+        player.getInventory().setItem(8, LobbyItems.cosmetics);
+        if (stateU.getGameState() == GameState.IN_GAME) player.getInventory().setItem(4, LobbyItems.spectator);
     }
 
     private void sendDiscordInvite(Player player) {

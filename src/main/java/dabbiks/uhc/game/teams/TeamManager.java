@@ -72,10 +72,6 @@ public class TeamManager {
         team.removeEntry(playerName);
         updateTeamVisuals(teamName);
 
-        if (player.isOnline()) {
-            player.sendMessage("§c« §7Opuściłeś §e" + teamName + "§7!");
-        }
-
         for (String entry : team.getEntries()) {
             Player p = Bukkit.getPlayer(entry);
             if (p == null || p.getName().equals(playerName)) continue;

@@ -1,26 +1,20 @@
 package dabbiks.uhc.player.data.persistent;
 
 public enum PersistentStats {
-    FREECLASSTOKENS,
     KILLS,
-    SEASONKILLS,
+    SEASON_KILLS,
     ASSISTS,
-    SEASONASSISTS,
+    SEASON_ASSISTS,
     WINS,
-    SEASONWINS,
-    PERFECTWINS,
-    SEASONPERFECTWINS,
+    SEASON_WINS,
     PLAYED,
-    SEASONPLAYED,
+    SEASON_PLAYED,
+
     COINS,
-    TOTALCOINS,
-    PASSPD,
-    TOTALPD,
-    RANKPR,
-    PREVIOUSRANKPR,
-    HIGHESTPR,
-    SEGMENTSSURVIVED,
-    DAMAGEDEALT,
-    STOCK,
-    DAMAGETAKEN;
+    TOTAL_COINS,
+    POWDER,
+    TOTAL_POWDER,
+
+    RANK_PR,
+    PREVIOUS_RANK_PR
 }

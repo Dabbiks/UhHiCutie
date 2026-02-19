@@ -2,8 +2,10 @@ package dabbiks.uhc.menu;
 
 import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.champions.ChampionManager;
+import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
+import de.tr7zw.nbtapi.NBTItem;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -45,9 +47,9 @@ public class ChampionMenu extends FastInv {
 
             int slot = slots[index++];
             setItem(slot, createIcon(champion), e -> {
-                if (e.getClick().isLeftClick()) {
+                if (e.getClick().isRightClick()) {
                     handleUpgradeOrBuy(champion);
-                } else if (e.getClick().isRightClick()) {
+                } else if (e.getClick().isLeftClick()) {
                     handleSelect(champion);
                 }
             });
@@ -68,7 +70,11 @@ public class ChampionMenu extends FastInv {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }
-        return item;
+
+        NBTItem nbtItem = new NBTItem(item);
+        nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
+
+        return nbtItem.getItem();
     }
 
     private void handleUpgradeOrBuy(Champion champion) {

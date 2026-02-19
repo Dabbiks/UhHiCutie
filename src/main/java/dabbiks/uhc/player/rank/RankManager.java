@@ -29,16 +29,16 @@ public class RankManager {
     public static void modifyRankPoints(Player player, int amount) {
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
-        if (data.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < MIN_GAMES_FOR_RANKED) {
+        if (data.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0) < MIN_GAMES_FOR_RANKED) {
             return;
         }
 
-        int currentPoints = data.getStats().getOrDefault(PersistentStats.RANKPR, 0);
+        int currentPoints = data.getStats().getOrDefault(PersistentStats.RANK_PR, 0);
 
-        data.setStats(PersistentStats.PREVIOUSRANKPR, currentPoints);
+        data.setStats(PersistentStats.PREVIOUS_RANK_PR, currentPoints);
 
         int newPoints = Math.max(1, currentPoints + amount);
-        data.setStats(PersistentStats.RANKPR, newPoints);
+        data.setStats(PersistentStats.RANK_PR, newPoints);
 
         checkRankUpdate(player, currentPoints, newPoints);
     }
@@ -83,7 +83,7 @@ public class RankManager {
     public static void processPlacements(Player player) {
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
-        if (data.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < MIN_GAMES_FOR_RANKED) {
+        if (data.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0) < MIN_GAMES_FOR_RANKED) {
             return;
         }
 
@@ -94,7 +94,7 @@ public class RankManager {
         int calculatedPoints = RankCalculator.calculatePlacementRank(data);
         RankType resultRank = RankType.getByPoints(calculatedPoints);
 
-        data.setStats(PersistentStats.RANKPR, calculatedPoints);
+        data.setStats(PersistentStats.RANK_PR, calculatedPoints);
         data.setRank(resultRank);
         PersistentDataManager.saveData(player.getUniqueId());
 
@@ -121,7 +121,7 @@ public class RankManager {
 
             PersistentData pd = PersistentDataManager.getData(p.getUniqueId());
             if (pd != null) {
-                totalRank += pd.getStats().getOrDefault(PersistentStats.RANKPR, 800);
+                totalRank += pd.getStats().getOrDefault(PersistentStats.RANK_PR, 800);
                 count++;
             }
         }

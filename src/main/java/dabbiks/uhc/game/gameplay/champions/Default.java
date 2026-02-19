@@ -34,7 +34,7 @@ public class Default extends Champion {
 
     @Override
     public Material getIcon() {
-        return Material.IRON_PICKAXE;
+        return Material.BREAD;
     }
 
     @Override
@@ -47,23 +47,23 @@ public class Default extends Champion {
         ItemConverter itemConverter = new ItemConverter();
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
-        sessionData.addTag(SessionTags.MINER);
+        sessionData.addTag(SessionTags.DEFAULT);
 
         switch (level) {
             case 1, 2, 3, 4 -> {
-                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.STONE_PICKAXE)));
-                player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.STONE_SWORD)));
+                player.getInventory().addItem(new ItemStack(Material.CARROT, 5));
             }
             case 5, 6, 7, 8, 9 -> {
-                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
-                player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
-                sessionData.addTag(SessionTags.SMALL_ANVIL_DISCOUNT);
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_SWORD)));
+                player.getInventory().addItem(new ItemStack(Material.CARROT, 5));
+                sessionData.addTag(SessionTags.SMALL_PARRY_COOLDOWN);
             }
             case 10 -> {
-                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
-                player.getInventory().addItem(new ItemStack(Material.BREAD, 10));
-                sessionData.addTag(SessionTags.BIG_ANVIL_DISCOUNT);
-                sessionData.addTag(SessionTags.IMMORTAL_EXPERIENCE);
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_SWORD)));
+                player.getInventory().addItem(new ItemStack(Material.CARROT, 10));
+                sessionData.addTag(SessionTags.BIG_PARRY_COOLDOWN);
+                sessionData.addTag(SessionTags.PARRY_REGENERATION);
             }
         }
     }
@@ -71,37 +71,37 @@ public class Default extends Champion {
     @Override
     protected List<String> getClassDescription() {
         List<String> desc = new ArrayList<>();
-        desc.add("§7Klasa skupiona na efektywnym");
-        desc.add("§7pozyskiwaniu surowców z mapy.");
+        desc.add("§7Podstawowa klasa wzmacniająca");
+        desc.add("§7walkę wręcz i parowanie.");
         return desc;
     }
 
     @Override
     protected List<String> getLevelDescription(int level) {
         List<String> desc = new ArrayList<>();
-        int doubleOreChance = level * 2;
+        int bonusSwordDamage = level * 2;
 
         desc.add("§6Ekwipunek startowy:");
         if (level <= 4) {
-            desc.add(" §8■ §fKamienny kilof");
-            desc.add(" §8■ §fChleb §7(5 szt.)");
+            desc.add(" §8■ §fKamienny miecz");
+            desc.add(" §8■ §fMarchew §7(5 szt.)");
         } else if (level <= 9) {
-            desc.add(" §8■ §fŻelazny kilof");
-            desc.add(" §8■ §fChleb §7(5 szt.)");
+            desc.add(" §8■ §fŻelazny miecz");
+            desc.add(" §8■ §fMarchew §7(5 szt.)");
         } else {
-            desc.add(" §8■ §fŻelazny kilof");
-            desc.add(" §8■ §fChleb §7(10 szt.)");
+            desc.add(" §8■ §fŻelazny miecz");
+            desc.add(" §8■ §fMarchew §7(10 szt.)");
         }
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fSzanse na podwójną rudę: §a" + doubleOreChance + "%");
+        desc.add(" §e» §fDodatkowe obrażenia z miecza: §a" + bonusSwordDamage + "%");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fZniżka na kowadła: §a30%");
+            desc.add(" §e» §fParowanie ma zmniejszony cooldown o 15%");
         } else if (level == 10) {
-            desc.add(" §e» §fZniżka na kowadła: §a50%");
-            desc.add(" §e» §fOchrona: §bPasek EXP działa jak totem");
+            desc.add(" §e» §fParowanie ma zmniejszony cooldown o 30%");
+            desc.add(" §e» §fParowanie ciosów krytycznych leczy o §c2 serca");
         }
 
         return desc;
@@ -114,10 +114,11 @@ public class Default extends Champion {
 
         if (!persistentData.hasUnlockedChampion(getId())) {
             if (playerCoins >= getCost()) {
-                desc.add(symbolU.MOUSE_LEFT + " §aKliknij, aby zakupić klasę!");
+                desc.add(symbolU.MOUSE_RIGHT + " §aKliknij, aby zakupić klasę!");
                 desc.add(" §8• §7Koszt: §6" + getCost() + " monet");
             } else {
-                desc.add(symbolU.MOUSE_LEFT + " §cBrakuje Ci §n" + (getCost() - playerCoins) + "§c monet!");
+                desc.add(symbolU.MOUSE_RIGHT + " §7Potrzebujesz jeszcze §c" + (getCost() - playerCoins) + " monet");
+                desc.add("§7lub §c" + (10 - persistentData.getChampionShards(getId())) + " odłamków §7żeby odblokować tę klasę!");
             }
             return desc;
         }
@@ -125,23 +126,24 @@ public class Default extends Champion {
         if (persistentData.getChampionLevel(getId()) < 10) {
             int upgradeCost = getUpgradeCost(getCost(), level);
             if (playerCoins >= upgradeCost) {
-                desc.add(symbolU.MOUSE_LEFT + " §e  ");
-                desc.add("  ");
+                desc.add(symbolU.MOUSE_RIGHT + " §eUlepsz na poziom " + (level + 1));
+                desc.add(" §8• §7Koszt: §6" + upgradeCost + " monet");
             } else {
-                desc.add(symbolU.MOUSE_LEFT + "  ");
+                desc.add(symbolU.MOUSE_RIGHT + " §7Potrzebujesz jeszcze §c" + (upgradeCost - playerCoins) + " monet");
+                desc.add(" §7żeby odblokować kolejny poziom tej klasy!");
             }
         } else {
             desc.add("§6§lMAESTRIA");
             desc.add(" §8• §7Punkty: §e" + persistentData.getChampionMastery(getId()));
             desc.add("");
-            desc.add("§8" + symbolU.MOUSE_LEFT + " §7Osiągnięto maksymalny poziom.");
+            desc.add("§8" + symbolU.MOUSE_RIGHT + " §7Osiągnięto maksymalny poziom.");
         }
 
         desc.add("");
         if (!persistentData.getChampion().equals(getId())) {
-            desc.add(symbolU.MOUSE_RIGHT + " §eKliknij, aby wybrać tę klasę");
+            desc.add(symbolU.MOUSE_LEFT + " §eKliknij, aby wybrać tę klasę");
         } else {
-            desc.add(symbolU.MOUSE_RIGHT + " §aKlasa jest aktualnie wybrana");
+            desc.add(symbolU.MOUSE_LEFT + " §aKlasa jest aktualnie wybrana");
         }
         return desc;
     }

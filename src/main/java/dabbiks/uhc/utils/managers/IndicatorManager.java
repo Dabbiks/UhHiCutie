@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import static dabbiks.uhc.Main.plugin;
+import static dabbiks.uhc.Main.symbolU;
 
 public class IndicatorManager {
 
@@ -36,7 +37,7 @@ public class IndicatorManager {
         display.setGlowing(true);
 
         String text = isCritical
-                ? "\uE087 §f" + format.format(damage)
+                ? symbolU.CRITICAL_DAMAGE + " " + format.format(damage)
                 : "§f" + format.format(damage);
 
         display.setText(text);
@@ -89,7 +90,7 @@ public class IndicatorManager {
         display.setShadowed(true);
         display.setGlowing(true);
 
-        display.setText("§a+" + format.format(Math.abs(heal)));
+        display.setText(symbolU.REGENERATION + " " + format.format(Math.abs(heal)));
 
         display.setInterpolationDelay(0);
         display.setInterpolationDuration(TELEPORT_PERIOD);

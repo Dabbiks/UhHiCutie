@@ -40,7 +40,7 @@ public class SymbolUtils {
     public final String CRITICAL_DAMAGE = "§f";
     public final String JUMP_STRENGTH = "§f";
     public final String ATTACK_DAMAGE = "§f";
-    public final String ARROW_DAMAGE = "§f";
+    public final String RANGED_DAMAGE = "§f";
     public final String HEALTH_BOOST = "§f";
     public final String BURNING_TIME = "§f";
     public final String REGENERATION = "§f";

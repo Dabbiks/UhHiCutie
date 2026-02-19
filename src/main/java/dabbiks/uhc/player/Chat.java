@@ -1,0 +1,102 @@
+package dabbiks.uhc.player;
+
+import dabbiks.uhc.Main;
+import dabbiks.uhc.game.gameplay.champions.Champion;
+import dabbiks.uhc.game.gameplay.champions.ChampionManager;
+import dabbiks.uhc.game.teams.TeamData;
+import dabbiks.uhc.game.teams.TeamLoader;
+import dabbiks.uhc.game.teams.TeamUtils;
+import dabbiks.uhc.player.data.persistent.PersistentData;
+import dabbiks.uhc.player.data.persistent.PersistentDataManager;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.rank.RankType;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.scoreboard.Team;
+
+import java.util.List;
+
+import static dabbiks.uhc.Main.*;
+
+public class Chat implements Listener {
+
+    ChampionManager champions = new ChampionManager();
+
+    @EventHandler
+    public void onChat(PlayerChatEvent event) {
+        Player player = event.getPlayer();
+        Team team = TeamUtils.getPlayerTeam(player);
+        String message = event.getMessage();
+        event.setCancelled(true);
+        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
+
+        boolean isTeamMessage = message.startsWith("!");
+        if (isTeamMessage) {
+            message = message.substring(1);
+        }
+
+        if (isTeamMessage && team != null) {
+            for (String member : team.getEntries()) {
+                Player teamMember = Bukkit.getPlayer(member);
+                if (teamMember != null) {
+                    teamMember.sendMessage("§c[DRUŻYNA] §6"
+                            + champions.getChampion(persistentData.getChampion()).getName() + " §e" + player.getName() + "§f " + message);
+                }
+
+            }
+        } else {
+            if (persistentData == null) return;
+            if (persistentData.getRank() == null) {
+                persistentData.setRank(RankType.UNRANKED);
+            }
+            StringBuilder prefix = new StringBuilder();
+
+            String rankIcon = getRankIcon(persistentData);
+            if (rankIcon != null && !rankIcon.isEmpty()) {
+                prefix.append(rankIcon);
+            }
+
+            if (persistentData.isManager()) {
+                if (!prefix.isEmpty()) prefix.append(" ");
+                prefix.append(symbolU.RANK_MANAGER);
+            }
+
+            String teamIcon = getTeamIcon(player);
+            if (!teamIcon.isEmpty()) {
+                if (!prefix.isEmpty()) prefix.append(" ");
+                prefix.append(teamIcon);
+            }
+
+            if (!prefix.isEmpty()) prefix.append(" ");
+            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), prefix + "§e" + player.getName() + "§f " + message);
+        }
+    }
+
+    private String getRankIcon(PersistentData persistentData) {
+        String icon = "";
+
+        if (persistentData == null) return icon;
+        if (persistentData.getRank() == null) return icon;
+        return persistentData.getRank().getIcon();
+    }
+
+    private String getTeamIcon(Player player) {
+        Team team = TeamUtils.getPlayerTeam(player);
+        if (team == null) return "";
+
+        String teamName = team.getName();
+
+        for (TeamData teamData : TeamLoader.getTeams()) {
+            if (teamData.getName().equalsIgnoreCase(teamName)) {
+                String icon = teamData.getSmallIcon();
+                return (icon != null) ? icon : "";
+            }
+        }
+        return "";
+    }
+
+}

@@ -1,8 +1,7 @@
 package dabbiks.uhc.game.teams;
 
+import dabbiks.uhc.game.configs.LobbyConfig;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTEntity;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,23 +25,29 @@ public class TeamClick implements Listener {
             return;
         }
 
-        String teamName = NBT.getPersistentData(interaction, nbt -> nbt.getString("team_interaction"));
-        if (teamName == null) return;
-
+        String targetTeamName = NBT.getPersistentData(interaction, nbt -> nbt.getString("team_interaction"));
+        if (targetTeamName == null) return;
 
         Player player = event.getPlayer();
+        Team targetTeam = teamManager.getScoreboard().getTeam(targetTeamName);
+
+        if (targetTeam == null) return;
+
+        if (targetTeam.hasEntry(player.getName())) {
+            player.sendMessage("§cJesteś już w tej drużynie.");
+            return;
+        }
+
+        if (targetTeam.getEntries().size() >= LobbyConfig.teamSize) {
+            player.sendMessage("§cTa drużyna jest już pełna!");
+            return;
+        }
 
         Team currentTeam = teamManager.getScoreboard().getEntryTeam(player.getName());
-
         if (currentTeam != null) {
-            if (currentTeam.getName().equals(teamName)) {
-                player.sendMessage("§eJesteś już w tej drużynie.");
-                return;
-            }
-
             teamManager.removePlayer(player);
         }
 
-        teamManager.addPlayer(player, teamName);
+        teamManager.addPlayer(player, targetTeamName);
     }
 }

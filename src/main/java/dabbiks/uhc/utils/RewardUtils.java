@@ -31,9 +31,9 @@ public class RewardUtils {
 
         assert persistentData != null;
         persistentData.addStats(PersistentStats.COINS, (int) (WIN_COINS * multiplier));
-        persistentData.addStats(PersistentStats.TOTALCOINS, (int) (WIN_COINS * multiplier));
+        persistentData.addStats(PersistentStats.TOTAL_COINS, (int) (WIN_COINS * multiplier));
         persistentData.addStats(PersistentStats.PLAYED, 1);
-        persistentData.addStats(PersistentStats.SEASONPLAYED, 1);
+        persistentData.addStats(PersistentStats.SEASON_PLAYED, 1);
         sessionData.addStats(SessionStats.WINCOINS, (int) (WIN_COINS * multiplier));
 
         double rankModifier = sessionData.getModifier();
@@ -52,7 +52,7 @@ public class RewardUtils {
 
         assert persistentData != null;
         persistentData.addStats(PersistentStats.COINS, (int) (KILL_COINS * multiplier));
-        persistentData.addStats(PersistentStats.TOTALCOINS, (int) (KILL_COINS * multiplier));
+        persistentData.addStats(PersistentStats.TOTAL_COINS, (int) (KILL_COINS * multiplier));
         sessionData.addStats(SessionStats.KILLCOINS, (int) (KILL_COINS * multiplier));
 
         sessionData.addStats(SessionStats.KILLS, 1);
@@ -73,7 +73,7 @@ public class RewardUtils {
 
         assert persistentData != null;
         persistentData.addStats(PersistentStats.COINS, (int) (ASSIST_COINS * multiplier));
-        persistentData.addStats(PersistentStats.TOTALCOINS, (int) (ASSIST_COINS * multiplier));
+        persistentData.addStats(PersistentStats.TOTAL_COINS, (int) (ASSIST_COINS * multiplier));
         sessionData.addStats(SessionStats.KILLCOINS, (int) (ASSIST_COINS * multiplier));
 
         double rankModifier = sessionData.getModifier();
@@ -92,9 +92,9 @@ public class RewardUtils {
 
         assert persistentData != null;
         persistentData.addStats(PersistentStats.PLAYED, 1);
-        persistentData.addStats(PersistentStats.SEASONPLAYED, 1);
+        persistentData.addStats(PersistentStats.SEASON_PLAYED, 1);
 
-        if (persistentData.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0) < RankManager.MIN_GAMES_FOR_RANKED) return;
+        if (persistentData.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0) < RankManager.MIN_GAMES_FOR_RANKED) return;
 
         double rankModifier = sessionData.getModifier();
         double deathModifier = 2.0 - rankModifier;
@@ -124,7 +124,7 @@ public class RewardUtils {
         summary.add("  §e+ " + totalCoins + " §7(Łącznie)");
         summary.add("");
 
-        int gamesPlayed = persistentData.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0);
+        int gamesPlayed = persistentData.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0);
         if (gamesPlayed <= 5) {
             summary.add("  §fGra rozstawiająca: §6" + gamesPlayed + "§f/§65");
         } else {

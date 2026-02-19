@@ -48,6 +48,9 @@ public class PersistentData {
     @Expose
     private Map<String, Integer> championLevel = new HashMap<>();
 
+    @Expose
+    private Map<String, Integer> championShards = new HashMap<>();
+
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
 
@@ -128,6 +131,14 @@ public class PersistentData {
     public void addUnlockedChampion(String champion) { unlockedChampions.add(champion);
         championLevel.put(champion, 1);
         championMastery.put(champion, 0);
+    }
+
+    public void addChampionShards(String champion, int amount) {
+        championShards.put(champion, Math.min(championShards.getOrDefault(champion, 0)+amount, 10));
+    }
+
+    public int getChampionShards(String champion) {
+        return championShards.getOrDefault(champion, 0);
     }
 
     /*-----------------------------------------------------------------------------------------------------------------*/

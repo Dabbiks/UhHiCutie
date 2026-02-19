@@ -91,64 +91,7 @@ public class SpawnProtector implements Listener {
     @EventHandler
     public void onPlayerDamageByPlayer(EntityDamageByEntityEvent event) {
         if (!event.getDamager().getWorld().equals(Bukkit.getWorld("world"))) { return; }
-
-        if (event.getDamager() instanceof Player attacker) {
-            if (!(event.getEntity() instanceof Player)) {
-                if (!attacker.hasPermission("*")) {
-                    event.setCancelled(true);
-                }
-                return;
-            }
-
-            Player victim = (Player) event.getEntity();
-
-            if (attacker.getLocation().getBlockX() > 30.5 || attacker.getLocation().getBlockX() < 8.5 ||
-                    attacker.getLocation().getBlockZ() > 17.5 || attacker.getLocation().getBlockZ() < -5.5) {
-                event.setCancelled(true);
-                return;
-            }
-            if (victim.getLocation().getBlockX() > 30.5 || victim.getLocation().getBlockX() < 8.5 ||
-                    victim.getLocation().getBlockZ() > 17.5 || victim.getLocation().getBlockZ() < -5.5) {
-                event.setCancelled(true);
-                return;
-            }
-            if (attacker.getLocation().getBlockY() > 96 || attacker.getLocation().getBlockY() < 91 ||
-                    victim.getLocation().getBlockY() > 96 || victim.getLocation().getBlockY() < 91) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (victim.isBlocking()) {
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    ItemStack hand = victim.getInventory().getItemInMainHand();
-                    hand.resetData(DataComponentTypes.BLOCKS_ATTACKS);
-                    victim.setCooldown(hand, 30);
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        itemU.addParryingComponent(hand);
-                    }, 30L);
-                });
-                soundU.playSoundAtLocation(victim.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.3f, (new Random().nextFloat(1.4f, 1.7f)));
-                Vector direction = victim.getLocation().toVector().subtract(event.getDamager().getLocation().toVector());
-                direction.setY(Math.max(direction.getY(), 0.1));
-                direction.normalize().multiply(0.5);
-                victim.setVelocity(direction);
-            }
-
-            indicatorManager.spawnDamageIndicator(victim, event.getFinalDamage(), event.isCritical());
-
-            if (event.getFinalDamage() >= victim.getHealth()) {
-                event.setCancelled(true);
-                soundU.playSoundAtPlayer(victim, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1, 1);
-                victim.teleport(new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5));
-                playerU.addHealth(attacker, 100);
-                playerU.addHealth(victim, 100);
-                if (stateU.getGameState() != GameState.IN_GAME) {
-                    messageU.sendMessageToPlayers(playerListU.getWaitingPlayers(), "§e" + attacker.getName() + " §frozbroił §e" + victim.getName());
-                }
-            }
-        } else {
-            event.setCancelled(true);
-        }
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -179,4 +122,6 @@ public class SpawnProtector implements Listener {
         event.setCancelled(true);
         event.getItem().remove();
     }
+
+
 }

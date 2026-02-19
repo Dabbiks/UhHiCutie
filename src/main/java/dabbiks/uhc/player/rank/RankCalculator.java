@@ -14,9 +14,9 @@ public class RankCalculator {
     private static final int PLACE_WIN_POINTS = 75;
 
     public static int calculatePlacementRank(PersistentData data) {
-        int kills = data.getStats().getOrDefault(PersistentStats.SEASONKILLS, 0);
-        int assists = data.getStats().getOrDefault(PersistentStats.SEASONASSISTS, 0);
-        int wins = data.getStats().getOrDefault(PersistentStats.SEASONWINS, 0);
+        int kills = data.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0);
+        int assists = data.getStats().getOrDefault(PersistentStats.SEASON_ASSISTS, 0);
+        int wins = data.getStats().getOrDefault(PersistentStats.SEASON_WINS, 0);
         int perfectWins = data.getStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
 
         int rank = (PLACE_KILL_POINTS * kills)
@@ -28,15 +28,15 @@ public class RankCalculator {
     }
 
     public static int calculateMatchModifier(PersistentData data, double avgOpponentRank) {
-        double played = data.getStats().getOrDefault(PersistentStats.SEASONPLAYED, 0);
+        double played = data.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0);
 
         if (played < 5) return 100;
 
-        double kills = data.getStats().getOrDefault(PersistentStats.SEASONKILLS, 0);
-        double assists = data.getStats().getOrDefault(PersistentStats.SEASONASSISTS, 0);
-        double wins = data.getStats().getOrDefault(PersistentStats.SEASONWINS, 0);
+        double kills = data.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0);
+        double assists = data.getStats().getOrDefault(PersistentStats.SEASON_ASSISTS, 0);
+        double wins = data.getStats().getOrDefault(PersistentStats.SEASON_WINS, 0);
         double perfectWins = data.getStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
-        int currentRank = data.getStats().getOrDefault(PersistentStats.RANKPR, 0);
+        int currentRank = data.getStats().getOrDefault(PersistentStats.RANK_PR, 0);
 
         double deaths = played - wins;
         double kda = (deaths <= 0) ? (kills + assists) : (kills + assists) / deaths;

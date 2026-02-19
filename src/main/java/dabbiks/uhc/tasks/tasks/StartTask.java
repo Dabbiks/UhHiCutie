@@ -22,8 +22,8 @@ public class StartTask extends Task {
     protected void tick() {
         int playerCount = playerListU.getAllPlayers().size();
 
-        if (!(WorldConfig.isWorldGenerated)) return;
         if (stateU.getGameState() == null) stateU.setGameState(GameState.WAITING);
+        if (!(WorldConfig.isWorldGenerated)) return;
 
         if (stateU.getGameState() == GameState.STARTING && countdown > 0) {
             titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "", String.valueOf(countdown), 30);

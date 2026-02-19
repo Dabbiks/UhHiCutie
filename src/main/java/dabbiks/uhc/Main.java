@@ -16,6 +16,7 @@ import dabbiks.uhc.game.world.WorldGen;
 import dabbiks.uhc.game.world.events.WorldBorder;
 import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.lobby.SpawnProtector;
+import dabbiks.uhc.player.Chat;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.player.traffic.JoinEvent;
 import dabbiks.uhc.player.traffic.QuitEvent;
@@ -104,6 +105,7 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Chat(), this);
 
         teamManager.deleteTeams();
         new TeamInitializer();
