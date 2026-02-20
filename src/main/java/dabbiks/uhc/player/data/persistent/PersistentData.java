@@ -1,6 +1,10 @@
 package dabbiks.uhc.player.data.persistent;
 
 import com.google.gson.annotations.Expose;
+import dabbiks.uhc.Main;
+import dabbiks.uhc.cosmetics.KillSound;
+import dabbiks.uhc.cosmetics.PvpSword;
+import dabbiks.uhc.cosmetics.particletrail.TrailData;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.player.rank.RankType;
 
@@ -50,6 +54,34 @@ public class PersistentData {
 
     @Expose
     private Map<String, Integer> championShards = new HashMap<>();
+
+    // * COSMETICS
+
+    @Expose
+    private String killSound;
+    @Expose
+    private List<String> unlockedKillSounds = new ArrayList<>();
+
+    @Expose
+    private String pvpSword;
+    @Expose
+    private List<String> unlockedPvpSwords = new ArrayList<>();
+
+    @Expose
+    private String trail;
+    @Expose
+    private List<String> unlockedTrails = new ArrayList<>();
+
+    // * CHESTS
+
+    @Expose
+    private int[] chests = new int[5];
+
+    @Expose
+    private int[] keys = new int[5];
+
+    @Expose
+    private int[] keyFragments = new int[5];
 
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
@@ -140,6 +172,49 @@ public class PersistentData {
     public int getChampionShards(String champion) {
         return championShards.getOrDefault(champion, 0);
     }
+
+    // ? COSMETICS
+
+    public KillSound getKillSound() {
+        if (killSound == null) return null;
+        return KillSound.valueOf(killSound);
+    }
+    public void setKillSound(KillSound killSound) { this.killSound = killSound.name(); }
+
+    public void unlockKillSound(KillSound killSound) { unlockedKillSounds.add(killSound.name()); }
+    public boolean hasKillSound(KillSound killSound) { return unlockedKillSounds.contains(killSound.name()); }
+
+    public PvpSword getPvpSword() {
+        if (pvpSword == null) return null;
+        return PvpSword.valueOf(pvpSword);
+    }
+    public void setPvpSword(PvpSword pvpSword) { this.pvpSword = pvpSword.name(); }
+
+    public void unlockPvpSword(PvpSword pvpSword) { unlockedPvpSwords.add(pvpSword.name()); }
+    public boolean hasPvpSword(PvpSword pvpSword) { return unlockedPvpSwords.contains(pvpSword.name()); }
+
+    public TrailData getTrail() {
+        if (trail == null) return null;
+        return Main.INSTANCE.getTrailManager().getTrailData(trail);
+    }
+    public void setTrail(TrailData trail) { this.trail = trail.getId(); }
+
+    public void unlockTrail(TrailData trail) { unlockedKillSounds.add(trail.getId()); }
+    public boolean hasTrail(TrailData trail) { return unlockedKillSounds.contains(trail.getId()); }
+
+    // ? CHESTS
+
+    public int getChests(int index) { return chests[index]; }
+    public void setChests(int index, int amount) { chests[index] = amount; }
+    public void addChests(int index, int amount) { chests[index] += amount; }
+
+    public int getKeys(int index) { return keys[index]; }
+    public void setKeys(int index, int amount) { keys[index] = amount; }
+    public void addKeys(int index, int amount) { keys[index] += amount; }
+
+    public int getKeyFragments(int index) { return keyFragments[index]; }
+    public void setKeyFragments(int index, int amount) { keyFragments[index] = amount; }
+    public void addKeyFragments(int index, int amount) { keyFragments[index] += amount; }
 
     /*-----------------------------------------------------------------------------------------------------------------*/
 

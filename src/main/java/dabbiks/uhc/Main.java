@@ -1,5 +1,8 @@
 package dabbiks.uhc;
 
+import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
+import dabbiks.uhc.cosmetics.particletrail.TrailCycleManager;
+import dabbiks.uhc.cosmetics.particletrail.TrailDataLoader;
 import dabbiks.uhc.game.gameplay.damage.MeleeHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileLaunch;
@@ -57,6 +60,7 @@ public final class Main extends JavaPlugin {
     private WorldBorder worldBorder;
     private TeamManager teamManager;
     private PrefixManager prefixManager;
+    private TrailCycleManager trailManager;
 
     @Override
     public void onEnable() {
@@ -80,6 +84,7 @@ public final class Main extends JavaPlugin {
         indicatorManager = new IndicatorManager();
         teamManager = new TeamManager();
         prefixManager = new PrefixManager();
+        trailManager = new TrailCycleManager();
 
         persistentDataJson = new PersistentDataJson();
         worldBorder = new WorldBorder();
@@ -102,6 +107,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
+        Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);
@@ -109,6 +115,8 @@ public final class Main extends JavaPlugin {
 
         teamManager.deleteTeams();
         new TeamInitializer();
+
+        trailManager.setTrails(new TrailDataLoader().loadAllTrails());
 
         new TaskManager().run();
         Bukkit.getScheduler().runTaskLater(this, WorldGen::createWorld, 10L);
@@ -125,4 +133,5 @@ public final class Main extends JavaPlugin {
     public RecipeManager getRecipeManager() { return recipeManager; }
     public TeamManager getTeamManager() { return teamManager; }
     public PrefixManager getPrefixManager() { return prefixManager; }
+    public TrailCycleManager getTrailManager() { return trailManager; }
 }

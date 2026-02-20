@@ -1,5 +1,10 @@
 package dabbiks.uhc.player.traffic;
 
+import dabbiks.uhc.cosmetics.CosmeticTier;
+import dabbiks.uhc.cosmetics.KillSound;
+import dabbiks.uhc.cosmetics.PvpSword;
+import dabbiks.uhc.cosmetics.particletrail.TrailCycleManager;
+import dabbiks.uhc.cosmetics.particletrail.TrailData;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.gameplay.items.recipes.remover.RecipeRemover;
@@ -35,6 +40,7 @@ public class JoinEvent implements Listener {
     public static Map<Player, FastBoard> boards = new HashMap<>();
     List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
     private final PrefixManager prefixManager = INSTANCE.getPrefixManager();
+    private final TrailCycleManager trailCycleManager = INSTANCE.getTrailManager();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -58,13 +64,24 @@ public class JoinEvent implements Listener {
     }
 
     private void handleInitialData(Player player, PersistentData data) {
-        if (!player.hasPlayedBefore()) {
-            data.addStats(PersistentStats.FREECLASSTOKENS, 1);
-        }
-
         if (data.getUnlockedChampions() == null || data.getUnlockedChampions().isEmpty()) {
             data.addUnlockedChampion("default");
             data.setChampion("default");
+        }
+
+        if (data.getKillSound() == null) {
+            data.unlockKillSound(KillSound.BLASTX);
+            data.setKillSound(KillSound.BLASTX);
+        }
+
+        if (data.getPvpSword() == null) {
+            data.unlockPvpSword(PvpSword.WOODEN_SWORD);
+            data.setPvpSword(PvpSword.WOODEN_SWORD);
+        }
+
+        if (data.getTrail() == null) {
+            data.unlockTrail(trailCycleManager.getTrailData("default"));
+            data.setTrail(trailCycleManager.getTrailData("default"));
         }
 
         RankManager.processPlacements(player);

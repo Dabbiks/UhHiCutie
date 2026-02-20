@@ -17,12 +17,10 @@ public class RankCalculator {
         int kills = data.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0);
         int assists = data.getStats().getOrDefault(PersistentStats.SEASON_ASSISTS, 0);
         int wins = data.getStats().getOrDefault(PersistentStats.SEASON_WINS, 0);
-        int perfectWins = data.getStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
 
         int rank = (PLACE_KILL_POINTS * kills)
                 + (PLACE_ASSIST_POINTS * assists)
-                + (PLACE_WIN_POINTS * wins)
-                + (PLACE_WIN_POINTS * perfectWins);
+                + (PLACE_WIN_POINTS * wins);
 
         return Math.max(1, rank);
     }
@@ -35,12 +33,11 @@ public class RankCalculator {
         double kills = data.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0);
         double assists = data.getStats().getOrDefault(PersistentStats.SEASON_ASSISTS, 0);
         double wins = data.getStats().getOrDefault(PersistentStats.SEASON_WINS, 0);
-        double perfectWins = data.getStats().getOrDefault(PersistentStats.SEASONPERFECTWINS, 0);
         int currentRank = data.getStats().getOrDefault(PersistentStats.RANK_PR, 0);
 
         double deaths = played - wins;
         double kda = (deaths <= 0) ? (kills + assists) : (kills + assists) / deaths;
-        double winRate = (wins + (perfectWins * 0.5)) / played;
+        double winRate = (wins) / played;
 
         double kdaScore = Math.min(kda / 1.5, 1.0) * 20;
         double winScore = Math.min(winRate / 0.12, 1.0) * 20;
