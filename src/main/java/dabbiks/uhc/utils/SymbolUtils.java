@@ -22,6 +22,7 @@ public class SymbolUtils {
     public final String SCOREBOARD_BORDER = "§f\uE095";
     public final String SCOREBOARD_CLOCK = "§f\uE096";
     public final String SCOREBOARD_COIN = "§f\uE097";
+    public final String SCOREBOARD_POWDER = "§f\uE09B";
     public final String SCOREBOARD_CROWN = "§f\uE098";
     public final String SCOREBOARD_SPECTATOR = "§f\uE099";
     public final String SCOREBOARD_SWORD = "§f\uE09A";

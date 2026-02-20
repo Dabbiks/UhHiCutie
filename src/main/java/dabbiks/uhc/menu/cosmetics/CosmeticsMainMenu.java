@@ -38,7 +38,7 @@ public class CosmeticsMainMenu extends FastInv {
         int discountSlot = 22;
         int powderSlot = 23;
 
-        setItem(trailSlot, createIcon(symbolU.MOUSE_LEFT + " §fCząsteczki lotu", Material.FIREWORK_ROCKET, null), e -> {
+        setItem(trailSlot, createIcon(symbolU.MOUSE_LEFT + " §fSmugi lotu", Material.FIREWORK_ROCKET, null), e -> {
             super.getInventory().close();
             new TrailMenu(player, persistentData).open(player);
         });
@@ -53,7 +53,8 @@ public class CosmeticsMainMenu extends FastInv {
         setItem(coinSlot, createIcon("§f" + persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) +
                 symbolU.SCOREBOARD_COIN, Material.SUNFLOWER, null));
         setItem(discountSlot, createIcon("§c% §fTrwające promocje", Material.RED_DYE, null));
-        setItem(powderSlot, createIcon("§f" + persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0), Material.BARRIER, null));
+        setItem(powderSlot, createIcon("§f" + persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0) +
+                symbolU.SCOREBOARD_POWDER, Material.AMETHYST_SHARD, null));
     }
 
     private ItemStack createIcon(String name, Material material, List<String> lore) {

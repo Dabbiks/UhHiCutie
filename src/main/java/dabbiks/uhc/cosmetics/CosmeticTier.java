@@ -1,11 +1,11 @@
 package dabbiks.uhc.cosmetics;
 
 public enum CosmeticTier {
-    COMMON("§7§lP "),
-    RARE("§b§lR "),
-    EPIC("§a§lE "),
-    MYTHIC("§d§lM "),
-    LEGENDARY("§5§lL ");
+    COMMON("§7§lP §f"),
+    RARE("§b§lR §f"),
+    EPIC("§a§lE §f"),
+    MYTHIC("§d§lM §f"),
+    LEGENDARY("§5§lL §f");
 
     private final String icon;
 
