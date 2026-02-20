@@ -49,6 +49,7 @@ public final class Main extends JavaPlugin {
     public static ItemUtils itemU;
     public static PlayerListUtils playerListU;
     public static RewardUtils rewardU;
+    public static FireworkUtils fireworkU;
 
     public static TabManager tabManager;
     public static AttributeManager attributeManager;
@@ -78,6 +79,7 @@ public final class Main extends JavaPlugin {
         itemU = new ItemUtils();
         playerListU = new PlayerListUtils();
         rewardU = new RewardUtils();
+        fireworkU = new FireworkUtils();
 
         tabManager = new TabManager();
         attributeManager = new AttributeManager();

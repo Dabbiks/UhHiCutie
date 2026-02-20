@@ -4,19 +4,21 @@ import dabbiks.uhc.cosmetics.chest.rewards.Reward;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
+import dabbiks.uhc.utils.ParticleUtils;
+import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Random;
 
-import static dabbiks.uhc.Main.symbolU;
+import static dabbiks.uhc.Main.*;
 
 public class MediumCoinReward extends Reward {
 
     private final String name;
     private final Random random = new Random();
-    private final String color;
     private final int amount;
 
     private final Material material = Material.SUNFLOWER;
@@ -25,8 +27,12 @@ public class MediumCoinReward extends Reward {
     public MediumCoinReward() {
         amount = random.nextInt(1000, 2500);
         name = amount + symbolU.SCOREBOARD_COIN;
-        color = "§e§l";
 
+    }
+
+    @Override
+    public String getType() {
+        return "§e§lWALUTA";
     }
 
     @Override
@@ -39,15 +45,16 @@ public class MediumCoinReward extends Reward {
         return name;
     }
 
-    public String getColor() {
-        return color;
-    }
-
     public ItemStack getItem() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setCustomModelData(model);
         item.setItemMeta(meta);
         return item;
+    }
+
+    @Override
+    public void spawnEffect(Location location) {
+        fireworkU.spawnBurst(location, Color.YELLOW);
     }
 }

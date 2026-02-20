@@ -4,6 +4,7 @@ import dabbiks.uhc.cosmetics.chest.rewards.Reward;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,7 +17,6 @@ public class SmallCoinReward extends Reward {
 
     private final String name;
     private final Random random = new Random();
-    private final String color;
     private final int amount;
 
     private final Material material = Material.SUNFLOWER;
@@ -25,8 +25,11 @@ public class SmallCoinReward extends Reward {
     public SmallCoinReward() {
         amount = random.nextInt(300, 1000);
         name = amount + symbolU.SCOREBOARD_COIN;
-        color = "§c§l";
+    }
 
+    @Override
+    public String getType() {
+        return "§c§lWALUTA";
     }
 
     @Override
@@ -39,10 +42,6 @@ public class SmallCoinReward extends Reward {
         return name;
     }
 
-    public String getColor() {
-        return color;
-    }
-
     public ItemStack getItem() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -50,4 +49,7 @@ public class SmallCoinReward extends Reward {
         item.setItemMeta(meta);
         return item;
     }
+
+    @Override
+    public void spawnEffect(Location location) { }
 }

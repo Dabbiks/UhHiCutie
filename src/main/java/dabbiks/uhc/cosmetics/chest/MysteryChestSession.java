@@ -1,5 +1,8 @@
 package dabbiks.uhc.cosmetics.chest;
 
+import dabbiks.uhc.cosmetics.chest.rewards.Reward;
+import dabbiks.uhc.player.data.persistent.PersistentData;
+import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -30,6 +33,7 @@ public class MysteryChestSession {
     private final Map<Location, BlockFace> chests = new HashMap<>();
     private final List<Location> openedChests = new ArrayList<>();
     private final List<TextDisplay> textDisplays = new ArrayList<>();
+    private final List<ItemDisplay> itemDisplays = new ArrayList<>();
     private TextDisplay timerDisplay;
     private boolean isEnding = false;
 
@@ -127,6 +131,32 @@ public class MysteryChestSession {
             chestsLeft--;
             soundU.playSoundAtLocation(loc, Sound.BLOCK_PISTON_CONTRACT, 1, 0.6f);
             soundU.playSoundAtLocation(loc, Sound.BLOCK_CHEST_OPEN, 1, 1);
+            giveReward(loc);
+        }
+    }
+
+    private void giveReward(Location location) {
+        Reward reward = ChestRewardManager.drawReward(chestType);
+        if (reward == null) return;
+
+        textDisplays.add(location.getWorld().spawn(location.clone().add(-0.5, 1, 0.5), TextDisplay.class, entity -> {
+            entity.setText(reward.getType());
+            entity.setShadowed(true);
+            entity.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
+        }));
+        textDisplays.add(location.getWorld().spawn(location.clone().add(-0.5, 0.8, 0.5), TextDisplay.class, entity -> {
+            entity.setText(reward.getName());
+            entity.setShadowed(true);
+            entity.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
+        }));
+        itemDisplays.add(location.getWorld().spawn(location.clone().add(-0.5, 0.6, 0.5), ItemDisplay.class, entity -> {
+            entity.setItemStack(reward.getItem());
+            entity.setBillboard(Display.Billboard.CENTER);
+        }));
+
+        PersistentData data = PersistentDataManager.getData(uuid);
+        if (data != null) {
+            reward.addReward(data);
         }
     }
 
@@ -150,6 +180,7 @@ public class MysteryChestSession {
                             if (block.getState() instanceof Lidded lid) {
                                 lid.open();
                             }
+                            giveReward(location);
                             chestsLeft--;
                         }
                     }
@@ -174,6 +205,9 @@ public class MysteryChestSession {
                     delay += 3;
                 }
                 for (TextDisplay display : textDisplays) {
+                    if (display != null && display.isValid()) display.remove();
+                }
+                for (ItemDisplay display : itemDisplays) {
                     if (display != null && display.isValid()) display.remove();
                 }
                 Block block = centerLocation.getBlock();
