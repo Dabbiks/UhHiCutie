@@ -41,6 +41,10 @@ public class TrailDataLoader {
                 plugin.getLogger().severe("Failed to load trail file: " + file.getName() + " - " + e.getMessage());
             }
         }
+
+        trails.add(new TrailData("default", "Podstawowa smuga", Material.SNOWBALL, CosmeticTier.COMMON,
+                0, 0, null, null, 0));
+
         return trails;
     }
 
