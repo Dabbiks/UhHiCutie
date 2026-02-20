@@ -2,9 +2,7 @@ package dabbiks.uhc.cosmetics.chest;
 
 import dabbiks.uhc.cosmetics.chest.rewards.Reward;
 import dabbiks.uhc.cosmetics.chest.rewards.RewardPool;
-import dabbiks.uhc.cosmetics.chest.rewards.coins.MediumCoinReward;
-import dabbiks.uhc.cosmetics.chest.rewards.coins.MiniCoinReward;
-import dabbiks.uhc.cosmetics.chest.rewards.coins.SmallCoinReward;
+import dabbiks.uhc.cosmetics.chest.rewards.coins.*;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -20,30 +18,40 @@ public class ChestRewardManager {
         rewardPools.clear();
 
         RewardPool commonPool = new RewardPool();
-        commonPool.addReward(new MiniCoinReward(), 70.0);
-        commonPool.addReward(new SmallCoinReward(), 30.0);
+        commonPool.addReward(MiniCoinReward::new, 70.0);
+        commonPool.addReward(SmallCoinReward::new, 30.0);
+        commonPool.addReward(MediumCoinReward::new, 5.0);
+        commonPool.addReward(BigCoinReward::new, 0.2);
         rewardPools.put(ChestType.COMMON, commonPool);
 
         RewardPool rarePool = new RewardPool();
-        rarePool.addReward(new MiniCoinReward(), 40.0);
-        rarePool.addReward(new SmallCoinReward(), 50.0);
-        rarePool.addReward(new MediumCoinReward(), 10.0);
+        rarePool.addReward(MiniCoinReward::new, 40.0);
+        rarePool.addReward(SmallCoinReward::new, 50.0);
+        rarePool.addReward(MediumCoinReward::new, 10.0);
+        rarePool.addReward(BigCoinReward::new, 1.0);
         rewardPools.put(ChestType.RARE, rarePool);
 
         RewardPool epicPool = new RewardPool();
-        epicPool.addReward(new MiniCoinReward(), 10.0);
-        epicPool.addReward(new SmallCoinReward(), 60.0);
-        epicPool.addReward(new MediumCoinReward(), 30.0);
+        epicPool.addReward(MiniCoinReward::new, 10.0);
+        epicPool.addReward(SmallCoinReward::new, 60.0);
+        epicPool.addReward(MediumCoinReward::new, 10.0);
+        rarePool.addReward(BigCoinReward::new, 2.0);
+        rarePool.addReward(HugeCoinReward::new, 0.1);
         rewardPools.put(ChestType.EPIC, epicPool);
 
         RewardPool mythicPool = new RewardPool();
-        mythicPool.addReward(new SmallCoinReward(), 40.0);
-        mythicPool.addReward(new MediumCoinReward(), 60.0);
+        mythicPool.addReward(SmallCoinReward::new, 40.0);
+        mythicPool.addReward(MediumCoinReward::new, 60.0);
+        mythicPool.addReward(MiniCoinReward::new, 5.0);
+        rarePool.addReward(BigCoinReward::new, 4.0);
+        rarePool.addReward(HugeCoinReward::new, 0.5);
         rewardPools.put(ChestType.MYTHIC, mythicPool);
 
         RewardPool legendaryPool = new RewardPool();
-        legendaryPool.addReward(new SmallCoinReward(), 10.0);
-        legendaryPool.addReward(new MediumCoinReward(), 90.0);
+        legendaryPool.addReward(SmallCoinReward::new, 10.0);
+        legendaryPool.addReward(MediumCoinReward::new, 90.0);
+        rarePool.addReward(BigCoinReward::new, 10.0);
+        rarePool.addReward(HugeCoinReward::new, 5.0);
         rewardPools.put(ChestType.LEGENDARY, legendaryPool);
     }
 

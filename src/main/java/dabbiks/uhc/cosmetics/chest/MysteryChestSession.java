@@ -14,6 +14,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -34,8 +35,10 @@ public class MysteryChestSession {
     private final List<Location> openedChests = new ArrayList<>();
     private final List<TextDisplay> textDisplays = new ArrayList<>();
     private final List<ItemDisplay> itemDisplays = new ArrayList<>();
+    private final List<String> rewards = new ArrayList<>();
     private TextDisplay timerDisplay;
     private boolean isEnding = false;
+    private boolean rewardMessage = false;
 
     public MysteryChestSession(UUID uuid, ChestType chestType) {
         this.uuid = uuid;
@@ -51,6 +54,8 @@ public class MysteryChestSession {
     private void startSession() {
         World world = Bukkit.getWorld("world");
         Bukkit.getPlayer(uuid).getInventory().close();
+
+        new ChestMessage().send(chestType, uuid, null);
 
         soundU.playSoundAtLocation(centerLocation, Sound.BLOCK_ANVIL_USE, 1, 1);
         chests.put(new Location(world, centerLocation.getX(), centerLocation.getY(), centerLocation.getZ() - 2), BlockFace.SOUTH);
@@ -125,6 +130,7 @@ public class MysteryChestSession {
         Location loc = block.getLocation();
         if (!chests.containsKey(loc) || openedChests.contains(loc)) return;
 
+        if (chestsLeft <= 0) return;
         if (block.getState() instanceof Lidded lid) {
             lid.open();
             openedChests.add(loc);
@@ -132,6 +138,7 @@ public class MysteryChestSession {
             soundU.playSoundAtLocation(loc, Sound.BLOCK_PISTON_CONTRACT, 1, 0.6f);
             soundU.playSoundAtLocation(loc, Sound.BLOCK_CHEST_OPEN, 1, 1);
             giveReward(loc);
+            if (chestsLeft == 0 && !rewardMessage) new ChestMessage().send(chestType, playerUuid, rewards); rewardMessage = true;
         }
     }
 
@@ -139,20 +146,27 @@ public class MysteryChestSession {
         Reward reward = ChestRewardManager.drawReward(chestType);
         if (reward == null) return;
 
-        textDisplays.add(location.getWorld().spawn(location.clone().add(-0.5, 1, 0.5), TextDisplay.class, entity -> {
+        textDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1.55, 0.5), TextDisplay.class, entity -> {
             entity.setText(reward.getType());
             entity.setShadowed(true);
+            entity.setBillboard(Display.Billboard.CENTER);
             entity.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         }));
-        textDisplays.add(location.getWorld().spawn(location.clone().add(-0.5, 0.8, 0.5), TextDisplay.class, entity -> {
+        textDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1.3, 0.5), TextDisplay.class, entity -> {
             entity.setText(reward.getName());
             entity.setShadowed(true);
+            entity.setBillboard(Display.Billboard.CENTER);
             entity.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         }));
-        itemDisplays.add(location.getWorld().spawn(location.clone().add(-0.5, 0.6, 0.5), ItemDisplay.class, entity -> {
+        itemDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1, 0.5), ItemDisplay.class, entity -> {
             entity.setItemStack(reward.getItem());
-            entity.setBillboard(Display.Billboard.CENTER);
+            setHorizontalRotation(entity, centerLocation);
+            Transformation t = entity.getTransformation();
+            t.getScale().set(0.8f, 0.8f, 0.8f);
+            entity.setTransformation(t);
         }));
+        reward.spawnEffect(location.clone().add(0.5, 1, 0.5));
+        rewards.add(reward.getType() + " " + reward.getName());
 
         PersistentData data = PersistentDataManager.getData(uuid);
         if (data != null) {
@@ -182,6 +196,7 @@ public class MysteryChestSession {
                             }
                             giveReward(location);
                             chestsLeft--;
+                            if (chestsLeft == 0 && !rewardMessage) new ChestMessage().send(chestType, uuid, rewards); rewardMessage = true;
                         }
                     }
                 }.runTaskLater(plugin, delay);
@@ -261,5 +276,22 @@ public class MysteryChestSession {
                 ticks++;
             }
         }.runTaskTimer(plugin, 0L, 1L);
+    }
+
+    private void setHorizontalRotation(ItemDisplay display, Location target) {
+        Location start = display.getLocation();
+
+        double dx = target.getX() - start.getX();
+        double dz = target.getZ() - start.getZ();
+
+        if (dx == 0 && dz == 0) return;
+
+        float yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
+
+        Location newRotation = start.clone();
+        newRotation.setYaw(yaw);
+        newRotation.setPitch(0);
+
+        display.teleport(newRotation);
     }
 }
