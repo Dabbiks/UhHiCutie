@@ -3,11 +3,11 @@ package dabbiks.uhc.cosmetics.chest;
 import dabbiks.uhc.cosmetics.CosmeticTier;
 
 public enum ChestType {
-    COMMON("§fSkrzynia §7§lPOSPOLITA", 2, 1, 1, 0),
-    RARE("§fSkrzynia §7§lRZADKA", 2, 1, 1, 1),
-    EPIC("§fSkrzynia §a§lEPICKA", 3, 1, 1, 2),
-    MYTHIC("§fSkrzynia §d§lMITYCZNA", 4, 1, 1, 3),
-    LEGENDARY("§fSkrzynia §5§lLEGENDARNA", 5, 1, 1, 4);
+    COMMON("§fSkrzynia §7§lPOSPOLITA", 2, 12, 450, 0),
+    RARE("§fSkrzynia §b§lRZADKA", 2, 14, 675, 1),
+    EPIC("§fSkrzynia §a§lEPICKA", 3, 16, 950, 2),
+    MYTHIC("§fSkrzynia §d§lMITYCZNA", 4, 18, 1200, 3),
+    LEGENDARY("§fSkrzynia §5§lLEGENDARNA", 5, 20, 1825, 4);
 
     private final String name;
     private final int chests;

@@ -138,7 +138,7 @@ public class MysteryChestSession {
             soundU.playSoundAtLocation(loc, Sound.BLOCK_PISTON_CONTRACT, 1, 0.6f);
             soundU.playSoundAtLocation(loc, Sound.BLOCK_CHEST_OPEN, 1, 1);
             giveReward(loc);
-            if (chestsLeft == 0 && !rewardMessage) new ChestMessage().send(chestType, playerUuid, rewards); rewardMessage = true;
+            if (chestsLeft == 0 && !rewardMessage) { new ChestMessage().send(chestType, uuid, rewards); rewardMessage = true; }
         }
     }
 
@@ -146,13 +146,13 @@ public class MysteryChestSession {
         Reward reward = ChestRewardManager.drawReward(chestType);
         if (reward == null) return;
 
-        textDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1.55, 0.5), TextDisplay.class, entity -> {
+        textDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1.75, 0.5), TextDisplay.class, entity -> {
             entity.setText(reward.getType());
             entity.setShadowed(true);
             entity.setBillboard(Display.Billboard.CENTER);
             entity.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         }));
-        textDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1.3, 0.5), TextDisplay.class, entity -> {
+        textDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1.5, 0.5), TextDisplay.class, entity -> {
             entity.setText(reward.getName());
             entity.setShadowed(true);
             entity.setBillboard(Display.Billboard.CENTER);
@@ -160,13 +160,13 @@ public class MysteryChestSession {
         }));
         itemDisplays.add(location.getWorld().spawn(location.clone().add(0.5, 1, 0.5), ItemDisplay.class, entity -> {
             entity.setItemStack(reward.getItem());
-            setHorizontalRotation(entity, centerLocation);
+            setHorizontalRotation(entity, centerLocation.clone().add(0.5, 0, 0.5));
             Transformation t = entity.getTransformation();
             t.getScale().set(0.8f, 0.8f, 0.8f);
             entity.setTransformation(t);
         }));
         reward.spawnEffect(location.clone().add(0.5, 1, 0.5));
-        rewards.add(reward.getType() + " " + reward.getName());
+        rewards.add(reward.getType() + " §f" + reward.getName());
 
         PersistentData data = PersistentDataManager.getData(uuid);
         if (data != null) {
@@ -196,7 +196,7 @@ public class MysteryChestSession {
                             }
                             giveReward(location);
                             chestsLeft--;
-                            if (chestsLeft == 0 && !rewardMessage) new ChestMessage().send(chestType, uuid, rewards); rewardMessage = true;
+                            if (chestsLeft == 0 && !rewardMessage) { new ChestMessage().send(chestType, uuid, rewards); rewardMessage = true; }
                         }
                     }
                 }.runTaskLater(plugin, delay);
@@ -280,18 +280,15 @@ public class MysteryChestSession {
 
     private void setHorizontalRotation(ItemDisplay display, Location target) {
         Location start = display.getLocation();
-
         double dx = target.getX() - start.getX();
         double dz = target.getZ() - start.getZ();
 
         if (dx == 0 && dz == 0) return;
 
-        float yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
+        float yaw = (float) Math.atan2(dz, dx) - (float) Math.PI / 2;
 
-        Location newRotation = start.clone();
-        newRotation.setYaw(yaw);
-        newRotation.setPitch(0);
-
-        display.teleport(newRotation);
+        Transformation t = display.getTransformation();
+        t.getLeftRotation().set(new org.joml.AxisAngle4f(-yaw, 0, 1, 0));
+        display.setTransformation(t);
     }
 }

@@ -3,11 +3,11 @@ package dabbiks.uhc.cosmetics.chest;
 import dabbiks.uhc.cosmetics.CosmeticTier;
 
 public enum KeyType {
-    COMMON(CosmeticTier.COMMON.getIcon() + "Klucz", 1, 1, 0),
-    RARE(CosmeticTier.RARE.getIcon() + "Klucz", 1, 1, 1),
-    EPIC(CosmeticTier.EPIC.getIcon() + "Klucz", 1, 1, 2),
-    MYTHIC(CosmeticTier.MYTHIC.getIcon() + "Klucz", 1, 1, 3),
-    LEGENDARY(CosmeticTier.LEGENDARY.getIcon() + "Klucz", 1, 1, 4);
+    COMMON(CosmeticTier.COMMON.getIcon() + "Klucz", 1, 250, 0),
+    RARE(CosmeticTier.RARE.getIcon() + "Klucz", 1, 400, 1),
+    EPIC(CosmeticTier.EPIC.getIcon() + "Klucz", 1, 675, 2),
+    MYTHIC(CosmeticTier.MYTHIC.getIcon() + "Klucz", 1, 975, 3),
+    LEGENDARY(CosmeticTier.LEGENDARY.getIcon() + "Klucz", 1, 1225, 4);
 
     private final String name;
     private final int model;
