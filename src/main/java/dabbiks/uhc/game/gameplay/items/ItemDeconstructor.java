@@ -110,6 +110,10 @@ public class ItemDeconstructor {
             instance.setCanBeEnchanted(true);
         }
 
+        if (nbtItem.hasTag(ItemTags.IS_ENCHANTED.name())) {
+            instance.setIsEnchanted(true);
+        }
+
         if (nbtItem.hasKey("SLOT")) {
             instance.setEquipmentSlot(EquipmentSlot.valueOf(nbtItem.getString("SLOT")));
         }

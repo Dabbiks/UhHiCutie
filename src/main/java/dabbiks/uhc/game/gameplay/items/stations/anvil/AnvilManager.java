@@ -4,6 +4,10 @@ import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemDeconstructor;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemMerger;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.data.session.SessionTags;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -85,11 +89,23 @@ public class AnvilManager implements Listener {
         ItemInstance resultInstance = new ItemMerger(firstInstance, secondInstance).merge();
 
         if (resultInstance == null) return;
+        if (resultInstance.getEnchants() != null && !resultInstance.getEnchants().isEmpty()) resultInstance.setIsEnchanted(true);
 
         ItemStack result = new ItemBuilder(resultInstance).build();
         event.setResult(result);
-        event.getInventory().setRepairCost(10);
-        event.getView().setRepairCost(10);
+
+        Player player = (Player) event.getView().getPlayer();
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        int price = 10;
+        if (sessionData.hasTag(SessionTags.SMALL_ANVIL_DISCOUNT)) {
+            price = 7;
+        } else if (sessionData.hasTag(SessionTags.BIG_ANVIL_DISCOUNT)) {
+            price = 5;
+        }
+
+        event.getInventory().setRepairCost(price);
+        event.getView().setRepairCost(price);
         event.getView().bypassEnchantmentLevelRestriction(true);
     }
 }

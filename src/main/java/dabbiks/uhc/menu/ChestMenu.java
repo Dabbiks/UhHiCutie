@@ -87,15 +87,19 @@ public class ChestMenu extends FastInv {
             List<String> lore = new ArrayList<>();
 
             lore.add(type.getName());
-            lore.add("Klucze " + persistentData.getKeys(type.getIndex()));
-            lore.add("Fragmenty kluczy " + persistentData.getKeyFragments(type.getIndex()));
-            lore.add("Skrzynie " + persistentData.getChests(type.getIndex()));
+            lore.add("");
+            lore.add("§7Skrzynie: §e" + persistentData.getChests(type.getIndex()));
+            lore.add("§7Klucze: §e" + persistentData.getKeys(type.getIndex()));
+            lore.add("§7Fragmenty kluczy §e" + persistentData.getKeyFragments(type.getIndex()) + "/3");
+            lore.add("");
 
             int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
             boolean hasCoinsForChest = coins >= type.getPrice();
             boolean hasCoinsForKey = coins >= keyType.getPrice();
+            boolean hasChestAndKey = persistentData.getChests(type.getIndex()) > 0 && persistentData.getKeys(type.getIndex()) > 0;
 
+            lore.add(hasChestAndKey ? symbolU.MOUSE_LEFT + "§a Otwórz skrzynię!" : symbolU.MOUSE_LEFT + "§c Musisz posiadać skrzynię i klucz!");
             lore.add((hasCoinsForChest ? symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + coins + "§f" + symbolU.SCOREBOARD_COIN
                     : symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (type.getPrice() - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni"));
             lore.add((hasCoinsForKey ? symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + coins + "§f" + symbolU.SCOREBOARD_COIN
