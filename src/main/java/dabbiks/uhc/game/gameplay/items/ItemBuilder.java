@@ -209,6 +209,10 @@ public class ItemBuilder {
             nbtItem.setInteger(ItemTags.CAN_BE_ENCHANTED.name(), 1);
         }
 
+        if (instance.isEnchanted()) {
+            nbtItem.setBoolean(ItemTags.IS_ENCHANTED.name(), true);
+        }
+
         if (instance.getEnchantSlot() != null) {
             nbtItem.setInteger(instance.getEnchantSlot().name(), 1);
         }

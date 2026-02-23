@@ -21,6 +21,8 @@ import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.lobby.SpawnProtector;
 import dabbiks.uhc.player.Chat;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
+import dabbiks.uhc.player.events.Grinding;
+import dabbiks.uhc.player.events.Mining;
 import dabbiks.uhc.player.traffic.JoinEvent;
 import dabbiks.uhc.player.traffic.QuitEvent;
 import dabbiks.uhc.tasks.TaskManager;
@@ -110,6 +112,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
+
+        Bukkit.getPluginManager().registerEvents(new Mining(), this);
+        Bukkit.getPluginManager().registerEvents(new Grinding(), this);
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);

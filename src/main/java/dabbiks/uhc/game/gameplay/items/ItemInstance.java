@@ -22,6 +22,7 @@ public class ItemInstance implements Cloneable {
     private boolean tags;
     private boolean canBeForged;
     private boolean canBeEnchanted;
+    private boolean isEnchanted;
     private boolean canParry;
     private String armorSlot;
     private String armorTexture;
@@ -63,6 +64,9 @@ public class ItemInstance implements Cloneable {
 
     public boolean canBeEnchanted() { return canBeEnchanted; }
     public void setCanBeEnchanted(boolean canBeEnchanted) { this.canBeEnchanted = canBeEnchanted; }
+
+    public boolean isEnchanted() { return isEnchanted; }
+    public void setIsEnchanted(boolean isEnchanted) { this.isEnchanted = isEnchanted; }
 
     public boolean canParry() { return canParry; }
     public void setCanParry(boolean canParry) { this.canParry = canParry; }

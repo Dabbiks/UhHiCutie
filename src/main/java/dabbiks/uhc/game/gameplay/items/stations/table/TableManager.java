@@ -93,6 +93,7 @@ public class TableManager implements Listener {
         List<EnchantData> enchants = enchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot());
         if (enchants.isEmpty()) ConsoleLogger.sendWarning(ConsoleLogger.LogType.ENCHANTS, "Error while calculating possible enchants");
         itemInstance.setEnchants(enchants);
+        itemInstance.setIsEnchanted(true);
 
         ItemStack resultItem = new ItemBuilder(itemInstance).build();
         ItemStack handItem = player.getInventory().getItemInMainHand();
