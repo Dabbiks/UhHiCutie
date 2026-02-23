@@ -72,12 +72,26 @@ public class MeleeHit implements Listener {
 
         damage = armorHandler.handle(null, victim, damage);
 
-        event.setDamage(damage);
-        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
-        damage = event.getFinalDamage();
-        indicatorManager.spawnDamageIndicator(victim, damage, false);
+        double totalDamage = damage;
+        double absorption = victim.getAbsorptionAmount();
 
-        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (totalDamage >= victim.getHealth() + absorption) {
+            event.setCancelled(true);
+            deathHandler.handle(victim);
+            return;
+        }
+
+        if (absorption > 0) {
+            double absorbed = Math.min(totalDamage, absorption);
+            victim.setAbsorptionAmount(absorption - absorbed);
+            damage -= absorbed;
+        }
+
+        event.setDamage(damage);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+
+        indicatorManager.spawnDamageIndicator(victim, totalDamage, false);
     }
 
     public void processDamageByMonster(EntityDamageByEntityEvent event) {
@@ -95,12 +109,26 @@ public class MeleeHit implements Listener {
 
         damage = armorHandler.handle(null, victim, damage);
 
-        event.setDamage(damage);
-        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
-        damage = event.getFinalDamage();
-        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
+        double totalDamage = damage;
+        double absorption = victim.getAbsorptionAmount();
 
-        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (totalDamage >= victim.getHealth() + absorption) {
+            event.setCancelled(true);
+            deathHandler.handle(victim);
+            return;
+        }
+
+        if (absorption > 0) {
+            double absorbed = Math.min(totalDamage, absorption);
+            victim.setAbsorptionAmount(absorption - absorbed);
+            damage -= absorbed;
+        }
+
+        event.setDamage(damage);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+
+        indicatorManager.spawnDamageIndicator(victim, totalDamage, event.isCritical());
     }
 
     public void processDamageToMonster(EntityDamageByEntityEvent event) {
@@ -172,11 +200,25 @@ public class MeleeHit implements Listener {
         damage = armorHandler.handle(damager, victim, damage);
         attributeHandler.handle(damager, victim, damage, AttributeType.LIFE_STEAL);
 
-        event.setDamage(damage);
-        event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
-        damage = event.getFinalDamage();
-        indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
+        double totalDamage = damage;
+        double absorption = victim.getAbsorptionAmount();
 
-        if (damage >= victim.getHealth()) { event.setCancelled(true); deathHandler.handle(victim); }
+        if (totalDamage >= victim.getHealth() + absorption) {
+            event.setCancelled(true);
+            deathHandler.handle(victim);
+            return;
+        }
+
+        if (absorption > 0) {
+            double absorbed = Math.min(totalDamage, absorption);
+            victim.setAbsorptionAmount(absorption - absorbed);
+            damage -= absorbed;
+        }
+
+        event.setDamage(damage);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+
+        indicatorManager.spawnDamageIndicator(victim, totalDamage, event.isCritical());
     }
 }
