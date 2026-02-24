@@ -6,6 +6,8 @@ import dabbiks.uhc.cosmetics.particletrail.TrailDataLoader;
 import dabbiks.uhc.game.gameplay.damage.MeleeHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileLaunch;
+import dabbiks.uhc.game.gameplay.elytra.ChestplateManager;
+import dabbiks.uhc.game.gameplay.elytra.ElytraListener;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
 import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeLimitTracker;
@@ -64,6 +66,7 @@ public final class Main extends JavaPlugin {
     private TeamManager teamManager;
     private PrefixManager prefixManager;
     private TrailCycleManager trailManager;
+    private ChestplateManager chestplateManager;
 
     @Override
     public void onEnable() {
@@ -89,6 +92,7 @@ public final class Main extends JavaPlugin {
         teamManager = new TeamManager();
         prefixManager = new PrefixManager();
         trailManager = new TrailCycleManager();
+        chestplateManager = new ChestplateManager();
 
         persistentDataJson = new PersistentDataJson();
         worldBorder = new WorldBorder();
@@ -112,6 +116,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ElytraListener(chestplateManager), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new Grinding(), this);

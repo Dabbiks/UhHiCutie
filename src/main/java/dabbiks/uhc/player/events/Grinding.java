@@ -20,7 +20,7 @@ public class Grinding implements Listener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
-        assert block != null;
+        if (block == null) return;
         if (block.getType() != Material.GRINDSTONE) return;
 
         ItemStack item = player.getInventory().getItemInMainHand();
