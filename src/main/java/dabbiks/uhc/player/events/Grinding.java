@@ -6,30 +6,42 @@ import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import static dabbiks.uhc.Main.soundU;
 
 public class Grinding implements Listener {
 
     @EventHandler
     public void onGrind(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+        if (event.getHand() != EquipmentSlot.HAND) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
         Block block = event.getClickedBlock();
+        if (block == null || block.getType() != Material.GRINDSTONE) return;
 
-        if (block == null) return;
-        if (block.getType() != Material.GRINDSTONE) return;
+        ItemStack item = event.getItem();
+        if (item == null || item.getType() == Material.AIR) return;
 
-        ItemStack item = player.getInventory().getItemInMainHand();
         NBTItem nbtItem = new NBTItem(item);
 
         if (nbtItem.hasTag(ItemTags.IS_ENCHANTED.name())) {
+            event.setCancelled(true);
+
             ItemInstance instance = new ItemDeconstructor(item).deconstruct();
             instance.setEnchants(null);
-            player.getInventory().setItemInMainHand(new ItemBuilder(instance).build());
+
+            event.getPlayer().getInventory().setItemInMainHand(new ItemBuilder(instance).build());
+
+            soundU.playSoundAtLocation(block.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1, 1);
         }
     }
 

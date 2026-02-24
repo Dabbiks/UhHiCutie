@@ -12,12 +12,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Tag;
 
+import java.util.EnumSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Mining implements Listener {
 
     Random random = new Random();
+
+    private final Set<Material> ORES = EnumSet.of(
+            Material.COAL_ORE, Material.DEEPSLATE_COAL_ORE,
+            Material.IRON_ORE, Material.DEEPSLATE_IRON_ORE,
+            Material.COPPER_ORE, Material.DEEPSLATE_COPPER_ORE,
+            Material.GOLD_ORE, Material.DEEPSLATE_GOLD_ORE,
+            Material.REDSTONE_ORE, Material.DEEPSLATE_REDSTONE_ORE,
+            Material.EMERALD_ORE, Material.DEEPSLATE_EMERALD_ORE,
+            Material.LAPIS_ORE, Material.DEEPSLATE_LAPIS_ORE,
+            Material.DIAMOND_ORE, Material.DEEPSLATE_DIAMOND_ORE,
+            Material.NETHER_GOLD_ORE, Material.NETHER_QUARTZ_ORE,
+            Material.ANCIENT_DEBRIS
+    );
 
     @EventHandler
     public void onMine(BlockBreakEvent event) {
@@ -26,9 +42,9 @@ public class Mining implements Listener {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
         Block block = event.getBlock();
 
-        if (block.getType().toString().contains("_ORE")) {
-            player.setExp(player.getExp() + 5);
-        }
+        if (!ORES.contains(block.getType())) return;
+
+        player.giveExp(5);
 
         if (sessionData.hasTag(SessionTags.MINER)) {
             assert persistentData != null;
