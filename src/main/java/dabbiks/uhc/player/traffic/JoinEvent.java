@@ -7,6 +7,10 @@ import dabbiks.uhc.cosmetics.particletrail.TrailCycleManager;
 import dabbiks.uhc.cosmetics.particletrail.TrailData;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
+import dabbiks.uhc.game.gameplay.items.ItemBuilder;
+import dabbiks.uhc.game.gameplay.items.ItemInstance;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.recipes.remover.RecipeRemover;
 import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.player.PlayerState;
@@ -28,6 +32,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +61,7 @@ public class JoinEvent implements Listener {
         handleInitialData(player, data);
         setupPlayerUI(player);
         setupPlayerState(player);
+        setupPvpSword(player, data);
 
         player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5));
         player.setRotation(0, -5);
@@ -117,7 +123,22 @@ public class JoinEvent implements Listener {
         player.getInventory().setItem(1, LobbyItems.recipes);
         player.getInventory().setItem(7, LobbyItems.wiki);
         player.getInventory().setItem(8, LobbyItems.cosmetics);
+
         if (stateU.getGameState() == GameState.IN_GAME) player.getInventory().setItem(4, LobbyItems.spectator);
+    }
+
+    private void setupPvpSword(Player player, PersistentData persistentData) {
+        List<AttributeData> attrs = new ArrayList<>();
+        attrs.add(new AttributeData(AttributeType.ATTACK_DAMAGE, 3));
+        attrs.add(new AttributeData(AttributeType.ATTACK_SPEED, -2));
+        attrs.add(new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 25));
+
+        ItemInstance itemInstance = new ItemInstance();
+        itemInstance.setName(persistentData.getPvpSword().getName());
+        itemInstance.setMaterial(persistentData.getPvpSword().getMaterial().name());
+        itemInstance.setAttributes(attrs);
+
+        player.getInventory().setItem(4, new ItemBuilder(itemInstance).build());
     }
 
     private void sendDiscordInvite(Player player) {

@@ -21,7 +21,9 @@ public class TaskManager extends BukkitRunnable {
         executors.add(new TimeTask());
         executors.add(new ScoreboardTask());
         executors.add(new SegmentTask());
+
         executors.add(new LobbyTeleportTask());
+        executors.add(new PvpSwordTask());
 
         runTaskTimer(plugin, 0, 1);
     }

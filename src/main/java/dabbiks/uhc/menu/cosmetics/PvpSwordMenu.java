@@ -1,7 +1,11 @@
 package dabbiks.uhc.menu.cosmetics;
 
 import dabbiks.uhc.cosmetics.PvpSword;
+import dabbiks.uhc.game.gameplay.items.ItemBuilder;
+import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
+import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -126,6 +130,19 @@ public class PvpSwordMenu extends FastInv {
         persistentData.setPvpSword(pvpSword);
         player.sendMessage("§aWybrano miecz: " + pvpSword.getName());
         soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
+
+        List<AttributeData> attrs = new ArrayList<>();
+        attrs.add(new AttributeData(AttributeType.ATTACK_DAMAGE, 3));
+        attrs.add(new AttributeData(AttributeType.ATTACK_SPEED, -2));
+        attrs.add(new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 25));
+
+        ItemInstance itemInstance = new ItemInstance();
+        itemInstance.setName(persistentData.getPvpSword().getName());
+        itemInstance.setMaterial(persistentData.getPvpSword().getMaterial().name());
+        itemInstance.setAttributes(attrs);
+
+        player.getInventory().setItem(4, new ItemBuilder(itemInstance).build());
+
         render();
     }
 }
