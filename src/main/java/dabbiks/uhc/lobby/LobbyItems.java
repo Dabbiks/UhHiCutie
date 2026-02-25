@@ -57,21 +57,22 @@ public class LobbyItems implements Listener {
     public void onPlayerRightClickEvent(PlayerInteractEvent event) {
         if (event.getItem() == null) return;
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (!event.getPlayer().getLocation().getWorld().getName().equals("world")) return;
 
         ItemStack item = event.getItem();
         NBTItem nbtItem = new NBTItem(item);
         Player player = event.getPlayer();
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
-        if (nbtItem.hasTag("CHAMPIONS")) {
-            event.setCancelled(true);
-            new ChampionMenu(player, data).open(player);
-        }
-
         if (nbtItem.hasTag("RECIPE_BOOK")) {
             event.setCancelled(true);
             new RecipeMenu(player, INSTANCE.getRecipeManager()).open(player);
+        }
+
+        if (!event.getPlayer().getLocation().getWorld().getName().equals("world")) return;
+
+        if (nbtItem.hasTag("CHAMPIONS")) {
+            event.setCancelled(true);
+            new ChampionMenu(player, data).open(player);
         }
 
         if (nbtItem.hasTag("WIKI")) {

@@ -95,8 +95,8 @@ public class TeamUtils {
         for (Team team : teamManager.getScoreboard().getTeams()) {
             int x = random.nextInt(maxX * 2 + 1) - maxX;
             int z = random.nextInt(maxZ * 2 + 1) - maxZ;
-            int y = world.getHighestBlockYAt(x, z);
-            teamLocations.put(team, new Location(world, x + 0.5, y + 1, z + 0.5));
+            int y = 500;
+            teamLocations.put(team, new Location(world, x + 0.5, y, z + 0.5));
         }
 
         List<Player> playersToTeleport = new ArrayList<>();
