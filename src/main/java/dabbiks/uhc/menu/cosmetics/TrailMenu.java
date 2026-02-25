@@ -24,7 +24,7 @@ public class TrailMenu extends FastInv {
     private final PersistentData persistentData;
 
     public TrailMenu(Player player, PersistentData persistentData) {
-        super(36, "Smugi lotu");
+        super(54, "Smugi lotu");
         this.player = player;
         this.persistentData = persistentData;
 
