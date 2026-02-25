@@ -2,13 +2,10 @@ package dabbiks.uhc.game.gameplay.damage.handlers.enchants;
 
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTEntity;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
@@ -26,9 +23,6 @@ public class ProjectileEnchantHandler {
             }
             if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GLOWING.getName()))) {
                 glowing(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GLOWING.getName())), victim);
-            }
-            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.MAGIC_ARROW.getName()))) {
-                magic_arrow(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.MAGIC_ARROW.getName())), victim);
             }
             if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.PYROTECHNICS.getName()))) {
                 pyrotechnics(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.PYROTECHNICS.getName())), victim);
@@ -51,10 +45,6 @@ public class ProjectileEnchantHandler {
 
     private void glowing(int level, LivingEntity victim) {
         victim.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 40 * level, 0, false, true));
-    }
-
-    private void magic_arrow(int level, LivingEntity victim) {
-        victim.damage(level * 1.5);
     }
 
     private void pyrotechnics(int level, LivingEntity victim) {

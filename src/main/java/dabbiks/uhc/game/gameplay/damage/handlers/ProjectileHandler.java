@@ -3,13 +3,11 @@ package dabbiks.uhc.game.gameplay.damage.handlers;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTEntity;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
-import org.bukkit.inventory.ItemStack;
 
 public class ProjectileHandler {
 
@@ -24,7 +22,6 @@ public class ProjectileHandler {
         applyTag(nbt, arrow, AttributeType.RANGED_DAMAGE.name(), "double");
         applyTag(nbt, arrow, EnchantType.POWER.name(), "int");
         applyTag(nbt, arrow, EnchantType.GLOWING.name(), "int");
-        applyTag(nbt, arrow, EnchantType.MAGIC_ARROW.name(), "int");
         applyTag(nbt, arrow, EnchantType.PYROTECHNICS.name(), "int");
     }
 

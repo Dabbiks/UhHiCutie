@@ -5,6 +5,7 @@ import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionTags;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -12,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Tag;
 
 import java.util.EnumSet;
 import java.util.Random;
@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class Mining implements Listener {
 
-    Random random = new Random();
+    private final Random random = new Random();
 
     private final Set<Material> ORES = EnumSet.of(
             Material.COAL_ORE, Material.DEEPSLATE_COAL_ORE,
@@ -51,11 +51,34 @@ public class Mining implements Listener {
             int level = persistentData.getChampionLevel("miner");
             double chance = 0.02 * level;
 
-            if (random.nextDouble() > chance) return;
-            for (ItemStack item : block.getDrops()) {
-                block.getWorld().dropItemNaturally(block.getLocation(), item);
+            if (random.nextDouble() <= chance) {
+                for (ItemStack item : block.getDrops()) {
+                    block.getWorld().dropItemNaturally(block.getLocation(), item);
+                }
+            }
+        }
+
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (itemInHand.getType() == Material.AIR) return;
+
+        NBTItem nbtItem = new NBTItem(itemInHand);
+
+        if (nbtItem.hasTag("SMELTING")) {
+            event.setDropItems(false);
+            for (ItemStack drop : block.getDrops(itemInHand)) {
+                drop.setType(getSmeltedMaterial(drop.getType()));
+                block.getWorld().dropItemNaturally(block.getLocation(), drop);
             }
         }
     }
 
+    private Material getSmeltedMaterial(Material material) {
+        return switch (material) {
+            case RAW_IRON, IRON_ORE, DEEPSLATE_IRON_ORE -> Material.IRON_INGOT;
+            case RAW_GOLD, GOLD_ORE, DEEPSLATE_GOLD_ORE -> Material.GOLD_INGOT;
+            case RAW_COPPER, COPPER_ORE, DEEPSLATE_COPPER_ORE -> Material.COPPER_INGOT;
+            case ANCIENT_DEBRIS -> Material.NETHERITE_SCRAP;
+            default -> material;
+        };
+    }
 }
