@@ -53,8 +53,9 @@ public class SpawnProtector implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked().hasPermission("*")) { return; }
-        event.setCancelled(true);
-    }
+        if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("world")) {
+            event.setCancelled(true);
+        }    }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {

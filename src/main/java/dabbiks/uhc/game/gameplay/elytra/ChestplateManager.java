@@ -8,6 +8,7 @@ import java.util.UUID;
 public class ChestplateManager {
 
     private final Map<UUID, ItemStack> savedChestplates = new HashMap<>();
+    private final Map<UUID, ItemStack> savedElytras = new HashMap<>();
 
     public void saveChestplate(UUID uuid, ItemStack item) {
         savedChestplates.put(uuid, item);
@@ -19,5 +20,17 @@ public class ChestplateManager {
 
     public boolean hasSavedChestplate(UUID uuid) {
         return savedChestplates.containsKey(uuid);
+    }
+
+    public void saveElytra(UUID uuid, ItemStack item) {
+        savedElytras.put(uuid, item);
+    }
+
+    public ItemStack getElytra(UUID uuid) {
+        return savedElytras.get(uuid);
+    }
+
+    public boolean hasSavedElytra(UUID uuid) {
+        return savedElytras.containsKey(uuid);
     }
 }
