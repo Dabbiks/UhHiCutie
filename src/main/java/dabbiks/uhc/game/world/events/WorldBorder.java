@@ -4,12 +4,15 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerInitializeWorldBorder;
 import dabbiks.uhc.game.configs.SegmentConfig;
 import dabbiks.uhc.game.configs.WorldConfig;
+import dabbiks.uhc.utils.managers.BorderManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static dabbiks.uhc.Main.*;
@@ -28,35 +31,23 @@ public class WorldBorder {
 
     public void setBorderSize(double amountReduced, long millis) {
         if (isBorderGrowing) return;
+
+        double oldSize = borderSize;
         if (borderSize < 2) {
-            WrapperPlayServerInitializeWorldBorder packet = new WrapperPlayServerInitializeWorldBorder(
-                    0.5,
-                    0.5,
-                    borderSize,
-                    0.1,
-                    millis,
-                    2000,
-                    15,
-                    20
-            );
-            return;
+            borderSize = 0.1;
+        } else {
+            borderSize = borderSize - amountReduced;
         }
-        WrapperPlayServerInitializeWorldBorder packet = new WrapperPlayServerInitializeWorldBorder(
-                0.5,
-                0.5,
-                borderSize,
-                borderSize-amountReduced,
-                millis,
-                2000,
-                15,
-                20
-        );
-        borderSize = borderSize - amountReduced;
+
+        List<Player> targetPlayers = new ArrayList<>();
         for (Player player : playerListU.getAllPlayers()) {
             if (player.getWorld().getName().equals(WorldConfig.worldName)) {
-                PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet);
+                targetPlayers.add(player);
             }
         }
+
+        BorderManager.animateWorldBorderSize(targetPlayers, oldSize, borderSize, millis);
+
         for (Player player : playerListU.getPlayingPlayers()) {
             int x = player.getLocation().getBlockX();
             int z = player.getLocation().getBlockZ();
