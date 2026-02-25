@@ -1,7 +1,6 @@
 package dabbiks.uhc.menu.cosmetics;
 
-import dabbiks.uhc.cosmetics.particletrail.TrailData;
-import dabbiks.uhc.cosmetics.particletrail.TrailDataLoader;
+import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
@@ -23,13 +22,11 @@ public class TrailMenu extends FastInv {
 
     private final Player player;
     private final PersistentData persistentData;
-    private final List<TrailData> trails;
 
     public TrailMenu(Player player, PersistentData persistentData) {
         super(36, "Smugi lotu");
         this.player = player;
         this.persistentData = persistentData;
-        this.trails = new TrailDataLoader().loadAllTrails();
 
         render();
     }
@@ -41,7 +38,7 @@ public class TrailMenu extends FastInv {
         };
 
         int index = 0;
-        for (TrailData trail : trails) {
+        for (ParticleTrail trail : ParticleTrail.values()) {
             if (index >= slots.length) break;
 
             int slot = slots[index++];
@@ -60,19 +57,19 @@ public class TrailMenu extends FastInv {
         }
     }
 
-    private ItemStack createIcon(TrailData trail) {
+    private ItemStack createIcon(ParticleTrail trail) {
         ItemStack item = new ItemStack(trail.getMaterial());
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName(trail.getTier().getIcon() + "§f" + trail.getName());
+            meta.setDisplayName(trail.getTier().getIcon() + "§f" + trail.getDisplayName());
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             List<String> lore = new ArrayList<>();
 
             boolean unlocked = persistentData.hasTrail(trail);
-            boolean selected = trail.getId().equals(persistentData.getTrail());
+            boolean selected = trail.name().equals(persistentData.getTrail());
 
             if (selected) {
                 lore.add(symbolU.MOUSE_LEFT + "§a Wybrana smuga");
@@ -101,7 +98,7 @@ public class TrailMenu extends FastInv {
         return nbtItem.getItem();
     }
 
-    private void handleBuy(TrailData trail, boolean useCoins) {
+    private void handleBuy(ParticleTrail trail, boolean useCoins) {
         int cost = useCoins ? trail.getCoinsCost() : trail.getPowderCost();
         PersistentStats currency = useCoins ? PersistentStats.COINS : PersistentStats.POWDER;
         int playerCurrency = persistentData.getStats().getOrDefault(currency, 0);
@@ -114,16 +111,16 @@ public class TrailMenu extends FastInv {
         persistentData.removeStats(currency, cost);
         persistentData.unlockTrail(trail);
         PersistentDataManager.saveData(player.getUniqueId());
-        PurchaseMessage.send(player, "§7smugę §c" + trail.getName().toUpperCase(), cost, useCoins);
+        PurchaseMessage.send(player, "§7smugę §c" + trail.getDisplayName().toUpperCase(), cost, useCoins);
         soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.BLOCK_NOTE_BLOCK_BIT, 0.3f, 2);
-        player.sendMessage("§aZakupiono smugę " + trail.getName() + "!");
+        player.sendMessage("§aZakupiono smugę " + trail.getDisplayName() + "!");
 
         render();
     }
 
-    private void handleSelect(TrailData trail) {
+    private void handleSelect(ParticleTrail trail) {
         persistentData.setTrail(trail);
-        player.sendMessage("§aWybrano smugę: " + trail.getName());
+        player.sendMessage("§aWybrano smugę: " + trail.getDisplayName());
         soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
         render();
     }

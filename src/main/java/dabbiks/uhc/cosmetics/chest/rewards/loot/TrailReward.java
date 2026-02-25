@@ -1,8 +1,7 @@
 package dabbiks.uhc.cosmetics.chest.rewards.loot;
 
 import dabbiks.uhc.cosmetics.CosmeticTier;
-import dabbiks.uhc.cosmetics.particletrail.TrailData;
-import dabbiks.uhc.cosmetics.particletrail.TrailDataLoader;
+import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.chest.rewards.Reward;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,14 +20,13 @@ import static dabbiks.uhc.Main.*;
 
 public class TrailReward extends Reward {
 
-    private final TrailData trail;
+    private final ParticleTrail trail;
     private final CosmeticTier tier;
 
     public TrailReward(CosmeticTier tier) {
         this.tier = tier;
-
-        List<TrailData> availableTrails = new TrailDataLoader().loadAllTrails().stream()
-                .filter(t -> t.getTier() == tier)
+        List<ParticleTrail> availableTrails = Arrays.stream(ParticleTrail.values())
+                .filter(s -> s.getTier() == tier)
                 .toList();
 
         if (availableTrails.isEmpty()) {
@@ -52,11 +51,13 @@ public class TrailReward extends Reward {
     @Override
     public void addReward(PersistentData persistentData) {
         if (persistentData.hasTrail(trail)) {
-            persistentData.addStats(PersistentStats.POWDER, trail.getPowderCost() / 4);
+            int compensation = trail.getPowderCost() / 4;
+            persistentData.addStats(PersistentStats.POWDER, compensation);
 
             Player player = Bukkit.getPlayer(persistentData.getName());
-            if (player == null) return;
-            player.sendMessage("§7Otrzymujesz §f" + trail.getPowderCost() / 4 + symbolU.SCOREBOARD_POWDER + "§7 za §e" + trail.getName());
+            if (player != null) {
+                player.sendMessage("§7Otrzymujesz §f" + compensation + symbolU.SCOREBOARD_POWDER + "§7 za §e" + trail.getDisplayName());
+            }
         } else {
             persistentData.unlockTrail(trail);
         }
@@ -64,7 +65,7 @@ public class TrailReward extends Reward {
 
     @Override
     public String getName() {
-        return trail.getName();
+        return trail.getDisplayName();
     }
 
     @Override

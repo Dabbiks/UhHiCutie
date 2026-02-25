@@ -1,8 +1,6 @@
 package dabbiks.uhc;
 
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
-import dabbiks.uhc.cosmetics.particletrail.TrailCycleManager;
-import dabbiks.uhc.cosmetics.particletrail.TrailDataLoader;
 import dabbiks.uhc.game.gameplay.damage.MeleeHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileLaunch;

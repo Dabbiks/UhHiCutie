@@ -1,10 +1,8 @@
 package dabbiks.uhc.player.traffic;
 
-import dabbiks.uhc.cosmetics.CosmeticTier;
 import dabbiks.uhc.cosmetics.KillSound;
+import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
-import dabbiks.uhc.cosmetics.particletrail.TrailCycleManager;
-import dabbiks.uhc.cosmetics.particletrail.TrailData;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
@@ -45,7 +43,6 @@ public class JoinEvent implements Listener {
     public static Map<Player, FastBoard> boards = new HashMap<>();
     List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
     private final PrefixManager prefixManager = INSTANCE.getPrefixManager();
-    private final TrailCycleManager trailCycleManager = INSTANCE.getTrailManager();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -86,8 +83,8 @@ public class JoinEvent implements Listener {
         }
 
         if (data.getTrail() == null) {
-            data.unlockTrail(trailCycleManager.getTrailData("default"));
-            data.setTrail(trailCycleManager.getTrailData("default"));
+            data.unlockTrail(ParticleTrail.DEFAULT);
+            data.setTrail(ParticleTrail.DEFAULT);
         }
 
         RankManager.processPlacements(player);

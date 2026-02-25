@@ -3,8 +3,8 @@ package dabbiks.uhc.player.data.persistent;
 import com.google.gson.annotations.Expose;
 import dabbiks.uhc.Main;
 import dabbiks.uhc.cosmetics.KillSound;
+import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
-import dabbiks.uhc.cosmetics.particletrail.TrailData;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.player.rank.RankType;
 
@@ -193,14 +193,10 @@ public class PersistentData {
     public void unlockPvpSword(PvpSword pvpSword) { unlockedPvpSwords.add(pvpSword.name()); }
     public boolean hasPvpSword(PvpSword pvpSword) { return unlockedPvpSwords.contains(pvpSword.name()); }
 
-    public TrailData getTrail() {
-        if (trail == null) return null;
-        return Main.INSTANCE.getTrailManager().getTrailData(trail);
-    }
-    public void setTrail(TrailData trail) { this.trail = trail.getId(); }
-
-    public void unlockTrail(TrailData trail) { unlockedKillSounds.add(trail.getId()); }
-    public boolean hasTrail(TrailData trail) { return unlockedKillSounds.contains(trail.getId()); }
+    public ParticleTrail getTrail() { try { return trail == null ? null : ParticleTrail.valueOf(trail); } catch (Exception e) { return null; } }
+    public void setTrail(ParticleTrail trail) { this.trail = trail == null ? null : trail.name(); }
+    public void unlockTrail(ParticleTrail trail) { if (trail != null && !unlockedTrails.contains(trail.name())) unlockedTrails.add(trail.name()); }
+    public boolean hasTrail(ParticleTrail trail) { return trail == null || unlockedTrails.contains(trail.name()); }
 
     // ? CHESTS
 

@@ -36,7 +36,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getPlayer().hasPermission("*")) {return;}
+        if (event.getPlayer().hasPermission("*")) { return; }
         if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
             event.setCancelled(true);
         }
@@ -44,7 +44,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getPlayer().hasPermission("*")) {return;}
+        if (event.getPlayer().hasPermission("*")) { return; }
         if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
             event.setCancelled(true);
         }
@@ -52,7 +52,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getPlayer().hasPermission("*")) {return;}
+        if (event.getPlayer().hasPermission("*")) { return; }
         if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
             event.setCancelled(true);
         }
@@ -67,7 +67,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getWhoClicked().hasPermission("*")) {return;}
+        if (event.getWhoClicked().hasPermission("*")) { return; }
         if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("world")) {
             event.setCancelled(true);
         }
@@ -75,7 +75,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (event.getPlayer().hasPermission("*")) {return;}
+        if (event.getPlayer().hasPermission("*")) { return; }
         if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
             event.setCancelled(true);
         }
@@ -83,7 +83,7 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-        if (event.getPlayer().hasPermission("*")) {return;}
+        if (event.getPlayer().hasPermission("*")) { return; }
         if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
             event.setCancelled(true);
         }
