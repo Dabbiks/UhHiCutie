@@ -69,7 +69,7 @@ public class AttributeManager {
      * Pobiera aktualną całkowitą wartość atrybutu (wartość bazowa + wszystkie modyfikatory).
      * @return Wartość atrybutu lub 0.0, jeśli atrybut nie występuje u tego bytu.
      */
-    public double getAttributeValue(LivingEntity entity, AttributeType type) {
+    public double getAttributeValue(LivingEntity entity, AttributeType type, double baseValue) {
         if (type.getAttribute() != null) {
             AttributeInstance instance = entity.getAttribute(type.getAttribute());
             return instance != null ? instance.getValue() : 0.0;
@@ -121,6 +121,10 @@ public class AttributeManager {
             } else {
                 flatValue += value;
             }
+        }
+
+        if (flatValue == 0.0 && percentValue > 0.0) {
+            return baseValue * percentValue;
         }
 
         return flatValue * (1.0 + percentValue);

@@ -1,9 +1,13 @@
 package dabbiks.uhc.game.gameplay.elytra;
 
+import dabbiks.uhc.Main;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
+import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,9 @@ public class ElytraListener implements Listener {
         Player player = event.getPlayer();
         if (player.hasCooldown(Material.FIREWORK_ROCKET)) return;
 
+        NBTItem nbtItem = new NBTItem(item);
+        if (!nbtItem.hasTag(ItemTags.PERSONAL.name())) return;
+
         ItemStack elytra = manager.hasSavedElytra(player.getUniqueId())
                 ? manager.getElytra(player.getUniqueId())
                 : createCustomElytra();
@@ -54,14 +62,18 @@ public class ElytraListener implements Listener {
         event.setCancelled(true);
         player.setCooldown(Material.FIREWORK_ROCKET, COOLDOWN_TICKS);
 
-        ItemStack currentChest = player.getInventory().getChestplate();
-        if (currentChest != null && currentChest.getType() != Material.ELYTRA) {
-            manager.saveChestplate(player.getUniqueId(), currentChest.clone());
-        }
+        player.setVelocity(new Vector(0, 0.5, 0));
 
-        player.getInventory().setChestplate(elytra);
-        player.setGliding(true);
-        player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
+        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+            ItemStack currentChest = player.getInventory().getChestplate();
+            if (currentChest != null && currentChest.getType() != Material.ELYTRA) {
+                manager.saveChestplate(player.getUniqueId(), currentChest.clone());
+            }
+
+            player.getInventory().setChestplate(elytra);
+            player.setGliding(true);
+            player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
+        }, 1L);
     }
 
     @EventHandler

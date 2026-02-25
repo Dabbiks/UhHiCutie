@@ -1,8 +1,13 @@
 package dabbiks.uhc.lobby;
 
 import dabbiks.uhc.game.GameState;
+import dabbiks.uhc.game.gameplay.damage.handlers.CriticalHitHandler;
+import dabbiks.uhc.game.gameplay.damage.handlers.ParryingHandler;
+import dabbiks.uhc.game.teams.TeamUtils;
+import dabbiks.uhc.tasks.tasks.PvpSwordTask;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
@@ -25,6 +30,9 @@ import java.util.Random;
 import static dabbiks.uhc.Main.*;
 
 public class SpawnProtector implements Listener {
+
+    CriticalHitHandler criticalHitHandler = new CriticalHitHandler();
+    ParryingHandler parryingHandler = new ParryingHandler();
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
@@ -83,10 +91,36 @@ public class SpawnProtector implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event instanceof EntityDamageByEntityEvent) return;
-        if (event.getEntity().getWorld().equals(Bukkit.getWorld("world"))) {
+        if (!event.getEntity().getWorld().equals(Bukkit.getWorld("world"))) return;
+        if (!(event instanceof EntityDamageByEntityEvent entityEvent)) return;
+        if (!(entityEvent.getDamager() instanceof Player damager)) return;
+        if (!(entityEvent.getEntity() instanceof Player victim)) return;
+        if (!PvpSwordTask.canFight(damager)) return;
+        if (!PvpSwordTask.canFight(victim)) return;
+        if (damager.getInventory().getHeldItemSlot() != 4) return;
+
+        final double baseDamage = event.getDamage();
+        double damage = baseDamage;
+
+        if (parryingHandler.handle(victim, entityEvent)) return;
+        damage += criticalHitHandler.handle(damager, baseDamage, entityEvent.isCritical());
+
+        double totalDamage = damage;
+
+        if (totalDamage >= victim.getHealth()) {
             event.setCancelled(true);
+            victim.setGameMode(GameMode.SPECTATOR);
+            victim.teleport(new Location(victim.getWorld(),0.5f, 100, 0.5f));
+            playerU.addHealth(victim, 100);
+            playerU.addHealth(damager, 100);
+            return;
         }
+
+        entityEvent.setDamage(damage);
+        if (entityEvent.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) entityEvent.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
+        if (entityEvent.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) entityEvent.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+
+        indicatorManager.spawnDamageIndicator(victim, totalDamage, entityEvent.isCritical());
     }
 
     @EventHandler

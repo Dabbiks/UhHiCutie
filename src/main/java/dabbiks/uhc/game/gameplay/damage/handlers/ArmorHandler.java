@@ -24,7 +24,7 @@ public class ArmorHandler {
 
 
         if (damager != null) {
-            armor -= (int) attributeManager.getAttributeValue(damager, AttributeType.ARMOR_PENETRATION);
+            armor -= (int) attributeManager.getAttributeValue(damager, AttributeType.ARMOR_PENETRATION, 1);
 
             ItemStack item = damager.getInventory().getItemInMainHand();
             if (item.isEmpty() || item.getType() == Material.AIR) {
@@ -41,7 +41,7 @@ public class ArmorHandler {
     }
 
     private int handlePlayer(Player victim) {
-        return (int) attributeManager.getAttributeValue(victim, AttributeType.ARMOR);
+        return (int) attributeManager.getAttributeValue(victim, AttributeType.ARMOR, 1);
     }
 
     private int handleMob(LivingEntity victim) {

@@ -4,6 +4,7 @@ import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.champions.ChampionManager;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
+import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.world.events.WeatherCycle;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.lobby.LobbyItems;
@@ -12,6 +13,7 @@ import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.rank.RankManager;
 import dabbiks.uhc.player.tab.TabUtils;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -38,6 +40,10 @@ public class StartManager {
         itemInstance.setName(symbolU.MOUSE_RIGHT + " §fAktywuj elytrę");
         itemInstance.setAmount(1);
         firework = new ItemBuilder(itemInstance).build();
+
+        NBTItem nbtItem = new NBTItem(firework);
+        nbtItem.setInteger(ItemTags.PERSONAL.name(), 1);
+        firework = nbtItem.getItem();
     }
 
     private void prepareWorldBorder() {

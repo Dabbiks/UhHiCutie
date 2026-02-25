@@ -1,5 +1,6 @@
 package dabbiks.uhc.game.gameplay.damage;
 
+import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.game.gameplay.damage.handlers.*;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.MeleeEnchantHandler;
@@ -38,6 +39,7 @@ public class MeleeHit implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
+        if (!event.getEntity().getWorld().getName().equals(WorldConfig.worldName)) return;
         if (!(event instanceof EntityDamageByEntityEvent) && event.getEntity() instanceof Player) {
             processEnvironmentDamage(event);
             return;

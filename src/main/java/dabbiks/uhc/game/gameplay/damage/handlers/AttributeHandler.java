@@ -19,13 +19,13 @@ public class AttributeHandler {
 
     private double handleElectricDamage(Player damager, LivingEntity victim, double damage) {
         if (Objects.equals(WeatherCycle.getWeatherIcon(), symbolU.WEATHER_SUNNY)) return 0;
-        double electricDamage = attributeManager.getAttributeValue(damager, AttributeType.ELECTRIC_DAMAGE);
+        double electricDamage = attributeManager.getAttributeValue(damager, AttributeType.ELECTRIC_DAMAGE, damage);
         if (victim.getLocation().getBlockY() < victim.getWorld().getHighestBlockYAt(victim.getLocation().getBlockX(), victim.getLocation().getBlockZ())) return 0;
         return electricDamage;
     }
 
     private void handleLifeSteal(Player damager, LivingEntity victim, double damage) {
-        double lifeSteal = attributeManager.getAttributeValue(damager, AttributeType.LIFE_STEAL);
+        double lifeSteal = attributeManager.getAttributeValue(damager, AttributeType.LIFE_STEAL, damage);
         if (lifeSteal == 0) return;
         if (victim instanceof Player) {
             playerU.addHealth(damager, lifeSteal);
