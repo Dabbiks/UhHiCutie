@@ -55,7 +55,7 @@ public class LobbyItems implements Listener {
 
     @EventHandler
     public void onPlayerRightClickEvent(PlayerInteractEvent event) {
-        if (event.getItem() == null) return;
+        if (event.getItem() == null || event.getItem().getType() == Material.AIR) return;
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         ItemStack item = event.getItem();

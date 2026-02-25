@@ -9,7 +9,7 @@ import dabbiks.uhc.game.gameplay.items.data.fireworks.ExplosionData;
 import dabbiks.uhc.game.gameplay.items.data.fireworks.FireworkData;
 import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import dabbiks.uhc.game.gameplay.items.data.potions.PotionData;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -111,8 +111,10 @@ public class ItemBuilder {
                     value = value / 100.0;
                 }
 
+                UUID stableUUID = UUID.nameUUIDFromBytes(attributeData.getAttributeType().getName().getBytes());
+
                 AttributeModifier modifier = new AttributeModifier(
-                        UUID.randomUUID(),
+                        stableUUID,
                         attributeData.getAttributeType().getName(),
                         value,
                         operation,
@@ -177,49 +179,47 @@ public class ItemBuilder {
         meta.setLore(lore);
         item.setItemMeta(meta);
 
-        NBTItem nbtItem = new NBTItem(item);
-
-        if (instance.getEnchants() != null) {
-            for (EnchantData enchantData : instance.getEnchants()) {
-                nbtItem.setInteger(enchantData.getType().name(), enchantData.getLevel());
+        NBT.modify(item, nbtItem -> {
+            if (instance.getEnchants() != null) {
+                for (EnchantData enchantData : instance.getEnchants()) {
+                    nbtItem.setInteger(enchantData.getType().name(), enchantData.getLevel());
+                }
             }
-        }
 
-        if (instance.getAttributes() != null) {
-            for (AttributeData attributeData : instance.getAttributes()) {
-                nbtItem.setDouble(attributeData.getAttributeType().name(), attributeData.getAttributeValue());
+            if (instance.getAttributes() != null) {
+                for (AttributeData attributeData : instance.getAttributes()) {
+                    nbtItem.setDouble(attributeData.getAttributeType().name(), attributeData.getAttributeValue());
+                }
             }
-        }
 
-        if (instance.getEquipmentSlot() != null) {
-            nbtItem.setString("SLOT", instance.getEquipmentSlot().name());
-        }
-
-        if (instance.getPerks() != null && !instance.getPerks().isEmpty()) {
-            for (PerkType perkType : instance.getPerks()) {
-                nbtItem.setInteger(perkType.name(), 1);
+            if (instance.getEquipmentSlot() != null) {
+                nbtItem.setString("SLOT", instance.getEquipmentSlot().name());
             }
-        }
 
-        if (instance.canBeForged()) {
-            nbtItem.setInteger(ItemTags.CAN_BE_FORGED.name(), 1);
-        }
+            if (instance.getPerks() != null && !instance.getPerks().isEmpty()) {
+                for (PerkType perkType : instance.getPerks()) {
+                    nbtItem.setInteger(perkType.name(), 1);
+                }
+            }
 
-        if (instance.canBeEnchanted()) {
-            nbtItem.setInteger(ItemTags.CAN_BE_ENCHANTED.name(), 1);
-        }
+            if (instance.canBeForged()) {
+                nbtItem.setInteger(ItemTags.CAN_BE_FORGED.name(), 1);
+            }
 
-        if (instance.isEnchanted()) {
-            nbtItem.setBoolean(ItemTags.IS_ENCHANTED.name(), true);
-        }
+            if (instance.canBeEnchanted()) {
+                nbtItem.setInteger(ItemTags.CAN_BE_ENCHANTED.name(), 1);
+            }
 
-        if (instance.getEnchantSlot() != null) {
-            nbtItem.setInteger(instance.getEnchantSlot().name(), 1);
-        }
+            if (instance.isEnchanted()) {
+                nbtItem.setBoolean(ItemTags.IS_ENCHANTED.name(), true);
+            }
 
-        nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
+            if (instance.getEnchantSlot() != null) {
+                nbtItem.setInteger(instance.getEnchantSlot().name(), 1);
+            }
 
-        item = nbtItem.getItem();
+            nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
+        });
 
         if (instance.canParry()) {
             itemU.addParryingComponent(item);

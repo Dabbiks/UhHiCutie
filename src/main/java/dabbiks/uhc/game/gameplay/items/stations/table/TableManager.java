@@ -7,7 +7,8 @@ import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantCalculator;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -25,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static dabbiks.uhc.Main.soundU;
 
@@ -77,8 +79,9 @@ public class TableManager implements Listener {
         }
 
         if (item.isEmpty() || item.getType().equals(Material.AIR)) return;
-        NBTItem nbtItem = new NBTItem(item);
-        if (nbtItem.getInteger(ItemTags.CAN_BE_ENCHANTED.name()) == null) {
+
+        Integer canBeEnchanted = NBT.get(item, (Function<ReadableItemNBT, Integer>) nbt -> nbt.getInteger(ItemTags.CAN_BE_ENCHANTED.name()));
+        if (canBeEnchanted == null || canBeEnchanted == 0) {
             player.sendMessage("§cTego przedmiotu nie da się zakląć");
             return;
         }

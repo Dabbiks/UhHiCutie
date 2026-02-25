@@ -69,6 +69,7 @@ public class RecipeListener implements Listener {
 
         if (!validateIngredients(event.getInventory().getMatrix(), recipe)) {
             event.setCancelled(true);
+            player.updateInventory();
             return;
         }
 
@@ -81,6 +82,7 @@ public class RecipeListener implements Listener {
         if (remainingLimit <= 0) {
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED + "Limit wyczerpany!");
+            player.updateInventory();
             return;
         }
 
@@ -116,6 +118,7 @@ public class RecipeListener implements Listener {
 
         event.getInventory().setResult(null);
         player.sendMessage(ChatColor.YELLOW + "Wytworzono ostatnie możliwe sztuki (Limit).");
+        player.updateInventory();
     }
 
     private boolean validateIngredients(ItemStack[] matrix, RecipeInstance recipe) {

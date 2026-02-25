@@ -5,7 +5,8 @@ import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionTags;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.EnumSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 public class Mining implements Listener {
 
@@ -61,9 +63,9 @@ public class Mining implements Listener {
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         if (itemInHand.getType() == Material.AIR) return;
 
-        NBTItem nbtItem = new NBTItem(itemInHand);
+        Boolean hasSmelting = NBT.get(itemInHand, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag("SMELTING"));
 
-        if (nbtItem.hasTag("SMELTING")) {
+        if (Boolean.TRUE.equals(hasSmelting)) {
             event.setDropItems(false);
             for (ItemStack drop : block.getDrops(itemInHand)) {
                 drop.setType(getSmeltedMaterial(drop.getType()));

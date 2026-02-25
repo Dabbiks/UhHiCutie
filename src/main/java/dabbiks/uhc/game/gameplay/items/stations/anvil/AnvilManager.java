@@ -7,7 +7,6 @@ import dabbiks.uhc.game.gameplay.items.ItemMerger;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionTags;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

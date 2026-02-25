@@ -4,7 +4,8 @@ import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemDeconstructor;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -15,6 +16,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.function.Function;
 
 import static dabbiks.uhc.Main.soundU;
 
@@ -31,9 +34,9 @@ public class Grinding implements Listener {
         ItemStack item = event.getItem();
         if (item == null || item.getType() == Material.AIR) return;
 
-        NBTItem nbtItem = new NBTItem(item);
+        Boolean isEnchanted = NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag(ItemTags.IS_ENCHANTED.name()));
 
-        if (nbtItem.hasTag(ItemTags.IS_ENCHANTED.name())) {
+        if (Boolean.TRUE.equals(isEnchanted)) {
             event.setCancelled(true);
 
             ItemInstance instance = new ItemDeconstructor(item).deconstruct();

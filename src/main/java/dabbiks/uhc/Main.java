@@ -63,7 +63,6 @@ public final class Main extends JavaPlugin {
     private WorldBorder worldBorder;
     private TeamManager teamManager;
     private PrefixManager prefixManager;
-    private TrailCycleManager trailManager;
     private ChestplateManager chestplateManager;
 
     @Override
@@ -89,7 +88,6 @@ public final class Main extends JavaPlugin {
         indicatorManager = new IndicatorManager();
         teamManager = new TeamManager();
         prefixManager = new PrefixManager();
-        trailManager = new TrailCycleManager();
         chestplateManager = new ChestplateManager();
 
         persistentDataJson = new PersistentDataJson();
@@ -126,8 +124,6 @@ public final class Main extends JavaPlugin {
         teamManager.deleteTeams();
         new TeamInitializer();
 
-        trailManager.setTrails(new TrailDataLoader().loadAllTrails());
-
         new TaskManager().run();
         Bukkit.getScheduler().runTaskLater(this, WorldGen::createWorld, 10L);
     }
@@ -143,5 +139,4 @@ public final class Main extends JavaPlugin {
     public RecipeManager getRecipeManager() { return recipeManager; }
     public TeamManager getTeamManager() { return teamManager; }
     public PrefixManager getPrefixManager() { return prefixManager; }
-    public TrailCycleManager getTrailManager() { return trailManager; }
 }

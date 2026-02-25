@@ -7,7 +7,7 @@ import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Equippable;
 import org.bukkit.Material;
@@ -69,60 +69,61 @@ public class ItemDeconstructor {
             }
         }
 
-        NBTItem nbtItem = new NBTItem(itemStack);
-
-        List<EnchantData> enchants = new ArrayList<>();
-        for (EnchantType type : EnchantType.values()) {
-            if (nbtItem.hasKey(type.name())) {
-                enchants.add(new EnchantData(type, nbtItem.getInteger(type.name())));
+        NBT.get(itemStack, nbtItem -> {
+            List<EnchantData> enchants = new ArrayList<>();
+            for (EnchantType type : EnchantType.values()) {
+                if (nbtItem.hasTag(type.name())) {
+                    enchants.add(new EnchantData(type, nbtItem.getInteger(type.name())));
+                }
             }
-        }
-        if (!enchants.isEmpty()) {
-            instance.setEnchants(enchants);
-        }
-
-        List<AttributeData> attributes = new ArrayList<>();
-        for (AttributeType type : AttributeType.values()) {
-            if (nbtItem.hasKey(type.name())) {
-                double value = nbtItem.getDouble(type.name());
-                attributes.add(new AttributeData(type, value));
+            if (!enchants.isEmpty()) {
+                instance.setEnchants(enchants);
             }
-        }
-        if (!attributes.isEmpty()) {
-            instance.setAttributes(attributes);
-        }
 
-        List<PerkType> perks = new ArrayList<>();
-        for (PerkType type : PerkType.values()) {
-            if (nbtItem.hasKey(type.name())) {
-                perks.add(type);
+            List<AttributeData> attributes = new ArrayList<>();
+            for (AttributeType type : AttributeType.values()) {
+                if (nbtItem.hasTag(type.name())) {
+                    double value = nbtItem.getDouble(type.name());
+                    attributes.add(new AttributeData(type, value));
+                }
             }
-        }
-        if (!perks.isEmpty()) {
-            instance.setPerks(perks);
-        }
+            if (!attributes.isEmpty()) {
+                instance.setAttributes(attributes);
+            }
 
-        if (nbtItem.hasKey(ItemTags.CAN_BE_FORGED.name())) {
-            instance.setCanBeForged(true);
-        }
+            List<PerkType> perks = new ArrayList<>();
+            for (PerkType type : PerkType.values()) {
+                if (nbtItem.hasTag(type.name())) {
+                    perks.add(type);
+                }
+            }
+            if (!perks.isEmpty()) {
+                instance.setPerks(perks);
+            }
 
-        if (nbtItem.hasKey(ItemTags.CAN_BE_ENCHANTED.name())) {
-            instance.setCanBeEnchanted(true);
-        }
+            if (nbtItem.hasTag(ItemTags.CAN_BE_FORGED.name())) {
+                instance.setCanBeForged(true);
+            }
 
-        if (nbtItem.hasTag(ItemTags.IS_ENCHANTED.name())) {
-            instance.setIsEnchanted(true);
-        }
+            if (nbtItem.hasTag(ItemTags.CAN_BE_ENCHANTED.name())) {
+                instance.setCanBeEnchanted(true);
+            }
 
-        if (nbtItem.hasKey("SLOT")) {
-            instance.setEquipmentSlot(EquipmentSlot.valueOf(nbtItem.getString("SLOT")));
-        }
+            if (nbtItem.hasTag(ItemTags.IS_ENCHANTED.name())) {
+                instance.setIsEnchanted(true);
+            }
 
-        for (EnchantSlot enchantSlot : EnchantSlot.values()) {
-            if (nbtItem.getInteger(enchantSlot.name()) != 1) continue;
-            instance.setEnchantSlot(enchantSlot);
-            break;
-        }
+            if (nbtItem.hasTag("SLOT")) {
+                instance.setEquipmentSlot(EquipmentSlot.valueOf(nbtItem.getString("SLOT")));
+            }
+
+            for (EnchantSlot enchantSlot : EnchantSlot.values()) {
+                if (nbtItem.hasTag(enchantSlot.name()) && nbtItem.getInteger(enchantSlot.name()) == 1) {
+                    instance.setEnchantSlot(enchantSlot);
+                    break;
+                }
+            }
+        });
 
         return instance;
     }

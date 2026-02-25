@@ -13,7 +13,7 @@ import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.rank.RankManager;
 import dabbiks.uhc.player.tab.TabUtils;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -41,9 +41,9 @@ public class StartManager {
         itemInstance.setAmount(1);
         firework = new ItemBuilder(itemInstance).build();
 
-        NBTItem nbtItem = new NBTItem(firework);
-        nbtItem.setInteger(ItemTags.PERSONAL.name(), 1);
-        firework = nbtItem.getItem();
+        NBT.modify(firework, nbt -> {
+            nbt.setInteger(ItemTags.PERSONAL.name(), 1);
+        });
     }
 
     private void prepareWorldBorder() {

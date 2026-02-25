@@ -6,12 +6,14 @@ import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantCalculator;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class ItemConverter {
 
@@ -20,8 +22,8 @@ public class ItemConverter {
     public ItemStack convert(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return item;
 
-        NBTItem nbtItem = new NBTItem(item);
-        if (nbtItem.hasKey(ItemTags.UHC_ITEM.name())) return item;
+        Boolean isUhcItem = NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag(ItemTags.UHC_ITEM.name()));
+        if (Boolean.TRUE.equals(isUhcItem)) return item;
 
         String recipeId = item.getType().name().toLowerCase();
         Optional<RecipeInstance> optional = RecipeManager.getRecipeById(recipeId);

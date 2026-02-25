@@ -129,7 +129,6 @@ public class TeamUtils {
                     return;
                 }
                 Player player = players.get(index);
-                playerU.cleanseState(player);
                 player.teleport(locs.get(index));
                 index++;
             }

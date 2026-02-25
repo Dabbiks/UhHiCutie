@@ -6,7 +6,8 @@ import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,6 +28,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class ElytraListener implements Listener {
 
@@ -48,8 +50,8 @@ public class ElytraListener implements Listener {
         Player player = event.getPlayer();
         if (player.hasCooldown(Material.FIREWORK_ROCKET)) return;
 
-        NBTItem nbtItem = new NBTItem(item);
-        if (!nbtItem.hasTag(ItemTags.PERSONAL.name())) return;
+        Boolean isPersonal = NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag(ItemTags.PERSONAL.name()));
+        if (!Boolean.TRUE.equals(isPersonal)) return;
 
         ItemStack elytra = manager.hasSavedElytra(player.getUniqueId())
                 ? manager.getElytra(player.getUniqueId())

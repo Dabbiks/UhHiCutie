@@ -8,7 +8,7 @@ import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -109,10 +109,11 @@ public class ChestMenu extends FastInv {
             item.setItemMeta(meta);
         }
 
-        NBTItem nbtItem = new NBTItem(item);
-        nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
+        NBT.modify(item, nbt -> {
+            nbt.setInteger(ItemTags.UHC_ITEM.name(), 1);
+        });
 
-        return nbtItem.getItem();
+        return item;
     }
 
     private void handleChestBuy(ChestType chestType) {
