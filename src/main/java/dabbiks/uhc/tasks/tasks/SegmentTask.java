@@ -19,13 +19,13 @@ public class SegmentTask extends Task {
 
     protected void tick() {
         if (stateU.getGameState() != GameState.IN_GAME) return;
-        if ((int) timeU.getTime() == (SegmentConfig.eachSegmentTime * SegmentConfig.actualSegment) - 2) {
+        if ((int) timeU.getTime() == (SegmentConfig.eachSegmentTime * SegmentConfig.actualSegment) - 1) {
             soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.BLOCK_LEVER_CLICK, 0.1f, 1.3f);
         }
-        if ((int) timeU.getTime() == (SegmentConfig.eachSegmentTime * SegmentConfig.actualSegment) - 1) {
+        if ((int) timeU.getTime() == (SegmentConfig.eachSegmentTime * SegmentConfig.actualSegment)) {
             soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.BLOCK_LEVER_CLICK, 0.2f, 1.1f);
         }
-        if ((int) timeU.getTime() >= (SegmentConfig.eachSegmentTime * SegmentConfig.actualSegment)) {
+        if ((int) timeU.getTime() >= (SegmentConfig.eachSegmentTime * SegmentConfig.actualSegment) + 1) {
             soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.BLOCK_LEVER_CLICK, 0.4f, 0.9f);
 
             SegmentConfig.actualSegment++;

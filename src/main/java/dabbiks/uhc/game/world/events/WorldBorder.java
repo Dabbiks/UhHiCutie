@@ -5,6 +5,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerIn
 import dabbiks.uhc.game.configs.SegmentConfig;
 import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.utils.managers.BorderManager;
+import io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -16,13 +17,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static dabbiks.uhc.Main.*;
+import static dabbiks.uhc.game.configs.WorldConfig.worldBorderSize;
 
 public class WorldBorder {
 
-    public static double borderSize = WorldConfig.worldBorderSize * 2;
+    public static double borderSize = worldBorderSize * 2;
 
     public void prepareWorldBorder() {
-        Bukkit.getWorld(WorldConfig.worldName).getWorldBorder().setSize(WorldConfig.worldBorderSize * 2);
+        Bukkit.getWorld(WorldConfig.worldName).getWorldBorder().setSize(worldBorderSize * 2);
         Bukkit.getWorld(WorldConfig.worldName).getWorldBorder().setDamageAmount(0);
     }
 
@@ -31,24 +33,36 @@ public class WorldBorder {
 
     public void setBorderSize(double amountReduced, long millis) {
         if (isBorderGrowing) return;
-
-        double oldSize = borderSize;
         if (borderSize < 2) {
-            borderSize = 0.1;
-        } else {
-            borderSize = borderSize - amountReduced;
+            WrapperPlayServerInitializeWorldBorder packet = new WrapperPlayServerInitializeWorldBorder(
+                    0.5,
+                    0.5,
+                    borderSize,
+                    0.1,
+                    millis,
+                    2000,
+                    15,
+                    20
+            );
+            return;
         }
-
-        List<Player> targetPlayers = new ArrayList<>();
+        WrapperPlayServerInitializeWorldBorder packet = new WrapperPlayServerInitializeWorldBorder(
+                0.5,
+                0.5,
+                borderSize,
+                borderSize-amountReduced,
+                10L,
+                2000,
+                15,
+                20
+        );
+        borderSize = borderSize - amountReduced;
         for (Player player : playerListU.getAllPlayers()) {
             if (player.getWorld().getName().equals(WorldConfig.worldName)) {
-                targetPlayers.add(player);
+                PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet);
             }
         }
-
-        BorderManager.animateWorldBorderSize(targetPlayers, oldSize, borderSize, millis);
-
-        for (Player player : playerListU.getPlayingPlayers()) {
+        for (Player player : playerListU.getAllPlayers()) {
             int x = player.getLocation().getBlockX();
             int z = player.getLocation().getBlockZ();
             if (x > borderSize / 2 || x < ((borderSize / 2) * -1) || z > borderSize / 2 || z < ((borderSize / 2) * -1)) {
@@ -97,7 +111,7 @@ public class WorldBorder {
             setBorderSize(1.6, 1000L);
         } else if (actualSegment > SegmentConfig.secondBorderStageSegment && actualSegment <= SegmentConfig.thirdBorderStageSegment && !isBorderGrowing) {
             return;
-        } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && borderSize > 6) {
+        } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && worldBorderSize > 6) {
             setBorderSize(1.6, 1000L);
         }
 

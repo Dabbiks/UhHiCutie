@@ -17,9 +17,11 @@ import org.bukkit.util.Vector;
 public class ProjectileEnchantHandler {
 
     public double handle(Projectile projectile, LivingEntity victim, double damage) {
+        double enchantDamage = 0;
+
         if (projectile instanceof Arrow) {
             if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.POWER.getName()))) {
-                damage += power(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.POWER.getName())));
+                enchantDamage += power(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.POWER.getName())));
             }
             if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GLOWING.getName()))) {
                 glowing(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GLOWING.getName())), victim);
@@ -38,7 +40,7 @@ public class ProjectileEnchantHandler {
             }
         }
 
-        return damage;
+        return enchantDamage;
     }
 
     private double power(int level) { return level * 1.25; }

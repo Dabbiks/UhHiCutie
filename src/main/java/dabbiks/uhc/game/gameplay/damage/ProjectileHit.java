@@ -61,10 +61,9 @@ public class ProjectileHit implements Listener {
         SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
         sessionData.setDamager(victim, damager);
 
-        final double baseDamage = event.getDamage();
+        final double baseDamage = getProjectileBonusDamage(projectile);
         double damage = baseDamage;
 
-        damage += getProjectileBonusDamage(projectile);
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += projectileEnchantHandler.handle(projectile, victim, damage);
         damage += armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
@@ -81,10 +80,9 @@ public class ProjectileHit implements Listener {
     public void processProjectileToMonster(EntityDamageByEntityEvent event, Player damager, Projectile projectile, Entity entityVictim) {
         if (!(entityVictim instanceof LivingEntity victim)) return;
 
-        final double baseDamage = event.getDamage();
+        final double baseDamage = getProjectileBonusDamage(projectile);
         double damage = baseDamage;
 
-        damage += getProjectileBonusDamage(projectile);
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += projectileEnchantHandler.handle(projectile, victim, damage);
 

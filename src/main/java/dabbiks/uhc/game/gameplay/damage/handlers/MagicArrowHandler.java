@@ -1,6 +1,5 @@
 package dabbiks.uhc.game.gameplay.damage.handlers;
 
-import dabbiks.uhc.game.gameplay.damage.handlers.ArmorHandler;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
@@ -32,31 +31,48 @@ public class MagicArrowHandler {
         double speed = 2.5 + (magicLevel * 0.4);
 
         Location loc = shooter.getEyeLocation();
-        Vector dir = loc.getDirection().normalize().multiply(speed);
+        Vector dir = loc.getDirection().normalize();
         JavaPlugin plugin = JavaPlugin.getProvidingPlugin(MagicArrowHandler.class);
 
+        originalArrow.remove();
+
         new BukkitRunnable() {
-            int distanceTraveled = 0;
+            int distanceLimit = 100;
+            double currentDistance = 0;
 
             @Override
             public void run() {
-                if (distanceTraveled >= (100 / speed) || !loc.getBlock().isPassable()) {
+                if (currentDistance >= distanceLimit) {
                     this.cancel();
                     return;
                 }
 
-                loc.add(dir);
-                loc.getWorld().spawnParticle(hasFlame ? Particle.FLAME : Particle.SNOWFLAKE, loc, 3, 0.05, 0.05, 0.05, 0.02, null, true);
+                for (double step = 0; step < speed; step += 0.2) {
+                    loc.add(dir.clone().multiply(0.2));
+                    currentDistance += 0.2;
 
-                for (Entity entity : loc.getWorld().getNearbyEntities(loc, 0.5, 0.5, 0.5)) {
-                    if (entity instanceof Player player && TeamUtils.isPlayerAlly(player, shooter)) { this.cancel(); return; }
-                    if (entity instanceof LivingEntity victim && !entity.equals(shooter)) {
-                        handleHit(shooter, victim, damage, hasFlame, plugin);
+                    if (!loc.getBlock().isPassable()) {
                         this.cancel();
                         return;
                     }
+
+                    loc.getWorld().spawnParticle(hasFlame ? Particle.FLAME : Particle.SNOWFLAKE, loc, 1, 0, 0, 0, 0.01, null, true);
+
+                    for (Entity entity : loc.getWorld().getNearbyEntities(loc, 0.3, 0.3, 0.3)) {
+                        if (entity.equals(shooter)) continue;
+
+                        if (entity instanceof Player player && TeamUtils.isPlayerAlly(player, shooter)) {
+                            this.cancel();
+                            return;
+                        }
+
+                        if (entity instanceof LivingEntity victim) {
+                            handleHit(shooter, victim, damage, hasFlame, plugin);
+                            this.cancel();
+                            return;
+                        }
+                    }
                 }
-                distanceTraveled++;
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
@@ -77,7 +93,10 @@ public class MagicArrowHandler {
                 int t = 0;
                 @Override
                 public void run() {
-                    if (t >= 80 || victim.isDead()) { this.cancel(); return; }
+                    if (t >= 80 || victim.isDead()) {
+                        this.cancel();
+                        return;
+                    }
                     victim.setFreezeTicks(60);
                     t++;
                 }

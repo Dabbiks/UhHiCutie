@@ -79,14 +79,14 @@ public class ChestMenu extends FastInv {
         if (keyType == null) return new ItemStack(Material.BARRIER);
 
         if (meta != null) {
-            meta.setDisplayName("");
+            meta.setDisplayName(type.getName());
+            meta.setItemName(type.getName());
             meta.setCustomModelData(type.getModel());
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             List<String> lore = new ArrayList<>();
 
-            lore.add(type.getName());
             lore.add("");
             lore.add("§7Skrzynie: §e" + persistentData.getChests(type.getIndex()));
             lore.add("§7Klucze: §e" + persistentData.getKeys(type.getIndex()));
@@ -100,9 +100,9 @@ public class ChestMenu extends FastInv {
             boolean hasChestAndKey = persistentData.getChests(type.getIndex()) > 0 && persistentData.getKeys(type.getIndex()) > 0;
 
             lore.add(hasChestAndKey ? symbolU.MOUSE_LEFT + "§a Otwórz skrzynię!" : symbolU.MOUSE_LEFT + "§c Musisz posiadać skrzynię i klucz!");
-            lore.add((hasCoinsForChest ? symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + coins + "§f" + symbolU.SCOREBOARD_COIN
+            lore.add((hasCoinsForChest ? symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + type.getPrice() + "§f" + symbolU.SCOREBOARD_COIN
                     : symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (type.getPrice() - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni"));
-            lore.add((hasCoinsForKey ? symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + coins + "§f" + symbolU.SCOREBOARD_COIN
+            lore.add((hasCoinsForKey ? symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + keyType.getPrice() + "§f" + symbolU.SCOREBOARD_COIN
                     : symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (keyType.getPrice() - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do klucza"));
 
             meta.setLore(lore);
