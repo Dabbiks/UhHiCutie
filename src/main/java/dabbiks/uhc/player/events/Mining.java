@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Random;
 import java.util.Set;
@@ -48,28 +49,34 @@ public class Mining implements Listener {
 
         player.giveExp(5);
 
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+
+        Collection<ItemStack> drops = block.getDrops(itemInHand, player);
+
+        boolean hasSmelting = itemInHand.getType() != Material.AIR &&
+                Boolean.TRUE.equals(NBT.get(itemInHand, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag("SMELTING")));
+
+        if (hasSmelting) {
+            event.setDropItems(false);
+            for (ItemStack drop : drops) {
+                drop.setType(getSmeltedMaterial(drop.getType()));
+                block.getWorld().dropItemNaturally(block.getLocation(), drop);
+            }
+        }
+
         if (sessionData.hasTag(SessionTags.MINER)) {
             assert persistentData != null;
             int level = persistentData.getChampionLevel("miner");
             double chance = 0.02 * level;
 
             if (random.nextDouble() <= chance) {
-                for (ItemStack item : block.getDrops()) {
-                    block.getWorld().dropItemNaturally(block.getLocation(), item);
+                for (ItemStack drop : drops) {
+                    ItemStack bonus = drop.clone();
+                    if (hasSmelting) {
+                        bonus.setType(getSmeltedMaterial(bonus.getType()));
+                    }
+                    block.getWorld().dropItemNaturally(block.getLocation(), bonus);
                 }
-            }
-        }
-
-        ItemStack itemInHand = player.getInventory().getItemInMainHand();
-        if (itemInHand.getType() == Material.AIR) return;
-
-        Boolean hasSmelting = NBT.get(itemInHand, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag("SMELTING"));
-
-        if (Boolean.TRUE.equals(hasSmelting)) {
-            event.setDropItems(false);
-            for (ItemStack drop : block.getDrops(itemInHand)) {
-                drop.setType(getSmeltedMaterial(drop.getType()));
-                block.getWorld().dropItemNaturally(block.getLocation(), drop);
             }
         }
     }

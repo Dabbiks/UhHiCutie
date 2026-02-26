@@ -124,6 +124,7 @@ public class KillSoundMenu extends FastInv {
 
     private void handleSelect(KillSound killSound) {
         player.sendMessage("§aWybrano dźwięk: " + killSound.getName());
+        persistentData.setKillSound(killSound);
         soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
         render();
     }

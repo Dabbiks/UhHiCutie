@@ -80,8 +80,8 @@ public class TableManager implements Listener {
 
         if (item.isEmpty() || item.getType().equals(Material.AIR)) return;
 
-        Integer canBeEnchanted = NBT.get(item, (Function<ReadableItemNBT, Integer>) nbt -> nbt.getInteger(ItemTags.CAN_BE_ENCHANTED.name()));
-        if (canBeEnchanted == null || canBeEnchanted == 0) {
+        boolean canBeEnchanted = NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.getBoolean(ItemTags.CAN_BE_ENCHANTED.name()));
+        if (!canBeEnchanted) {
             player.sendMessage("§cTego przedmiotu nie da się zakląć");
             return;
         }
@@ -94,7 +94,10 @@ public class TableManager implements Listener {
 
         player.setLevel(player.getLevel() - 3);
         List<EnchantData> enchants = enchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot());
-        if (enchants.isEmpty()) ConsoleLogger.sendWarning(ConsoleLogger.LogType.ENCHANTS, "Error while calculating possible enchants");
+        if (enchants.isEmpty()) {
+            ConsoleLogger.sendWarning(ConsoleLogger.LogType.ENCHANTS, "Error while calculating possible enchants");
+            return;
+        }
         itemInstance.setEnchants(enchants);
         itemInstance.setIsEnchanted(true);
 

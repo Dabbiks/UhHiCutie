@@ -66,8 +66,8 @@ public class ProjectileHit implements Listener {
 
         damage += getProjectileBonusDamage(projectile);
         damage += tagHandler.handle(damager, victim, baseDamage);
-        damage = projectileEnchantHandler.handle(projectile, victim, damage);
-        damage = armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
+        damage += projectileEnchantHandler.handle(projectile, victim, damage);
+        damage += armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
         damage = armorHandler.handle(damager, victim, damage);
 
         event.setDamage(damage);
@@ -86,7 +86,7 @@ public class ProjectileHit implements Listener {
 
         damage += getProjectileBonusDamage(projectile);
         damage += tagHandler.handle(damager, victim, baseDamage);
-        damage = projectileEnchantHandler.handle(projectile, victim, damage);
+        damage += projectileEnchantHandler.handle(projectile, victim, damage);
 
         damage = armorHandler.handle(damager, victim, damage);
 

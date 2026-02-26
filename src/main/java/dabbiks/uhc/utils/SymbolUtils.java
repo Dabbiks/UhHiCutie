@@ -79,4 +79,7 @@ public class SymbolUtils {
     public final String SEGMENT_10 = "";
     public final String SEGMENT_11 = "";
     public final String SEGMENT_12 = "";
+
+    // * OTHER
+    public final String QUESTION_MARK = "§f\uE09D";
 }

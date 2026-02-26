@@ -3,24 +3,23 @@ package dabbiks.uhc.cosmetics.chest;
 import dabbiks.uhc.cosmetics.chest.rewards.Reward;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
+import dabbiks.uhc.utils.managers.TextParticleManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Lidded;
-import org.bukkit.block.data.Directional;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
-import static dabbiks.uhc.Main.plugin;
-import static dabbiks.uhc.Main.soundU;
+import static dabbiks.uhc.Main.*;
 
 public class MysteryChestSession {
     public static MysteryChestSession activeSession = null;
@@ -39,6 +38,7 @@ public class MysteryChestSession {
     private TextDisplay timerDisplay;
     private boolean isEnding = false;
     private boolean rewardMessage = false;
+    private final TextParticleManager particleEngine = new TextParticleManager();
 
     public MysteryChestSession(UUID uuid, ChestType chestType) {
         this.uuid = uuid;
@@ -101,6 +101,38 @@ public class MysteryChestSession {
         }
 
         startTimer();
+        startParticleEffects();
+    }
+
+    private void startParticleEffects() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (isEnding || activeSession == null) {
+                    this.cancel();
+                    return;
+                }
+
+                for (Location loc : chests.keySet()) {
+                    if (!openedChests.contains(loc) && loc.getBlock().getType() == Material.CHEST) {
+                        spawnQuestionParticle(loc);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 2L);
+    }
+
+    private void spawnQuestionParticle(Location chestLoc) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        double offsetX = random.nextDouble(-0.1, 1.1);
+        double offsetZ = random.nextDouble(-0.1, 1.1);
+        Location spawnLoc = chestLoc.clone().add(offsetX, 0.6, offsetZ);
+
+        Vector velocity = new Vector(0, 0.035, 0);
+        int lifespan = 30;
+
+        particleEngine.spawnParticle(spawnLoc, symbolU.QUESTION_MARK, velocity, lifespan);
     }
 
     private void startTimer() {

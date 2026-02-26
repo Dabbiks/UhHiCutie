@@ -72,7 +72,7 @@ public class TrailMenu extends FastInv {
             List<String> lore = new ArrayList<>();
 
             boolean unlocked = persistentData.hasTrail(trail);
-            boolean selected = trail.name().equals(persistentData.getTrail());
+            boolean selected = persistentData.getTrail().name().equals(trail.name());
 
             if (selected) {
                 lore.add(symbolU.MOUSE_LEFT + "§a Wybrana smuga");
@@ -122,8 +122,8 @@ public class TrailMenu extends FastInv {
     }
 
     private void handleSelect(ParticleTrail trail) {
-        persistentData.setTrail(trail);
         player.sendMessage("§aWybrano smugę: " + trail.getDisplayName());
+        persistentData.setTrail(trail);
         soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
         render();
     }
