@@ -55,7 +55,6 @@ public class SpawnProtector implements Listener {
 
         if (damage >= victim.getHealth()) {
             event.setCancelled(true);
-            victim.setGameMode(GameMode.SPECTATOR);
             victim.teleport(new Location(victim.getWorld(), 0.5, 100, 0.5));
             playerU.addHealth(victim, 100);
             playerU.addHealth(damager, 100);

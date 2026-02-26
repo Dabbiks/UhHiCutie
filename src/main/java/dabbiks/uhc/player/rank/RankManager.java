@@ -21,7 +21,7 @@ public class RankManager {
         SessionData sData = SessionDataManager.getData(player.getUniqueId());
 
         double avgOpponentRank = calculateAverageOpponentRank(player);
-        int modifier = RankCalculator.calculateMatchModifier(pData, avgOpponentRank);
+        double modifier = RankCalculator.calculateMatchModifier(pData, avgOpponentRank);
 
         sData.setModifier(modifier);
     }

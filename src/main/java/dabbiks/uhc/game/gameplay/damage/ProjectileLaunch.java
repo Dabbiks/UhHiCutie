@@ -7,6 +7,8 @@ import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -18,19 +20,36 @@ public class ProjectileLaunch implements Listener {
 
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent event) {
-        if (!(event.getEntity() instanceof Arrow arrow)) return;
-        if (!(arrow.getShooter() instanceof Player player)) return;
+        Projectile projectile = event.getEntity();
+        if (!(projectile.getShooter() instanceof Player player)) return;
 
-        ItemStack bow = player.getInventory().getItemInMainHand();
-        if (bow.getType() == Material.AIR) return;
-        NBTItem nbt = new NBTItem(bow);
+        ItemStack weapon = player.getInventory().getItemInMainHand();
 
-        if (nbt.hasTag(EnchantType.MAGIC_ARROW.name())) {
+        if (!isValidWeapon(weapon, projectile)) {
+            weapon = player.getInventory().getItemInOffHand();
+            if (!isValidWeapon(weapon, projectile)) return;
+        }
+
+        NBTItem nbt = new NBTItem(weapon);
+
+        if (projectile instanceof Arrow arrow && nbt.hasTag(EnchantType.MAGIC_ARROW.name())) {
             event.setCancelled(true);
             MagicArrowHandler.launch(player, arrow, nbt);
             return;
         }
 
-        projectileHandler.handle(player, arrow);
+        projectileHandler.handle(projectile, nbt);
+    }
+
+    private boolean isValidWeapon(ItemStack item, Projectile projectile) {
+        if (item == null || item.getType() == Material.AIR) return false;
+        Material type = item.getType();
+
+        if (projectile instanceof Arrow) {
+            return type == Material.BOW || type == Material.CROSSBOW;
+        } else if (projectile instanceof Trident) {
+            return type == Material.TRIDENT;
+        }
+        return false;
     }
 }

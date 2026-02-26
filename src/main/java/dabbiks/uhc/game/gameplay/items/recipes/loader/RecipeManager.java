@@ -71,6 +71,10 @@ public class RecipeManager {
             return new RecipeChoice.MaterialChoice(org.bukkit.Tag.PLANKS.getValues().stream().toList());
         }
 
+        if (material == Material.COBBLESTONE || material == Material.COBBLED_DEEPSLATE) {
+            return new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.COBBLED_DEEPSLATE);
+        }
+
         return new RecipeChoice.MaterialChoice(material);
     }
 

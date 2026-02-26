@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dabbiks.uhc.Main.symbolU;
+
 public class RewardUtils {
 
     private final int WIN_COINS = 750;
@@ -23,7 +25,7 @@ public class RewardUtils {
     private final int ASSIST_RANK_POINTS = 5;
     private final int DEATH_RANK_POINTS = -20;
 
-    public double multiplier;
+    public double multiplier = 1;
 
     public void win(Player player) {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
@@ -42,6 +44,9 @@ public class RewardUtils {
 
         RankManager.modifyRankPoints(player, pointsToChange);
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
+
+        player.sendMessage("§f" + (WIN_COINS * multiplier) + symbolU.SCOREBOARD_COIN + " §8(Wygrana)");
+        player.sendMessage("§6" + (int) (WIN_RANK_POINTS * rankModifier) + "PR §8(Wygrana)");
 
         PersistentDataManager.saveData(player.getUniqueId());
     }
@@ -64,6 +69,9 @@ public class RewardUtils {
         RankManager.modifyRankPoints(player, pointsToChange);
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
 
+        player.sendMessage("§f" + (KILL_COINS * multiplier) + symbolU.SCOREBOARD_COIN + " §8(Zabójstwo)");
+        player.sendMessage("§6" + (int) (KILL_RANK_POINTS * rankModifier) + "PR §8(Zabójstwo)");
+
         PersistentDataManager.saveData(player.getUniqueId());
     }
 
@@ -82,6 +90,9 @@ public class RewardUtils {
 
         RankManager.modifyRankPoints(player, pointsToChange);
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
+
+        player.sendMessage("§f" + (ASSIST_COINS * multiplier) + symbolU.SCOREBOARD_COIN + " §8(Asysta)");
+        player.sendMessage("§6" + (int) (ASSIST_RANK_POINTS * rankModifier) + "PR §8(Asysta)");
 
         PersistentDataManager.saveData(player.getUniqueId());
     }
@@ -103,6 +114,8 @@ public class RewardUtils {
 
         RankManager.modifyRankPoints(player, pointsToChange);
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
+
+        player.sendMessage("§c-" + (int) (DEATH_RANK_POINTS * deathModifier) + "PR §8(Wygrana)");
 
         PersistentDataManager.saveData(player.getUniqueId());
     }

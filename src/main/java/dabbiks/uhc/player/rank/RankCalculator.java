@@ -25,10 +25,10 @@ public class RankCalculator {
         return Math.max(1, rank);
     }
 
-    public static int calculateMatchModifier(PersistentData data, double avgOpponentRank) {
+    public static double calculateMatchModifier(PersistentData data, double avgOpponentRank) {
         double played = data.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0);
 
-        if (played < 5) return 100;
+        if (played < 5) return 1.0;
 
         double kills = data.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0);
         double assists = data.getStats().getOrDefault(PersistentStats.SEASON_ASSISTS, 0);
@@ -47,6 +47,6 @@ public class RankCalculator {
         double opponentScore = BASE_OPPONENT_SCORE + (rankDiff / 20.0);
 
         double totalScore = performanceScore + opponentScore;
-        return (int) Math.max(MIN_MODIFIER, Math.min(MAX_MODIFIER, totalScore));
+        return Math.max((double) MIN_MODIFIER, Math.min((double) MAX_MODIFIER, totalScore)) / 100.0;
     }
 }

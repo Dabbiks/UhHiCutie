@@ -26,7 +26,7 @@ public class SessionData {
 
     // * RANK
 
-    private int rankPRModifier;
+    private double rankPRModifier;
 
     // * STATS
 
@@ -79,11 +79,11 @@ public class SessionData {
 
     // ? RANK
 
-    public void setModifier(int modifier) {
+    public void setModifier(double modifier) {
         rankPRModifier = modifier;
     }
 
-    public int getModifier() {
+    public double getModifier() {
         return rankPRModifier;
     }
 
@@ -106,22 +106,6 @@ public class SessionData {
     public String getTeamIcon() {
         return teamIcon;
     }
-
-//    public void updatePlayerPrefix(Player player) {
-//        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
-//        if (persistentData == null) return;
-//        if (persistentData.getPlayerRank() == null) {
-//            persistentData.setPlayerRank(RankType.UNRANKED);
-//        }
-//        rankIcon = persistentData.getPlayerRank().getIcon();
-//        String prefix = "";
-//        if (!rankIcon.isEmpty()) prefix = prefix + rankIcon + " ";
-//        if (!teamIcon.isEmpty()) prefix = prefix + teamIcon + " ";
-//        if (persistentData.getIsManager()) prefix = prefix + "\uE088" + " ";
-//        if (prefix.isEmpty()) // ! WIAD ERROR
-//
-//        tabManager.setPlayerTabPrefix(player, prefix);
-//    }
 
     // ? TAGS
 
