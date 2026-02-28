@@ -11,6 +11,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,14 +22,25 @@ public class ProjectileLaunch implements Listener {
     @EventHandler
     public void onLaunch(ProjectileLaunchEvent event) {
         Projectile projectile = event.getEntity();
-        if (!(projectile.getShooter() instanceof Player player)) return;
+        if (!(projectile.getShooter() instanceof Player)) return;
 
-        ItemStack weapon = player.getInventory().getItemInMainHand();
+        if (projectile instanceof Trident trident) {
+            ItemStack weapon = trident.getItem();
+            if (weapon == null || weapon.getType() == Material.AIR) return;
 
-        if (!isValidWeapon(weapon, projectile)) {
-            weapon = player.getInventory().getItemInOffHand();
-            if (!isValidWeapon(weapon, projectile)) return;
+            NBTItem nbt = new NBTItem(weapon);
+            projectileHandler.handle(projectile, nbt);
         }
+    }
+
+    @EventHandler
+    public void onShootBow(EntityShootBowEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        ItemStack weapon = event.getBow();
+        if (weapon == null) return;
+
+        if (!(event.getProjectile() instanceof Projectile projectile)) return;
 
         NBTItem nbt = new NBTItem(weapon);
 
@@ -39,17 +51,5 @@ public class ProjectileLaunch implements Listener {
         }
 
         projectileHandler.handle(projectile, nbt);
-    }
-
-    private boolean isValidWeapon(ItemStack item, Projectile projectile) {
-        if (item == null || item.getType() == Material.AIR) return false;
-        Material type = item.getType();
-
-        if (projectile instanceof Arrow) {
-            return type == Material.BOW || type == Material.CROSSBOW;
-        } else if (projectile instanceof Trident) {
-            return type == Material.TRIDENT;
-        }
-        return false;
     }
 }

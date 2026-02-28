@@ -1,15 +1,13 @@
 package dabbiks.uhc.game.gameplay.damage.handlers;
 
+import dabbiks.uhc.cosmetics.KillSound;
 import dabbiks.uhc.game.gameplay.Victory;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,13 +24,24 @@ public class DeathHandler {
         stateU.setPlayerState(player, PlayerState.SPECTATOR);
 
         if (sessionData.getDamager() != null && timeU.getTime() - sessionData.getDamagerTime() < 60) {
-            rewardU.kill(sessionData.getDamager());
+            Player killer = sessionData.getDamager();
+
+            rewardU.kill(killer);
             rewardU.death(player);
             rewardU.summary(player);
             for (Player assistPlayer : sessionData.getAssists()) rewardU.assist(assistPlayer);
 
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
-                    "§c§lELIMINACJA! §7" + sessionData.getDamager().getName() + " zabija " + player.getName() + "!");
+                    "§c§lELIMINACJA! §7" + killer.getName() + " zabija " + player.getName() + "!");
+
+            PersistentData killerData = PersistentDataManager.getData(killer.getUniqueId());
+            if (killerData != null && killerData.getKillSound() != null) {
+                String soundName = killerData.getKillSound().getSound();
+                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(soundName), 0.6f, 1);
+            } else {
+                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(KillSound.BLASTX.getSound()), 0.6f, 1);
+            }
+
         } else {
             rewardU.death(player);
             rewardU.summary(player);
@@ -61,5 +70,4 @@ public class DeathHandler {
             player.setItemOnCursor(null);
         }
     }
-
 }

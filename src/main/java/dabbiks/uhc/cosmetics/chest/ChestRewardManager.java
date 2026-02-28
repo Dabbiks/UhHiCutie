@@ -31,58 +31,58 @@ public class ChestRewardManager {
     }
 
     private static void setupCommon(RewardPool p) {
-        addCoins(p, 100, 40, 1.25, 0.0625, 0.001);
-        addPowder(p, 80, 30, 1.0, 0.05, 0.001);
-        addSwords(p, 2.0, 0.5, 0.025, 0.00125, 0.0001);
-        addKillSounds(p, 1.5, 0.4, 0.02, 0.00062, 0.0001);
-        addTrails(p, 1.0, 0.3, 0.0125, 0.00025, 0.0001);
-        addKeys(p, 5, 1, 0.05, 0.00625, 0.001);
-        addChampions(p, 0.5, 0.2);
-        addChests(p, 0.5, 0.1, 0.0125, 0.00125, 0.0001);
+        addCoins(p, 100, 40, 3, 0.1, 0.005);
+        addPowder(p, 80, 30, 3, 0.1, 0.005);
+        addSwords(p, 3.0, 0.5, 0.025, 0.01, 0.001);
+        addKillSounds(p, 1.5, 0.5, 0.02, 0.005, 0.001);
+        addTrails(p, 2.5, 0.5, 0.02, 0.0025, 0.001);
+        addKeys(p, 10, 3, 1, 1, 1);
+        addChampions(p, 0.3, 2.3);
+        addChests(p, 10, 3, 1, 1, 1);
     }
 
     private static void setupRare(RewardPool p) {
-        addCoins(p, 40, 100, 5.0, 0.25, 0.01);
-        addPowder(p, 30, 80, 3.75, 0.187, 0.005);
-        addSwords(p, 1.66, 5.0, 0.208, 0.01, 0.0008);
-        addKillSounds(p, 1.33, 4.16, 0.166, 0.004, 0.0003);
-        addTrails(p, 0.83, 3.33, 0.125, 0.002, 0.0001);
-        addKeys(p, 2, 8, 0.25, 0.0125, 0.002);
-        addChampions(p, 1.5, 0.8);
-        addChests(p, 2.0, 0.5, 0.025, 0.0025, 0.0005);
+        addCoins(p, 65, 85, 12, 1, 0.05);
+        addPowder(p, 60, 70, 8, 0.5, 0.05);
+        addSwords(p, 4.0, 1.5, 0.125, 0.01, 0.005);
+        addKillSounds(p, 2.5, 1.5, 0.1, 0.05, 0.005);
+        addTrails(p, 3.5, 2.5, 0.1, 0.025, 0.005);
+        addKeys(p, 8, 12, 3, 1, 1);
+        addChampions(p, 0.6, 3.6);
+        addChests(p, 8, 12, 3, 1, 1);
     }
 
     private static void setupEpic(RewardPool p) {
-        addCoins(p, 15, 40, 25.0, 1.875, 0.1);
-        addPowder(p, 10, 30, 20.0, 1.25, 0.08);
-        addSwords(p, 1.25, 3.75, 10.0, 0.156, 0.0125);
-        addKillSounds(p, 1.0, 3.0, 8.75, 0.093, 0.005);
-        addTrails(p, 0.75, 2.5, 7.5, 0.062, 0.0025);
-        addKeys(p, 1, 4, 2.5, 0.125, 0.02);
-        addChampions(p, 5.0, 3.0);
-        addChests(p, 5.0, 2.0, 0.25, 0.0125, 0.002);
+        addCoins(p, 60, 90, 12, 1.5, 0.1);
+        addPowder(p, 50, 80, 15, 2, 0.1);
+        addSwords(p, 4.5, 2.5, 0.5, 0.05, 0.01);
+        addKillSounds(p, 3.0, 2.0, 0.4, 0.08, 0.01);
+        addTrails(p, 4.0, 3.0, 0.4, 0.05, 0.01);
+        addKeys(p, 6, 12, 6, 2, 1);
+        addChampions(p, 1.5, 3.5);
+        addChests(p, 6, 12, 6, 2, 1);
     }
 
     private static void setupMythic(RewardPool p) {
-        addCoins(p, 5, 15, 10.0, 12.5, 1.5);
-        addPowder(p, 4, 10, 7.5, 10.0, 1.2);
-        addSwords(p, 0.5, 2.0, 5.0, 1.56, 0.2);
-        addKillSounds(p, 0.25, 1.5, 3.75, 1.25, 0.125);
-        addTrails(p, 0.25, 1.25, 3.0, 1.09, 0.1);
-        addKeys(p, 0.5, 2, 1.25, 1.875, 0.3);
-        addChampions(p, 10.0, 8.0);
-        addChests(p, 8.0, 5.0, 0.75, 0.187, 0.05);
+        addCoins(p, 70, 75, 12, 2.5, 0.2);
+        addPowder(p, 60, 65, 15, 3, 0.2);
+        addSwords(p, 4.0, 3.5, 1.2, 0.25, 0.05);
+        addKillSounds(p, 2.5, 3.0, 1.0, 0.2, 0.05);
+        addTrails(p, 3.0, 4.0, 1.0, 0.15, 0.05);
+        addKeys(p, 5, 10, 12, 4, 2);
+        addChampions(p, 3.0, 5.0);
+        addChests(p, 5, 10, 12, 4, 2);
     }
 
     private static void setupLegendary(RewardPool p) {
-        addCoins(p, 1, 5, 3.75, 6.25, 12.0);
-        addPowder(p, 1, 4, 3.12, 5.0, 10.0);
-        addSwords(p, 0.125, 0.5, 2.5, 0.93, 2.0);
-        addKillSounds(p, 0.05, 0.25, 2.0, 0.78, 1.5);
-        addTrails(p, 0.025, 0.2, 1.5, 0.62, 1.25);
-        addKeys(p, 0.1, 0.5, 0.5, 1.25, 2.5);
-        addChampions(p, 15.0, 12.0);
-        addChests(p, 10.0, 8.0, 1.5, 0.5, 0.2);
+        addCoins(p, 70, 70, 20, 5.5, 0.5);
+        addPowder(p, 60, 60, 25, 6, 0.5);
+        addSwords(p, 3.5, 4.5, 2.5, 0.75, 0.25);
+        addKillSounds(p, 2.0, 3.5, 2.2, 0.6, 0.2);
+        addTrails(p, 2.5, 4.5, 2.2, 0.5, 0.2);
+        addKeys(p, 4, 8, 15, 10, 5);
+        addChampions(p, 5.0, 8.0);
+        addChests(p, 4, 8, 15, 10, 5);
     }
 
     private static void addCoins(RewardPool p, double w1, double w2, double w3, double w4, double w5) {
