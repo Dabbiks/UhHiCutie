@@ -33,7 +33,7 @@ import java.util.function.Function;
 public class ElytraListener implements Listener {
 
     private final ChestplateManager manager;
-    private final int COOLDOWN_TICKS = 200;
+    private final int COOLDOWN_TICKS = 100;
     private final double BOOST_MULTIPLIER = 1.5;
 
     public ElytraListener(ChestplateManager manager) {
@@ -65,6 +65,7 @@ public class ElytraListener implements Listener {
         player.setCooldown(Material.FIREWORK_ROCKET, COOLDOWN_TICKS);
 
         player.setVelocity(new Vector(0, 0.5, 0));
+        player.setVelocity(new Vector(player.getVelocity().getX() + 0.5, player.getVelocity().getY() + 0.5, player.getVelocity().getZ() + 0.5));
 
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             ItemStack currentChest = player.getInventory().getChestplate();
@@ -75,7 +76,7 @@ public class ElytraListener implements Listener {
             player.getInventory().setChestplate(elytra);
             player.setGliding(true);
             player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
-        }, 1L);
+        }, 8L);
     }
 
     @EventHandler

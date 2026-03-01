@@ -34,13 +34,13 @@ public class DeathHandler {
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
                     "§c§lELIMINACJA! §7" + killer.getName() + " zabija " + player.getName() + "!");
 
-            PersistentData killerData = PersistentDataManager.getData(killer.getUniqueId());
-            if (killerData != null && killerData.getKillSound() != null) {
-                String soundName = killerData.getKillSound().getSound();
-                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(soundName), 0.6f, 1);
-            } else {
-                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(KillSound.BLASTX.getSound()), 0.6f, 1);
-            }
+//            PersistentData killerData = PersistentDataManager.getData(killer.getUniqueId());
+//            if (killerData != null && killerData.getKillSound() != null) {
+//                String soundName = killerData.getKillSound().getSound();
+//                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(soundName), 0.6f, 1);
+//            } else {
+//                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(KillSound.BLASTX.getSound()), 0.6f, 1);
+//            }
 
         } else {
             rewardU.death(player);

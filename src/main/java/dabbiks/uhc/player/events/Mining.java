@@ -53,6 +53,10 @@ public class Mining implements Listener {
 
         Collection<ItemStack> drops = block.getDrops(itemInHand, player);
 
+        for (ItemStack itemStack : drops) {
+            block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
+        }
+
         boolean hasSmelting = itemInHand.getType() != Material.AIR &&
                 Boolean.TRUE.equals(NBT.get(itemInHand, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag("SMELTING")));
 

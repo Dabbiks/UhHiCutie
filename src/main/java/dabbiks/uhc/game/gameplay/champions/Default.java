@@ -48,15 +48,18 @@ public class Default extends Champion {
         switch (level) {
             case 1, 2, 3, 4 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.STONE_SWORD)));
+                player.getInventory().addItem(new ItemStack(Material.BOOK, 1));
                 player.getInventory().addItem(new ItemStack(Material.CARROT, 5));
             }
             case 5, 6, 7, 8, 9 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_SWORD)));
+                player.getInventory().addItem(new ItemStack(Material.BOOK, 1));
                 player.getInventory().addItem(new ItemStack(Material.CARROT, 5));
                 sessionData.addTag(SessionTags.SMALL_PARRY_COOLDOWN);
             }
             case 10 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_SWORD)));
+                player.getInventory().addItem(new ItemStack(Material.BOOK, 1));
                 player.getInventory().addItem(new ItemStack(Material.CARROT, 10));
                 sessionData.addTag(SessionTags.BIG_PARRY_COOLDOWN);
                 sessionData.addTag(SessionTags.PARRY_REGENERATION);

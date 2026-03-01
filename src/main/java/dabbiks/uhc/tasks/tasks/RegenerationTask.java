@@ -15,7 +15,7 @@ public class RegenerationTask extends Task {
     protected void tick() {
         if (timeU.getTime() % 15 != 0) return;
         for (Player player : playerListU.getPlayingPlayers()) {
-            double regen = 1 * attributeManager.getAttributeValue(player, AttributeType.REGENERATION, 1);
+            double regen = 1 + attributeManager.getAttributeValue(player, AttributeType.REGENERATION, 1);
             playerU.addHealth(player, regen);
         }
     }
