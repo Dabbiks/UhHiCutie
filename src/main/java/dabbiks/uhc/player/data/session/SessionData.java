@@ -70,8 +70,9 @@ public class SessionData {
     public List<Player> getAssists() {
         List<Player> players = new ArrayList<>();
         for (Map.Entry<Player, Integer> entry : assists.entrySet()) {
-            if (timeU.getTime() - entry.getValue() > 60) assists.remove(entry.getKey());
-            else players.add(entry.getKey());
+            if (timeU.getTime() - entry.getValue() > 60) { assists.remove(entry.getKey()); continue; }
+            if (!entry.getKey().isOnline()) { assists.remove(entry.getKey()); continue; }
+            players.add(entry.getKey());
         }
 
         return players;

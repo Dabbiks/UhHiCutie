@@ -1,5 +1,7 @@
 package dabbiks.uhc;
 
+import dabbiks.uhc.commands.RequiredPlayersCommand;
+import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
 import dabbiks.uhc.game.gameplay.damage.MeleeHit;
 import dabbiks.uhc.game.gameplay.damage.ProjectileHit;
@@ -113,6 +115,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
         Bukkit.getPluginManager().registerEvents(new ElytraListener(chestplateManager), this);
+        Bukkit.getPluginManager().registerEvents(new ElytraListener(chestplateManager), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new Grinding(), this);
@@ -120,6 +123,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), this);
         Bukkit.getPluginManager().registerEvents(new Chat(), this);
+
+        getCommand("setteamsize").setExecutor(new TeamSizeCommand());
+        getCommand("setminplayers").setExecutor(new RequiredPlayersCommand());
 
         teamManager.deleteTeams();
         new TeamInitializer();
@@ -139,4 +145,5 @@ public final class Main extends JavaPlugin {
     public RecipeManager getRecipeManager() { return recipeManager; }
     public TeamManager getTeamManager() { return teamManager; }
     public PrefixManager getPrefixManager() { return prefixManager; }
+    public ChestplateManager getChestplateManager() { return chestplateManager; }
 }

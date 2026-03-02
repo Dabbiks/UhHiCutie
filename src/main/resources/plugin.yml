@@ -2,3 +2,12 @@ name: UhHiCutie
 version: '1.0-ALPHA'
 main: dabbiks.uhc.Main
 api-version: '1.21'
+commands:
+  setteamsize:
+    description: Zmienia rozmiar druzyny i odswieza hologramy.
+    permission: uhc.admin
+    usage: /setteamsize <int>
+  setminplayers:
+    description: Zmienia minimalna liczbe graczy wymagana do startu.
+    permission: uhc.admin
+    usage: /setminplayers <int>

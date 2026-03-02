@@ -61,26 +61,33 @@ public class Mining implements Listener {
 
         Collection<ItemStack> drops = block.getDrops(handItem, player);
 
-        if (handMeta.getEnchants().containsKey(Enchantment.FORTUNE)) {
-            for (ItemStack item : drops) {
+        int fortuneLevel = handMeta.getEnchantLevel(Enchantment.FORTUNE);
+
+        for (ItemStack item : drops) {
+            if (fortuneLevel > 0) {
                 item.setAmount(item.getAmount() * random.nextInt(1, 3));
 
-                if (random.nextDouble() > (0.3 * handMeta.getEnchants().get(Enchantment.FORTUNE))) return;
-                item.setAmount(item.getAmount() * 2);
+                if (random.nextDouble() <= (0.3 * fortuneLevel)) {
+                    item.setAmount(item.getAmount() * 2);
+                }
+            }
 
-                if (!hasSmelting) return;
-                if (item.getType().equals(getSmeltedMaterial(item.getType()))) return;
-                drops.remove(item);
-                drops.add(new ItemStack(getSmeltedMaterial(item.getType()), item.getAmount()));
+            if (hasSmelting) {
+                Material smeltedMaterial = getSmeltedMaterial(item.getType());
+                if (item.getType() != smeltedMaterial) {
+                    item.setType(smeltedMaterial);
+                }
+            }
 
-                if (!sessionData.hasTag(SessionTags.MINER)) return;
+            if (sessionData.hasTag(SessionTags.MINER)) {
                 int level = persistentData.getChampionLevel("miner");
                 double chance = 0.02 * level;
-                if (random.nextDouble() > chance) return;
-                item.setAmount(item.getAmount() * 2);
-
-                block.getWorld().dropItemNaturally(block.getLocation(), item);
+                if (random.nextDouble() <= chance) {
+                    item.setAmount(item.getAmount() * 2);
+                }
             }
+
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
         }
     }
 
