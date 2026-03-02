@@ -6,7 +6,9 @@ import dabbiks.uhc.menu.cosmetics.CosmeticsMainMenu;
 import dabbiks.uhc.menu.wiki.WikiMainMenu;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +18,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static dabbiks.uhc.Main.*;
 
@@ -48,9 +53,8 @@ public class LobbyItems implements Listener {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
 
-        NBTItem nbtItem = new NBTItem(item);
-        nbtItem.setInteger(id, 1);
-        return nbtItem.getItem();
+        NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setInteger(id, 1));
+        return item;
     }
 
     @EventHandler
@@ -59,33 +63,32 @@ public class LobbyItems implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         ItemStack item = event.getItem();
-        NBTItem nbtItem = new NBTItem(item);
         Player player = event.getPlayer();
         PersistentData data = PersistentDataManager.getData(player.getUniqueId());
 
-        if (nbtItem.hasTag("RECIPE_BOOK")) {
+        if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("RECIPE_BOOK")))) {
             event.setCancelled(true);
             new RecipeMenu(player, INSTANCE.getRecipeManager()).open(player);
         }
 
         if (!event.getPlayer().getLocation().getWorld().getName().equals("world")) return;
 
-        if (nbtItem.hasTag("CHAMPIONS")) {
+        if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("CHAMPIONS")))) {
             event.setCancelled(true);
             new ChampionMenu(player, data).open(player);
         }
 
-        if (nbtItem.hasTag("WIKI")) {
+        if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("WIKI")))) {
             event.setCancelled(true);
             new WikiMainMenu(player).open(player);
         }
 
-        if (nbtItem.hasTag("COSMETICS")) {
+        if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("COSMETICS")))) {
             event.setCancelled(true);
             new CosmeticsMainMenu(player, data).open(player);
         }
 
-        if (nbtItem.hasTag("SPECTATOR")) {
+        if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("SPECTATOR")))) {
             event.setCancelled(true);
             player.teleport(playerListU.getPlayingPlayers().getFirst().getLocation());
             playerU.clearInventory(player);

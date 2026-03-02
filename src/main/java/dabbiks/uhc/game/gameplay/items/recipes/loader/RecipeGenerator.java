@@ -42,9 +42,9 @@ public class RecipeGenerator {
     private void registerTier(String prefix, Material ingredient, double baseDmg, double baseArmor, int modelData) {
         registerSword(prefix + "_SWORD", ingredient, baseDmg, modelData);
         registerTool(prefix + "_PICKAXE", ingredient, baseDmg - 2, "PICKAXE", EnchantSlot.PICKAXE, modelData, "III", " S ", " S ");
-        registerTool(prefix + "_AXE", ingredient, baseDmg + 1, "AXE", EnchantSlot.AXE, modelData, "II ", "IS ", " S ");
+        registerTool(prefix + "_AXE", ingredient, baseDmg + 1, "AXE", EnchantSlot.AXE, modelData, "II", "IS", " S");
         registerTool(prefix + "_SHOVEL", ingredient, baseDmg - 2, "SHOVEL", EnchantSlot.TOOL, modelData, "I", "S", "S");
-        registerTool(prefix + "_HOE", ingredient, baseDmg - 3, "HOE", EnchantSlot.TOOL, modelData, "II ", " S ", " S ");
+        registerTool(prefix + "_HOE", ingredient, baseDmg - 3, "HOE", EnchantSlot.TOOL, modelData, "II", " S", " S");
 
         if (baseArmor > 0) {
             registerArmorSet(prefix, ingredient, baseArmor, modelData);
