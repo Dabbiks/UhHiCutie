@@ -40,9 +40,8 @@ public class MeleeEnchantHandler {
 
         ItemStack item = damager.getInventory().getItemInMainHand();
         if (item.isEmpty() || item.getType() == Material.AIR) return 0;
-        NBTItem nbtItem = new NBTItem(item);
 
-        int level = enchantManager.getItemLevel(nbtItem, type);
+        int level = enchantManager.getItemLevel(item, type);
         if (level == 0) return 0;
 
         switch (type) {

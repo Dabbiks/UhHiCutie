@@ -30,9 +30,8 @@ public class ArmorHandler {
             if (item.isEmpty() || item.getType() == Material.AIR) {
                 return damage;
             }
-            NBTItem nbtItem = new NBTItem(item);
 
-            int level = enchantManager.getItemLevel(nbtItem, EnchantType.LETHALITY);
+            int level = enchantManager.getItemLevel(item, EnchantType.LETHALITY);
             if (level > 0) armor -= level * 2;
         }
         if (armor < 0) armor = 0;

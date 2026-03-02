@@ -10,8 +10,13 @@ import static dabbiks.uhc.Main.symbolU;
 
 public class EnchantManager {
 
-    public int getItemLevel(NBTItem nbtItem, EnchantType type) {
-        return nbtItem.getInteger(type.toString());
+    public int getItemLevel(ItemStack item, EnchantType type) {
+        if (item == null || item.isEmpty() || item.getType() == Material.AIR) return 0;
+
+        return NBT.get(item, nbt -> {
+            String key = type.toString();
+            return nbt.hasTag(key) ? nbt.getInteger(key) : 0;
+        });
     }
 
     public int getArmorLevel(LivingEntity entity, EnchantType type) {
