@@ -39,7 +39,7 @@ public class RecipeListener implements Listener {
         if (!"uhhicutie".equals(keyed.getKey().getNamespace())) return;
 
         Player player = (Player) event.getView().getPlayer();
-        String recipeId = getRealRecipeId(keyed.getKey().getKey());
+        String recipeId = keyed.getKey().getKey();
         Optional<RecipeInstance> recipeOpt = RecipeManager.getRecipeById(recipeId);
 
         if (recipeOpt.isEmpty()) return;
@@ -50,7 +50,8 @@ public class RecipeListener implements Listener {
             return;
         }
 
-        if (isLimitFullyReached(player, recipe)) {
+        String baseRecipeId = getRealRecipeId(recipeId);
+        if (isLimitFullyReached(player, recipe, baseRecipeId)) {
             event.getInventory().setResult(null);
         }
     }
@@ -61,7 +62,7 @@ public class RecipeListener implements Listener {
         if (!(event.getRecipe() instanceof Keyed keyed)) return;
         if (!"uhhicutie".equals(keyed.getKey().getNamespace())) return;
 
-        String recipeId = getRealRecipeId(keyed.getKey().getKey());
+        String recipeId = keyed.getKey().getKey();
         Optional<RecipeInstance> recipeOpt = RecipeManager.getRecipeById(recipeId);
         if (recipeOpt.isEmpty()) return;
 
@@ -76,7 +77,8 @@ public class RecipeListener implements Listener {
         int maxAllowed = recipe.getMaxCraftsPerPlayer();
         if (maxAllowed <= 0) return;
 
-        int alreadyCrafted = tracker.getCraftCount(player, recipeId);
+        String baseRecipeId = getRealRecipeId(recipeId);
+        int alreadyCrafted = tracker.getCraftCount(player, baseRecipeId);
         int remainingLimit = maxAllowed - alreadyCrafted;
 
         if (remainingLimit <= 0) {
@@ -91,7 +93,7 @@ public class RecipeListener implements Listener {
 
         if (amountToCraft <= remainingLimit) {
             for (int i = 0; i < amountToCraft; i++) {
-                tracker.increment(player, recipeId);
+                tracker.increment(player, baseRecipeId);
             }
             return;
         }
@@ -113,7 +115,7 @@ public class RecipeListener implements Listener {
         }
 
         for (int i = 0; i < remainingLimit; i++) {
-            tracker.increment(player, recipeId);
+            tracker.increment(player, baseRecipeId);
         }
 
         event.getInventory().setResult(null);
@@ -197,11 +199,25 @@ public class RecipeListener implements Listener {
         if (item == null || item.getType() == Material.AIR) return false;
 
         Material requiredMat = ingredient.getMaterial();
-        if (requiredMat == Material.OAK_PLANKS) {
-            if (!Tag.PLANKS.isTagged(item.getType())) return false;
+        Material itemMat = item.getType();
+
+        boolean materialMatches = false;
+
+        if (Tag.PLANKS.isTagged(requiredMat)) {
+            materialMatches = Tag.PLANKS.isTagged(itemMat);
+        } else if (Tag.WOOL.isTagged(requiredMat)) {
+            materialMatches = Tag.WOOL.isTagged(itemMat);
+        } else if (Tag.LOGS.isTagged(requiredMat)) {
+            materialMatches = Tag.LOGS.isTagged(itemMat);
+        } else if (requiredMat == Material.COBBLESTONE || requiredMat == Material.COBBLED_DEEPSLATE) {
+            materialMatches = (itemMat == Material.COBBLESTONE || itemMat == Material.COBBLED_DEEPSLATE);
+        } else if (requiredMat == Material.COAL || requiredMat == Material.CHARCOAL) {
+            materialMatches = (itemMat == Material.COAL || itemMat == Material.CHARCOAL);
         } else {
-            if (item.getType() != requiredMat) return false;
+            materialMatches = (itemMat == requiredMat);
         }
+
+        if (!materialMatches) return false;
 
         ItemMeta meta = item.getItemMeta();
         Integer requiredCMD = ingredient.getCustomModelData();
@@ -244,9 +260,9 @@ public class RecipeListener implements Listener {
         return hasItems ? minMaterial : 0;
     }
 
-    private boolean isLimitFullyReached(Player player, RecipeInstance recipe) {
+    private boolean isLimitFullyReached(Player player, RecipeInstance recipe, String baseId) {
         if (recipe.getMaxCraftsPerPlayer() <= 0) return false;
-        return tracker.getCraftCount(player, recipe.getId()) >= recipe.getMaxCraftsPerPlayer();
+        return tracker.getCraftCount(player, baseId) >= recipe.getMaxCraftsPerPlayer();
     }
 
     private String getRealRecipeId(String key) {

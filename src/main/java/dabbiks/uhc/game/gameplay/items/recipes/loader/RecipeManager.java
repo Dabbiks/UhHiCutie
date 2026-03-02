@@ -5,6 +5,7 @@ import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -41,7 +42,19 @@ public class RecipeManager {
                     .toList();
 
             if (!recipe.getShape().equals(reversedShape)) {
-                registerBase(recipe, result, recipe.getId() + "_reversed", reversedShape);
+                RecipeInstance reversedRecipe = new RecipeInstance();
+                reversedRecipe.setId(recipe.getId() + "_reversed");
+                reversedRecipe.setType(recipe.getType());
+                reversedRecipe.setShape(reversedShape);
+                reversedRecipe.setIngredients(recipe.getIngredients());
+                reversedRecipe.setResult(recipe.getResult());
+                reversedRecipe.setMaxCraftsPerPlayer(recipe.getMaxCraftsPerPlayer());
+                reversedRecipe.setCategories(recipe.getCategories());
+                reversedRecipe.setShowInRecipeBook(recipe.showInRecipeBook());
+
+                recipes.putIfAbsent(reversedRecipe.getId(), reversedRecipe);
+                registerBase(reversedRecipe, result, reversedRecipe.getId(), reversedShape);
+                categorizeRecipe(reversedRecipe);
             }
         }
     }
@@ -67,12 +80,20 @@ public class RecipeManager {
     }
 
     private RecipeChoice getRecipeChoice(Material material) {
-        if (material == Material.OAK_PLANKS) {
-            return new RecipeChoice.MaterialChoice(org.bukkit.Tag.PLANKS.getValues().stream().toList());
+        if (Tag.PLANKS.isTagged(material)) {
+            return new RecipeChoice.MaterialChoice(new ArrayList<>(Tag.PLANKS.getValues()));
         }
-
+        if (Tag.WOOL.isTagged(material)) {
+            return new RecipeChoice.MaterialChoice(new ArrayList<>(Tag.WOOL.getValues()));
+        }
+        if (Tag.LOGS.isTagged(material)) {
+            return new RecipeChoice.MaterialChoice(new ArrayList<>(Tag.LOGS.getValues()));
+        }
         if (material == Material.COBBLESTONE || material == Material.COBBLED_DEEPSLATE) {
             return new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.COBBLED_DEEPSLATE);
+        }
+        if (material == Material.COAL || material == Material.CHARCOAL) {
+            return new RecipeChoice.MaterialChoice(Material.COAL, Material.CHARCOAL);
         }
 
         return new RecipeChoice.MaterialChoice(material);

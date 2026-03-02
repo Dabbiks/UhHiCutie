@@ -64,15 +64,6 @@ public class RecipeGenerator {
 
         registerRecipe(matName.toLowerCase(), Material.valueOf(matName), ingredient, modelData,
                 slot, EquipmentSlot.HAND, RecipeType.TOOL, attributes, shape);
-
-        if (type.equals("AXE") || type.equals("HOE")) {
-            String[] mirroredShape = new String[shape.length];
-            for (int i = 0; i < shape.length; i++) {
-                mirroredShape[i] = new StringBuilder(shape[i]).reverse().toString();
-            }
-            registerRecipe(matName.toLowerCase() + "_mirrored", Material.valueOf(matName), ingredient, modelData,
-                    slot, EquipmentSlot.HAND, RecipeType.TOOL, attributes, mirroredShape);
-        }
     }
 
     private @NonNull List<AttributeData> getAttributeData(double damage, String type) {
@@ -84,10 +75,9 @@ public class RecipeGenerator {
         });
         AttributeData critDamage = new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 40);
 
-        List<AttributeData> attributes = type.equals("AXE")
+        return type.equals("AXE")
                 ? List.of(attackDamage, attackSpeed, critDamage)
                 : List.of(attackDamage, attackSpeed);
-        return attributes;
     }
 
     private void registerArmorSet(String prefix, Material ingredient, double baseArmor, int modelData) {

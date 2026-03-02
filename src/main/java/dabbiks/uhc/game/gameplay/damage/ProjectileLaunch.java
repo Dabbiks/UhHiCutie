@@ -3,7 +3,8 @@ package dabbiks.uhc.game.gameplay.damage;
 import dabbiks.uhc.game.gameplay.damage.handlers.MagicArrowHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.ProjectileHandler;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -14,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.function.Function;
 
 public class ProjectileLaunch implements Listener {
 
@@ -28,8 +31,7 @@ public class ProjectileLaunch implements Listener {
             ItemStack weapon = trident.getItem();
             if (weapon == null || weapon.getType() == Material.AIR) return;
 
-            NBTItem nbt = new NBTItem(weapon);
-            projectileHandler.handle(projectile, nbt);
+            projectileHandler.handle(projectile, weapon);
         }
     }
 
@@ -42,14 +44,14 @@ public class ProjectileLaunch implements Listener {
 
         if (!(event.getProjectile() instanceof Projectile projectile)) return;
 
-        NBTItem nbt = new NBTItem(weapon);
+        boolean hasMagicArrow = Boolean.TRUE.equals(NBT.get(weapon, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag(EnchantType.MAGIC_ARROW.name())));
 
-        if (projectile instanceof Arrow arrow && nbt.hasTag(EnchantType.MAGIC_ARROW.name())) {
+        if (projectile instanceof Arrow arrow && hasMagicArrow) {
             event.setCancelled(true);
-            MagicArrowHandler.launch(player, arrow, nbt);
+            MagicArrowHandler.launch(player, arrow, weapon);
             return;
         }
 
-        projectileHandler.handle(projectile, nbt);
+        projectileHandler.handle(projectile, weapon);
     }
 }
