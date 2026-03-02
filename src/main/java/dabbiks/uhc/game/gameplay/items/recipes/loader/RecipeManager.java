@@ -42,19 +42,7 @@ public class RecipeManager {
                     .toList();
 
             if (!recipe.getShape().equals(reversedShape)) {
-                RecipeInstance reversedRecipe = new RecipeInstance();
-                reversedRecipe.setId(recipe.getId() + "_reversed");
-                reversedRecipe.setType(recipe.getType());
-                reversedRecipe.setShape(reversedShape);
-                reversedRecipe.setIngredients(recipe.getIngredients());
-                reversedRecipe.setResult(recipe.getResult());
-                reversedRecipe.setMaxCraftsPerPlayer(recipe.getMaxCraftsPerPlayer());
-                reversedRecipe.setCategories(recipe.getCategories());
-                reversedRecipe.setShowInRecipeBook(recipe.showInRecipeBook());
-
-                recipes.putIfAbsent(reversedRecipe.getId(), reversedRecipe);
-                registerBase(reversedRecipe, result, reversedRecipe.getId(), reversedShape);
-                categorizeRecipe(reversedRecipe);
+                registerBase(recipe, result, recipe.getId() + "_reversed", reversedShape);
             }
         }
     }
