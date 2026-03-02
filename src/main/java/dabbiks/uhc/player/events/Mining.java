@@ -64,27 +64,22 @@ public class Mining implements Listener {
         if (handMeta.getEnchants().containsKey(Enchantment.FORTUNE)) {
             for (ItemStack item : drops) {
                 item.setAmount(item.getAmount() * random.nextInt(1, 3));
+
                 if (random.nextDouble() > (0.3 * handMeta.getEnchants().get(Enchantment.FORTUNE))) return;
                 item.setAmount(item.getAmount() * 2);
+
                 if (!hasSmelting) return;
                 if (item.getType().equals(getSmeltedMaterial(item.getType()))) return;
                 drops.remove(item);
                 drops.add(new ItemStack(getSmeltedMaterial(item.getType()), item.getAmount()));
-            }
-        }
 
-        if (sessionData.hasTag(SessionTags.MINER)) {
-            assert persistentData != null;
-            int level = persistentData.getChampionLevel("miner");
-            double chance = 0.02 * level;
+                if (!sessionData.hasTag(SessionTags.MINER)) return;
+                int level = persistentData.getChampionLevel("miner");
+                double chance = 0.02 * level;
+                if (random.nextDouble() > chance) return;
+                item.setAmount(item.getAmount() * 2);
 
-            if (random.nextDouble() > chance) return;
-            for (ItemStack drop : drops) {
-                ItemStack bonus = drop.clone();
-                if (hasSmelting) {
-                    bonus.setType(getSmeltedMaterial(bonus.getType()));
-                }
-                block.getWorld().dropItemNaturally(block.getLocation(), bonus);
+                block.getWorld().dropItemNaturally(block.getLocation(), item);
             }
         }
     }
