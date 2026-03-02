@@ -3,16 +3,20 @@ package dabbiks.uhc.game.gameplay.damage.handlers;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.function.Function;
 
 import static dabbiks.uhc.Main.indicatorManager;
 
@@ -20,12 +24,13 @@ public class MagicArrowHandler {
 
     private static final ArmorHandler armorHandler = new ArmorHandler();
 
-    public static void launch(Player shooter, Arrow originalArrow, NBTItem nbt) {
+    public static void launch(Player shooter, Arrow originalArrow, ItemStack weapon) {
         double force = Math.min(originalArrow.getVelocity().length() / 3.0, 1.0);
-        int magicLevel = nbt.getInteger(EnchantType.MAGIC_ARROW.name());
-        int powerLevel = nbt.hasTag(EnchantType.POWER.name()) ? nbt.getInteger(EnchantType.POWER.name()) : 0;
-        boolean hasFlame = nbt.hasTag("FLAME");
-        double baseDamage = nbt.hasTag(AttributeType.RANGED_DAMAGE.name()) ? nbt.getDouble(AttributeType.RANGED_DAMAGE.name()) : 2.0;
+
+        int magicLevel = NBT.get(weapon, nbt -> nbt.hasTag(EnchantType.MAGIC_ARROW.name()) ? nbt.getInteger(EnchantType.MAGIC_ARROW.name()) : 0);
+        int powerLevel = NBT.get(weapon, nbt -> nbt.hasTag(EnchantType.POWER.name()) ? nbt.getInteger(EnchantType.POWER.name()) : 0);
+        boolean hasFlame = Boolean.TRUE.equals(NBT.get(weapon, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("FLAME")));
+        double baseDamage = NBT.get(weapon, nbt -> nbt.hasTag(AttributeType.RANGED_DAMAGE.name()) ? nbt.getDouble(AttributeType.RANGED_DAMAGE.name()) : 2.0);
 
         double damage = (baseDamage * force) + (powerLevel * 1.25);
         double speed = 2.5 + (magicLevel * 0.4);
@@ -104,3 +109,4 @@ public class MagicArrowHandler {
         }
     }
 }
+
