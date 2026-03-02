@@ -1,5 +1,6 @@
 package dabbiks.uhc.game.gameplay;
 
+import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.Shutdown;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
@@ -16,8 +17,12 @@ import static dabbiks.uhc.Main.*;
 public class Victory {
 
     public static void processWin() {
+        if (GameData.isEnding) return;
+
         Team team = TeamUtils.getLastAliveTeam();
         if (team == null) return;
+
+        GameData.isEnding = true;
 
         soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 0.9f);
 

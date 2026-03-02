@@ -1,9 +1,8 @@
 package dabbiks.uhc.game.gameplay.damage.handlers;
 
-import dabbiks.uhc.cosmetics.KillSound;
+import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.gameplay.Victory;
 import dabbiks.uhc.player.PlayerState;
-import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
@@ -16,6 +15,8 @@ import static dabbiks.uhc.Main.*;
 public class DeathHandler {
 
     public void handle(Player player) {
+        if (GameData.isEnding) return;
+
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
         dropFullInventory(player);
@@ -33,14 +34,6 @@ public class DeathHandler {
 
             messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
                     "§c§lELIMINACJA! §7" + killer.getName() + " zabija " + player.getName() + "!");
-
-//            PersistentData killerData = PersistentDataManager.getData(killer.getUniqueId());
-//            if (killerData != null && killerData.getKillSound() != null) {
-//                String soundName = killerData.getKillSound().getSound();
-//                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(soundName), 0.6f, 1);
-//            } else {
-//                soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.valueOf(KillSound.BLASTX.getSound()), 0.6f, 1);
-//            }
 
         } else {
             rewardU.death(player);

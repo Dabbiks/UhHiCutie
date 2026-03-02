@@ -1,10 +1,10 @@
 package dabbiks.uhc.player.traffic;
 
+import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
-import dabbiks.uhc.game.configs.SegmentConfig;
+import dabbiks.uhc.game.gameplay.damage.handlers.DeathHandler;
 import dabbiks.uhc.game.teams.TeamManager;
-import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scoreboard.Team;
 
 import static dabbiks.uhc.Main.*;
 import static dabbiks.uhc.game.gameplay.bossbar.SegmentBossBar.mainBossBar;
@@ -31,12 +30,8 @@ public class QuitEvent implements Listener {
 
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
-        cleanupPlayerData(player);
         handleQuitLogic(player, sessionData);
-
-        String msg = (stateU.getGameState() == GameState.WAITING || stateU.getGameState() == GameState.STARTING)
-                ? "§c" + player.getName() + " §7(§f" + (Bukkit.getOnlinePlayers().size() - 1) + "/" + LobbyConfig.maxPlayerCount + "§7)"
-                : "§c- §7" + player.getName();
+        cleanupPlayerData(player);
     }
 
     private void cleanupPlayerData(Player player) {
@@ -48,6 +43,8 @@ public class QuitEvent implements Listener {
     }
 
     private void handleQuitLogic(Player player, SessionData sessionData) {
+        if (GameData.isEnding) return;
+
         GameState gameState = stateU.getGameState();
 
         if (gameState == GameState.WAITING || gameState == GameState.STARTING) {
@@ -81,8 +78,7 @@ public class QuitEvent implements Listener {
     }
 
     private void handleInGameQuit(Player player, SessionData sessionData) {
-//        Damage.processDeath(player);
-        stateU.removePlayerState(player);
+        new DeathHandler().handle(player);
         sessionData.clearTags();
     }
 }
