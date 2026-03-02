@@ -18,7 +18,7 @@ import static dabbiks.uhc.Main.*;
 public class PowderReward extends Reward {
 
     public enum Tier {
-        MINI("§4§lPYŁ", 10, 80),
+        MINI("§c§lPYŁ", 10, 80),
         SMALL("§c§lPYŁ", 60, 200),
         MEDIUM("§e§lPYŁ", 200, 500),
         BIG("§e§lPYŁ", 400, 1500),

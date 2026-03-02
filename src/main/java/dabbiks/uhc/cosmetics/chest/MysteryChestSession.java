@@ -55,6 +55,9 @@ public class MysteryChestSession {
         World world = Bukkit.getWorld("world");
         Bukkit.getPlayer(uuid).getInventory().close();
 
+        if (chestType == ChestType.MYTHIC) soundU.playSoundAtLocation(centerLocation, Sound.ENTITY_WITHER_DEATH, 0.7f, 0.6f);
+        if (chestType == ChestType.LEGENDARY) soundU.playSoundAtLocation(centerLocation, Sound.ENTITY_ENDER_DRAGON_DEATH, 0.7f, 0.6f);
+
         new ChestMessage().send(chestType, uuid, null);
 
         soundU.playSoundAtLocation(centerLocation, Sound.BLOCK_ANVIL_USE, 1, 1);

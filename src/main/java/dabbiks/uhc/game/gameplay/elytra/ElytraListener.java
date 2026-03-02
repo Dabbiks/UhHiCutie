@@ -64,8 +64,10 @@ public class ElytraListener implements Listener {
         event.setCancelled(true);
         player.setCooldown(Material.FIREWORK_ROCKET, COOLDOWN_TICKS);
 
-        player.setVelocity(new Vector(0, 0.5, 0));
-        player.setVelocity(new Vector(player.getVelocity().getX() + 0.5, player.getVelocity().getY() + 0.5, player.getVelocity().getZ() + 0.5));
+        Vector velocity = player.getVelocity();
+        velocity.add(new Vector(0, 0.5, 0));
+        velocity.multiply(1.5);
+        player.setVelocity(velocity);
 
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             ItemStack currentChest = player.getInventory().getChestplate();
@@ -76,7 +78,7 @@ public class ElytraListener implements Listener {
             player.getInventory().setChestplate(elytra);
             player.setGliding(true);
             player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
-        }, 8L);
+        }, 5L);
     }
 
     @EventHandler
@@ -133,7 +135,7 @@ public class ElytraListener implements Listener {
 
         List<AttributeData> attributes = new ArrayList<>();
         attributes.add(new AttributeData(AttributeType.ARMOR, 3.0));
-        attributes.add(new AttributeData(AttributeType.GRAVITY_PERCENT, -25.0));
+        attributes.add(new AttributeData(AttributeType.GRAVITY_PERCENT, -10.0));
         instance.setAttributes(attributes);
 
         return new ItemBuilder(instance).build();
