@@ -9,11 +9,13 @@ import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -44,27 +46,30 @@ public class Mining implements Listener {
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
         Block block = event.getBlock();
+        Random random = new Random();
 
         if (!ORES.contains(block.getType())) return;
+        event.setDropItems(false);
 
         player.giveExp(5);
 
-        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        ItemStack handItem = player.getInventory().getItemInMainHand();
+        ItemMeta handMeta = handItem.getItemMeta();
 
-        Collection<ItemStack> drops = block.getDrops(itemInHand, player);
+        boolean hasSmelting = handItem.getType() != Material.AIR &&
+                Boolean.TRUE.equals(NBT.get(handItem, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag("SMELTING")));
 
-        for (ItemStack itemStack : drops) {
-            block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
-        }
+        Collection<ItemStack> drops = block.getDrops(handItem, player);
 
-        boolean hasSmelting = itemInHand.getType() != Material.AIR &&
-                Boolean.TRUE.equals(NBT.get(itemInHand, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag("SMELTING")));
-
-        if (hasSmelting) {
-            event.setDropItems(false);
-            for (ItemStack drop : drops) {
-                drop.setType(getSmeltedMaterial(drop.getType()));
-                block.getWorld().dropItemNaturally(block.getLocation(), drop);
+        if (handMeta.getEnchants().containsKey(Enchantment.FORTUNE)) {
+            for (ItemStack item : drops) {
+                item.setAmount(item.getAmount() * random.nextInt(1, 3));
+                if (random.nextDouble() > (0.3 * handMeta.getEnchants().get(Enchantment.FORTUNE))) return;
+                item.setAmount(item.getAmount() * 2);
+                if (!hasSmelting) return;
+                if (item.getType().equals(getSmeltedMaterial(item.getType()))) return;
+                drops.remove(item);
+                drops.add(new ItemStack(getSmeltedMaterial(item.getType()), item.getAmount()));
             }
         }
 
@@ -73,14 +78,13 @@ public class Mining implements Listener {
             int level = persistentData.getChampionLevel("miner");
             double chance = 0.02 * level;
 
-            if (random.nextDouble() <= chance) {
-                for (ItemStack drop : drops) {
-                    ItemStack bonus = drop.clone();
-                    if (hasSmelting) {
-                        bonus.setType(getSmeltedMaterial(bonus.getType()));
-                    }
-                    block.getWorld().dropItemNaturally(block.getLocation(), bonus);
+            if (random.nextDouble() > chance) return;
+            for (ItemStack drop : drops) {
+                ItemStack bonus = drop.clone();
+                if (hasSmelting) {
+                    bonus.setType(getSmeltedMaterial(bonus.getType()));
                 }
+                block.getWorld().dropItemNaturally(block.getLocation(), bonus);
             }
         }
     }

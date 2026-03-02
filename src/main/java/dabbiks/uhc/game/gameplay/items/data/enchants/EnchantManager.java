@@ -1,5 +1,6 @@
 package dabbiks.uhc.game.gameplay.items.data.enchants;
 
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -28,12 +29,13 @@ public class EnchantManager {
             }
 
             if (item.isEmpty() || item.getType() == Material.AIR) continue;
-            NBTItem nbt = new NBTItem(item);
-            String key = type.toString();
 
-            if (nbt.hasKey(key)) {
-                totalLevel += nbt.getInteger(key);
-            }
+            int itemLevel = NBT.get(item, nbt -> {
+                String key = type.toString();
+                return nbt.hasTag(key) ? nbt.getInteger(key) : 0;
+            });
+
+            totalLevel += itemLevel;
         }
 
         return totalLevel;
