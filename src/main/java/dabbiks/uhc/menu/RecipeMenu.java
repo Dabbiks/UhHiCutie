@@ -66,7 +66,9 @@ public class RecipeMenu extends FastInv {
     }
 
     private void refresh() {
-        getInventory().clear();
+        for (int i = 0; i < getInventory().getSize(); i++) {
+            removeItem(i);
+        }
 
         renderCategories();
         renderRecipeList();
