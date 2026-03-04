@@ -12,10 +12,12 @@ import dabbiks.uhc.player.data.session.SessionDataManager;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.*;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -74,6 +76,13 @@ public class DeathHandler {
         return Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag(ItemTags.PERSONAL.name())));
     }
 
+    private void dropItemEntity(World world, Location loc, ItemStack itemStack) {
+        Item droppedItem = world.dropItemNaturally(loc, itemStack);
+        droppedItem.setGravity(false);
+        droppedItem.setUnlimitedLifetime(true);
+        droppedItem.setVelocity(new Vector(0, -0.25, 0));
+    }
+
     private void dropFullInventory(Player player) {
         Location loc = player.getLocation();
         World world = loc.getWorld();
@@ -81,13 +90,13 @@ public class DeathHandler {
 
         for (ItemStack item : player.getInventory().getContents()) {
             if (item == null || item.getType() == Material.AIR || isPersonalItem(item)) continue;
-            world.dropItemNaturally(loc, item);
+            dropItemEntity(world, loc, item);
         }
         player.getInventory().clear();
 
         ItemStack cursorItem = player.getItemOnCursor();
         if (cursorItem != null && cursorItem.getType() != Material.AIR) {
-            if (!isPersonalItem(cursorItem)) world.dropItemNaturally(loc, cursorItem);
+            if (!isPersonalItem(cursorItem)) dropItemEntity(world, loc, cursorItem);
             player.setItemOnCursor(null);
         }
 
@@ -97,6 +106,6 @@ public class DeathHandler {
         ItemStack savedChestplate = manager.getAndRemoveChestplate(player.getUniqueId());
         if (savedChestplate == null || savedChestplate.getType() == Material.AIR || isPersonalItem(savedChestplate)) return;
 
-        world.dropItemNaturally(loc, savedChestplate);
+        dropItemEntity(world, loc, savedChestplate);
     }
 }

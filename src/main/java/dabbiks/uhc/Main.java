@@ -18,7 +18,6 @@ import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
 import dabbiks.uhc.game.teams.*;
 import dabbiks.uhc.game.world.WorldGen;
-import dabbiks.uhc.game.world.events.ItemDrop;
 import dabbiks.uhc.game.world.events.WorldBorder;
 import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.lobby.SpawnProtector;
@@ -111,7 +110,6 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileLaunch(), this);
 
-        Bukkit.getPluginManager().registerEvents(new ItemDrop(), this);
         Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
