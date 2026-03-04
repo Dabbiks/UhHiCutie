@@ -106,11 +106,9 @@ public class ElytraListener implements Listener {
         int max = sessionData.getMaxElytraCharges();
 
         StringBuilder bar = new StringBuilder();
-        bar.append(ChatColor.GREEN);
         for (int i = 0; i < charges; i++) {
             bar.append(symbolU.FUEL);
         }
-        bar.append(ChatColor.RED);
         for (int i = charges; i < max; i++) {
             bar.append(symbolU.NO_FUEL);
         }
