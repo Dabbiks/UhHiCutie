@@ -7,6 +7,9 @@ import java.util.*;
 
 import static dabbiks.uhc.Main.*;
 
+import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
+import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeType;
+
 public class SessionData {
 
     /*-----------------------------------------------------------------------------------------------------------------*/
@@ -33,8 +36,28 @@ public class SessionData {
     // * ELYTRA
     private int elytraCharges = 10;
 
+    // * RECIPES
+    private RecipeType lastRecipeCategory = RecipeType.WEAPON;
+    private RecipeInstance lastSelectedRecipe = null;
+
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
+
+    public RecipeType getLastRecipeCategory() {
+        return lastRecipeCategory;
+    }
+
+    public void setLastRecipeCategory(RecipeType lastRecipeCategory) {
+        this.lastRecipeCategory = lastRecipeCategory;
+    }
+
+    public RecipeInstance getLastSelectedRecipe() {
+        return lastSelectedRecipe;
+    }
+
+    public void setLastSelectedRecipe(RecipeInstance lastSelectedRecipe) {
+        this.lastSelectedRecipe = lastSelectedRecipe;
+    }
 
     // ? ELYTRA
 

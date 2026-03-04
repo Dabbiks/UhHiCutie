@@ -111,8 +111,8 @@ public class WorldBorder {
             setBorderSize(3.2, 1000L);
         } else if (actualSegment > SegmentConfig.secondBorderStageSegment && actualSegment <= SegmentConfig.thirdBorderStageSegment && !isBorderGrowing) {
             return;
-        } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && worldBorderSize > 6) {
-            setBorderSize(3.2, 1000L);
+        } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && borderSize > 80) {
+            setBorderSize(1.6, 1000L);
         }
 
         for (Player player : playerListU.getAllPlayers()) {

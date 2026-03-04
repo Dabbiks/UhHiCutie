@@ -5,6 +5,8 @@ import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeIngredient;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeType;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -49,8 +51,36 @@ public class RecipeMenu extends FastInv {
         this.player = player;
         this.recipeManager = recipeManager;
 
-        this.currentCategory = RecipeType.WEAPON;
-        loadRecipes();
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        if (sessionData.getLastRecipeCategory() != null) {
+            this.currentCategory = sessionData.getLastRecipeCategory();
+        } else {
+            this.currentCategory = RecipeType.WEAPON;
+        }
+
+        this.currentRecipes = recipeManager.getRecipesFromCategory(currentCategory);
+        this.page = 0;
+
+        boolean foundSavedRecipe = false;
+        if (sessionData.getLastSelectedRecipe() != null) {
+            for (RecipeInstance recipe : currentRecipes) {
+                if (recipe.getId().equals(sessionData.getLastSelectedRecipe().getId())) {
+                    this.selectedRecipe = recipe;
+                    foundSavedRecipe = true;
+                    break;
+                }
+            }
+        }
+
+        if (!foundSavedRecipe) {
+            if (!currentRecipes.isEmpty()) {
+                this.selectedRecipe = currentRecipes.get(0);
+                sessionData.setLastSelectedRecipe(this.selectedRecipe);
+            } else {
+                this.selectedRecipe = null;
+            }
+        }
 
         refresh();
         Bukkit.getScheduler().runTaskLater(dabbiks.uhc.Main.plugin, this::refresh, 1L);
@@ -95,7 +125,10 @@ public class RecipeMenu extends FastInv {
             setItem(CATEGORY_SLOTS[index], icon, e -> {
                 if (currentCategory != type) {
                     currentCategory = type;
+                    SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+                    sessionData.setLastRecipeCategory(type);
                     loadRecipes();
+                    sessionData.setLastSelectedRecipe(this.selectedRecipe);
                     refresh();
                     soundU.playSoundToPlayer(player, Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
                 }
@@ -135,6 +168,7 @@ public class RecipeMenu extends FastInv {
 
             setItem(RECIPE_SLOTS[slotIndex], icon, e -> {
                 selectedRecipe = recipe;
+                SessionDataManager.getData(player.getUniqueId()).setLastSelectedRecipe(recipe);
                 refresh();
                 soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
             });
