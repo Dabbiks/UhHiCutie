@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.damage;
+package dabbiks.uhc.game.gameplay.damage.listeners;
 
 import dabbiks.uhc.game.gameplay.damage.handlers.MagicArrowHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.ProjectileHandler;

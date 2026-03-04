@@ -1,7 +1,6 @@
-package dabbiks.uhc.game.gameplay.damage;
+package dabbiks.uhc.game.gameplay.damage.listeners;
 
 import dabbiks.uhc.game.gameplay.damage.handlers.ArmorHandler;
-import dabbiks.uhc.game.gameplay.damage.handlers.AttributeHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.DeathHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.TagHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;

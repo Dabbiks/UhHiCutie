@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.damage;
+package dabbiks.uhc.game.gameplay.damage.listeners;
 
 import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.configs.WorldConfig;
@@ -9,11 +9,8 @@ import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
-import dabbiks.uhc.player.data.persistent.PersistentData;
-import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
