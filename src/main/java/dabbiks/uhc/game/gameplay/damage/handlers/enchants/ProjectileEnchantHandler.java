@@ -20,23 +20,23 @@ public class ProjectileEnchantHandler {
         double enchantDamage = 0;
 
         if (projectile instanceof Arrow) {
-            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.POWER.getName()))) {
-                enchantDamage += power(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.POWER.getName())));
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.POWER.name()))) {
+                enchantDamage += power(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.POWER.name())));
             }
-            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GLOWING.getName()))) {
-                glowing(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GLOWING.getName())), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GLOWING.name()))) {
+                glowing(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GLOWING.name())), victim);
             }
-            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.PYROTECHNICS.getName()))) {
-                pyrotechnics(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.PYROTECHNICS.getName())), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.PYROTECHNICS.name()))) {
+                pyrotechnics(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.PYROTECHNICS.name())), victim);
             }
         }
 
         else if (projectile instanceof Trident) {
-            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GROUNDING.getName()))) {
-                grounding(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GROUNDING.getName())), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.GROUNDING.name()))) {
+                grounding(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.GROUNDING.name())), victim);
             }
-            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.CHANNELING.getName()))) {
-                channeling(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.CHANNELING.getName())), victim);
+            if (NBT.getPersistentData(projectile, nbt -> nbt.hasTag(EnchantType.CHANNELING.name()))) {
+                channeling(NBT.getPersistentData(projectile, nbt -> nbt.getInteger(EnchantType.CHANNELING.name())), victim);
             }
         }
 
@@ -60,14 +60,16 @@ public class ProjectileEnchantHandler {
         world.getNearbyEntities(loc, 3.5, 3.5, 3.5).forEach(entity -> {
             if (entity instanceof LivingEntity target) {
                 target.damage(5.0 * level);
-
                 target.setFireTicks(40 * level);
 
-                Vector push = target.getLocation().toVector()
-                        .subtract(loc.toVector())
-                        .normalize()
-                        .multiply(0.8)
-                        .setY(0.4);
+                Vector push = target.getLocation().toVector().subtract(loc.toVector());
+
+                if (push.lengthSquared() == 0.0) {
+                    push = new Vector(0, 0.4, 0);
+                } else {
+                    push.normalize().multiply(0.8).setY(0.4);
+                }
+
                 target.setVelocity(push);
             }
         });

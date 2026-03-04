@@ -4,6 +4,7 @@ import dabbiks.uhc.commands.RequiredPlayersCommand;
 import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
 import dabbiks.uhc.game.gameplay.damage.listeners.MeleeHit;
+import dabbiks.uhc.game.gameplay.damage.listeners.ParryingBlocker;
 import dabbiks.uhc.game.gameplay.damage.listeners.ProjectileHit;
 import dabbiks.uhc.game.gameplay.damage.listeners.ProjectileLaunch;
 import dabbiks.uhc.game.gameplay.elytra.ChestplateManager;
@@ -112,9 +113,9 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
+        Bukkit.getPluginManager().registerEvents(new ParryingBlocker(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ElytraListener(chestplateManager), this);
         Bukkit.getPluginManager().registerEvents(new ElytraListener(chestplateManager), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
