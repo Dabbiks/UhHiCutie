@@ -1,12 +1,10 @@
 package dabbiks.uhc.game.gameplay.items.recipes.listener;
 
+import dabbiks.uhc.Main;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeIngredient;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
-import org.bukkit.ChatColor;
-import org.bukkit.Keyed;
-import org.bukkit.Material;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static dabbiks.uhc.Main.plugin;
 
 public class RecipeListener implements Listener {
 
@@ -118,7 +118,7 @@ public class RecipeListener implements Listener {
 
         event.getInventory().setResult(null);
         player.sendMessage(ChatColor.YELLOW + "Wytworzono ostatnie możliwe sztuki (Limit).");
-        player.updateInventory();
+        Bukkit.getScheduler().runTask(plugin, player::updateInventory);
     }
 
     private boolean validateIngredients(ItemStack[] matrix, RecipeInstance recipe) {

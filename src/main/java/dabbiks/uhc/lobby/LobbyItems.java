@@ -91,7 +91,7 @@ public class LobbyItems implements Listener {
         if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("SPECTATOR")))) {
             event.setCancelled(true);
             player.teleport(playerListU.getPlayingPlayers().getFirst().getLocation());
-            playerU.clearInventory(player);
+            Bukkit.getScheduler().runTask(INSTANCE, player::updateInventory);
         }
     }
 }
