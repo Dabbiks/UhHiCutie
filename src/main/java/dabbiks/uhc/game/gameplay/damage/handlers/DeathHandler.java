@@ -14,6 +14,8 @@ import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -46,6 +48,11 @@ public class DeathHandler {
             PersistentData killerData = PersistentDataManager.getData(killer.getUniqueId());
 
             if (killer.isOnline()) {
+                playerU.addHealth(killer, 6);
+                killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 1));
+                SessionData killerSessionData = SessionDataManager.getData(killer.getUniqueId());
+                killerSessionData.addElytraCharges(3);
+
                 rewardU.kill(killer);
                 String sound = killerData.getKillSound().getSound();
                 for (Player player1 : playerListU.getAllPlayers()) player1.playSound(player1, "sounds:" + sound.toLowerCase(), 0.8f, 1f);
