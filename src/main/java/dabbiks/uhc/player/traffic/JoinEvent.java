@@ -121,7 +121,7 @@ public class JoinEvent implements Listener {
         player.getInventory().setItem(7, LobbyItems.wiki);
         player.getInventory().setItem(8, LobbyItems.cosmetics);
 
-        if (stateU.getGameState() == GameState.IN_GAME) player.getInventory().setItem(4, LobbyItems.spectator);
+        if (stateU.getGameState() == GameState.IN_GAME) player.getInventory().setItem(2, LobbyItems.spectator);
     }
 
     private void setupPvpSword(Player player, PersistentData persistentData) {

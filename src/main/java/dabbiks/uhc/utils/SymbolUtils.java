@@ -82,4 +82,6 @@ public class SymbolUtils {
 
     // * OTHER
     public final String QUESTION_MARK = "§f\uE09D";
+    public final String FUEL = "§f\uE09E";
+    public final String NO_FUEL = "§f\uE09F";
 }

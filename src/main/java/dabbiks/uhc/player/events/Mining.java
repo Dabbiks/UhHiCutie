@@ -64,6 +64,8 @@ public class Mining implements Listener {
         int fortuneLevel = handMeta.getEnchantLevel(Enchantment.FORTUNE);
 
         for (ItemStack item : drops) {
+            if (item.getType() == Material.COAL && random.nextDouble() > 0.5) sessionData.addElytraCharges(1);
+
             if (fortuneLevel > 0) {
                 item.setAmount(item.getAmount() * random.nextInt(1, 3));
 
@@ -71,6 +73,8 @@ public class Mining implements Listener {
                     item.setAmount(item.getAmount() * 2);
                 }
             }
+
+            if (random.nextDouble() > 0.5) item.setAmount(item.getAmount()+1);
 
             if (hasSmelting) {
                 Material smeltedMaterial = getSmeltedMaterial(item.getType());
@@ -87,7 +91,7 @@ public class Mining implements Listener {
                 }
             }
 
-            block.getWorld().dropItemNaturally(block.getLocation(), item);
+            block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), item);
         }
     }
 

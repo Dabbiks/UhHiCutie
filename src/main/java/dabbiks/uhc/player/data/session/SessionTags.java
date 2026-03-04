@@ -3,7 +3,6 @@ package dabbiks.uhc.player.data.session;
 public enum SessionTags {
 
     // * CHAMPIONS
-
     MINER,
     SMALL_ANVIL_DISCOUNT,
     BIG_ANVIL_DISCOUNT,
@@ -15,6 +14,8 @@ public enum SessionTags {
     PARRY_REGENERATION,
 
     // * ENCHANTS
+    SLUDGE,
 
-    SLUDGE
+    // * ELYTRA
+    MORE_FUEL
 }

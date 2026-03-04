@@ -6,9 +6,14 @@ import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableItemNBT;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,10 +35,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import static dabbiks.uhc.Main.symbolU;
+
 public class ElytraListener implements Listener {
 
     private final ChestplateManager manager;
-    private final int COOLDOWN_TICKS = 100;
+    private final int COOLDOWN_TICKS = 10;
     private final double BOOST_MULTIPLIER = 1.5;
 
     public ElytraListener(ChestplateManager manager) {
@@ -61,8 +68,17 @@ public class ElytraListener implements Listener {
             return;
         }
 
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        if (!sessionData.consumeElytraCharge()) {
+            displayCharges(player, sessionData);
+            return;
+        }
+
         event.setCancelled(true);
         player.setCooldown(Material.FIREWORK_ROCKET, COOLDOWN_TICKS);
+
+        displayCharges(player, sessionData);
 
         Vector velocity = player.getVelocity();
         velocity.add(new Vector(0, 0.5, 0));
@@ -79,6 +95,23 @@ public class ElytraListener implements Listener {
             player.setGliding(true);
             player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
         }, 5L);
+    }
+
+    private void displayCharges(Player player, SessionData sessionData) {
+        int charges = sessionData.getElytraCharges();
+        int max = sessionData.getMaxElytraCharges();
+
+        StringBuilder bar = new StringBuilder();
+        bar.append(ChatColor.GREEN);
+        for (int i = 0; i < charges; i++) {
+            bar.append(symbolU.FUEL);
+        }
+        bar.append(ChatColor.RED);
+        for (int i = charges; i < max; i++) {
+            bar.append(symbolU.NO_FUEL);
+        }
+
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(bar.toString()));
     }
 
     @EventHandler

@@ -1,14 +1,7 @@
 package dabbiks.uhc.player.data.session;
 
-import dabbiks.uhc.game.configs.SegmentConfig;
-import dabbiks.uhc.player.data.persistent.PersistentData;
-import dabbiks.uhc.player.data.persistent.PersistentDataManager;
-import dabbiks.uhc.player.rank.RankType;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -19,34 +12,57 @@ public class SessionData {
     /*-----------------------------------------------------------------------------------------------------------------*/
 
     // * DAMAGER
-
     private Player damager;
     private int damagerTime;
     private Map<Player, Integer> assists = new HashMap<>();
 
     // * RANK
-
     private double rankPRModifier;
 
     // * STATS
-
     private final Map<SessionStats, Integer> sessionStatsMap = new HashMap<>();
 
     // * TAGS
-
     private final EnumSet<SessionTags> activeTags = EnumSet.noneOf(SessionTags.class);
     private final Map<SessionTags, Integer> tagTasks = new HashMap<>();
 
     // * CHAT
-
     private String teamIcon = "";
     private String rankIcon = "";
 
+    // * ELYTRA
+    private int elytraCharges = 10;
+
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
+
+    // ? ELYTRA
+
+    public int getMaxElytraCharges() {
+        return hasTag(SessionTags.MORE_FUEL) ? 12 : 10;
+    }
+
+    public int getElytraCharges() {
+        return Math.min(elytraCharges, getMaxElytraCharges());
+    }
+
+    public void addElytraCharges(int amount) {
+        this.elytraCharges = Math.min(this.elytraCharges + amount, getMaxElytraCharges());
+    }
+
+    public void removeElytraCharges(int amount) {
+        this.elytraCharges = Math.max(this.elytraCharges - amount, 0);
+    }
+
+    public boolean consumeElytraCharge() {
+        if (this.elytraCharges > 0) {
+            this.elytraCharges--;
+            return true;
+        }
+        return false;
+    }
 
     // ? DAMAGER
-
     public void setDamager(Player victim, Player attacker) {
         if (damager != null && damager != attacker) {
             assists.put(damager, damagerTime);
@@ -74,12 +90,10 @@ public class SessionData {
             if (!entry.getKey().isOnline()) { assists.remove(entry.getKey()); continue; }
             players.add(entry.getKey());
         }
-
         return players;
     }
 
     // ? RANK
-
     public void setModifier(double modifier) {
         rankPRModifier = modifier;
     }
@@ -89,7 +103,6 @@ public class SessionData {
     }
 
     // ? STATS
-
     public void addStats(SessionStats sessionStats, Integer value) {
         sessionStatsMap.put(sessionStats, sessionStatsMap.getOrDefault(sessionStats, 0) + value);
     }
@@ -99,7 +112,6 @@ public class SessionData {
     }
 
     // ? CHAT
-
     public void setTeamIcon(String teamIcon) {
         this.teamIcon = teamIcon;
     }
@@ -109,7 +121,6 @@ public class SessionData {
     }
 
     // ? TAGS
-
     public void addTag(SessionTags tag) {
         activeTags.add(tag);
         Integer taskId = tagTasks.remove(tag);

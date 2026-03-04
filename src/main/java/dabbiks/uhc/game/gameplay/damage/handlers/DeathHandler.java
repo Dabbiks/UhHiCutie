@@ -3,12 +3,15 @@ package dabbiks.uhc.game.gameplay.damage.handlers;
 import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.gameplay.Victory;
 import dabbiks.uhc.player.PlayerState;
+import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
 
 import static dabbiks.uhc.Main.*;
 
@@ -27,14 +30,24 @@ public class DeathHandler {
         if (sessionData.getDamager() != null && timeU.getTime() - sessionData.getDamagerTime() < 60) {
             Player killer = sessionData.getDamager();
 
-            rewardU.kill(killer);
+
             rewardU.death(player);
             rewardU.summary(player);
-            for (Player assistPlayer : sessionData.getAssists()) rewardU.assist(assistPlayer);
+            for (Player assistPlayer : new ArrayList<>(sessionData.getAssists())) {
+                rewardU.assist(assistPlayer);
+            }
+            messageU.sendMessageToPlayers(
+                    playerListU.getAllPlayers(), "§c§lELIMINACJA! §7" + killer.getName() + " zabija " + player.getName() + "!");
 
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
-                    "§c§lELIMINACJA! §7" + killer.getName() + " zabija " + player.getName() + "!");
+            PersistentData killerData = PersistentDataManager.getData(killer.getUniqueId());
 
+            if (killer.isOnline()) {
+                rewardU.kill(killer);
+                String sound = killerData.getKillSound().getSound();
+                for (Player player1 : playerListU.getAllPlayers()) player1.playSound(player1, "sounds:" + sound.toLowerCase(), 0.8f, 1f);
+            } else {
+                for (Player player1 : playerListU.getAllPlayers()) player1.playSound(player1, "sounds:blastx", 0.8f, 1f);
+            }
         } else {
             rewardU.death(player);
             rewardU.summary(player);

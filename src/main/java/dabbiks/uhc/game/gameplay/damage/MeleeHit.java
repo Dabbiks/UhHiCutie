@@ -1,5 +1,6 @@
 package dabbiks.uhc.game.gameplay.damage;
 
+import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.game.gameplay.damage.handlers.*;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
@@ -40,6 +41,7 @@ public class MeleeHit implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (!event.getEntity().getWorld().getName().equals(WorldConfig.worldName)) return;
+        if (GameData.isEnding) { event.setCancelled(true); return; }
         if (!(event instanceof EntityDamageByEntityEvent) && event.getEntity() instanceof Player) {
             processEnvironmentDamage(event);
             return;
@@ -70,6 +72,7 @@ public class MeleeHit implements Listener {
         double damage = baseDamage;
 
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL) { baseDamage /= 2; damage /= 2; }
+        if (event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) { baseDamage /= 2; damage /= 2; }
 
         damage += tagHandler.handle(victim, null, baseDamage);
         damage += meleeEnchantHandler.handle(victim, victim, damage, null, EnchantType.IRON_FEET);

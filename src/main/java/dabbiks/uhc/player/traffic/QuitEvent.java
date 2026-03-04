@@ -52,7 +52,7 @@ public class QuitEvent implements Listener {
             return;
         }
 
-        if (stateU.getPlayerState(player) == PlayerState.SPECTATOR) {
+        if (stateU.getPlayerState(player) != PlayerState.ALIVE) {
             handleSpectatorQuit(player, sessionData);
             return;
         }

@@ -15,8 +15,7 @@ public class ItemDrop implements Listener {
         item.setGravity(false);
         item.setUnlimitedLifetime(true);
 
-        Vector velocity = item.getVelocity();
-        item.setVelocity(velocity.multiply(0.25));
+        item.setVelocity(new Vector(0, -0.25, 0));
     }
 
 }

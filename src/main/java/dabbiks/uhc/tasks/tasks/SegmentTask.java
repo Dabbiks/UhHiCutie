@@ -3,9 +3,12 @@ package dabbiks.uhc.tasks.tasks;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.SegmentConfig;
 import dabbiks.uhc.game.world.events.WeatherCycle;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.tab.TabUtils;
 import dabbiks.uhc.tasks.Task;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +32,14 @@ public class SegmentTask extends Task {
             soundU.playSoundToPlayers(playerListU.getAllPlayers(), Sound.BLOCK_LEVER_CLICK, 0.4f, 0.9f);
 
             SegmentConfig.actualSegment++;
+
+            for (Player player : playerListU.getPlayingPlayers()) {
+                SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+                sessionData.addElytraCharges(1);
+            }
+
             WeatherCycle.rollWeather();
+
             new TabUtils().setGlobalTabFooter("\n" + WeatherCycle.getWeatherIcon() + "\n");
         }
     }

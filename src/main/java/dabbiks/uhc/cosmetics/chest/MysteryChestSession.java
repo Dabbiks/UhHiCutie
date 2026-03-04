@@ -122,7 +122,7 @@ public class MysteryChestSession {
                     }
                 }
             }
-        }.runTaskTimer(plugin, 0L, 2L);
+        }.runTaskTimer(plugin, 0L, 6L);
     }
 
     private void spawnQuestionParticle(Location chestLoc) {
