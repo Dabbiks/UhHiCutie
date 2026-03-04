@@ -23,6 +23,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -47,18 +48,20 @@ public class ElytraListener implements Listener {
         this.manager = manager;
     }
 
+    private boolean isPersonalFirework(ItemStack item) {
+        if (item == null || item.getType() != Material.FIREWORK_ROCKET) return false;
+        return Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag(ItemTags.PERSONAL.name())));
+    }
+
     @EventHandler
     public void onRocketUse(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         ItemStack item = event.getItem();
-        if (item == null || item.getType() != Material.FIREWORK_ROCKET) return;
+        if (!isPersonalFirework(item)) return;
 
         Player player = event.getPlayer();
         if (player.hasCooldown(Material.FIREWORK_ROCKET)) return;
-
-        Boolean isPersonal = NBT.get(item, (Function<ReadableItemNBT, Boolean>) nbt -> nbt.hasTag(ItemTags.PERSONAL.name()));
-        if (!Boolean.TRUE.equals(isPersonal)) return;
 
         ItemStack elytra = manager.hasSavedElytra(player.getUniqueId())
                 ? manager.getElytra(player.getUniqueId())
@@ -71,6 +74,7 @@ public class ElytraListener implements Listener {
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
         if (!sessionData.consumeElytraCharge()) {
+            event.setCancelled(true);
             displayCharges(player, sessionData);
             return;
         }
@@ -136,24 +140,84 @@ public class ElytraListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (!manager.hasSavedChestplate(player.getUniqueId())) return;
 
-        if (event.getSlotType() == InventoryType.SlotType.ARMOR && event.getSlot() == 38) {
-            event.setCancelled(true);
+        if (event.getSlotType() == InventoryType.SlotType.ARMOR) {
+            ItemStack current = event.getCurrentItem();
+            if (current != null && current.getType() == Material.ELYTRA) {
+                event.setCancelled(true);
+            }
         }
+    }
 
-        if (event.getClick() == ClickType.NUMBER_KEY && event.getSlotType() == InventoryType.SlotType.ARMOR && event.getSlot() == 38) {
-            event.setCancelled(true);
-        }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onArmorSwapInteract(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        Player player = event.getPlayer();
+        if (!manager.hasSavedChestplate(player.getUniqueId())) return;
 
-        if (event.isShiftClick() && event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.ELYTRA) {
+        ItemStack item = event.getItem();
+        if (item == null) return;
+        String name = item.getType().name();
+        if (name.endsWith("_CHESTPLATE") || name.equals("ELYTRA")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onFireworkInventoryClick(InventoryClickEvent event) {
+        ItemStack current = event.getCurrentItem();
+        ItemStack cursor = event.getCursor();
+
+        boolean isCurrentFirework = isPersonalFirework(current);
+        boolean isCursorFirework = isPersonalFirework(cursor);
+
+        if (event.getClick() == ClickType.NUMBER_KEY) {
+            ItemStack hotbarItem = event.getWhoClicked().getInventory().getItem(event.getHotbarButton());
+            if (isPersonalFirework(hotbarItem)) {
+                if (event.getClickedInventory() != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+
+        if (!isCurrentFirework && !isCursorFirework) return;
+
+        if (event.isShiftClick() && isCurrentFirework) {
+            if (event.getView().getTopInventory().getType() != InventoryType.CRAFTING) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if (isCursorFirework && event.getClickedInventory() != null) {
+            if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onFireworkDrag(InventoryDragEvent event) {
+        if (!isPersonalFirework(event.getOldCursor())) return;
+
+        for (int slot : event.getRawSlots()) {
+            if (slot < event.getView().getTopInventory().getSize()) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemDrop(PlayerDropItemEvent event) {
+        ItemStack dropped = event.getItemDrop().getItemStack();
+
+        if (isPersonalFirework(dropped)) {
+            event.setCancelled(true);
+            return;
+        }
+
         Player player = event.getPlayer();
         if (manager.hasSavedChestplate(player.getUniqueId())) {
-            ItemStack dropped = event.getItemDrop().getItemStack();
             if (dropped.getType() == Material.ELYTRA) {
                 event.setCancelled(true);
             }
