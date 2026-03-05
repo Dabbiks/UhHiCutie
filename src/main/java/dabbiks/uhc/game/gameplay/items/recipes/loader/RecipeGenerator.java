@@ -42,7 +42,7 @@ public class RecipeGenerator {
     private void registerTier(String prefix, Material ingredient, double baseDmg, double baseArmor, int modelData) {
         registerSword(prefix + "_SWORD", ingredient, baseDmg, modelData);
         registerTool(prefix + "_PICKAXE", ingredient, baseDmg - 2, "PICKAXE", EnchantSlot.PICKAXE, modelData, "III", " S ", " S ");
-        registerTool(prefix + "_AXE", ingredient, baseDmg + 1, "AXE", EnchantSlot.AXE, modelData, "II", "IS", " S");
+        registerTool(prefix + "_AXE", ingredient, baseDmg - 2, "AXE", EnchantSlot.AXE, modelData, "II", "IS", " S");
         registerTool(prefix + "_SHOVEL", ingredient, baseDmg - 2, "SHOVEL", EnchantSlot.TOOL, modelData, "I", "S", "S");
         registerTool(prefix + "_HOE", ingredient, baseDmg - 3, "HOE", EnchantSlot.TOOL, modelData, "II", " S", " S");
 
@@ -69,14 +69,14 @@ public class RecipeGenerator {
     private @NonNull List<AttributeData> getAttributeData(double damage, String type) {
         AttributeData attackDamage = new AttributeData(AttributeType.ATTACK_DAMAGE, damage);
         AttributeData attackSpeed = new AttributeData(AttributeType.ATTACK_SPEED, switch (type) {
-            case "PICKAXE" -> -2.5;
-            case "AXE" -> -3.5;
+            case "PICKAXE", "AXE" -> -2.5;
             default -> -2;
         });
-        AttributeData critDamage = new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 40);
+        AttributeData critDamage = new AttributeData(AttributeType.CRIT_DAMAGE_PERCENT, 65);
+        AttributeData lethality = new AttributeData(AttributeType.ARMOR_PENETRATION, Math.max(1, damage - 1));
 
         return type.equals("AXE")
-                ? List.of(attackDamage, attackSpeed, critDamage)
+                ? List.of(attackDamage, attackSpeed, critDamage, lethality)
                 : List.of(attackDamage, attackSpeed);
     }
 

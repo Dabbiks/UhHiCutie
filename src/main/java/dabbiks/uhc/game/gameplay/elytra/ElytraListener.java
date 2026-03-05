@@ -84,10 +84,9 @@ public class ElytraListener implements Listener {
 
         displayCharges(player, sessionData);
 
-        Vector velocity = player.getVelocity();
-        velocity.add(new Vector(0, 0.5, 0));
-        velocity.multiply(1.5);
-        player.setVelocity(velocity);
+        Vector direction = player.getLocation().getDirection();
+        direction.multiply(1.8);
+        player.setVelocity(direction);
 
         Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
             ItemStack currentChest = player.getInventory().getChestplate();
@@ -98,7 +97,7 @@ public class ElytraListener implements Listener {
             player.getInventory().setChestplate(elytra);
             player.setGliding(true);
             player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
-        }, 5L);
+        }, 2L);
     }
 
     private void displayCharges(Player player, SessionData sessionData) {
