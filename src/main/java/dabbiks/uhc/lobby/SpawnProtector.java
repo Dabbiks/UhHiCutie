@@ -4,8 +4,6 @@ import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.gameplay.damage.handlers.CriticalHitHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.ParryingHandler;
 import dabbiks.uhc.tasks.tasks.PvpSwordTask;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -16,17 +14,17 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.ItemStack;
 
 import static dabbiks.uhc.Main.*;
 
 public class SpawnProtector implements Listener {
 
-    CriticalHitHandler criticalHitHandler = new CriticalHitHandler();
-    ParryingHandler parryingHandler = new ParryingHandler();
+    private final CriticalHitHandler criticalHitHandler = new CriticalHitHandler();
+    private final ParryingHandler parryingHandler = new ParryingHandler();
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -38,7 +36,17 @@ public class SpawnProtector implements Listener {
             return;
         }
 
-        if (!PvpSwordTask.canFight(damager) || !PvpSwordTask.canFight(victim) || damager.getInventory().getHeldItemSlot() != 4) {
+        if (!PvpSwordTask.canFight(damager)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!PvpSwordTask.canFight(victim)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (damager.getInventory().getHeldItemSlot() != 4) {
             event.setCancelled(true);
             return;
         }
@@ -72,63 +80,102 @@ public class SpawnProtector implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getPlayer().hasPermission("*")) return;
-        if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getPlayer().hasPermission("*")) return;
-        if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getPlayer().hasPermission("*")) return;
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getPlayer().hasPermission("*") || event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (event.getPlayer().hasPermission("*")) return;
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
+        if (event.getPlayer().hasPermission("*")) return;
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakByEntityEvent event) {
+        if (!(event.getRemover() instanceof Player player)) return;
+        if (player.hasPermission("*")) return;
+        if (!player.getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onOtherEntityDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player player)) return;
+        if (player.hasPermission("*")) return;
+        if (!player.getWorld().getName().equalsIgnoreCase("world")) return;
+        if (event.getEntity() instanceof Player) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked().hasPermission("*")) return;
-        if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (!event.getWhoClicked().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         if (event.getWhoClicked().hasPermission("*")) return;
-        if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (!event.getWhoClicked().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (event.getPlayer().hasPermission("*")) return;
-        if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         if (event.getPlayer().hasPermission("*")) return;
-        if (event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) {
-            event.setCancelled(true);
-        }
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
+        if (event.getPlayer().hasPermission("*")) return;
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onBucketFill(PlayerBucketFillEvent event) {
+        if (event.getPlayer().hasPermission("*")) return;
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
     public void onFireworkDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Firework && stateU.getGameState() != GameState.IN_GAME) {
-            event.setCancelled(true);
-        }
+        if (stateU.getGameState() == GameState.IN_GAME) return;
+        if (!(event.getDamager() instanceof Firework)) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
