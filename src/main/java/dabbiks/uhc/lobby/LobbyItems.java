@@ -4,6 +4,7 @@ import dabbiks.uhc.menu.ChampionMenu;
 import dabbiks.uhc.menu.RecipeMenu;
 import dabbiks.uhc.menu.cosmetics.CosmeticsMainMenu;
 import dabbiks.uhc.menu.wiki.WikiMainMenu;
+import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import de.tr7zw.nbtapi.NBT;
@@ -89,6 +90,8 @@ public class LobbyItems implements Listener {
         }
 
         if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("SPECTATOR")))) {
+            stateU.setPlayerState(player, PlayerState.SPECTATOR);
+            player.setGameMode(GameMode.SPECTATOR);
             event.setCancelled(true);
             player.teleport(playerListU.getPlayingPlayers().getFirst().getLocation());
             Bukkit.getScheduler().runTask(INSTANCE, player::updateInventory);
