@@ -1,5 +1,6 @@
 package dabbiks.uhc.player.traffic;
 
+import dabbiks.uhc.cosmetics.Cage;
 import dabbiks.uhc.cosmetics.KillSound;
 import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
@@ -85,6 +86,11 @@ public class JoinEvent implements Listener {
         if (data.getTrail() == null) {
             data.unlockTrail(ParticleTrail.DEFAULT);
             data.setTrail(ParticleTrail.DEFAULT);
+        }
+
+        if (data.getCage() == null) {
+            data.unlockCage(Cage.DEFAULT);
+            data.setCage(Cage.DEFAULT);
         }
 
         RankManager.processPlacements(player);

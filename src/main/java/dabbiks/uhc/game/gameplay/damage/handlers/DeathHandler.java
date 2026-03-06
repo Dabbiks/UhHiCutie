@@ -66,17 +66,17 @@ public class DeathHandler {
 
                 int streak = killerSessionData.getKillStreak();
                 if (streak > 1) {
-                    String streakName = "§0§lLEGENDA";
+                    String streakName = "§0ʟᴇɢᴇɴᴅᴀ";
                     switch (streak) {
-                        case 2: streakName = "§aDOUBLE KILL"; break;
-                        case 3: streakName = "§bTRIPLE KILL"; break;
-                        case 4: streakName = "§9§lQUADRA KILL"; break;
-                        case 5: streakName = "§e§lPENTA KILL"; break;
-                        case 6: streakName = "§6§lHEXA KILL"; break;
-                        case 7: streakName = "§c§lHEPTA KILL"; break;
-                        case 8: streakName = "§d§lOCTA KILL"; break;
-                        case 9: streakName = "§5§lNONA KILL"; break;
-                        case 10: streakName = "§4§lDECA KILL"; break;
+                        case 2: streakName = "§aᴅᴏᴜʙʟᴇ ᴋɪʟʟ"; break;
+                        case 3: streakName = "§bᴛʀɪᴘʟᴇ ᴋɪʟʟ"; break;
+                        case 4: streakName = "§9ǫᴜᴀᴅʀᴀ ᴋɪʟʟ"; break;
+                        case 5: streakName = "§eᴘᴇɴᴛᴀ ᴋɪʟʟ"; break;
+                        case 6: streakName = "§6ʜᴇxᴀ ᴋɪʟʟ"; break;
+                        case 7: streakName = "§cʜᴇᴘᴛᴀ ᴋɪʟʟ"; break;
+                        case 8: streakName = "§dᴏᴄᴛᴀ ᴋɪʟʟ"; break;
+                        case 9: streakName = "§5ɴᴏɴᴀ ᴋɪʟʟ"; break;
+                        case 10: streakName = "§4ᴅᴇᴄᴀ ᴋɪʟʟ"; break;
                     }
                     titleU.sendTitleToPlayers(playerListU.getAllPlayers(), streakName, "§7" + killer.getName(), 30);
                 }

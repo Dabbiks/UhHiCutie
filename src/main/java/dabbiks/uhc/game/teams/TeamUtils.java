@@ -119,7 +119,7 @@ public class TeamUtils {
                     PersistentData pd = PersistentDataManager.getData(p.getUniqueId());
                     if (pd != null && pd.getCage() != null) {
                         try {
-                            cageMat = Material.valueOf(pd.getCage().toUpperCase());
+                            cageMat = pd.getCage().getMaterial();
                         } catch (Exception ignored) {}
                     }
                 }

@@ -20,6 +20,7 @@ import dabbiks.uhc.player.tab.TabUtils;
 import de.tr7zw.nbtapi.NBT;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
@@ -57,11 +58,14 @@ public class StartManager implements Listener {
 
             @Override
             public void run() {
+                List<Player> players = playerListU.getAllPlayers();
                 if (time > 0) {
-                    titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "§cStart za", "§e" + time, 20);
+                    titleU.sendTitleToPlayers(players, "§cStart za", "§e" + time, 60);
+                    soundU.playSoundToPlayers(players, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.8f, 1);
                     time--;
                 } else {
-                    titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "§aSTART!", "", 20);
+                    titleU.sendTitleToPlayers(players, "§aSTART!", "", 60);
+                    soundU.playSoundToPlayers(players, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.8f, 1);
                     TeamUtils.removeCages();
                     HandlerList.unregisterAll(StartManager.this);
                     this.cancel();

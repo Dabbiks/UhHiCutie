@@ -63,10 +63,10 @@ public class LobbyTopManager {
 
                 String uuidStr = file.getName().replace(".json", "");
                 UUID uuid = UUID.fromString(uuidStr);
-                String name = Bukkit.getOfflinePlayer(uuid).getName();
-                if (name == null) name = "Unknown";
 
-                JsonObject stats = root.has("persistentStatsMap") ? root.getAsJsonObject("persistentStatsMap") : new JsonObject();
+                String name = root.has("name") && !root.get("name").isJsonNull() ? root.get("name").getAsString() : "Unknown";
+
+                JsonObject stats = root.has("stats") ? root.getAsJsonObject("stats") : new JsonObject();
 
                 coins.put(name, getStat(stats, "COINS"));
                 powder.put(name, getStat(stats, "POWDER"));

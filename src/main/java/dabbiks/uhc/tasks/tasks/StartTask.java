@@ -26,7 +26,7 @@ public class StartTask extends Task {
         if (!(WorldConfig.isWorldGenerated)) return;
 
         if (stateU.getGameState() == GameState.STARTING && countdown > 0) {
-            titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "", String.valueOf(countdown), 30);
+            titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "", "§e" + countdown, 30);
             countdown--;
         }
 
@@ -35,7 +35,7 @@ public class StartTask extends Task {
         }
 
         if (stateU.getGameState() == GameState.STARTING && playerCount < LobbyConfig.minPlayerCount) {
-            titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "", "Przerwane", 30);
+            titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "", "§cPrzerwane", 30);
             stateU.setGameState(GameState.WAITING);
             countdown = LobbyConfig.COUNTDOWN;
         }

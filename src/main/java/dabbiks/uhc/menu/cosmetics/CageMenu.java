@@ -25,7 +25,7 @@ public class CageMenu extends FastInv {
     private final Cage[] cages;
 
     public CageMenu(Player player, PersistentData persistentData) {
-        super(36, "Klatki startowe");
+        super(54, "Klatki startowe");
         this.player = player;
         this.persistentData = persistentData;
         this.cages = Cage.values();
