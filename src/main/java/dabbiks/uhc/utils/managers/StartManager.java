@@ -23,8 +23,13 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -32,7 +37,7 @@ import java.util.List;
 
 import static dabbiks.uhc.Main.*;
 
-public class StartManager {
+public class StartManager implements Listener {
 
     ItemStack firework = new ItemStack(Material.BARRIER);
     ChestplateManager chestplateManager = INSTANCE.getChestplateManager();
@@ -43,7 +48,33 @@ public class StartManager {
         prepareTeams();
         prepareTab();
         preparePlayers();
-        prepareFlight();
+
+        Bukkit.getPluginManager().registerEvents(this, Main.plugin);
+        TeamUtils.createCagesAndTeleport(200);
+
+        new BukkitRunnable() {
+            int time = 20;
+
+            @Override
+            public void run() {
+                if (time > 0) {
+                    titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "§cStart za", "§e" + time, 20);
+                    time--;
+                } else {
+                    titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "§aSTART!", "", 20);
+                    TeamUtils.removeCages();
+                    HandlerList.unregisterAll(StartManager.this);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(Main.plugin, 0L, 20L);
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (TeamUtils.hasCages() && event.getBlock().getY() >= 250 && event.getBlock().getY() <= 256) {
+            event.setCancelled(true);
+        }
     }
 
     private void setFireworkItem() {
@@ -90,47 +121,5 @@ public class StartManager {
             Champion champion = championManager.getChampion(persistentData.getChampion());
             champion.onStart(player, persistentData.getChampionLevel(persistentData.getChampion()));
         }
-        TeamUtils.teleportTeamsRandomly(300, 300);
     }
-
-    private void prepareFlight() {
-        final int COOLDOWN_TICKS = 100;
-        final double BOOST_MULTIPLIER = 1.5;
-
-        for (Player player : playerListU.getPlayingPlayers()) {
-            if (player.hasCooldown(Material.FIREWORK_ROCKET)) return;
-            player.setCooldown(Material.FIREWORK_ROCKET, COOLDOWN_TICKS);
-
-            Vector velocity = player.getVelocity();
-            velocity.add(new Vector(0, 0.5, 0));
-            velocity.multiply(1.5);
-            player.setVelocity(velocity);
-
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                ItemStack currentChest = player.getInventory().getChestplate();
-                if (currentChest != null && currentChest.getType() != Material.ELYTRA) {
-                    chestplateManager.saveChestplate(player.getUniqueId(), currentChest.clone());
-                }
-
-                player.getInventory().setChestplate(createCustomElytra());
-                player.setGliding(true);
-                player.setVelocity(player.getLocation().getDirection().multiply(BOOST_MULTIPLIER));
-            }, 5L);
-        }
-    }
-
-    private ItemStack createCustomElytra() {
-        ItemInstance instance = new ItemInstance();
-        instance.setMaterial(Material.ELYTRA.name());
-        instance.setAmount(1);
-        instance.setEquipmentSlot(EquipmentSlot.CHEST);
-
-        List<AttributeData> attributes = new ArrayList<>();
-        attributes.add(new AttributeData(AttributeType.ARMOR, 3.0));
-        attributes.add(new AttributeData(AttributeType.GRAVITY_PERCENT, -10.0));
-        instance.setAttributes(attributes);
-
-        return new ItemBuilder(instance).build();
-    }
-
 }

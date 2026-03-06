@@ -13,8 +13,6 @@ import java.util.*;
 
 public class PersistentData {
 
-    /*-----------------------------------------------------------------------------------------------------------------*/
-
     @Expose
     private UUID uuid;
 
@@ -30,16 +28,11 @@ public class PersistentData {
     @Expose
     private RankType rank;
 
-
-    // * RECIPES
-
     @Expose
     private String recipeCategory;
 
     @Expose
     private RecipeInstance recipe;
-
-    // * CHAMPIONS
 
     @Expose
     private String champion;
@@ -55,8 +48,6 @@ public class PersistentData {
 
     @Expose
     private Map<String, Integer> championShards = new HashMap<>();
-
-    // * COSMETICS
 
     @Expose
     private String killSound;
@@ -78,8 +69,6 @@ public class PersistentData {
     @Expose
     private List<String> unlockedCages = new ArrayList<>();
 
-    // * CHESTS
-
     @Expose
     private int[] chests = new int[5];
 
@@ -89,104 +78,44 @@ public class PersistentData {
     @Expose
     private int[] keyFragments = new int[5];
 
-    /*-----------------------------------------------------------------------------------------------------------------*/
-    /*-----------------------------------------------------------------------------------------------------------------*/
+    public UUID getUUID() { return uuid; }
+    public void setUUID(UUID uuid) { this.uuid = uuid; }
 
-    public UUID getUUID() {
-        return uuid;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
-    }
+    public boolean isManager() { return isManager; }
 
-    public String getName() {
-        return name;
-    }
+    public RankType getRank() { return rank; }
+    public void setRank(RankType rank) { this.rank = rank; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isManager() {
-        return isManager;
-    }
-
-    public RankType getRank() {
-        return rank;
-    }
-
-    public void setRank(RankType rank) {
-        this.rank = rank;
-    }
-
-    public Map<PersistentStats, Integer> getStats() {
-        return stats;
-    }
-
-    public void addStats(PersistentStats stats, int value) {
-        this.stats.put(stats, getStats().getOrDefault(stats, 0) + value);
-    }
-
-    public void setStats(PersistentStats stats, int number) {
-        this.stats.put(stats, number);
-    }
-
-    public void removeStats(PersistentStats stats, int number) {
-        this.stats.put(stats, getStats().getOrDefault(stats, 0) - number);
-    }
-
-    // ? RECIPES
+    public Map<PersistentStats, Integer> getStats() { return stats; }
+    public void addStats(PersistentStats stats, int value) { this.stats.put(stats, getStats().getOrDefault(stats, 0) + value); }
+    public void setStats(PersistentStats stats, int number) { this.stats.put(stats, number); }
+    public void removeStats(PersistentStats stats, int number) { this.stats.put(stats, getStats().getOrDefault(stats, 0) - number); }
 
     public String getRecipeCategory() { return recipeCategory; }
-
-    public void setRecipeCategory(String recipeCategory) {
-        this.recipeCategory = recipeCategory;
-    }
-
+    public void setRecipeCategory(String recipeCategory) { this.recipeCategory = recipeCategory; }
     public RecipeInstance getRecipe() { return recipe; }
-
     public void setRecipe(RecipeInstance recipe) { this.recipe = recipe; }
 
-    // ? CHAMPIONS
-
     public String getChampion() { return champion; }
-
     public void setChampion(String champion) { this.champion = champion; }
-
     public int getChampionMastery(String champion) { return championMastery.getOrDefault(champion, 0); }
-
     public void addChampionMastery(String champion, int amount) { championMastery.put(champion, championMastery.getOrDefault(champion, 0) + amount); }
-
     public int getChampionLevel(String champion) { return championLevel.getOrDefault(champion, 0); }
-
     public void setChampionLevel(String champion, int level) { championLevel.put(champion, level); }
-
     public List<String> getUnlockedChampions() { return unlockedChampions; }
-
     public boolean hasUnlockedChampion(String champion) { return unlockedChampions.contains(champion); }
-
-    public void addUnlockedChampion(String champion) { unlockedChampions.add(champion);
-        championLevel.put(champion, 1);
-        championMastery.put(champion, 0);
-    }
-
-    public void addChampionShards(String champion, int amount) {
-        championShards.put(champion, Math.min(championShards.getOrDefault(champion, 0)+amount, 10));
-    }
-
-    public int getChampionShards(String champion) {
-        return championShards.getOrDefault(champion, 0);
-    }
-
-    // ? COSMETICS
+    public void addUnlockedChampion(String champion) { unlockedChampions.add(champion); championLevel.put(champion, 1); championMastery.put(champion, 0); }
+    public void addChampionShards(String champion, int amount) { championShards.put(champion, Math.min(championShards.getOrDefault(champion, 0)+amount, 10)); }
+    public int getChampionShards(String champion) { return championShards.getOrDefault(champion, 0); }
 
     public KillSound getKillSound() {
         if (killSound == null) return null;
         return KillSound.valueOf(killSound);
     }
     public void setKillSound(KillSound killSound) { this.killSound = killSound.name(); }
-
     public void unlockKillSound(KillSound killSound) { unlockedKillSounds.add(killSound.name()); }
     public boolean hasKillSound(KillSound killSound) { return unlockedKillSounds.contains(killSound.name()); }
 
@@ -195,7 +124,6 @@ public class PersistentData {
         return PvpSword.valueOf(pvpSword);
     }
     public void setPvpSword(PvpSword pvpSword) { this.pvpSword = pvpSword.name(); }
-
     public void unlockPvpSword(PvpSword pvpSword) { unlockedPvpSwords.add(pvpSword.name()); }
     public boolean hasPvpSword(PvpSword pvpSword) { return unlockedPvpSwords.contains(pvpSword.name()); }
 
@@ -205,14 +133,12 @@ public class PersistentData {
     public boolean hasTrail(ParticleTrail trail) { return trail == null || unlockedTrails.contains(trail.name()); }
 
     public Cage getCage() {
-        if (cage == null) return Cage.DEFAULT;
-        try { return Cage.valueOf(cage); } catch (Exception e) { return Cage.DEFAULT; }
+        if (cage == null) return null;
+        try { return Cage.valueOf(cage); } catch (Exception e) { return null; }
     }
-    public void setCage(Cage cage) { this.cage = cage == null ? null : cage.name(); }
-    public void unlockCage(Cage cage) { if (cage != null && !unlockedCages.contains(cage.name())) unlockedCages.add(cage.name()); }
-    public boolean hasCage(Cage cage) { return cage == null || unlockedCages.contains(cage.name()); }
-
-    // ? CHESTS
+    public void setCage(Cage cage) { this.cage = cage.name(); }
+    public void unlockCage(Cage cage) { unlockedCages.add(cage.name()); }
+    public boolean hasCage(Cage cage) { return unlockedCages.contains(cage.name()); }
 
     public int getChests(int index) { return chests[index]; }
     public void setChests(int index, int amount) { chests[index] = amount; }
@@ -225,7 +151,4 @@ public class PersistentData {
     public int getKeyFragments(int index) { return keyFragments[index]; }
     public void setKeyFragments(int index, int amount) { keyFragments[index] = amount; }
     public void addKeyFragments(int index, int amount) { keyFragments[index] += amount; }
-
-    /*-----------------------------------------------------------------------------------------------------------------*/
-
 }

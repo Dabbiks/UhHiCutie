@@ -31,8 +31,9 @@ public class CosmeticsMainMenu extends FastInv {
     private void render() {
 
         int trailSlot = 10;
-        int killSoundSlot = 13;
-        int pvpSword = 16;
+        int killSoundSlot = 12;
+        int pvpSwordSlot = 14;
+        int cageSlot = 16;
 
         int coinSlot = 21;
         int discountSlot = 22;
@@ -46,10 +47,15 @@ public class CosmeticsMainMenu extends FastInv {
             super.getInventory().close();
             new KillSoundMenu(player, persistentData).open(player);
         });
-        setItem(pvpSword, createIcon(symbolU.MOUSE_LEFT + " §fMiecze PvP", Material.GOLDEN_SWORD, null), e -> {
+        setItem(pvpSwordSlot, createIcon(symbolU.MOUSE_LEFT + " §fMiecze PvP", Material.GOLDEN_SWORD, null), e -> {
             super.getInventory().close();
             new PvpSwordMenu(player, persistentData).open(player);
         });
+        setItem(cageSlot, createIcon(symbolU.MOUSE_LEFT + " §fKlatki startowe", Material.GLASS, null), e -> {
+            super.getInventory().close();
+            new CageMenu(player, persistentData).open(player);
+        });
+
         setItem(coinSlot, createIcon("§f" + persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) +
                 symbolU.SCOREBOARD_COIN, Material.SUNFLOWER, null));
         setItem(discountSlot, createIcon("§c% §fTrwające promocje", Material.RED_DYE, null));

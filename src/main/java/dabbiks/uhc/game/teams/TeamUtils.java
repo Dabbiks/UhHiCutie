@@ -3,11 +3,13 @@ package dabbiks.uhc.game.teams;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.player.PlayerState;
+import dabbiks.uhc.player.data.persistent.PersistentData;
+import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
 import java.util.*;
@@ -18,6 +20,8 @@ import static dabbiks.uhc.Main.*;
 public class TeamUtils {
 
     private static final TeamManager teamManager = INSTANCE.getTeamManager();
+    private static final List<Location> cageCenters = new ArrayList<>();
+    private static boolean cagesExist = false;
 
     public static boolean isPlayerInTeam(Player player, String teamName) {
         Team team = teamManager.getScoreboard().getTeam(teamName);
@@ -85,54 +89,87 @@ public class TeamUtils {
         }
     }
 
-    public static void teleportTeamsRandomly(int maxX, int maxZ) {
+    public static boolean hasCages() {
+        return cagesExist;
+    }
+
+    public static void createCagesAndTeleport(int radius) {
         World world = Bukkit.getWorld(WorldConfig.worldName);
         if (world == null) return;
+        cageCenters.clear();
+        cagesExist = true;
 
-        Map<Team, Location> teamLocations = new HashMap<>();
         Random random = new Random();
 
         for (Team team : teamManager.getScoreboard().getTeams()) {
-            int x = random.nextInt(maxX * 2 + 1) - maxX;
-            int z = random.nextInt(maxZ * 2 + 1) - maxZ;
-            int y = 500;
-            teamLocations.put(team, new Location(world, x + 0.5, y, z + 0.5));
-        }
+            if (team.getSize() == 0) continue;
 
-        List<Player> playersToTeleport = new ArrayList<>();
-        List<Location> locationsByPlayer = new ArrayList<>();
+            int x = random.nextInt(radius * 2 + 1) - radius;
+            int z = random.nextInt(radius * 2 + 1) - radius;
+            int y = 250;
+            Location center = new Location(world, x, y, z);
+            cageCenters.add(center);
 
-        teamLocations.forEach((team, loc) -> {
-            for (String entryName : team.getEntries()) {
-                addPlayerToTeleportList(entryName, loc, playersToTeleport, locationsByPlayer);
-            }
-        });
-
-        scheduleTeleportTask(playersToTeleport, locationsByPlayer);
-    }
-
-    private static void addPlayerToTeleportList(String name, Location loc, List<Player> players, List<Location> locs) {
-        Player player = Bukkit.getPlayer(name);
-        if (player == null || !player.isOnline()) return;
-        players.add(player);
-        locs.add(loc);
-    }
-
-    private static void scheduleTeleportTask(List<Player> players, List<Location> locs) {
-        new BukkitRunnable() {
-            int index = 0;
-
-            @Override
-            public void run() {
-                if (index >= players.size()) {
-                    this.cancel();
-                    return;
+            Material cageMat = Material.GLASS;
+            List<String> entries = new ArrayList<>(team.getEntries());
+            if (!entries.isEmpty()) {
+                String randomPlayer = entries.get(random.nextInt(entries.size()));
+                Player p = Bukkit.getPlayer(randomPlayer);
+                if (p != null) {
+                    PersistentData pd = PersistentDataManager.getData(p.getUniqueId());
+                    if (pd != null && pd.getCage() != null) {
+                        try {
+                            cageMat = Material.valueOf(pd.getCage().toUpperCase());
+                        } catch (Exception ignored) {}
+                    }
                 }
-                Player player = players.get(index);
-                player.teleport(locs.get(index));
-                index++;
             }
-        }.runTaskTimer(plugin, 0L, 5);
+
+            for (int dx = -3; dx <= 3; dx++) {
+                for (int dy = 0; dy <= 6; dy++) {
+                    for (int dz = -3; dz <= 3; dz++) {
+                        Location loc = center.clone().add(dx, dy, dz);
+                        boolean isEdgeX = (dx == -3 || dx == 3);
+                        boolean isEdgeY = (dy == 0 || dy == 6);
+                        boolean isEdgeZ = (dz == -3 || dz == 3);
+                        int edgeCount = (isEdgeX ? 1 : 0) + (isEdgeY ? 1 : 0) + (isEdgeZ ? 1 : 0);
+
+                        if (edgeCount >= 2) {
+                            loc.getBlock().setType(cageMat);
+                        } else if (edgeCount == 1) {
+                            loc.getBlock().setType(Material.BARRIER);
+                        } else {
+                            loc.getBlock().setType(Material.AIR);
+                        }
+                    }
+                }
+            }
+
+            for (String entryName : team.getEntries()) {
+                Player player = Bukkit.getPlayer(entryName);
+                if (player != null && player.isOnline()) {
+                    player.teleport(center.clone().add(0.5, 1, 0.5));
+                }
+            }
+        }
+    }
+
+    public static void removeCages() {
+        World world = Bukkit.getWorld(WorldConfig.worldName);
+        if (world == null) return;
+        cagesExist = false;
+
+        for (Location center : cageCenters) {
+            for (int dx = -3; dx <= 3; dx++) {
+                for (int dy = 0; dy <= 6; dy++) {
+                    for (int dz = -3; dz <= 3; dz++) {
+                        Location loc = center.clone().add(dx, dy, dz);
+                        loc.getBlock().setType(Material.AIR);
+                    }
+                }
+            }
+        }
+        cageCenters.clear();
     }
 
     public static Team getLastAliveTeam() {
@@ -158,5 +195,4 @@ public class TeamUtils {
         if (aliveTeams != 1) return null;
         return lastTeam;
     }
-
 }

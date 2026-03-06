@@ -6,6 +6,7 @@ public enum RewardType {
     MULTIPLIER("MNOŻNIK"),
     TRIAL("SMUGA"),
     PVP_SWORD("MIECZ PVP"),
+    CAGE("KLATKA"),
     KEY("KLUCZ"),
     FRAGMENT("ODŁAMEK"),
     CHEST("SKRZYNIA"),

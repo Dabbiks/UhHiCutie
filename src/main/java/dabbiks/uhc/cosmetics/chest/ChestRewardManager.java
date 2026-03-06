@@ -34,6 +34,7 @@ public class ChestRewardManager {
         addCoins(p, 100, 40, 3, 0.1, 0.005);
         addPowder(p, 80, 30, 3, 0.1, 0.005);
         addSwords(p, 3.0, 0.5, 0.025, 0.01, 0.001);
+        addCages(p, 3.0, 0.5, 0.025, 0.01, 0.001);
         addKillSounds(p, 1.5, 0.5, 0.02, 0.005, 0.001);
         addTrails(p, 2.5, 0.5, 0.02, 0.0025, 0.001);
         addKeys(p, 10, 3, 1, 1, 1);
@@ -45,6 +46,7 @@ public class ChestRewardManager {
         addCoins(p, 65, 85, 12, 1, 0.05);
         addPowder(p, 60, 70, 8, 0.5, 0.05);
         addSwords(p, 4.0, 1.5, 0.125, 0.01, 0.005);
+        addCages(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addKillSounds(p, 2.5, 1.5, 0.1, 0.05, 0.005);
         addTrails(p, 3.5, 2.5, 0.1, 0.025, 0.005);
         addKeys(p, 8, 12, 3, 1, 1);
@@ -56,6 +58,7 @@ public class ChestRewardManager {
         addCoins(p, 60, 90, 12, 1.5, 0.1);
         addPowder(p, 50, 80, 15, 2, 0.1);
         addSwords(p, 4.5, 2.5, 0.5, 0.05, 0.01);
+        addCages(p, 4.5, 2.5, 0.5, 0.05, 0.01);
         addKillSounds(p, 3.0, 2.0, 0.4, 0.08, 0.01);
         addTrails(p, 4.0, 3.0, 0.4, 0.05, 0.01);
         addKeys(p, 6, 12, 6, 2, 1);
@@ -67,6 +70,7 @@ public class ChestRewardManager {
         addCoins(p, 70, 75, 12, 2.5, 0.2);
         addPowder(p, 60, 65, 15, 3, 0.2);
         addSwords(p, 4.0, 3.5, 1.2, 0.25, 0.05);
+        addCages(p, 4.0, 3.5, 1.2, 0.25, 0.05);
         addKillSounds(p, 2.5, 3.0, 1.0, 0.2, 0.05);
         addTrails(p, 3.0, 4.0, 1.0, 0.15, 0.05);
         addKeys(p, 5, 10, 12, 4, 2);
@@ -78,6 +82,7 @@ public class ChestRewardManager {
         addCoins(p, 70, 70, 20, 5.5, 0.5);
         addPowder(p, 60, 60, 25, 6, 0.5);
         addSwords(p, 3.5, 4.5, 2.5, 0.75, 0.25);
+        addCages(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addKillSounds(p, 2.0, 3.5, 2.2, 0.6, 0.2);
         addTrails(p, 2.5, 4.5, 2.2, 0.5, 0.2);
         addKeys(p, 4, 8, 15, 10, 5);
@@ -107,6 +112,14 @@ public class ChestRewardManager {
         p.addReward(() -> new PvpSwordReward(CosmeticTier.EPIC), w3);
         p.addReward(() -> new PvpSwordReward(CosmeticTier.MYTHIC), w4);
         p.addReward(() -> new PvpSwordReward(CosmeticTier.LEGENDARY), w5);
+    }
+
+    private static void addCages(RewardPool p, double w1, double w2, double w3, double w4, double w5) {
+        p.addReward(() -> new CageReward(CosmeticTier.COMMON), w1);
+        p.addReward(() -> new CageReward(CosmeticTier.RARE), w2);
+        p.addReward(() -> new CageReward(CosmeticTier.EPIC), w3);
+        p.addReward(() -> new CageReward(CosmeticTier.MYTHIC), w4);
+        p.addReward(() -> new CageReward(CosmeticTier.LEGENDARY), w5);
     }
 
     private static void addKillSounds(RewardPool p, double w1, double w2, double w3, double w4, double w5) {
