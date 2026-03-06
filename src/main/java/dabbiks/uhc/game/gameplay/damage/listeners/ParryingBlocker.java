@@ -20,7 +20,7 @@ public class ParryingBlocker implements Listener {
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = event.getPlayer().getInventory().getItemInOffHand();
 
-            if (item != null && item.hasData(DataComponentTypes.BLOCKS_ATTACKS)) {
+            if (item.hasData(DataComponentTypes.BLOCKS_ATTACKS)) {
                 event.setCancelled(true);
             }
         }

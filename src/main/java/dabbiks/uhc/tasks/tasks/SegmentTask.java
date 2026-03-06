@@ -1,18 +1,24 @@
 package dabbiks.uhc.tasks.tasks;
 
 import dabbiks.uhc.game.GameState;
+import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.configs.SegmentConfig;
+import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.game.world.events.WeatherCycle;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.tab.TabUtils;
 import dabbiks.uhc.tasks.Task;
+import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;
 
 import static dabbiks.uhc.Main.*;
+import static org.bukkit.Bukkit.getLogger;
 
 public class SegmentTask extends Task {
 
@@ -38,9 +44,27 @@ public class SegmentTask extends Task {
                 sessionData.addElytraCharges(1);
             }
 
+            if (SegmentConfig.actualSegment == SegmentConfig.pvpStageSegment + 1) {
+                Bukkit.getWorld(WorldConfig.worldName).setPVP(true);
+            }
+
+            if (SegmentConfig.actualSegment == SegmentConfig.compassStageSegment + 1) {
+                World world = Bukkit.getWorld(WorldConfig.worldName);
+                setGameRule(world, "locator_bar", true);
+            }
+
             WeatherCycle.rollWeather();
 
             new TabUtils().setGlobalTabFooter("\n" + WeatherCycle.getWeatherIcon() + "\n");
+        }
+    }
+
+    private static <T> void setGameRule(World world, String ruleName, T value) {
+        GameRule<T> rule = GameRule.getByName(ruleName);
+        if (rule != null) {
+            world.setGameRule(rule, value);
+        } else {
+            getLogger().warning("GameRule " + ruleName + " not found.");
         }
     }
 }

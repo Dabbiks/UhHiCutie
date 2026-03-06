@@ -123,8 +123,7 @@ public class TeamManager {
         for (TextDisplay textDisplay : teamDisplays.values()) textDisplay.remove();
 
         for (Entity entity : Bukkit.getWorld("world").getEntities()) {
-            boolean isTeamEntity = NBT.getPersistentData(entity, nbt -> nbt.hasTag("team_entity"));
-            if (isTeamEntity) entity.remove();
+            if (entity instanceof TextDisplay || entity instanceof Interaction) entity.remove();
         }
 
         interactions.clear();

@@ -31,14 +31,14 @@ public class WorldGen {
         }
 
         world.setSpawnLocation(0, 100, 0);
-        world.setPVP(true);
+        world.setPVP(false);
         world.setDifficulty(Difficulty.EASY);
 
         setGameRule(world, "show_advancement_messages", false);
         setGameRule(world, "spectators_generate_chunks", false);
         setGameRule(world, "advance_weather", false);
         setGameRule(world, "immediate_respawn", true);
-        setGameRule(world, "random_tick_speed", 8);
+        setGameRule(world, "random_tick_speed", 0);
         setGameRule(world, "reduced_debug_info", false);
         setGameRule(world, "natural_health_regeneration", false);
         setGameRule(world, "show_death_messages", false);

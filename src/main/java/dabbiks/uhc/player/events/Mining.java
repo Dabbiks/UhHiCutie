@@ -113,8 +113,7 @@ public class Mining implements Listener {
         if (tool == Material.WOODEN_PICKAXE && STONE.contains(block)) return Material.STONE_PICKAXE;
         if (tool == Material.STONE_PICKAXE && (block == Material.COPPER_ORE || block == Material.DEEPSLATE_COPPER_ORE)) return Material.COPPER_PICKAXE;
         if (tool == Material.COPPER_PICKAXE && (block == Material.IRON_ORE || block == Material.DEEPSLATE_IRON_ORE)) return Material.IRON_PICKAXE;
-        if (tool == Material.IRON_PICKAXE && (block == Material.GOLD_ORE || block == Material.DEEPSLATE_GOLD_ORE)) return Material.GOLDEN_PICKAXE;
-        if (tool == Material.GOLDEN_PICKAXE && (block == Material.DIAMOND_ORE || block == Material.DEEPSLATE_DIAMOND_ORE)) return Material.DIAMOND_PICKAXE;
+        if (tool == Material.IRON_PICKAXE && (block == Material.DIAMOND_ORE || block == Material.DEEPSLATE_DIAMOND_ORE)) return Material.DIAMOND_PICKAXE;
         if (tool == Material.DIAMOND_PICKAXE && block == Material.ANCIENT_DEBRIS) return Material.NETHERITE_PICKAXE;
         return null;
     }

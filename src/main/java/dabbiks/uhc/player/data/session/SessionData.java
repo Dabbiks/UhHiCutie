@@ -107,13 +107,13 @@ public class SessionData {
     }
 
     public List<Player> getAssists() {
-        List<Player> players = new ArrayList<>();
-        for (Map.Entry<Player, Integer> entry : assists.entrySet()) {
-            if (timeU.getTime() - entry.getValue() > 60) { assists.remove(entry.getKey()); continue; }
-            if (!entry.getKey().isOnline()) { assists.remove(entry.getKey()); continue; }
-            players.add(entry.getKey());
-        }
-        return players;
+        long currentTime = timeU.getTime();
+
+        assists.entrySet().removeIf(entry ->
+                (currentTime - entry.getValue() > 60) || !entry.getKey().isOnline()
+        );
+
+        return new ArrayList<>(assists.keySet());
     }
 
     // ? RANK

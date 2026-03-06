@@ -115,7 +115,7 @@ public class RewardUtils {
         RankManager.modifyRankPoints(player, pointsToChange);
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
 
-        player.sendMessage("§c-" + (int) (DEATH_RANK_POINTS * deathModifier) + "PR §8(Wygrana)");
+        player.sendMessage("§c" + (int) (DEATH_RANK_POINTS * deathModifier) + "PR §8(Śmierć)");
 
         PersistentDataManager.saveData(player.getUniqueId());
     }
