@@ -52,8 +52,34 @@ public class DeathHandler {
             if (killer.isOnline()) {
                 playerU.addHealth(killer, 6);
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 1));
+
                 SessionData killerSessionData = SessionDataManager.getData(killer.getUniqueId());
                 killerSessionData.addElytraCharges(3);
+
+                long currentTime = timeU.getTime();
+                if (currentTime - killerSessionData.getLastKillTime() < 60) {
+                    killerSessionData.setKillStreak(killerSessionData.getKillStreak() + 1);
+                } else {
+                    killerSessionData.setKillStreak(1);
+                }
+                killerSessionData.setLastKillTime(currentTime);
+
+                int streak = killerSessionData.getKillStreak();
+                if (streak > 1) {
+                    String streakName = "§0§lLEGENDA";
+                    switch (streak) {
+                        case 2: streakName = "§aDOUBLE KILL"; break;
+                        case 3: streakName = "§bTRIPLE KILL"; break;
+                        case 4: streakName = "§9§lQUADRA KILL"; break;
+                        case 5: streakName = "§e§lPENTA KILL"; break;
+                        case 6: streakName = "§6§lHEXA KILL"; break;
+                        case 7: streakName = "§c§lHEPTA KILL"; break;
+                        case 8: streakName = "§d§lOCTA KILL"; break;
+                        case 9: streakName = "§5§lNONA KILL"; break;
+                        case 10: streakName = "§4§lDECA KILL"; break;
+                    }
+                    titleU.sendTitleToPlayers(playerListU.getAllPlayers(), streakName, "§7" + killer.getName(), 30);
+                }
 
                 rewardU.kill(killer);
                 String sound = killerData.getKillSound().getSound();

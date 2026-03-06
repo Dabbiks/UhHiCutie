@@ -40,6 +40,10 @@ public class SessionData {
     private RecipeType lastRecipeCategory = RecipeType.WEAPON;
     private RecipeInstance lastSelectedRecipe = null;
 
+    // * STREAK
+    private long lastKillTime = 0;
+    private int killStreak = 0;
+
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
 
@@ -57,6 +61,22 @@ public class SessionData {
 
     public void setLastSelectedRecipe(RecipeInstance lastSelectedRecipe) {
         this.lastSelectedRecipe = lastSelectedRecipe;
+    }
+
+    public long getLastKillTime() {
+        return lastKillTime;
+    }
+
+    public void setLastKillTime(long lastKillTime) {
+        this.lastKillTime = lastKillTime;
+    }
+
+    public int getKillStreak() {
+        return killStreak;
+    }
+
+    public void setKillStreak(int killStreak) {
+        this.killStreak = killStreak;
     }
 
     // ? ELYTRA

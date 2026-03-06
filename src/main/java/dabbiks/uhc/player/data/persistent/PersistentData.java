@@ -5,6 +5,7 @@ import dabbiks.uhc.Main;
 import dabbiks.uhc.cosmetics.KillSound;
 import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
+import dabbiks.uhc.cosmetics.Cage;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.player.rank.RankType;
 
@@ -71,6 +72,11 @@ public class PersistentData {
     private String trail;
     @Expose
     private List<String> unlockedTrails = new ArrayList<>();
+
+    @Expose
+    private String cage;
+    @Expose
+    private List<String> unlockedCages = new ArrayList<>();
 
     // * CHESTS
 
@@ -197,6 +203,14 @@ public class PersistentData {
     public void setTrail(ParticleTrail trail) { this.trail = trail == null ? null : trail.name(); }
     public void unlockTrail(ParticleTrail trail) { if (trail != null && !unlockedTrails.contains(trail.name())) unlockedTrails.add(trail.name()); }
     public boolean hasTrail(ParticleTrail trail) { return trail == null || unlockedTrails.contains(trail.name()); }
+
+    public Cage getCage() {
+        if (cage == null) return Cage.DEFAULT;
+        try { return Cage.valueOf(cage); } catch (Exception e) { return Cage.DEFAULT; }
+    }
+    public void setCage(Cage cage) { this.cage = cage == null ? null : cage.name(); }
+    public void unlockCage(Cage cage) { if (cage != null && !unlockedCages.contains(cage.name())) unlockedCages.add(cage.name()); }
+    public boolean hasCage(Cage cage) { return cage == null || unlockedCages.contains(cage.name()); }
 
     // ? CHESTS
 
