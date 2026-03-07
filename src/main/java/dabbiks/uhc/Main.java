@@ -128,8 +128,10 @@ public final class Main extends JavaPlugin {
         getCommand("setteamsize").setExecutor(new TeamSizeCommand());
         getCommand("setminplayers").setExecutor(new RequiredPlayersCommand());
 
-        teamManager.deleteTeams();
-        new TeamInitializer();
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            teamManager.deleteTeams();
+            new TeamInitializer();
+        }, 20L);
 
         new TaskManager().run();
         Bukkit.getScheduler().runTaskLater(this, WorldGen::createWorld, 10L);

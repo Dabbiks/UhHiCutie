@@ -3,7 +3,9 @@ package dabbiks.uhc.game.teams;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import de.tr7zw.nbtapi.NBT;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
@@ -122,8 +124,15 @@ public class TeamManager {
         for (Interaction interaction : interactions) interaction.remove();
         for (TextDisplay textDisplay : teamDisplays.values()) textDisplay.remove();
 
-        for (Entity entity : Bukkit.getWorld("world").getEntities()) {
-            if (entity instanceof TextDisplay || entity instanceof Interaction) entity.remove();
+        World world = Bukkit.getWorld("world");
+        if (world != null) {
+            new Location(world, 0, 100, 0).getChunk().load();
+
+            for (Entity entity : world.getEntities()) {
+                if (entity instanceof TextDisplay || entity instanceof Interaction) {
+                    entity.remove();
+                }
+            }
         }
 
         interactions.clear();

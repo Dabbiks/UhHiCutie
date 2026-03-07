@@ -181,7 +181,10 @@ public class MeleeHit implements Listener {
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;
-        if (TeamUtils.isPlayerAlly(damager, victim)) return;
+        if (TeamUtils.isPlayerAlly(damager, victim)) {
+            event.setCancelled(true);
+            return;
+        }
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
