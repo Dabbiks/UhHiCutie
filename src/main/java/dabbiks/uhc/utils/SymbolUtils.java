@@ -26,6 +26,7 @@ public class SymbolUtils {
     public final String SCOREBOARD_CROWN = "§f\uE098";
     public final String SCOREBOARD_SPECTATOR = "§f\uE099";
     public final String SCOREBOARD_SWORD = "§f\uE09A";
+    public final String SCOREBOARD_GLORY = "§f\uE0A0";
 
     // * BUTTONS
     public final String SHIFT = "§f\uE080";

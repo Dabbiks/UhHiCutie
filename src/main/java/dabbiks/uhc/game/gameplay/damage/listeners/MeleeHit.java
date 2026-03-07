@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 
 import static dabbiks.uhc.Main.indicatorManager;
 import static dabbiks.uhc.Main.stateU;
@@ -107,7 +108,16 @@ public class MeleeHit implements Listener {
 
         if (!(damager instanceof LivingEntity)) return;
 
-        final double baseDamage = event.getDamage();
+        double baseDamage = event.getDamage();
+        if (((LivingEntity) damager).getEquipment() != null) {
+            ItemStack weapon = ((LivingEntity) damager).getEquipment().getItemInMainHand();
+            if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
+                baseDamage *= 0.5;
+                if (baseDamage > 16.0) {
+                    baseDamage = 16.0;
+                }
+            }
+        }
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;
@@ -143,7 +153,14 @@ public class MeleeHit implements Listener {
 
         if (!(victim instanceof LivingEntity)) return;
 
-        final double baseDamage = event.getDamage();
+        double baseDamage = event.getDamage();
+        ItemStack weapon = damager.getInventory().getItemInMainHand();
+        if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
+            baseDamage *= 0.5;
+            if (baseDamage > 16.0) {
+                baseDamage = 16.0;
+            }
+        }
         double damage = baseDamage;
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
@@ -177,7 +194,14 @@ public class MeleeHit implements Listener {
         SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
         sessionData.setDamager(victim, damager);
 
-        final double baseDamage = event.getDamage();
+        double baseDamage = event.getDamage();
+        ItemStack weapon = damager.getInventory().getItemInMainHand();
+        if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
+            baseDamage *= 0.5;
+            if (baseDamage > 16.0) {
+                baseDamage = 16.0;
+            }
+        }
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;

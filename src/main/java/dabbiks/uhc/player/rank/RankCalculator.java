@@ -7,7 +7,7 @@ public class RankCalculator {
 
     private static final int MIN_MODIFIER = 60;
     private static final int MAX_MODIFIER = 140;
-    private static final int BASE_OPPONENT_SCORE = 60;
+    private static final int BASE_OPPONENT_SCORE = 100;
 
     private static final int PLACE_KILL_POINTS = 30;
     private static final int PLACE_ASSIST_POINTS = 10;
@@ -39,8 +39,8 @@ public class RankCalculator {
         double kda = (deaths <= 0) ? (kills + assists) : (kills + assists) / deaths;
         double winRate = (wins) / played;
 
-        double kdaScore = Math.min(kda / 1.5, 1.0) * 20;
-        double winScore = Math.min(winRate / 0.12, 1.0) * 20;
+        double kdaScore = (Math.min(kda / 1.5, 1.0) - 0.5) * 20;
+        double winScore = (Math.min(winRate / 0.12, 1.0) - 0.5) * 20;
         double performanceScore = kdaScore + winScore;
 
         double rankDiff = avgOpponentRank - currentRank;

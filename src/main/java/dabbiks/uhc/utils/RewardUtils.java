@@ -21,9 +21,9 @@ public class RewardUtils {
     private final int ASSIST_COINS = 25;
 
     private final int WIN_RANK_POINTS = 50;
-    private final int KILL_RANK_POINTS = 20;
+    private final int KILL_RANK_POINTS = 22;
     private final int ASSIST_RANK_POINTS = 5;
-    private final int DEATH_RANK_POINTS = -20;
+    private final int DEATH_RANK_POINTS = -18;
 
     public double multiplier = 1;
 
@@ -36,6 +36,8 @@ public class RewardUtils {
         persistentData.addStats(PersistentStats.TOTAL_COINS, (int) (WIN_COINS * multiplier));
         persistentData.addStats(PersistentStats.PLAYED, 1);
         persistentData.addStats(PersistentStats.SEASON_PLAYED, 1);
+        persistentData.addStats(PersistentStats.WINS, 1);
+        persistentData.addStats(PersistentStats.SEASON_WINS, 1);
         sessionData.addStats(SessionStats.WINCOINS, (int) (WIN_COINS * multiplier));
 
         double rankModifier = sessionData.getModifier();
@@ -58,6 +60,8 @@ public class RewardUtils {
         assert persistentData != null;
         persistentData.addStats(PersistentStats.COINS, (int) (KILL_COINS * multiplier));
         persistentData.addStats(PersistentStats.TOTAL_COINS, (int) (KILL_COINS * multiplier));
+        persistentData.addStats(PersistentStats.KILLS, 1);
+        persistentData.addStats(PersistentStats.SEASON_KILLS, 1);
         sessionData.addStats(SessionStats.KILLCOINS, (int) (KILL_COINS * multiplier));
 
         sessionData.addStats(SessionStats.KILLS, 1);
@@ -82,6 +86,8 @@ public class RewardUtils {
         assert persistentData != null;
         persistentData.addStats(PersistentStats.COINS, (int) (ASSIST_COINS * multiplier));
         persistentData.addStats(PersistentStats.TOTAL_COINS, (int) (ASSIST_COINS * multiplier));
+        persistentData.addStats(PersistentStats.ASSISTS, 1);
+        persistentData.addStats(PersistentStats.SEASON_ASSISTS, 1);
         sessionData.addStats(SessionStats.KILLCOINS, (int) (ASSIST_COINS * multiplier));
 
         double rankModifier = sessionData.getModifier();
@@ -116,6 +122,18 @@ public class RewardUtils {
         sessionData.addStats(SessionStats.RANKING, pointsToChange);
 
         player.sendMessage("§c" + (int) (DEATH_RANK_POINTS * deathModifier) + "PR §8(Śmierć)");
+
+        PersistentDataManager.saveData(player.getUniqueId());
+    }
+
+    public void playing(Player player) {
+        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        assert persistentData != null;
+        persistentData.addStats(PersistentStats.COINS, 1);
+        persistentData.addStats(PersistentStats.TOTAL_COINS, 1);
+        sessionData.addStats(SessionStats.TIMECOINS, 1);
 
         PersistentDataManager.saveData(player.getUniqueId());
     }

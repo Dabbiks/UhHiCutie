@@ -33,6 +33,11 @@ public class RankManager {
             return;
         }
 
+        if (data.getRank() == RankType.UNRANKED) {
+            processPlacements(player);
+            return;
+        }
+
         int currentPoints = data.getStats().getOrDefault(PersistentStats.RANK_PR, 0);
 
         data.setStats(PersistentStats.PREVIOUS_RANK_PR, currentPoints);
@@ -99,7 +104,7 @@ public class RankManager {
         PersistentDataManager.saveData(player.getUniqueId());
 
         messageU.sendMessageToPlayers(playerListU.getAllPlayers(),
-                "§e" + player.getName() + "§f ukończył gry rozstawiające: " + resultRank.getIcon());
+                "§e" + player.getName() + "§f ukończył mecze rozstawiające w randze: " + resultRank.getDisplayName());
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (player.isOnline()) {

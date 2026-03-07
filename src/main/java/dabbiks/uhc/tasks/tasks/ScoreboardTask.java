@@ -49,10 +49,11 @@ public class ScoreboardTask extends Task {
 
                 board.updateLines(
                         "",
-                        "  §cɪɪɪ ꜱᴇᴢᴏɴ ʀᴀɴᴋɪɴɢᴏᴡʏ",
+                        "  §cTwój ranking",
                         "  §f" + persistentData.getRank().getIcon() + " §7" + persistentData.getRank().getName()
                                 + " §8(" + (persistentData.getStats().getOrDefault(PersistentStats.RANK_PR, 0) % 100) + "PR§8)",
                         "",
+                        "  §f" + symbolU.SCOREBOARD_GLORY + " ʜᴏɴᴏʀ: §e" + persistentData.getStats().getOrDefault(PersistentStats.GLORY, 0),
                         "  §f" + symbolU.SCOREBOARD_COIN + " ᴍᴏɴᴇᴛʏ: §e" + persistentData.getStats().getOrDefault(PersistentStats.COINS, 0),
                         "  §f" + symbolU.SCOREBOARD_POWDER + " ᴘʀᴏsᴢᴇᴋ: §e" + persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0),
                         "  §f" + symbolU.SCOREBOARD_SWORD + " ᴇʟɪᴍɪɴᴀᴄᴊᴇ: §e" + persistentData.getStats().getOrDefault(PersistentStats.SEASON_KILLS, 0) +

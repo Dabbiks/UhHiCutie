@@ -16,5 +16,6 @@ public enum PersistentStats {
     TOTAL_POWDER,
 
     RANK_PR,
-    PREVIOUS_RANK_PR
+    PREVIOUS_RANK_PR,
+    GLORY
 }

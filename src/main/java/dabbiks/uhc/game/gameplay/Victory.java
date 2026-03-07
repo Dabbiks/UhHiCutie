@@ -42,11 +42,13 @@ public class Victory {
             }
         }
 
-        titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "§e§l#1 Victory royale", bottomLine.toString(), 500);
+        titleU.sendTitleToPlayers(playerListU.getAllPlayers(), "§c#1 Zwycięstwo", bottomLine.toString(), 500);
 
         for (Player winner : winners) {
             rewardU.win(winner);
-            rewardU.summary(winner);
+            if (stateU.getPlayerState(winner) == PlayerState.ALIVE) {
+                rewardU.summary(winner);
+            }
         }
 
         Shutdown.shutdownServer();
