@@ -231,13 +231,11 @@ public class RecipeListener implements Listener {
         if (!materialMatches) return false;
 
         ItemMeta meta = item.getItemMeta();
-        Integer requiredCMD = ingredient.getCustomModelData();
 
-        if (requiredCMD != null) {
-            return meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == requiredCMD;
-        } else {
-            return meta == null || !meta.hasCustomModelData();
-        }
+        int requiredCMD = (ingredient.getCustomModelData() == null) ? 0 : ingredient.getCustomModelData();
+        int itemCMD = (meta != null && meta.hasCustomModelData()) ? meta.getCustomModelData() : 0;
+
+        return requiredCMD == itemCMD;
     }
 
     private void reduceMatrix(CraftingInventory inv, int timesToCraft) {

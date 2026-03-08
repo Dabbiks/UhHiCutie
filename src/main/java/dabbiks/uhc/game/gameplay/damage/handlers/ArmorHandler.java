@@ -52,7 +52,7 @@ public class ArmorHandler {
                 pieces++;
             }
         }
-        return 10 + pieces * 5;
+        return pieces * 3;
     }
 
 }
