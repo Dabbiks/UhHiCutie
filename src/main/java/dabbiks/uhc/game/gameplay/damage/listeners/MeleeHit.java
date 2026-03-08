@@ -109,6 +109,8 @@ public class MeleeHit implements Listener {
         if (!(damager instanceof LivingEntity)) return;
 
         double baseDamage = event.getDamage();
+        if (event.isCritical()) baseDamage /= 1.5;
+
         if (((LivingEntity) damager).getEquipment() != null) {
             ItemStack weapon = ((LivingEntity) damager).getEquipment().getItemInMainHand();
             if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
@@ -154,6 +156,8 @@ public class MeleeHit implements Listener {
         if (!(victim instanceof LivingEntity)) return;
 
         double baseDamage = event.getDamage();
+        if (event.isCritical()) baseDamage /= 1.5;
+
         ItemStack weapon = damager.getInventory().getItemInMainHand();
         if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
             baseDamage *= 0.5;
@@ -195,6 +199,8 @@ public class MeleeHit implements Listener {
         sessionData.setDamager(victim, damager);
 
         double baseDamage = event.getDamage();
+        if (event.isCritical()) baseDamage /= 1.5;
+
         ItemStack weapon = damager.getInventory().getItemInMainHand();
         if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
             baseDamage *= 0.5;

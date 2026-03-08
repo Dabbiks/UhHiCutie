@@ -23,17 +23,24 @@ public class CriticalHitHandler {
         if (item == null || item.getType().isAir()) return damage;
 
         NBTItem nbtItem = new NBTItem(item);
-        String key = AttributeType.CRIT_DAMAGE.name();
-
-        if (!nbtItem.hasTag(key)) return damage;
 
         if (nbtItem.hasTag("SLOT")) {
             if (!EquipmentSlot.valueOf(nbtItem.getString("SLOT")).equals(slot)) return damage;
         }
 
-        double value = nbtItem.getDouble(key);
-        boolean isPercent = nbtItem.getBoolean(key + "_PERCENT");
+        double newDamage = damage;
 
-        return isPercent ? damage * (1.0 + value) : damage + value;
+        String flatKey = AttributeType.CRIT_DAMAGE.name();
+        if (nbtItem.hasTag(flatKey)) {
+            newDamage += nbtItem.getDouble(flatKey);
+        }
+
+        String percentKey = AttributeType.CRIT_DAMAGE_PERCENT.name();
+        if (nbtItem.hasTag(percentKey)) {
+            double percentValue = nbtItem.getDouble(percentKey);
+            newDamage += damage * (percentValue / 100.0);
+        }
+
+        return newDamage;
     }
 }

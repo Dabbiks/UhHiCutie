@@ -35,7 +35,7 @@ public class ArmorHandler {
             if (level > 0) armor -= level * 2;
         }
         if (armor < 0) armor = 0;
-        double reduction = armor / (armor + 10.0);
+        double reduction = armor / (armor + 5.0);
         return damage * (1 - reduction);
     }
 
