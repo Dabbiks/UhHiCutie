@@ -211,7 +211,7 @@ public class RecipeGenerator {
         item.setMaterial(material.name());
         item.setAmount(1);
         if (name != null) item.setName(name);
-        item.setCustomModelData(modelData);
+        if (modelData != 0) item.setCustomModelData(modelData);
         item.setTags(true);
         item.setCanBeForged(true);
         item.setCanBeEnchanted(true);
