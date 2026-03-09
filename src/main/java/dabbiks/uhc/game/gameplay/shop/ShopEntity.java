@@ -27,28 +27,30 @@ public class ShopEntity {
 
     private HappyGhast happyGhast;
     private Mannequin mannequin;
+    private TextDisplay textDisplay;
     private BukkitTask flightTask;
     private final World world;
     private final HashMap<Integer, Location> track;
 
-    private int trackIndex;
+    private int targetIndex = 1;
     private int boostedTicks;
 
-    public ShopEntity(HashMap<Integer, Location> track, int trackIndex) {
+    public ShopEntity(HashMap<Integer, Location> track, int targetIndex) {
         this.track = track;
-        this.trackIndex = trackIndex;
+        this.targetIndex = targetIndex <= 0 ? 1 : targetIndex;
         this.world = Bukkit.getWorld(WorldConfig.worldName);
 
         shopEntities.add(this);
     }
 
     public void spawn() {
-        if (world == null) {
+        if (world == null || track.isEmpty()) {
             return;
         }
 
-        HappyGhast happyGhast = (HappyGhast) world.spawnEntity(track.get(1), EntityType.HAPPY_GHAST);
+        Location exactLoc = track.getOrDefault(targetIndex, track.values().iterator().next()).clone();
 
+        HappyGhast happyGhast = (HappyGhast) world.spawnEntity(exactLoc, EntityType.HAPPY_GHAST);
         happyGhast.setAI(false);
         happyGhast.setGravity(false);
         happyGhast.setSilent(true);
@@ -57,8 +59,7 @@ public class ShopEntity {
         happyGhast.setRemoveWhenFarAway(false);
         this.happyGhast = happyGhast;
 
-        Mannequin mannequin = (Mannequin) world.spawnEntity(track.get(1), EntityType.MANNEQUIN);
-
+        Mannequin mannequin = (Mannequin) world.spawnEntity(exactLoc, EntityType.MANNEQUIN);
         mannequin.setAI(false);
         mannequin.setGravity(false);
         mannequin.setSilent(true);
@@ -68,6 +69,14 @@ public class ShopEntity {
         this.mannequin = mannequin;
 
         happyGhast.addPassenger(mannequin);
+
+        TextDisplay textDisplay = (TextDisplay) world.spawnEntity(exactLoc.clone().add(0, 3, 0), EntityType.TEXT_DISPLAY);
+        textDisplay.text(net.kyori.adventure.text.Component.text("SKLEP").color(net.kyori.adventure.text.format.NamedTextColor.YELLOW).decorate(net.kyori.adventure.text.format.TextDecoration.BOLD));
+        textDisplay.setBillboard(Display.Billboard.CENTER);
+        textDisplay.setSeeThrough(true);
+        textDisplay.setTeleportDuration(1);
+        textDisplay.setPersistent(true);
+        this.textDisplay = textDisplay;
     }
 
     public void applySkinToMannequin(String textureValue) {
@@ -84,35 +93,50 @@ public class ShopEntity {
 
     public void startFlightTask() {
         flightTask = new BukkitRunnable() {
-
             @Override
             public void run() {
-                if (happyGhast == null) {
-                    flightTask.cancel();
-                    return;
-                }
+                try {
+                    if (happyGhast == null || happyGhast.isDead()) {
+                        if (textDisplay != null && !textDisplay.isDead()) textDisplay.remove();
+                        flightTask.cancel();
+                        return;
+                    }
 
-                boolean isStopped = isPlayerClose() || isOtherShopOnTrack();
-                if (isStopped) boostedTicks++;
+                    if (track.isEmpty()) return;
 
-                boolean isBoosted = boostedTicks > 0;
-                if (!isStopped) {
-                    updatePosition(getNextPosition(isBoosted));
+                    boolean isStopped = isPlayerClose() || isOtherShopOnTrack();
+                    if (isStopped) {
+                        boostedTicks++;
+                    }
+
+                    boolean isBoosted = boostedTicks > 0;
+                    if (!isStopped) {
+                        updatePosition(isBoosted);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void updatePosition(int trackIndex) {
-        happyGhast.teleport(track.getOrDefault(trackIndex, new Location(world, 0, 300, 0)));
-    }
+    private void updatePosition(boolean isBoosted) {
+        int speed = isBoosted ? 2 : 1;
 
-    private int getNextPosition(boolean isTickBoosted) {
-        int nextIndex = trackIndex + 1;
-        if (isTickBoosted) nextIndex++;
-        if (nextIndex > track.size()) { trackIndex = 1; return 1; }
-        trackIndex = nextIndex;
-        return trackIndex;
+        targetIndex += speed;
+        if (targetIndex > track.size()) {
+            targetIndex = targetIndex % track.size();
+            if (targetIndex == 0) targetIndex = 1;
+        }
+
+        Location target = track.get(targetIndex);
+        if (target != null) {
+            happyGhast.teleport(target);
+
+            if (textDisplay != null && !textDisplay.isDead()) {
+                textDisplay.teleport(target.clone().add(0, 3, 0));
+            }
+        }
     }
 
     private boolean isPlayerClose() {
@@ -124,13 +148,14 @@ public class ShopEntity {
     }
 
     private boolean isOtherShopOnTrack() {
-        int trackSize = track.size();
+        if (track.isEmpty()) return false;
+
         for (ShopEntity other : shopEntities) {
             if (other == this) continue;
 
-            int distanceAhead = (other.trackIndex - this.trackIndex + trackSize) % trackSize;
+            int idxDiff = (other.targetIndex - this.targetIndex + track.size()) % track.size();
 
-            if (distanceAhead > 0 && distanceAhead < 100) {
+            if (idxDiff > 0 && idxDiff <= 30) {
                 return true;
             }
         }
@@ -138,6 +163,6 @@ public class ShopEntity {
     }
 
     public Location getPosition() {
-        return track.getOrDefault(trackIndex, new Location(world, 0, 300, 0));
+        return track.getOrDefault(targetIndex, happyGhast != null ? happyGhast.getLocation() : null);
     }
 }

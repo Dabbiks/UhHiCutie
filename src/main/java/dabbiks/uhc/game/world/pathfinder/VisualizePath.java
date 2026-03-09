@@ -33,9 +33,6 @@ public class VisualizePath {
         stopAllVisualizations();
 
         generateAndVisualize(plugin, 125, 250, 70, 70, Color.RED);
-        generateAndVisualize(plugin, 115, 230, 50, 50, Color.BLUE);
-        generateAndVisualize(plugin, 100, 210, 85, 85, Color.GREEN);
-        generateAndVisualize(plugin, 80, 200, 100, 100, Color.YELLOW);
     }
 
     public static void stopAllVisualizations() {
