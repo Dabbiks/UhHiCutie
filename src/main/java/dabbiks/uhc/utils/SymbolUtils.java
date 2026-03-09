@@ -81,6 +81,9 @@ public class SymbolUtils {
     public final String SEGMENT_11 = "";
     public final String SEGMENT_12 = "";
 
+    // * SKIN TEXTURES
+    public final String ITEM_SHOP_SKIN = "ewogICJ0aW1lc3RhbXAiIDogMTc2NjQ5Nzk3NDI0MSwKICAicHJvZmlsZUlkIiA6ICI2OTcwNjhkYmQ4M2U0ZjVmOGJjMmU1M2IzMjM1NzZmYSIsCiAgInByb2ZpbGVOYW1lIiA6ICJEYWJib21pbmFjamEiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU3MzljNzY2ZGU4NjRmNTdjOGFhYTZhMDczNjdiNTczZGIyYjNlNTU2MjQwZWJlMzcxOWRkN2Q5NDdiOWIyYyIKICAgIH0KICB9Cn0=";
+
     // * OTHER
     public final String QUESTION_MARK = "§f\uE09D";
     public final String FUEL = "§f\uE09E";

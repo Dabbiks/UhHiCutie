@@ -23,6 +23,7 @@ import dabbiks.uhc.game.world.events.Cobweb;
 import dabbiks.uhc.game.world.events.LavaCollect;
 import dabbiks.uhc.game.world.events.WorldBorder;
 import dabbiks.uhc.lobby.LobbyItems;
+import dabbiks.uhc.lobby.LobbyTopManager;
 import dabbiks.uhc.lobby.SpawnProtector;
 import dabbiks.uhc.player.Chat;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
@@ -139,6 +140,8 @@ public final class Main extends JavaPlugin {
 
         new TaskManager().run();
         Bukkit.getScheduler().runTaskLater(this, WorldGen::createWorld, 10L);
+
+        LobbyTopManager.loadDonations();
     }
 
     @Override

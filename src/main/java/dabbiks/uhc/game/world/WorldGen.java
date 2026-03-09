@@ -2,6 +2,7 @@ package dabbiks.uhc.game.world;
 
 import dabbiks.uhc.Main;
 import dabbiks.uhc.game.configs.WorldConfig;
+import dabbiks.uhc.game.gameplay.shop.ShopManager;
 import dabbiks.uhc.game.world.pathfinder.VisualizePath;
 import org.bukkit.*;
 import org.popcraft.chunky.api.ChunkyAPI;
@@ -60,6 +61,7 @@ public class WorldGen {
         chunky.onGenerationComplete(event -> {
             WorldConfig.isWorldGenerated = true;
             VisualizePath.paths(Main.INSTANCE);
+            new ShopManager().spawnShops();
         } );
     }
 
