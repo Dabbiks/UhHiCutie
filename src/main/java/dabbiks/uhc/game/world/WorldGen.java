@@ -1,12 +1,15 @@
 package dabbiks.uhc.game.world;
 
+import dabbiks.uhc.Main;
 import dabbiks.uhc.game.configs.WorldConfig;
+import dabbiks.uhc.game.world.pathfinder.VisualizePath;
 import org.bukkit.*;
 import org.popcraft.chunky.api.ChunkyAPI;
 import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
 
 import java.io.File;
 
+import static dabbiks.uhc.Main.plugin;
 import static org.bukkit.Bukkit.broadcastMessage;
 import static org.bukkit.Bukkit.getLogger;
 
@@ -54,7 +57,10 @@ public class WorldGen {
         ChunkyAPI chunky = Bukkit.getServer().getServicesManager().load(ChunkyAPI.class);
 
         chunky.startTask(WorldConfig.worldName, "square", 0, 0, 400, 400, "region");
-        chunky.onGenerationComplete(event -> { WorldConfig.isWorldGenerated = true; } );
+        chunky.onGenerationComplete(event -> {
+            WorldConfig.isWorldGenerated = true;
+            VisualizePath.paths(Main.INSTANCE);
+        } );
     }
 
     private static <T> void setGameRule(World world, String ruleName, T value) {
