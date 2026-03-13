@@ -2,8 +2,6 @@ package dabbiks.uhc.game.world;
 
 import dabbiks.uhc.Main;
 import dabbiks.uhc.game.configs.WorldConfig;
-import dabbiks.uhc.game.gameplay.shop.ShopManager;
-import dabbiks.uhc.game.world.pathfinder.VisualizePath;
 import org.bukkit.*;
 import org.popcraft.chunky.api.ChunkyAPI;
 import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
@@ -60,8 +58,6 @@ public class WorldGen {
         chunky.startTask(WorldConfig.worldName, "square", 0, 0, 400, 400, "region");
         chunky.onGenerationComplete(event -> {
             WorldConfig.isWorldGenerated = true;
-            VisualizePath.paths(Main.INSTANCE);
-            new ShopManager().spawnShops();
         } );
     }
 

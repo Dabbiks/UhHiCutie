@@ -3,7 +3,6 @@ package dabbiks.uhc.utils.managers;
 import dabbiks.uhc.Main;
 import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.champions.ChampionManager;
-import dabbiks.uhc.game.gameplay.elytra.ChestplateManager;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
@@ -30,6 +29,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -40,11 +41,7 @@ import static dabbiks.uhc.Main.*;
 
 public class StartManager implements Listener {
 
-    ItemStack firework = new ItemStack(Material.BARRIER);
-    ChestplateManager chestplateManager = INSTANCE.getChestplateManager();
-
     public void processStart() {
-        setFireworkItem();
         prepareWorldBorder();
         prepareTeams();
         prepareTab();
@@ -81,18 +78,6 @@ public class StartManager implements Listener {
         }
     }
 
-    private void setFireworkItem() {
-        ItemInstance itemInstance = new ItemInstance();
-        itemInstance.setMaterial(Material.FIREWORK_ROCKET.name());
-        itemInstance.setName(symbolU.MOUSE_RIGHT + " §fAktywuj elytrę");
-        itemInstance.setAmount(1);
-        firework = new ItemBuilder(itemInstance).build();
-
-        NBT.modify(firework, nbt -> {
-            nbt.setInteger(ItemTags.PERSONAL.name(), 1);
-        });
-    }
-
     private void prepareWorldBorder() {
         INSTANCE.getWorldBorder().prepareWorldBorder();
     }
@@ -116,7 +101,8 @@ public class StartManager implements Listener {
             attributeManager.addModifier(player, Attribute.WAYPOINT_RECEIVE_RANGE, "waypoint_receive", 1000, AttributeModifier.Operation.ADD_NUMBER);
             attributeManager.addModifier(player, Attribute.WAYPOINT_TRANSMIT_RANGE, "waypoint_transmit", 1000, AttributeModifier.Operation.ADD_NUMBER);
 
-            player.getInventory().addItem(firework);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 10, false, false));
+
             player.getInventory().setItem(8, LobbyItems.recipes);
 
             PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());

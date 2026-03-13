@@ -59,31 +59,24 @@ public class SegmentTask extends Task {
 
             String[] messages = null;
             switch (SegmentConfig.actualSegment) {
-                case 5:
-                    messages = new String[]{
-                            "§c§lALERT RCB",
-                            "§eGranica zaczyna się zmniejszać",
-                            "§ePvP zostało włączone, a radar",
-                            "§enamierzający został włączony."
-                    };
-                    break;
                 case 10:
                     messages = new String[]{
-                            "§c§lALERT RCB",
-                            "§eGranica zatrzymała się."
+                            "§c§lETAP I",
+                            "§fGranica ruszyła",
+                            "§fPvP zostało włączone"
                     };
                     break;
                 case 15:
                     messages = new String[]{
-                            "§c§lALERT RCB",
-                            "§eGranica zaczyna się zmniejszać."
+                            "§c§lETAP II",
+                            "§fGranica zatrzymała się",
+                            "§fRadar na pasku namierza graczy"
                     };
                     break;
                 case 20:
                     messages = new String[]{
-                            "§c§lALERT RCB",
-                            "§eGranica wkrótce się zamknie, a",
-                            "§eśrodek mapy zacznie znikać."
+                            "§c§lETAP III",
+                            "§fGranica ruszyła"
                     };
                     break;
             }
@@ -91,7 +84,7 @@ public class SegmentTask extends Task {
             if (messages != null) {
                 messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
                 for (String msg : messages) {
-                    messageU.sendMessageToPlayers(playerListU.getAllPlayers(), messageU.gamePrefix + " " + msg);
+                    messageU.sendMessageToPlayers(playerListU.getAllPlayers(), msg);
                 }
                 messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
             }

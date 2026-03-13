@@ -2,7 +2,6 @@ package dabbiks.uhc.game.gameplay.damage.handlers;
 
 import dabbiks.uhc.game.GameData;
 import dabbiks.uhc.game.gameplay.Victory;
-import dabbiks.uhc.game.gameplay.elytra.ChestplateManager;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentData;
@@ -125,13 +124,5 @@ public class DeathHandler {
             if (!isPersonalItem(cursorItem)) dropItemEntity(world, loc, cursorItem);
             player.setItemOnCursor(null);
         }
-
-        ChestplateManager manager = INSTANCE.getChestplateManager();
-        if (manager == null || !manager.hasSavedChestplate(player.getUniqueId())) return;
-
-        ItemStack savedChestplate = manager.getAndRemoveChestplate(player.getUniqueId());
-        if (savedChestplate == null || savedChestplate.getType() == Material.AIR || isPersonalItem(savedChestplate)) return;
-
-        dropItemEntity(world, loc, savedChestplate);
     }
 }

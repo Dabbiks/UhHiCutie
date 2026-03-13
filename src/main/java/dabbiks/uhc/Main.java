@@ -7,8 +7,6 @@ import dabbiks.uhc.game.gameplay.damage.listeners.MeleeHit;
 import dabbiks.uhc.game.gameplay.damage.listeners.ParryingBlocker;
 import dabbiks.uhc.game.gameplay.damage.listeners.ProjectileHit;
 import dabbiks.uhc.game.gameplay.damage.listeners.ProjectileLaunch;
-import dabbiks.uhc.game.gameplay.elytra.ChestplateManager;
-import dabbiks.uhc.game.gameplay.elytra.ElytraListener;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
 import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeLimitTracker;
@@ -69,7 +67,6 @@ public final class Main extends JavaPlugin {
     private WorldBorder worldBorder;
     private TeamManager teamManager;
     private PrefixManager prefixManager;
-    private ChestplateManager chestplateManager;
 
     @Override
     public void onEnable() {
@@ -94,7 +91,6 @@ public final class Main extends JavaPlugin {
         indicatorManager = new IndicatorManager();
         teamManager = new TeamManager();
         prefixManager = new PrefixManager();
-        chestplateManager = new ChestplateManager();
 
         persistentDataJson = new PersistentDataJson();
         worldBorder = new WorldBorder();
@@ -121,7 +117,6 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ParryingBlocker(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ElytraListener(chestplateManager), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new Grinding(), this);
@@ -155,5 +150,4 @@ public final class Main extends JavaPlugin {
     public RecipeManager getRecipeManager() { return recipeManager; }
     public TeamManager getTeamManager() { return teamManager; }
     public PrefixManager getPrefixManager() { return prefixManager; }
-    public ChestplateManager getChestplateManager() { return chestplateManager; }
 }

@@ -106,7 +106,7 @@ public class TeamUtils {
 
             int x = random.nextInt(radius * 2 + 1) - radius;
             int z = random.nextInt(radius * 2 + 1) - radius;
-            int y = 250;
+            int y = Bukkit.getWorld(WorldConfig.worldName).getHighestBlockYAt(x, z) + 50;
             Location center = new Location(world, x, y, z);
             cageCenters.add(center);
 
