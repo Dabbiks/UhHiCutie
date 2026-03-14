@@ -69,7 +69,7 @@ public class LobbyItems implements Listener {
 
         if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("RECIPE_BOOK")))) {
             event.setCancelled(true);
-            new RecipeMenu(player, INSTANCE.getRecipeManager()).open(player);
+            new RecipeMenu(player, INSTANCE.getRecipeManager(), INSTANCE.getRecipeLimitTracker()).open(player);
         }
 
         if (!event.getPlayer().getLocation().getWorld().getName().equals("world")) return;

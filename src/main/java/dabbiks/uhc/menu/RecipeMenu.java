@@ -3,6 +3,7 @@ package dabbiks.uhc.menu;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeIngredient;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
+import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeLimitTracker;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeType;
 import dabbiks.uhc.player.data.session.SessionData;
@@ -18,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static dabbiks.uhc.Main.soundU;
 import static dabbiks.uhc.Main.symbolU;
@@ -26,6 +26,7 @@ import static dabbiks.uhc.Main.symbolU;
 public class RecipeMenu extends FastInv {
 
     private final RecipeManager recipeManager;
+    private final RecipeLimitTracker limitTracker;
     private final Player player;
 
     private RecipeType currentCategory;
@@ -46,10 +47,11 @@ public class RecipeMenu extends FastInv {
     private static final int PREV_PAGE_SLOT = 46;
     private static final int NEXT_PAGE_SLOT = 49;
 
-    public RecipeMenu(Player player, RecipeManager recipeManager) {
+    public RecipeMenu(Player player, RecipeManager recipeManager, RecipeLimitTracker limitTracker) {
         super(54, "\uF808" + symbolU.RECIPE_MENU);
         this.player = player;
         this.recipeManager = recipeManager;
+        this.limitTracker = limitTracker;
 
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
@@ -156,6 +158,20 @@ public class RecipeMenu extends FastInv {
             List<String> lore = meta.getLore();
             if (lore == null) lore = new ArrayList<>();
             lore.add("");
+
+            int maxAllowed = recipe.getMaxCraftsPerPlayer();
+            if (maxAllowed > 0) {
+                int alreadyCrafted = limitTracker.getCraftCount(player, recipe.getId());
+                int remaining = Math.max(0, maxAllowed - alreadyCrafted);
+
+                if (remaining == 0) {
+                    lore.add("§cOsiągnąłeś limit craftingów!");
+                } else {
+                    lore.add("§7Możesz stworzyć jeszcze: §a" + remaining);
+                }
+                lore.add("");
+            }
+
             if (selectedRecipe != null && selectedRecipe.getId().equals(recipe.getId())) {
                 lore.add("§aWybrany przepis");
                 meta.addEnchant(org.bukkit.enchantments.Enchantment.UNBREAKING, 1, true);

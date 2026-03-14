@@ -148,6 +148,7 @@ public final class Main extends JavaPlugin {
         return worldBorder;
     }
     public RecipeManager getRecipeManager() { return recipeManager; }
+    public RecipeLimitTracker getRecipeLimitTracker() { return recipeLimitTracker; }
     public TeamManager getTeamManager() { return teamManager; }
     public PrefixManager getPrefixManager() { return prefixManager; }
 }

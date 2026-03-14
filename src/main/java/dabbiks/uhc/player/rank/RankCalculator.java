@@ -5,8 +5,8 @@ import dabbiks.uhc.player.data.persistent.PersistentStats;
 
 public class RankCalculator {
 
-    private static final int MIN_MODIFIER = 60;
-    private static final int MAX_MODIFIER = 140;
+    private static final int MIN_MODIFIER = 35;
+    private static final int MAX_MODIFIER = 165;
     private static final int BASE_OPPONENT_SCORE = 100;
 
     private static final int PLACE_KILL_POINTS = 30;

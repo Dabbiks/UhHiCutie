@@ -11,6 +11,8 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +26,7 @@ public class LobbyTopManager {
 
     private static final Location TOP_LOC = new Location(Bukkit.getWorld("world"), -8.99, 103.0, 5.0);
     private static final float TOP_YAW = -90f;
+    private static BukkitTask currentAnimationTask;
 
     public enum TopCategory {
         COINS("MONETY"),
@@ -140,80 +143,142 @@ public class LobbyTopManager {
     }
 
     public static void displayTop(TopCategory category) {
-        deleteAll();
+        List<String> newLines = new ArrayList<>();
 
         if (category == TopCategory.DONATIONS) {
-            displayDonations();
-            return;
-        }
-
-        Map<String, Integer> map = tops.get(category);
-        if (map == null || map.isEmpty()) return;
-
-        World world = TOP_LOC.getWorld();
-        if (world == null) return;
-
-        Location current = TOP_LOC.clone();
-
-        createLine(world, current, "§l" + category.getTitle(), TOP_YAW);
-        current.subtract(0, 0.5, 0);
-
-        int index = 1;
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            if (index > 10) break;
-
-            String nickColor = switch (index) {
-                case 1 -> "§6";
-                case 2 -> "§f";
-                case 3 -> "§c";
-                default -> "§7";
-            };
-
-            String valueDisplay;
-            if (category == TopCategory.RANKING) {
-                RankType rank = RankType.getByPoints(entry.getValue());
-                valueDisplay = "§f" + rank.getDisplayName();
-            } else {
-                valueDisplay = "§e" + formatNumber(entry.getValue());
+            if (donationsTop == null || donationsTop.isEmpty()) return;
+            newLines.add("§l" + TopCategory.DONATIONS.getTitle());
+            int index = 1;
+            for (Map.Entry<String, Double> entry : donationsTop.entrySet()) {
+                if (index > 10) break;
+                double val = entry.getValue();
+                String valueDisplay = "§a" + (val == Math.floor(val) ? String.format(Locale.US, "%.0f", val) : String.format(Locale.US, "%.2f", val)) + " zł";
+                newLines.add("§8" + index + ". §7" + entry.getKey() + " §7- " + valueDisplay);
+                index++;
             }
-
-            String line = "§8" + index + ". " + nickColor + entry.getKey() + " §7- " + valueDisplay;
-            createLine(world, current, line, TOP_YAW);
-            current.subtract(0, 0.25, 0);
-
-            index++;
+        } else {
+            Map<String, Integer> map = tops.get(category);
+            if (map == null || map.isEmpty()) return;
+            newLines.add("§l" + category.getTitle());
+            int index = 1;
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                if (index > 10) break;
+                String nickColor = switch (index) {
+                    case 1 -> "§6";
+                    case 2 -> "§f";
+                    case 3 -> "§c";
+                    default -> "§7";
+                };
+                String valueDisplay;
+                if (category == TopCategory.RANKING) {
+                    RankType rank = RankType.getByPoints(entry.getValue());
+                    valueDisplay = "§f" + rank.getDisplayName();
+                } else {
+                    valueDisplay = "§e" + formatNumber(entry.getValue());
+                }
+                newLines.add("§8" + index + ". " + nickColor + entry.getKey() + " §7- " + valueDisplay);
+                index++;
+            }
         }
+
+        animateTransition(newLines);
     }
 
-    private static void displayDonations() {
-        if (donationsTop == null || donationsTop.isEmpty()) return;
-
+    private static void animateTransition(List<String> newLines) {
         World world = TOP_LOC.getWorld();
         if (world == null) return;
 
-        Location current = TOP_LOC.clone();
-
-        createLine(world, current, "§l" + TopCategory.DONATIONS.getTitle(), TOP_YAW);
-        current.subtract(0, 0.5, 0);
-
-        int index = 1;
-        for (Map.Entry<String, Double> entry : donationsTop.entrySet()) {
-            if (index > 10) break;
-
-            String nickColor = "§7";
-            double val = entry.getValue();
-            String valueDisplay = "§a" + (val == Math.floor(val) ? String.format(Locale.US, "%.0f", val) : String.format(Locale.US, "%.2f", val)) + " zł";
-
-            String line = "§8" + index + ". " + nickColor + entry.getKey() + " §7- " + valueDisplay;
-            createLine(world, current, line, TOP_YAW);
-            current.subtract(0, 0.25, 0);
-
-            index++;
+        if (currentAnimationTask != null && !currentAnimationTask.isCancelled()) {
+            currentAnimationTask.cancel();
+            deleteAll();
         }
+
+        List<TextDisplay> oldDisplays = new ArrayList<>();
+        for (Entity entity : world.getEntitiesByClass(TextDisplay.class)) {
+            if (entity.hasMetadata("TOP_HOLO")) {
+                oldDisplays.add((TextDisplay) entity);
+            }
+        }
+
+        oldDisplays.sort((a, b) -> Double.compare(b.getLocation().getY(), a.getLocation().getY()));
+
+        double titleY = TOP_LOC.getY();
+        double thresholdY = titleY + 1.5;
+        double spawnY = titleY - 5.0;
+
+        currentAnimationTask = new BukkitRunnable() {
+            int oldIndex = 0;
+            int newIndex = 0;
+            int delayTicks = 15;
+            final Set<ActiveAnim> animations = new HashSet<>();
+
+            @Override
+            public void run() {
+                if (oldIndex < oldDisplays.size()) {
+                    animations.add(new ActiveAnim(oldDisplays.get(oldIndex), true, null));
+                    oldIndex++;
+                } else if (delayTicks > 0) {
+                    delayTicks--;
+                } else if (newIndex < newLines.size()) {
+                    Location target = TOP_LOC.clone();
+                    target.setYaw(TOP_YAW);
+
+                    double targetY = titleY;
+                    if (newIndex > 0) {
+                        targetY -= 0.5 + (newIndex - 1) * 0.25;
+                    }
+                    target.setY(targetY);
+
+                    Location start = target.clone();
+                    start.setY(spawnY);
+
+                    TextDisplay td = createLineEntity(world, start, newLines.get(newIndex), TOP_YAW);
+                    animations.add(new ActiveAnim(td, false, target));
+                    newIndex++;
+                }
+
+                Iterator<ActiveAnim> it = animations.iterator();
+                while (it.hasNext()) {
+                    ActiveAnim anim = it.next();
+                    Location loc = anim.display.getLocation();
+
+                    if (anim.isOld) {
+                        anim.velocity += 0.015;
+                        loc.add(0, anim.velocity, 0);
+
+                        anim.display.setTeleportDuration(2);
+                        anim.display.teleport(loc);
+
+                        if (loc.getY() >= thresholdY) {
+                            anim.display.remove();
+                            it.remove();
+                        }
+                    } else {
+                        double dist = anim.target.getY() - loc.getY();
+                        if (dist <= 0.02) {
+                            anim.display.setTeleportDuration(1);
+                            anim.display.teleport(anim.target);
+                            it.remove();
+                        } else {
+                            double step = dist * 0.15;
+                            if (step < 0.02) step = 0.02;
+                            loc.add(0, step, 0);
+
+                            anim.display.setTeleportDuration(2);
+                            anim.display.teleport(loc);
+                        }
+                    }
+                }
+
+                if (oldIndex >= oldDisplays.size() && delayTicks <= 0 && newIndex >= newLines.size() && animations.isEmpty()) {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private static void createLine(World world, Location loc, String text, float yaw) {
-        world.spawn(loc, TextDisplay.class, td -> {
+    private static TextDisplay createLineEntity(World world, Location loc, String text, float yaw) {
+        return world.spawn(loc, TextDisplay.class, td -> {
             td.setText("§r" + text);
             td.setBillboard(Display.Billboard.FIXED);
             td.setShadowed(true);
@@ -230,6 +295,19 @@ public class LobbyTopManager {
                     entity.remove();
                 }
             }
+        }
+    }
+
+    private static class ActiveAnim {
+        TextDisplay display;
+        boolean isOld;
+        Location target;
+        double velocity = 0;
+
+        ActiveAnim(TextDisplay display, boolean isOld, Location target) {
+            this.display = display;
+            this.isOld = isOld;
+            this.target = target;
         }
     }
 }
