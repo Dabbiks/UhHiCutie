@@ -3,10 +3,7 @@ package dabbiks.uhc;
 import dabbiks.uhc.commands.RequiredPlayersCommand;
 import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
-import dabbiks.uhc.game.gameplay.damage.listeners.MeleeHit;
-import dabbiks.uhc.game.gameplay.damage.listeners.ParryingBlocker;
-import dabbiks.uhc.game.gameplay.damage.listeners.ProjectileHit;
-import dabbiks.uhc.game.gameplay.damage.listeners.ProjectileLaunch;
+import dabbiks.uhc.game.gameplay.damage.listeners.*;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
 import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeLimitTracker;
@@ -109,6 +106,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileLaunch(), this);
+        Bukkit.getPluginManager().registerEvents(new BoomerangLaunch(), this);
 
         Bukkit.getPluginManager().registerEvents(new TeamClick(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);

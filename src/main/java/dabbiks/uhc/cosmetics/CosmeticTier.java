@@ -5,7 +5,8 @@ public enum CosmeticTier {
     RARE("§b§lR §f"),
     EPIC("§a§lE §f"),
     MYTHIC("§d§lM §f"),
-    LEGENDARY("§5§lL §f");
+    LEGENDARY("§5§lL §f"),
+    PRESTIGE("§6§l$ §f");
 
     private final String icon;
 

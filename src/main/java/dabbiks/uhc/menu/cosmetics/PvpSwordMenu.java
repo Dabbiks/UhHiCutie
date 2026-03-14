@@ -39,10 +39,11 @@ public class PvpSwordMenu extends FastInv {
 
     private void render() {
         int[] slots = {
+                1, 2, 3, 4, 5, 6, 7,
                 10, 11, 12, 13, 14, 15, 16,
                 19, 20, 21, 22, 23, 24, 25,
                 28, 29, 30, 31, 32, 33, 34,
-                37, 38, 39, 40, 41, 42, 43
+                39, 40, 41
         };
 
         int index = 0;

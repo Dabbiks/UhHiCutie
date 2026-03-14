@@ -4,18 +4,16 @@ import dabbiks.uhc.tasks.tasks.*;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static dabbiks.uhc.Main.plugin;
 
 public class TaskManager extends BukkitRunnable {
 
-    private final List<Task> executors;
+    private static final List<Task> executors = new CopyOnWriteArrayList<>();
 
     public TaskManager() {
-        executors = new ArrayList<>();
-
         executors.add(new StartTask());
         executors.add(new BorderTask());
         executors.add(new TimeTask());
@@ -26,11 +24,18 @@ public class TaskManager extends BukkitRunnable {
         executors.add(new LobbyTopTask());
         executors.add(new PlaytimeCoinsTask());
         executors.add(new TrailTask());
-
         executors.add(new LobbyTeleportTask());
         executors.add(new PvpSwordTask());
 
         runTaskTimer(plugin, 0, 1);
+    }
+
+    public static void addTask(Task task) {
+        executors.add(task);
+    }
+
+    public static void removeTask(Task task) {
+        executors.remove(task);
     }
 
     @Override
@@ -40,5 +45,4 @@ public class TaskManager extends BukkitRunnable {
             task.tick();
         }
     }
-
 }

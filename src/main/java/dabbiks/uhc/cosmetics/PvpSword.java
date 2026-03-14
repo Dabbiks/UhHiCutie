@@ -33,7 +33,11 @@ public enum PvpSword {
     RAW_COD("Surowy Dorsz", Material.COD, CosmeticTier.COMMON, 10000, 2000),
     RAW_SALMON("Surowy Łosoś", Material.SALMON, CosmeticTier.COMMON, 10000, 2000),
     TROPICAL_FISH("Ryba Tropikalna", Material.TROPICAL_FISH, CosmeticTier.RARE, 25000, 5000),
-    SPYGLASS("Luneta", Material.SPYGLASS, CosmeticTier.LEGENDARY, 1000000, 200000);
+    SPYGLASS("Luneta", Material.SPYGLASS, CosmeticTier.LEGENDARY, 1000000, 200000),
+
+    PRESTIGE_SWORD("Miecz z 24-karatowego złota", Material.GOLDEN_SWORD, CosmeticTier.PRESTIGE, 1000000, 200000),
+    PRESTIGE_FISHING_ROD("Wędka z 24-karatowego złota", Material.FISHING_ROD, CosmeticTier.PRESTIGE, 1000000, 200000),
+    PRESTIGE_MACE("Buzdygan z 24-karatowego złota", Material.MACE, CosmeticTier.PRESTIGE, 1000000, 200000);
 
     private final String name;
     private final Material material;
