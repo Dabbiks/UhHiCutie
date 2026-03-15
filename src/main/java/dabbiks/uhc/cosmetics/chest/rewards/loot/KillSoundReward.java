@@ -44,6 +44,7 @@ public class KillSoundReward extends Reward {
             case EPIC -> "§d";
             case MYTHIC -> "§c";
             case LEGENDARY -> "§6";
+            case PRESTIGE -> "§4BŁĄD";
         };
         return color + "§lDŹWIĘK";
     }

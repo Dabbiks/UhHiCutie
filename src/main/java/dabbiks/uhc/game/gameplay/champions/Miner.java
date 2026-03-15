@@ -52,11 +52,13 @@ public class Miner extends Champion {
             }
             case 5, 6, 7, 8, 9 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_HELMET)));
                 player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
                 sessionData.addTag(SessionTags.SMALL_ANVIL_DISCOUNT);
             }
             case 10 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_HELMET)));
                 player.getInventory().addItem(new ItemStack(Material.BREAD, 10));
                 sessionData.addTag(SessionTags.BIG_ANVIL_DISCOUNT);
                 sessionData.addTag(SessionTags.IMMORTAL_EXPERIENCE);
@@ -83,21 +85,23 @@ public class Miner extends Champion {
             desc.add(" §8■ §fChleb §7(5 szt.)");
         } else if (level <= 9) {
             desc.add(" §8■ §fŻelazny kilof");
+            desc.add(" §8■ §fSkórzana czapka");
             desc.add(" §8■ §fChleb §7(5 szt.)");
         } else {
             desc.add(" §8■ §fŻelazny kilof");
+            desc.add(" §8■ §fŻelazny hełm");
             desc.add(" §8■ §fChleb §7(10 szt.)");
         }
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fSzanse na podwójną rudę: §a" + doubleOreChance + "%");
+        desc.add(" §e» §fMasz §c" + doubleOreChance + "% §fszansy na podwojenie dropu");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fZniżka na kowadła: §a30%");
+            desc.add(" §e» §fUżycie kowadła jest §ctańsze §fo §c30%");
         } else if (level == 10) {
-            desc.add(" §e» §fZniżka na kowadła: §a50%");
-            desc.add(" §e» §fOchrona: §bPasek EXP działa jak totem");
+            desc.add(" §e» §fUżycie kowadła jest §ctańsze §fo §c50%");
+            desc.add(" §e» §fPasek XP działa jednorazowo jak totem");
         }
 
         return desc;

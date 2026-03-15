@@ -53,16 +53,18 @@ public class Default extends Champion {
             }
             case 5, 6, 7, 8, 9 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_SWORD)));
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_CHESTPLATE)));
                 player.getInventory().addItem(new ItemStack(Material.BOOK, 1));
                 player.getInventory().addItem(new ItemStack(Material.CARROT, 5));
-                sessionData.addTag(SessionTags.SMALL_PARRY_COOLDOWN);
+                sessionData.addTag(SessionTags.ABSORPTION_REDUCTION);
             }
             case 10 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_SWORD)));
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_CHESTPLATE)));
                 player.getInventory().addItem(new ItemStack(Material.BOOK, 1));
                 player.getInventory().addItem(new ItemStack(Material.CARROT, 10));
-                sessionData.addTag(SessionTags.BIG_PARRY_COOLDOWN);
-                sessionData.addTag(SessionTags.PARRY_REGENERATION);
+                sessionData.addTag(SessionTags.BIG_ABSORPTION_REDUCTION);
+                sessionData.addTag(SessionTags.ADDITIONAL_REGENERATION);
             }
         }
     }
@@ -78,7 +80,7 @@ public class Default extends Champion {
     @Override
     protected List<String> getLevelDescription(int level) {
         List<String> desc = new ArrayList<>();
-        int bonusSwordDamage = level * 2;
+        double bonusSwordDamage = level * 0.1;
 
         desc.add("§6Ekwipunek startowy:");
         if (level <= 4) {
@@ -86,21 +88,23 @@ public class Default extends Champion {
             desc.add(" §8■ §fMarchew §7(5 szt.)");
         } else if (level <= 9) {
             desc.add(" §8■ §fŻelazny miecz");
+            desc.add(" §8■ §fSkórzana kurtka");
             desc.add(" §8■ §fMarchew §7(5 szt.)");
         } else {
             desc.add(" §8■ §fŻelazny miecz");
+            desc.add(" §8■ §fŻelazny napierśnik");
             desc.add(" §8■ §fMarchew §7(10 szt.)");
         }
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fDodatkowe obrażenia z miecza: §a" + bonusSwordDamage + "%");
+        desc.add(" §e» §fZadajesz dodatkowo §c" + bonusSwordDamage + " §fobrażeń mieczami");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fParowanie ma zmniejszony cooldown o 15%");
+            desc.add(" §e» §fPod wpływem absorpcji otrzymujesz §c12.5% §fmniej obrażeń");
         } else if (level == 10) {
-            desc.add(" §e» §fParowanie ma zmniejszony cooldown o 30%");
-            desc.add(" §e» §fParowanie ciosów krytycznych leczy o §c2 serca");
+            desc.add(" §e» §fPod wpływem absorpcji otrzymujesz §c25% §fmniej obrażeń");
+            desc.add(" §e» §fTwoja bazowa regeneracja jest §cazwiększona §fo §cpół serca");
         }
 
         return desc;

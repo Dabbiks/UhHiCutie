@@ -78,6 +78,9 @@ public class PersistentData {
     @Expose
     private int[] keyFragments = new int[5];
 
+    @Expose
+    private double donations;
+
     public UUID getUUID() { return uuid; }
     public void setUUID(UUID uuid) { this.uuid = uuid; }
 
@@ -151,4 +154,7 @@ public class PersistentData {
     public int getKeyFragments(int index) { return keyFragments[index]; }
     public void setKeyFragments(int index, int amount) { keyFragments[index] = amount; }
     public void addKeyFragments(int index, int amount) { keyFragments[index] += amount; }
+
+    public double getDonations() { return donations; }
+    public void setDonations(double donations) { this.donations = donations; }
 }

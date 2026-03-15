@@ -140,6 +140,8 @@ public class JoinEvent implements Listener {
         itemInstance.setName(persistentData.getPvpSword().getName());
         itemInstance.setMaterial(persistentData.getPvpSword().getMaterial().name());
         itemInstance.setAttributes(attrs);
+        if (persistentData.getPvpSword().getCustomModelData() != 0)
+            itemInstance.setCustomModelData(persistentData.getPvpSword().getCustomModelData());
 
         player.getInventory().setItem(4, new ItemBuilder(itemInstance).build());
     }

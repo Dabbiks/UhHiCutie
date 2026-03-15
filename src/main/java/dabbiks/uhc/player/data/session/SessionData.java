@@ -33,9 +33,6 @@ public class SessionData {
     private String teamIcon = "";
     private String rankIcon = "";
 
-    // * ELYTRA
-    private int elytraCharges = 10;
-
     // * RECIPES
     private RecipeType lastRecipeCategory = RecipeType.WEAPON;
     private RecipeInstance lastSelectedRecipe = null;
@@ -77,32 +74,6 @@ public class SessionData {
 
     public void setKillStreak(int killStreak) {
         this.killStreak = killStreak;
-    }
-
-    // ? ELYTRA
-
-    public int getMaxElytraCharges() {
-        return hasTag(SessionTags.MORE_FUEL) ? 12 : 10;
-    }
-
-    public int getElytraCharges() {
-        return Math.min(elytraCharges, getMaxElytraCharges());
-    }
-
-    public void addElytraCharges(int amount) {
-        this.elytraCharges = Math.min(this.elytraCharges + amount, getMaxElytraCharges());
-    }
-
-    public void removeElytraCharges(int amount) {
-        this.elytraCharges = Math.max(this.elytraCharges - amount, 0);
-    }
-
-    public boolean consumeElytraCharge() {
-        if (this.elytraCharges > 0) {
-            this.elytraCharges--;
-            return true;
-        }
-        return false;
     }
 
     // ? DAMAGER

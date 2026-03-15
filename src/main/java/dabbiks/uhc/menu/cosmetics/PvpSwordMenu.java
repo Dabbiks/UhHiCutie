@@ -1,5 +1,6 @@
 package dabbiks.uhc.menu.cosmetics;
 
+import dabbiks.uhc.cosmetics.CosmeticTier;
 import dabbiks.uhc.cosmetics.PvpSword;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
@@ -29,10 +30,14 @@ public class PvpSwordMenu extends FastInv {
     private final PvpSword[] pvpSwords;
 
     public PvpSwordMenu(Player player, PersistentData persistentData) {
-        super(54, "Miecze PvP");
+        super(45, "Miecze PvP");
         this.player = player;
         this.persistentData = persistentData;
         this.pvpSwords = PvpSword.values();
+
+        if (persistentData.getDonations() >= 20 && !persistentData.hasPvpSword(PvpSword.PRESTIGE_SWORD)) persistentData.unlockPvpSword(PvpSword.PRESTIGE_SWORD);
+        if (persistentData.getDonations() >= 50 && !persistentData.hasPvpSword(PvpSword.PRESTIGE_FISHING_ROD)) persistentData.unlockPvpSword(PvpSword.PRESTIGE_FISHING_ROD);
+        if (persistentData.getDonations() >= 100 && !persistentData.hasPvpSword(PvpSword.PRESTIGE_MACE)) persistentData.unlockPvpSword(PvpSword.PRESTIGE_MACE);
 
         render();
     }
@@ -74,6 +79,7 @@ public class PvpSwordMenu extends FastInv {
             meta.setDisplayName(pvpSword.getTier().getIcon() + "§f" + pvpSword.getName());
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            if (pvpSword.getCustomModelData() != 0) meta.setCustomModelData(pvpSword.getCustomModelData());
 
             List<String> lore = new ArrayList<>();
 
@@ -84,6 +90,17 @@ public class PvpSwordMenu extends FastInv {
                 lore.add(symbolU.MOUSE_LEFT + "§a Wybrany miecz");
             } else if (unlocked) {
                 lore.add(symbolU.MOUSE_LEFT + "§e Wybierz miecz");
+            } else if (pvpSword.getTier() == CosmeticTier.PRESTIGE) {
+                if (pvpSword == PvpSword.PRESTIGE_SWORD) {
+                    lore.add("§7Do odblokowania brakuje Ci ");
+                    lore.add("§7jeszcze §a" + (20 - persistentData.getDonations()) + "zł §7wpłaty");
+                } else if (pvpSword == PvpSword.PRESTIGE_FISHING_ROD) {
+                    lore.add("§7Do odblokowania brakuje Ci ");
+                    lore.add("§7jeszcze §a" + (50 - persistentData.getDonations()) + "zł §7wpłaty");
+                } else if (pvpSword == PvpSword.PRESTIGE_MACE) {
+                    lore.add("§7Do odblokowania brakuje Ci ");
+                    lore.add("§7jeszcze §a" + (100 - persistentData.getDonations()) + "zł §7wpłaty");
+                }
             } else {
                 int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
                 int powder = persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0);
@@ -117,6 +134,11 @@ public class PvpSwordMenu extends FastInv {
             return;
         }
 
+        if (pvpSword.getTier() == CosmeticTier.PRESTIGE) {
+            soundU.playSoundToPlayer(player, Sound.ENTITY_VILLAGER_NO, 1, 1);
+            return;
+        }
+
         persistentData.removeStats(currency, cost);
         persistentData.unlockPvpSword(pvpSword);
         PersistentDataManager.saveData(player.getUniqueId());
@@ -141,6 +163,7 @@ public class PvpSwordMenu extends FastInv {
         itemInstance.setName(persistentData.getPvpSword().getName());
         itemInstance.setMaterial(persistentData.getPvpSword().getMaterial().name());
         itemInstance.setAttributes(attrs);
+        if (pvpSword.getCustomModelData() != 0) itemInstance.setCustomModelData(pvpSword.getCustomModelData());
 
         player.getInventory().setItem(4, new ItemBuilder(itemInstance).build());
 
