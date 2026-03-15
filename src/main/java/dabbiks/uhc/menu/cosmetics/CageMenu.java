@@ -2,6 +2,8 @@ package dabbiks.uhc.menu.cosmetics;
 
 import dabbiks.uhc.cosmetics.Cage;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
+import dabbiks.uhc.menu.Discount;
+import dabbiks.uhc.menu.DiscountType;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -23,6 +25,7 @@ public class CageMenu extends FastInv {
     private final Player player;
     private final PersistentData persistentData;
     private final Cage[] cages;
+    private final double priceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CAGE, 1.0);
 
     public CageMenu(Player player, PersistentData persistentData) {
         super(54, "Klatki startowe");
@@ -84,13 +87,16 @@ public class CageMenu extends FastInv {
                 int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
                 int powder = persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0);
 
-                boolean hasCoins = coins >= cage.getCoinsCost();
-                boolean hasPowder = powder >= cage.getPowderCost();
+                int coinsCost = (int) (cage.getCoinsCost() * priceMultiplier);
+                int powderCost = (int) (cage.getPowderCost() * priceMultiplier);
 
-                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + cage.getCoinsCost() + "§f" + symbolU.SCOREBOARD_COIN
-                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (cage.getCoinsCost() - coins) + "§f" + symbolU.SCOREBOARD_COIN));
-                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + cage.getPowderCost() + "§f" + symbolU.SCOREBOARD_POWDER
-                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (cage.getPowderCost() - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
+                boolean hasCoins = coins >= coinsCost;
+                boolean hasPowder = powder >= powderCost;
+
+                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + coinsCost + "§f" + symbolU.SCOREBOARD_COIN
+                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (coinsCost - coins) + "§f" + symbolU.SCOREBOARD_COIN));
+                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + powderCost + "§f" + symbolU.SCOREBOARD_POWDER
+                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (powderCost - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
             }
 
             meta.setLore(lore);
@@ -104,7 +110,7 @@ public class CageMenu extends FastInv {
     }
 
     private void handleBuy(Cage cage, boolean useCoins) {
-        int cost = useCoins ? cage.getCoinsCost() : cage.getPowderCost();
+        int cost = useCoins ? (int) (cage.getCoinsCost() * priceMultiplier) : (int) (cage.getPowderCost() * priceMultiplier);
         PersistentStats currency = useCoins ? PersistentStats.COINS : PersistentStats.POWDER;
         int playerCurrency = persistentData.getStats().getOrDefault(currency, 0);
 

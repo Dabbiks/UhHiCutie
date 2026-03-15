@@ -14,7 +14,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.*;
@@ -49,35 +48,7 @@ public class LobbyTopManager {
         }
     }
 
-    private static final Map<TopCategory, Map<String, Integer>> tops = new EnumMap<>(TopCategory.class);
-    private static Map<String, Double> donationsTop = new LinkedHashMap<>();
-
-    public static void loadDonations() {
-        File file = new File(plugin.getDataFolder(), "donations.txt");
-        if (!file.exists()) {
-            try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            } catch (Exception ignored) {}
-            return;
-        }
-
-        Map<String, Double> donations = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
-                String[] split = line.split(";");
-                if (split.length == 2) {
-                    try {
-                        donations.put(split[0].trim(), Double.parseDouble(split[1].trim()));
-                    } catch (NumberFormatException ignored) {}
-                }
-            }
-        } catch (Exception ignored) {}
-
-        donationsTop = sortByValueDescending(donations);
-    }
+    private static final Map<TopCategory, Map<String, Double>> tops = new EnumMap<>(TopCategory.class);
 
     public static void loadTops() {
         File folder = new File(plugin.getDataFolder() + "/player-data");
@@ -86,13 +57,14 @@ public class LobbyTopManager {
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
         if (files == null) return;
 
-        Map<String, Integer> coins = new HashMap<>();
-        Map<String, Integer> powder = new HashMap<>();
-        Map<String, Integer> ranking = new HashMap<>();
-        Map<String, Integer> wins = new HashMap<>();
-        Map<String, Integer> played = new HashMap<>();
-        Map<String, Integer> kills = new HashMap<>();
-        Map<String, Integer> glory = new HashMap<>();
+        Map<String, Double> coins = new HashMap<>();
+        Map<String, Double> powder = new HashMap<>();
+        Map<String, Double> ranking = new HashMap<>();
+        Map<String, Double> wins = new HashMap<>();
+        Map<String, Double> played = new HashMap<>();
+        Map<String, Double> kills = new HashMap<>();
+        Map<String, Double> glory = new HashMap<>();
+        Map<String, Double> donations = new HashMap<>();
 
         for (File file : files) {
             try (FileReader reader = new FileReader(file)) {
@@ -101,13 +73,19 @@ public class LobbyTopManager {
                 String name = root.has("name") && !root.get("name").isJsonNull() ? root.get("name").getAsString() : "Unknown";
                 JsonObject stats = root.has("stats") ? root.getAsJsonObject("stats") : new JsonObject();
 
-                coins.put(name, getStat(stats, "COINS"));
-                powder.put(name, getStat(stats, "POWDER"));
-                ranking.put(name, getStat(stats, "RANK_PR"));
-                wins.put(name, getStat(stats, "WINS"));
-                played.put(name, getStat(stats, "PLAYED"));
-                kills.put(name, getStat(stats, "KILLS"));
-                glory.put(name, getStat(stats, "GLORY"));
+                coins.put(name, (double) getStat(stats, "COINS"));
+                powder.put(name, (double) getStat(stats, "POWDER"));
+                ranking.put(name, (double) getStat(stats, "RANK_PR"));
+                wins.put(name, (double) getStat(stats, "WINS"));
+                played.put(name, (double) getStat(stats, "PLAYED"));
+                kills.put(name, (double) getStat(stats, "KILLS"));
+                glory.put(name, (double) getStat(stats, "GLORY"));
+
+                double donationAmount = root.has("donations") && !root.get("donations").isJsonNull() ? root.get("donations").getAsDouble() : 0.0;
+                if (donationAmount > 0) {
+                    donations.put(name, donationAmount);
+                }
+
             } catch (Exception ignored) {
             }
         }
@@ -119,6 +97,7 @@ public class LobbyTopManager {
         tops.put(TopCategory.PLAYED, sortByValueDescending(played));
         tops.put(TopCategory.KILLS, sortByValueDescending(kills));
         tops.put(TopCategory.GLORY, sortByValueDescending(glory));
+        tops.put(TopCategory.DONATIONS, sortByValueDescending(donations));
     }
 
     private static int getStat(JsonObject stats, String key) {
@@ -144,41 +123,36 @@ public class LobbyTopManager {
 
     public static void displayTop(TopCategory category) {
         List<String> newLines = new ArrayList<>();
+        Map<String, Double> map = tops.get(category);
 
-        if (category == TopCategory.DONATIONS) {
-            if (donationsTop == null || donationsTop.isEmpty()) return;
-            newLines.add("§l" + TopCategory.DONATIONS.getTitle());
-            int index = 1;
-            for (Map.Entry<String, Double> entry : donationsTop.entrySet()) {
-                if (index > 10) break;
+        if (map == null || map.isEmpty()) return;
+
+        newLines.add("§l" + category.getTitle());
+        int index = 1;
+
+        for (Map.Entry<String, Double> entry : map.entrySet()) {
+            if (index > 10) break;
+
+            String nickColor = switch (index) {
+                case 1 -> "§6";
+                case 2 -> "§f";
+                case 3 -> "§c";
+                default -> "§7";
+            };
+
+            String valueDisplay;
+            if (category == TopCategory.DONATIONS) {
                 double val = entry.getValue();
-                String valueDisplay = "§a" + (val == Math.floor(val) ? String.format(Locale.US, "%.0f", val) : String.format(Locale.US, "%.2f", val)) + " zł";
-                newLines.add("§8" + index + ". §7" + entry.getKey() + " §7- " + valueDisplay);
-                index++;
+                valueDisplay = "§a" + (val == Math.floor(val) ? String.format(Locale.US, "%.0f", val) : String.format(Locale.US, "%.2f", val)) + " zł";
+            } else if (category == TopCategory.RANKING) {
+                RankType rank = RankType.getByPoints(entry.getValue().intValue());
+                valueDisplay = "§f" + rank.getDisplayName();
+            } else {
+                valueDisplay = "§e" + formatNumber(entry.getValue().intValue());
             }
-        } else {
-            Map<String, Integer> map = tops.get(category);
-            if (map == null || map.isEmpty()) return;
-            newLines.add("§l" + category.getTitle());
-            int index = 1;
-            for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                if (index > 10) break;
-                String nickColor = switch (index) {
-                    case 1 -> "§6";
-                    case 2 -> "§f";
-                    case 3 -> "§c";
-                    default -> "§7";
-                };
-                String valueDisplay;
-                if (category == TopCategory.RANKING) {
-                    RankType rank = RankType.getByPoints(entry.getValue());
-                    valueDisplay = "§f" + rank.getDisplayName();
-                } else {
-                    valueDisplay = "§e" + formatNumber(entry.getValue());
-                }
-                newLines.add("§8" + index + ". " + nickColor + entry.getKey() + " §7- " + valueDisplay);
-                index++;
-            }
+
+            newLines.add("§8" + index + ". " + nickColor + entry.getKey() + " §7- " + valueDisplay);
+            index++;
         }
 
         animateTransition(newLines);
@@ -210,67 +184,82 @@ public class LobbyTopManager {
             int oldIndex = 0;
             int newIndex = 0;
             int delayTicks = 15;
-            final Set<ActiveAnim> animations = new HashSet<>();
+
+            int incomingTick = 0;
+            int totalIncomingTicks = 45;
+
+            final Set<OldAnim> oldAnims = new HashSet<>();
+            final Set<NewAnim> newAnims = new HashSet<>();
 
             @Override
             public void run() {
                 if (oldIndex < oldDisplays.size()) {
-                    animations.add(new ActiveAnim(oldDisplays.get(oldIndex), true, null));
+                    oldAnims.add(new OldAnim(oldDisplays.get(oldIndex)));
                     oldIndex++;
                 } else if (delayTicks > 0) {
                     delayTicks--;
-                } else if (newIndex < newLines.size()) {
-                    Location target = TOP_LOC.clone();
-                    target.setYaw(TOP_YAW);
+                } else {
+                    if (newIndex < newLines.size()) {
+                        Location target = TOP_LOC.clone();
+                        target.setYaw(TOP_YAW);
 
-                    double targetY = titleY;
-                    if (newIndex > 0) {
-                        targetY -= 0.5 + (newIndex - 1) * 0.25;
+                        double targetY = titleY;
+                        if (newIndex > 0) {
+                            targetY -= 0.5 + (newIndex - 1) * 0.25;
+                        }
+                        target.setY(targetY);
+
+                        Location start = target.clone();
+                        start.setY(spawnY);
+
+                        TextDisplay td = createLineEntity(world, start, newLines.get(newIndex), TOP_YAW);
+                        newAnims.add(new NewAnim(td, start.getY(), targetY, incomingTick, totalIncomingTicks));
+                        newIndex++;
                     }
-                    target.setY(targetY);
-
-                    Location start = target.clone();
-                    start.setY(spawnY);
-
-                    TextDisplay td = createLineEntity(world, start, newLines.get(newIndex), TOP_YAW);
-                    animations.add(new ActiveAnim(td, false, target));
-                    newIndex++;
+                    incomingTick++;
                 }
 
-                Iterator<ActiveAnim> it = animations.iterator();
-                while (it.hasNext()) {
-                    ActiveAnim anim = it.next();
+                Iterator<OldAnim> oldIt = oldAnims.iterator();
+                while (oldIt.hasNext()) {
+                    OldAnim anim = oldIt.next();
                     Location loc = anim.display.getLocation();
+                    anim.velocity += 0.015;
+                    loc.add(0, anim.velocity, 0);
 
-                    if (anim.isOld) {
-                        anim.velocity += 0.015;
-                        loc.add(0, anim.velocity, 0);
+                    anim.display.setTeleportDuration(2);
+                    anim.display.teleport(loc);
 
+                    if (loc.getY() >= thresholdY) {
+                        anim.display.remove();
+                        oldIt.remove();
+                    }
+                }
+
+                Iterator<NewAnim> newIt = newAnims.iterator();
+                while (newIt.hasNext()) {
+                    NewAnim anim = newIt.next();
+                    int ticksElapsed = incomingTick - anim.startTick;
+                    int ticksTotal = anim.endTick - anim.startTick;
+
+                    if (ticksElapsed >= ticksTotal) {
+                        Location loc = anim.display.getLocation();
+                        loc.setY(anim.targetY);
+                        anim.display.setTeleportDuration(1);
+                        anim.display.teleport(loc);
+                        newIt.remove();
+                    } else {
+                        double p = (double) ticksElapsed / ticksTotal;
+                        double pEased = 1.0 - Math.pow(1.0 - p, 3.0);
+                        double currentY = anim.spawnY + (anim.targetY - anim.spawnY) * pEased;
+
+                        Location loc = anim.display.getLocation();
+                        loc.setY(currentY);
                         anim.display.setTeleportDuration(2);
                         anim.display.teleport(loc);
-
-                        if (loc.getY() >= thresholdY) {
-                            anim.display.remove();
-                            it.remove();
-                        }
-                    } else {
-                        double dist = anim.target.getY() - loc.getY();
-                        if (dist <= 0.02) {
-                            anim.display.setTeleportDuration(1);
-                            anim.display.teleport(anim.target);
-                            it.remove();
-                        } else {
-                            double step = dist * 0.15;
-                            if (step < 0.02) step = 0.02;
-                            loc.add(0, step, 0);
-
-                            anim.display.setTeleportDuration(2);
-                            anim.display.teleport(loc);
-                        }
                     }
                 }
 
-                if (oldIndex >= oldDisplays.size() && delayTicks <= 0 && newIndex >= newLines.size() && animations.isEmpty()) {
+                if (oldIndex >= oldDisplays.size() && delayTicks <= 0 && newIndex >= newLines.size() && oldAnims.isEmpty() && newAnims.isEmpty()) {
                     this.cancel();
                 }
             }
@@ -298,16 +287,28 @@ public class LobbyTopManager {
         }
     }
 
-    private static class ActiveAnim {
+    private static class OldAnim {
         TextDisplay display;
-        boolean isOld;
-        Location target;
         double velocity = 0;
 
-        ActiveAnim(TextDisplay display, boolean isOld, Location target) {
+        OldAnim(TextDisplay display) {
             this.display = display;
-            this.isOld = isOld;
-            this.target = target;
+        }
+    }
+
+    private static class NewAnim {
+        TextDisplay display;
+        double spawnY;
+        double targetY;
+        int startTick;
+        int endTick;
+
+        NewAnim(TextDisplay display, double spawnY, double targetY, int startTick, int endTick) {
+            this.display = display;
+            this.spawnY = spawnY;
+            this.targetY = targetY;
+            this.startTick = startTick;
+            this.endTick = endTick;
         }
     }
 }

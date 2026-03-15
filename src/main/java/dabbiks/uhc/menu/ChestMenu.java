@@ -27,6 +27,8 @@ public class ChestMenu extends FastInv {
 
     private final Player player;
     private final PersistentData persistentData;
+    private final double chestPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHEST, 1.0);
+    private final double keyPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.KEY, 1.0);
 
     public ChestMenu(Player player, PersistentData persistentData) {
         super(27, "Magiczna skrzynia");
@@ -95,15 +97,18 @@ public class ChestMenu extends FastInv {
 
             int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
-            boolean hasCoinsForChest = coins >= type.getPrice();
-            boolean hasCoinsForKey = coins >= keyType.getPrice();
+            int chestPrice = (int) (type.getPrice() * chestPriceMultiplier);
+            int keyPrice = (int) (keyType.getPrice() * keyPriceMultiplier);
+
+            boolean hasCoinsForChest = coins >= chestPrice;
+            boolean hasCoinsForKey = coins >= keyPrice;
             boolean hasChestAndKey = persistentData.getChests(type.getIndex()) > 0 && persistentData.getKeys(type.getIndex()) > 0;
 
             lore.add(hasChestAndKey ? symbolU.MOUSE_LEFT + "§a Otwórz skrzynię!" : symbolU.MOUSE_LEFT + "§c Musisz posiadać skrzynię i klucz!");
-            lore.add((hasCoinsForChest ? symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + type.getPrice() + "§f" + symbolU.SCOREBOARD_COIN
-                    : symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (type.getPrice() - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni"));
-            lore.add((hasCoinsForKey ? symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + keyType.getPrice() + "§f" + symbolU.SCOREBOARD_COIN
-                    : symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (keyType.getPrice() - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do klucza"));
+            lore.add((hasCoinsForChest ? symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + chestPrice + "§f" + symbolU.SCOREBOARD_COIN
+                    : symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (chestPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni"));
+            lore.add((hasCoinsForKey ? symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + keyPrice + "§f" + symbolU.SCOREBOARD_COIN
+                    : symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (keyPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do klucza"));
 
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -117,7 +122,7 @@ public class ChestMenu extends FastInv {
     }
 
     private void handleChestBuy(ChestType chestType) {
-        int cost = chestType.getPrice();
+        int cost = (int) (chestType.getPrice() * chestPriceMultiplier);
         int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
         if (coins < cost) {
@@ -134,7 +139,7 @@ public class ChestMenu extends FastInv {
     }
 
     private void handleKeyBuy(KeyType keyType) {
-        int cost = keyType.getPrice();
+        int cost = (int) (keyType.getPrice() * keyPriceMultiplier);
         int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
         if (coins < cost) {
@@ -145,7 +150,7 @@ public class ChestMenu extends FastInv {
         persistentData.removeStats(PersistentStats.COINS, cost);
         persistentData.addKeys(keyType.getIndex(), 1);
         PersistentDataManager.saveData(player.getUniqueId());
-        player.sendMessage("§aZakupiono skrzynię!");
+        player.sendMessage("§aZakupiono klucz!");
 
         render();
     }

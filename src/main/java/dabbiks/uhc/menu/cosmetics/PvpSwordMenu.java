@@ -7,6 +7,8 @@ import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import dabbiks.uhc.menu.Discount;
+import dabbiks.uhc.menu.DiscountType;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -28,6 +30,7 @@ public class PvpSwordMenu extends FastInv {
     private final Player player;
     private final PersistentData persistentData;
     private final PvpSword[] pvpSwords;
+    private final double priceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.PVP_SWORD, 1.0);
 
     public PvpSwordMenu(Player player, PersistentData persistentData) {
         super(45, "Miecze PvP");
@@ -105,13 +108,16 @@ public class PvpSwordMenu extends FastInv {
                 int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
                 int powder = persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0);
 
-                boolean hasCoins = coins >= pvpSword.getCoinsCost();
-                boolean hasPowder = powder >= pvpSword.getPowderCost();
+                int coinsCost = (int) (pvpSword.getCoinsCost() * priceMultiplier);
+                int powderCost = (int) (pvpSword.getPowderCost() * priceMultiplier);
 
-                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + pvpSword.getCoinsCost() + "§f" + symbolU.SCOREBOARD_COIN
-                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (pvpSword.getCoinsCost() - coins) + "§f" + symbolU.SCOREBOARD_COIN));
-                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + pvpSword.getPowderCost() + "§f" + symbolU.SCOREBOARD_POWDER
-                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (pvpSword.getPowderCost() - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
+                boolean hasCoins = coins >= coinsCost;
+                boolean hasPowder = powder >= powderCost;
+
+                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + coinsCost + "§f" + symbolU.SCOREBOARD_COIN
+                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (coinsCost - coins) + "§f" + symbolU.SCOREBOARD_COIN));
+                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + powderCost + "§f" + symbolU.SCOREBOARD_POWDER
+                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (powderCost - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
             }
 
             meta.setLore(lore);
@@ -125,7 +131,7 @@ public class PvpSwordMenu extends FastInv {
     }
 
     private void handleBuy(PvpSword pvpSword, boolean useCoins) {
-        int cost = useCoins ? pvpSword.getCoinsCost() : pvpSword.getPowderCost();
+        int cost = useCoins ? (int) (pvpSword.getCoinsCost() * priceMultiplier) : (int) (pvpSword.getPowderCost() * priceMultiplier);
         PersistentStats currency = useCoins ? PersistentStats.COINS : PersistentStats.POWDER;
         int playerCurrency = persistentData.getStats().getOrDefault(currency, 0);
 

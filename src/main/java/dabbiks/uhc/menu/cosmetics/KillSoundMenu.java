@@ -2,6 +2,8 @@ package dabbiks.uhc.menu.cosmetics;
 
 import dabbiks.uhc.cosmetics.KillSound;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
+import dabbiks.uhc.menu.Discount;
+import dabbiks.uhc.menu.DiscountType;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -23,6 +25,7 @@ public class KillSoundMenu extends FastInv {
     private final Player player;
     private final PersistentData persistentData;
     private final KillSound[] killSounds;
+    private final double priceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.KILL_SOUND, 1.0);
 
     public KillSoundMenu(Player player, PersistentData persistentData) {
         super(36, "Dźwięki zabójstwa");
@@ -83,13 +86,16 @@ public class KillSoundMenu extends FastInv {
                 int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
                 int powder = persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0);
 
-                boolean hasCoins = coins >= killSound.getCoinsCost();
-                boolean hasPowder = powder >= killSound.getPowderCost();
+                int coinsCost = (int) (killSound.getCoinsCost() * priceMultiplier);
+                int powderCost = (int) (killSound.getPowderCost() * priceMultiplier);
 
-                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + killSound.getCoinsCost() + "§f" + symbolU.SCOREBOARD_COIN
-                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (killSound.getCoinsCost() - coins) + "§f" + symbolU.SCOREBOARD_COIN));
-                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + killSound.getPowderCost() + "§f" + symbolU.SCOREBOARD_POWDER
-                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (killSound.getPowderCost() - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
+                boolean hasCoins = coins >= coinsCost;
+                boolean hasPowder = powder >= powderCost;
+
+                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + coinsCost + "§f" + symbolU.SCOREBOARD_COIN
+                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (coinsCost - coins) + "§f" + symbolU.SCOREBOARD_COIN));
+                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + powderCost + "§f" + symbolU.SCOREBOARD_POWDER
+                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (powderCost - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
             }
 
             meta.setLore(lore);
@@ -103,7 +109,7 @@ public class KillSoundMenu extends FastInv {
     }
 
     private void handleBuy(KillSound killSound, boolean useCoins) {
-        int cost = useCoins ? killSound.getCoinsCost() : killSound.getPowderCost();
+        int cost = useCoins ? (int) (killSound.getCoinsCost() * priceMultiplier) : (int) (killSound.getPowderCost() * priceMultiplier);
         PersistentStats currency = useCoins ? PersistentStats.COINS : PersistentStats.POWDER;
         int playerCurrency = persistentData.getStats().getOrDefault(currency, 0);
 

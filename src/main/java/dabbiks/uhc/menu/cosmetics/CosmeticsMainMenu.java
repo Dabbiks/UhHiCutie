@@ -1,6 +1,8 @@
 package dabbiks.uhc.menu.cosmetics;
 
 import dabbiks.uhc.game.gameplay.items.ItemTags;
+import dabbiks.uhc.menu.Discount;
+import dabbiks.uhc.menu.DiscountType;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
 import de.tr7zw.nbtapi.NBTItem;
@@ -11,7 +13,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static dabbiks.uhc.Main.symbolU;
 
@@ -56,9 +60,24 @@ public class CosmeticsMainMenu extends FastInv {
             new CageMenu(player, persistentData).open(player);
         });
 
+        List<String> discountLore = new ArrayList<>();
+        Map<DiscountType, Double> discounts = Discount.getDiscounts();
+
+        if (discounts.isEmpty()) {
+            discountLore.add("§7Brak aktywnych promocji.");
+        } else {
+            for (Map.Entry<DiscountType, Double> entry : discounts.entrySet()) {
+                if (entry.getValue() < 1.0) {
+                    int percent = (int) ((1.0 - entry.getValue()) * 100);
+                    discountLore.add("§8- §c-" + percent + "% §7" + entry.getKey().getName());
+                }
+            }
+            if (discountLore.isEmpty()) discountLore.add("§7Brak aktywnych promocji.");
+        }
+
         setItem(coinSlot, createIcon("§f" + persistentData.getStats().getOrDefault(PersistentStats.COINS, 0) +
                 symbolU.SCOREBOARD_COIN, Material.SUNFLOWER, null));
-        setItem(discountSlot, createIcon("§c% §fTrwające promocje", Material.RED_DYE, null));
+        setItem(discountSlot, createIcon("§c% §fTrwające promocje", Material.RED_DYE, discountLore));
         setItem(powderSlot, createIcon("§f" + persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0) +
                 symbolU.SCOREBOARD_POWDER, Material.AMETHYST_SHARD, null));
     }

@@ -1,5 +1,6 @@
 package dabbiks.uhc.lobby;
 
+import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.menu.ChampionMenu;
 import dabbiks.uhc.menu.RecipeMenu;
 import dabbiks.uhc.menu.cosmetics.CosmeticsMainMenu;
@@ -54,7 +55,10 @@ public class LobbyItems implements Listener {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
 
-        NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setInteger(id, 1));
+        NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> {
+            nbt.setInteger(id, 1);
+            nbt.setInteger(ItemTags.UHC_ITEM.name(), 1);
+        });
         return item;
     }
 
