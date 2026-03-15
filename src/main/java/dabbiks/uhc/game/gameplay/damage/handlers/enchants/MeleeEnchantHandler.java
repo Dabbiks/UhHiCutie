@@ -62,6 +62,14 @@ public class MeleeEnchantHandler {
         return damage;
     }
 
+    private boolean isOnHitProof(LivingEntity victim) {
+        if (victim instanceof Player player) {
+            SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+            return sessionData != null && sessionData.hasTag(SessionTags.ON_HIT_PROOF);
+        }
+        return false;
+    }
+
     private double sharpness(int level, boolean isCritical) {
         return isCritical ? 0 : level * 0.75;
     }
@@ -75,6 +83,7 @@ public class MeleeEnchantHandler {
     }
 
     private void sludge(int level, LivingEntity victim) {
+        if (isOnHitProof(victim)) return;
         victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * level, 0, false, true));
         if (!(victim instanceof Player player)) return;
         SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
@@ -82,10 +91,12 @@ public class MeleeEnchantHandler {
     }
 
     private void poison(int level, LivingEntity victim) {
+        if (isOnHitProof(victim)) return;
         victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * level + 1, 0, false, true));
     }
 
     private void ignite(int level, LivingEntity victim) {
+        if (isOnHitProof(victim)) return;
         victim.setFireTicks(40 * level);
     }
 

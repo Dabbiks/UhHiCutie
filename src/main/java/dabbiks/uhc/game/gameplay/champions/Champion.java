@@ -1,5 +1,7 @@
 package dabbiks.uhc.game.gameplay.champions;
 
+import dabbiks.uhc.menu.Discount;
+import dabbiks.uhc.menu.DiscountType;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
 import org.bukkit.Material;
@@ -26,10 +28,17 @@ public abstract class Champion {
         List<String> desc = new ArrayList<>();
         int playerCoins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
+        final double championPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION, 1.0);
+        final double upgradePriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION_UPGRADE, 1.0);
+
         if (!persistentData.hasUnlockedChampion(getId())) {
             if (playerCoins >= getCost()) {
                 desc.add(symbolU.MOUSE_RIGHT + " §aKliknij, aby zakupić klasę!");
-                desc.add(" §8• §7Koszt: §6" + getCost() + " monet");
+                if (championPriceMultiplier != 1) {
+                    desc.add(" §8• §7Koszt: §6§m" + getCost() + "§r §c" + (int) (getCost() * championPriceMultiplier) + " monet");
+                } else {
+                    desc.add(" §8• §7Koszt: §6" + getCost() + " monet");
+                }
             } else {
                 desc.add(symbolU.MOUSE_RIGHT + " §7Potrzebujesz jeszcze §c" + (getCost() - playerCoins) + " monet");
                 desc.add("§7lub §c" + (10 - persistentData.getChampionShards(getId())) + " odłamków §7żeby odblokować tę klasę!");
@@ -41,7 +50,11 @@ public abstract class Champion {
             int upgradeCost = getUpgradeCost(getCost(), level);
             if (playerCoins >= upgradeCost) {
                 desc.add(symbolU.MOUSE_RIGHT + " §eUlepsz na poziom " + (level + 1));
-                desc.add(" §8• §7Koszt: §6" + upgradeCost + " monet");
+                if (upgradePriceMultiplier != 1) {
+                    desc.add(" §8• §7Koszt: §6§m" + upgradeCost + "§r §c" + (int) (upgradeCost * upgradePriceMultiplier) + " monet");
+                } else {
+                    desc.add(" §8• §7Koszt: §6" + upgradeCost + " monet");
+                }
             } else {
                 desc.add(symbolU.MOUSE_RIGHT + " §7Potrzebujesz jeszcze §c" + (upgradeCost - playerCoins) + " monet");
                 desc.add(" §7żeby odblokować kolejny poziom tej klasy!");

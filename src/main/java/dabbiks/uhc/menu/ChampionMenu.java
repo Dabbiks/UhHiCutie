@@ -25,6 +25,8 @@ public class ChampionMenu extends FastInv {
     private final Player player;
     private final PersistentData data;
     private final List<Champion> champions;
+    private final double championPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION, 1.0);
+    private final double upgradePriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION_UPGRADE, 1.0);
 
     public ChampionMenu(Player player, PersistentData data) {
         super(27, "Klasy postaci");
@@ -80,7 +82,8 @@ public class ChampionMenu extends FastInv {
     private void handleUpgradeOrBuy(Champion champion) {
         boolean unlocked = data.hasUnlockedChampion(champion.getId());
         int currentLevel = data.getChampionLevel(champion.getId());
-        int cost = unlocked ? champion.getUpgradeCost(champion.getCost(), currentLevel) : champion.getCost();
+        int cost = unlocked ? (int) (champion.getUpgradeCost(champion.getCost(), currentLevel) * upgradePriceMultiplier)
+                : (int) (champion.getCost() * championPriceMultiplier);
         int playerCoins = data.getStats().getOrDefault(PersistentStats.COINS, 0);
 
         if (unlocked && currentLevel >= champion.getMaxLevel()) {

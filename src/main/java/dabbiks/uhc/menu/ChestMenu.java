@@ -160,10 +160,6 @@ public class ChestMenu extends FastInv {
             return;
         }
 
-        persistentData.addChests(chestType.getIndex(), -1);
-        persistentData.addKeys(chestType.getIndex(), -1);
-        PersistentDataManager.saveData(player.getUniqueId());
-
         new MysteryChestSession(player.getUniqueId(), chestType);
 
         render();

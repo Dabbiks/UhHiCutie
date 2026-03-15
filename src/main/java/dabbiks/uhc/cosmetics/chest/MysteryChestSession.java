@@ -48,6 +48,11 @@ public class MysteryChestSession {
         if (activeSession != null) return;
         activeSession = this;
 
+        PersistentData persistentData = PersistentDataManager.getData(uuid);
+        persistentData.addChests(chestType.getIndex(), -1);
+        persistentData.addKeys(chestType.getIndex(), -1);
+        PersistentDataManager.saveData(uuid);
+
         startSession();
     }
 

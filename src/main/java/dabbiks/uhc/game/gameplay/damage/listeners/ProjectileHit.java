@@ -11,6 +11,7 @@ import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.data.session.SessionTags;
 import de.tr7zw.nbtapi.NBT;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -20,9 +21,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import static dabbiks.uhc.Main.indicatorManager;
 import static dabbiks.uhc.Main.stateU;
+import static dabbiks.uhc.Main.playerU;
 
 public class ProjectileHit implements Listener {
 
@@ -59,6 +64,30 @@ public class ProjectileHit implements Listener {
 
         SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
         sessionData.setDamager(victim, damager);
+
+        SessionData damagerSession = SessionDataManager.getData(damager.getUniqueId());
+        if (damagerSession != null) {
+            if (damagerSession.hasTag(SessionTags.BIG_PROJECTILE_HIT_REGENERATION)) {
+                playerU.addHealth(damager, 2.0);
+            } else if (damagerSession.hasTag(SessionTags.PROJECTILE_HIT_REGENERATION)) {
+                playerU.addHealth(damager, 1.0);
+            }
+
+            if (damagerSession.hasTag(SessionTags.PROJECTILE_HIT_ARMOR_CORROSION)) {
+                for (ItemStack armorItem : victim.getInventory().getArmorContents()) {
+                    if (armorItem != null && armorItem.hasItemMeta()) {
+                        ItemMeta meta = armorItem.getItemMeta();
+                        if (meta instanceof Damageable damageable) {
+                            int maxDurability = armorItem.getType().getMaxDurability();
+                            int remainingUses = maxDurability - damageable.getDamage();
+                            int extraDamage = (int) (3 + (remainingUses * 0.03));
+                            damageable.setDamage(damageable.getDamage() + extraDamage);
+                            armorItem.setItemMeta(damageable);
+                        }
+                    }
+                }
+            }
+        }
 
         final double baseDamage = getProjectileBonusDamage(projectile);
         double damage = baseDamage;
