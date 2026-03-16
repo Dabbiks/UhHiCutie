@@ -45,6 +45,13 @@ public enum EnchantType {
 
     LUNGE("Szarża", 3, EnchantTier.COMMON, EnchantSlot.SPEAR, Enchantment.LUNGE),
 
+    BOOMERANG_DURABILITY("Trwałość", 5, EnchantTier.COMMON, EnchantSlot.BOOMERANG, null),
+    SHARPED("Naostrzenie", 3, EnchantTier.COMMON, EnchantSlot.BOOMERANG, null),
+    REPERCUSSION("Reperkusje", 3, EnchantTier.RARE, EnchantSlot.BOOMERANG, null),
+    EROSION("Erozja", 3, EnchantTier.EPIC, EnchantSlot.BOOMERANG, null),
+    RETURN("Powrót", 1, EnchantTier.EPIC, EnchantSlot.BOOMERANG, null),
+    EXECUTIONER("Kat", 1, EnchantTier.MYTHIC, EnchantSlot.BOOMERANG, null),
+
     LUCK_OF_THE_SEA("Morska fortuna", 5, EnchantTier.COMMON, EnchantSlot.FISHING_ROD, Enchantment.LUCK_OF_THE_SEA),
     LURE("Przynęta", 5, EnchantTier.RARE, EnchantSlot.FISHING_ROD, Enchantment.LURE);
 

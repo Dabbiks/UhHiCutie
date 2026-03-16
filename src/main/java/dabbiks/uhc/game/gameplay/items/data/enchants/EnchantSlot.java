@@ -9,6 +9,7 @@ public enum EnchantSlot {
     BOW,
     CROSSBOW,
     TRIDENT,
+    BOOMERANG,
     RANGED,
     MACE,
     SPEAR,
