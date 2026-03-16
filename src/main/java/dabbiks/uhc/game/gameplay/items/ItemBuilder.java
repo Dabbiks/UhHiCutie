@@ -111,7 +111,7 @@ public class ItemBuilder {
                     value = value / 100.0;
                 }
 
-                UUID stableUUID = UUID.nameUUIDFromBytes(attributeData.getAttributeType().name().getBytes());
+                UUID stableUUID = UUID.randomUUID();
 
                 AttributeModifier modifier = new AttributeModifier(
                         stableUUID,

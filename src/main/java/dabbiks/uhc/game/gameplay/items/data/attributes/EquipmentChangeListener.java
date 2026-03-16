@@ -22,13 +22,11 @@ import static dabbiks.uhc.Main.plugin;
 
 public class EquipmentChangeListener implements Listener {
 
-    private void updateHealthBoost(Player player) {
+    private void updateAttribute(Player player, Attribute bukkitAttribute, String nbtKey) {
         EntityEquipment equipment = player.getEquipment();
-        if (equipment == null) return;
 
         double flatValue = 0.0;
         double percentValue = 0.0;
-        String key = "Zdrowie";
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack item;
@@ -45,11 +43,11 @@ public class EquipmentChangeListener implements Listener {
             if (item == null || item.getType().isAir()) continue;
 
             NBTItem nbt = new NBTItem(item);
-            if (!nbt.hasKey(key)) continue;
+            if (!nbt.hasKey(nbtKey)) continue;
             if (nbt.hasKey("SLOT") && !nbt.getString("SLOT").equals(slot.name())) continue;
 
-            double value = nbt.getDouble(key);
-            boolean isPercent = nbt.hasKey(key + "_PERCENT") && nbt.getBoolean(key + "_PERCENT");
+            double value = nbt.getDouble(nbtKey);
+            boolean isPercent = nbt.hasKey(nbtKey + "_PERCENT") && nbt.getBoolean(nbtKey + "_PERCENT");
 
             if (isPercent) {
                 percentValue += value;
@@ -58,27 +56,27 @@ public class EquipmentChangeListener implements Listener {
             }
         }
 
-        AttributeInstance instance = player.getAttribute(Attribute.MAX_HEALTH);
+        AttributeInstance instance = player.getAttribute(bukkitAttribute);
         if (instance == null) return;
 
-        UUID flatUuid = UUID.nameUUIDFromBytes((key + "_FLAT").getBytes());
-        UUID percentUuid = UUID.nameUUIDFromBytes((key + "_PERCENT").getBytes());
+        UUID flatUuid = UUID.nameUUIDFromBytes((nbtKey + "_FLAT").getBytes());
+        UUID percentUuid = UUID.nameUUIDFromBytes((nbtKey + "_PERCENT").getBytes());
 
         if (instance.getModifier(flatUuid) != null) instance.removeModifier(flatUuid);
         if (instance.getModifier(percentUuid) != null) instance.removeModifier(percentUuid);
 
         if (flatValue != 0.0) {
-            instance.addModifier(new AttributeModifier(flatUuid, key + "_FLAT", flatValue, AttributeModifier.Operation.ADD_NUMBER));
+            instance.addModifier(new AttributeModifier(flatUuid, nbtKey + "_FLAT", flatValue, AttributeModifier.Operation.ADD_NUMBER));
         }
         if (percentValue != 0.0) {
-            instance.addModifier(new AttributeModifier(percentUuid, key + "_PERCENT", percentValue, AttributeModifier.Operation.ADD_SCALAR));
+            instance.addModifier(new AttributeModifier(percentUuid, nbtKey + "_PERCENT", percentValue, AttributeModifier.Operation.ADD_SCALAR));
         }
     }
 
     private void scheduleUpdate(Player player) {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (player.isOnline()) {
-                updateHealthBoost(player);
+                updateAttribute(player, Attribute.MAX_HEALTH, "Zdrowie");
             }
         }, 1L);
     }

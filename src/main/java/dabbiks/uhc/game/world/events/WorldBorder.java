@@ -112,15 +112,16 @@ public class WorldBorder {
         } else if (actualSegment > SegmentConfig.secondBorderStageSegment && actualSegment <= SegmentConfig.thirdBorderStageSegment && !isBorderGrowing) {
             return;
         } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && borderSize > 80) {
-            setBorderSize(1.6, 1000L);
+            setBorderSize(2.4, 1000L);
         } else if (borderSize <= 80) {
             new CenterCleaner(Bukkit.getWorld(WorldConfig.worldName));
         }
 
         for (Player player : playerListU.getAllPlayers()) {
-            if (actualSegment >= SegmentConfig.firstBorderStageSegment && actualSegment <= 32 && isBorderClose(player)) {
+            if (actualSegment >= SegmentConfig.firstBorderStageSegment && actualSegment <= 25 && isBorderClose(player)) {
                 player.playSound(player, Sound.ENTITY_ENDERMAN_AMBIENT, 0.2F, 2);
-            } else if (isBorderClose(player) && SegmentConfig.actualSegment > 32) {
+            } else if (isBorderClose(player) && SegmentConfig.actualSegment > 25) {
+                player.playSound(player, Sound.ENTITY_ENDERMAN_AMBIENT, 0.2F, 2);
                 player.playSound(player, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.3F, 2);
                 player.playSound(player, Sound.AMBIENT_CAVE, 0.3F, 2);
             }
