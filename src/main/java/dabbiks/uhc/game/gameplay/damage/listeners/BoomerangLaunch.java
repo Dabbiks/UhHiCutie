@@ -4,6 +4,7 @@ import dabbiks.uhc.tasks.TaskManager;
 import dabbiks.uhc.tasks.tasks.BoomerangFlightTask;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,11 @@ public class BoomerangLaunch implements Listener {
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null || !meta.hasCustomModelData() || meta.getCustomModelData() != 11) return;
+
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock != null && clickedBlock.getType().isInteractable() && !player.isSneaking()) {
+            return;
+        }
 
         event.setCancelled(true);
         if (player.hasCooldown(Material.WOODEN_SWORD)) return;

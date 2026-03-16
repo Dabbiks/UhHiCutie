@@ -17,8 +17,8 @@ import static dabbiks.uhc.Main.symbolU;
 public class RewardUtils {
 
     private final int WIN_COINS = 750;
-    private final int KILL_COINS = 100;
-    private final int ASSIST_COINS = 25;
+    private final int KILL_COINS = 300;
+    private final int ASSIST_COINS = 75;
 
     private final int WIN_RANK_POINTS = 50;
     private final int KILL_RANK_POINTS = 22;

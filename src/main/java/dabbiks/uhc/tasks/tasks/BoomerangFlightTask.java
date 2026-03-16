@@ -18,6 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
+
 public class BoomerangFlightTask extends Task {
 
     private final Player thrower;
@@ -74,7 +76,10 @@ public class BoomerangFlightTask extends Task {
 
         if (returnTimer > 0) {
             returnTimer--;
-            if (returnTimer == 0 && !returning) returning = true;
+            if (returnTimer == 0) {
+                finish(10, true);
+                return;
+            }
         }
 
         if (!returning) {
@@ -137,7 +142,7 @@ public class BoomerangFlightTask extends Task {
             if (hasHit) continue;
             hasHit = true;
 
-            if (enchantManager.getItemLevel(boomerangItem, EnchantType.RETURN) > 0 && !returning && returnTimer == -1) {
+            if (enchantManager.getItemLevel(boomerangItem, EnchantType.RETURN) > 0 && returnTimer == -1) {
                 returnTimer = 10;
             }
         }
@@ -174,9 +179,8 @@ public class BoomerangFlightTask extends Task {
 
         if (giveToPlayer) {
             thrower.playSound(thrower.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1f);
-            if (thrower.getInventory().firstEmpty() != -1) {
-                thrower.getInventory().addItem(boomerangItem);
-            } else {
+            HashMap<Integer, ItemStack> leftover = thrower.getInventory().addItem(boomerangItem);
+            if (!leftover.isEmpty()) {
                 thrower.getWorld().dropItemNaturally(thrower.getLocation(), boomerangItem);
             }
         } else {
