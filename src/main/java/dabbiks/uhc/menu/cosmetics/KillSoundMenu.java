@@ -86,16 +86,34 @@ public class KillSoundMenu extends FastInv {
                 int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
                 int powder = persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0);
 
-                int coinsCost = (int) (killSound.getCoinsCost() * priceMultiplier);
-                int powderCost = (int) (killSound.getPowderCost() * priceMultiplier);
+                int originalCoins = killSound.getCoinsCost();
+                int discountedCoins = (int) (originalCoins * priceMultiplier);
 
-                boolean hasCoins = coins >= coinsCost;
-                boolean hasPowder = powder >= powderCost;
+                int originalPowder = killSound.getPowderCost();
+                int discountedPowder = (int) (originalPowder * priceMultiplier);
 
-                lore.add((hasCoins ? symbolU.MOUSE_LEFT + "§7 Kup za §a" + coinsCost + "§f" + symbolU.SCOREBOARD_COIN
-                        : symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (coinsCost - coins) + "§f" + symbolU.SCOREBOARD_COIN));
-                lore.add((hasPowder ? symbolU.MOUSE_RIGHT + "§7 Kup za §a" + powderCost + "§f" + symbolU.SCOREBOARD_POWDER
-                        : symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (powderCost - powder) + "§f" + symbolU.SCOREBOARD_POWDER));
+                boolean hasCoins = coins >= discountedCoins;
+                boolean hasPowder = powder >= discountedPowder;
+
+                if (hasCoins) {
+                    if (priceMultiplier != 1.0) {
+                        lore.add(symbolU.MOUSE_LEFT + "§7 Kup za §a§m" + originalCoins + "§r §4" + discountedCoins + "§f" + symbolU.SCOREBOARD_COIN);
+                    } else {
+                        lore.add(symbolU.MOUSE_LEFT + "§7 Kup za §a" + originalCoins + "§f" + symbolU.SCOREBOARD_COIN);
+                    }
+                } else {
+                    lore.add(symbolU.MOUSE_LEFT + "§7 Brakuje §c" + (discountedCoins - coins) + "§f" + symbolU.SCOREBOARD_COIN);
+                }
+
+                if (hasPowder) {
+                    if (priceMultiplier != 1.0) {
+                        lore.add(symbolU.MOUSE_RIGHT + "§7 Kup za §a§m" + originalPowder + "§r §4" + discountedPowder + "§f" + symbolU.SCOREBOARD_POWDER);
+                    } else {
+                        lore.add(symbolU.MOUSE_RIGHT + "§7 Kup za §a" + originalPowder + "§f" + symbolU.SCOREBOARD_POWDER);
+                    }
+                } else {
+                    lore.add(symbolU.MOUSE_RIGHT + "§7 Brakuje §c" + (discountedPowder - powder) + "§f" + symbolU.SCOREBOARD_POWDER);
+                }
             }
 
             meta.setLore(lore);

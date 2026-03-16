@@ -133,8 +133,6 @@ public final class Main extends JavaPlugin {
 
         new TaskManager().run();
         Bukkit.getScheduler().runTaskLater(this, WorldGen::createWorld, 10L);
-
-        LobbyTopManager.loadDonations();
     }
 
     @Override

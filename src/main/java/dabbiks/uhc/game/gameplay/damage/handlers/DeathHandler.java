@@ -53,7 +53,6 @@ public class DeathHandler {
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 1));
 
                 SessionData killerSessionData = SessionDataManager.getData(killer.getUniqueId());
-                killerSessionData.addElytraCharges(3);
 
                 long currentTime = timeU.getTime();
                 if (currentTime - killerSessionData.getLastKillTime() < 60) {

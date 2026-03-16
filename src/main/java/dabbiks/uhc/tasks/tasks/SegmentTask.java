@@ -39,11 +39,6 @@ public class SegmentTask extends Task {
 
             SegmentConfig.actualSegment++;
 
-            for (Player player : playerListU.getPlayingPlayers()) {
-                SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
-                sessionData.addElytraCharges(1);
-            }
-
             if (SegmentConfig.actualSegment == SegmentConfig.pvpStageSegment + 1) {
                 Bukkit.getWorld(WorldConfig.worldName).setPVP(true);
             }

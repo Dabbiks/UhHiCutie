@@ -10,8 +10,10 @@ public class ChampionManager {
     private final Map<String, Champion> champions = new LinkedHashMap<>();
 
     public ChampionManager() {
-        register(new Miner());
         register(new Default());
+        register(new Miner());
+        register(new Archer());
+        register(new Pikeman());
     }
 
     private void register(Champion champion) {

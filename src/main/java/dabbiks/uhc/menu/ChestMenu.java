@@ -1,6 +1,5 @@
 package dabbiks.uhc.menu;
 
-import dabbiks.uhc.cosmetics.PvpSword;
 import dabbiks.uhc.cosmetics.chest.ChestType;
 import dabbiks.uhc.cosmetics.chest.KeyType;
 import dabbiks.uhc.cosmetics.chest.MysteryChestSession;
@@ -39,7 +38,6 @@ public class ChestMenu extends FastInv {
     }
 
     private void render() {
-
         int commonChest = 11;
         int rareChest = 12;
         int epicChest = 13;
@@ -97,18 +95,37 @@ public class ChestMenu extends FastInv {
 
             int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
-            int chestPrice = (int) (type.getPrice() * chestPriceMultiplier);
-            int keyPrice = (int) (keyType.getPrice() * keyPriceMultiplier);
+            int originalChestPrice = type.getPrice();
+            int discountedChestPrice = (int) (originalChestPrice * chestPriceMultiplier);
 
-            boolean hasCoinsForChest = coins >= chestPrice;
-            boolean hasCoinsForKey = coins >= keyPrice;
+            int originalKeyPrice = keyType.getPrice();
+            int discountedKeyPrice = (int) (originalKeyPrice * keyPriceMultiplier);
+
+            boolean hasCoinsForChest = coins >= discountedChestPrice;
+            boolean hasCoinsForKey = coins >= discountedKeyPrice;
             boolean hasChestAndKey = persistentData.getChests(type.getIndex()) > 0 && persistentData.getKeys(type.getIndex()) > 0;
 
             lore.add(hasChestAndKey ? symbolU.MOUSE_LEFT + "§a Otwórz skrzynię!" : symbolU.MOUSE_LEFT + "§c Musisz posiadać skrzynię i klucz!");
-            lore.add((hasCoinsForChest ? symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + chestPrice + "§f" + symbolU.SCOREBOARD_COIN
-                    : symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (chestPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni"));
-            lore.add((hasCoinsForKey ? symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + keyPrice + "§f" + symbolU.SCOREBOARD_COIN
-                    : symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (keyPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do klucza"));
+
+            if (hasCoinsForChest) {
+                if (chestPriceMultiplier != 1.0) {
+                    lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a§m" + originalChestPrice + "§r §4" + discountedChestPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                } else {
+                    lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + originalChestPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                }
+            } else {
+                lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (discountedChestPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni");
+            }
+
+            if (hasCoinsForKey) {
+                if (keyPriceMultiplier != 1.0) {
+                    lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a§m" + originalKeyPrice + "§r §4" + discountedKeyPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                } else {
+                    lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + originalKeyPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                }
+            } else {
+                lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (discountedKeyPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do klucza");
+            }
 
             meta.setLore(lore);
             item.setItemMeta(meta);

@@ -14,11 +14,10 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class BoomerangFlightTask extends Task {
 
@@ -27,36 +26,36 @@ public class BoomerangFlightTask extends Task {
     private final ItemStack boomerangItem;
     private final BoomerangHandler handler;
 
+    private Location currentLocation;
+    private final Vector direction;
     private Vector velocity;
-    private int ticks;
+    private double speed = 1.6;
+
+    private int ticks = 0;
     private final int maxDistanceTicks;
-    private boolean returning;
-    private float rotationAngle;
+    private boolean returning = false;
+    private float rotationAngle = 0f;
 
     public BoomerangFlightTask(Player thrower, ItemDisplay display, ItemStack boomerangItem) {
         this.thrower = thrower;
         this.display = display;
         this.boomerangItem = boomerangItem;
         this.handler = new BoomerangHandler();
-        this.velocity = thrower.getLocation().getDirection().normalize().multiply(1.3);
-        this.ticks = 0;
-        this.returning = false;
-        this.rotationAngle = 0f;
 
-        display.setTeleportDuration(1);
-        display.setInterpolationDuration(1);
+        this.currentLocation = thrower.getEyeLocation().add(thrower.getLocation().getDirection().multiply(0.5));
+        this.direction = thrower.getLocation().getDirection().normalize();
+        this.velocity = direction.clone().multiply(speed);
+
+        display.teleport(currentLocation);
+        display.setTeleportDuration(3);
+        display.setInterpolationDuration(3);
         display.setInterpolationDelay(0);
 
         ItemMeta meta = boomerangItem.getItemMeta();
-        int cmd = (meta != null && meta.hasCustomModelData()) ? meta.getCustomModelData() : 20001;
+        int cmd = (meta != null && meta.hasCustomModelData()) ? meta.getCustomModelData() : 11;
 
         this.maxDistanceTicks = switch (cmd) {
-            case 20001 -> 10;
-            case 20002 -> 15;
-            case 20003 -> 20;
-            case 20004 -> 25;
-            case 20005 -> 30;
-            case 20006 -> 38;
+            case 11 -> 30;
             default -> 15;
         };
     }
@@ -68,44 +67,58 @@ public class BoomerangFlightTask extends Task {
             return;
         }
 
-        Location loc = display.getLocation();
-
         if (!returning) {
-            velocity.setY(velocity.getY() - 0.005);
+            speed -= (1.3 / maxDistanceTicks);
+            if (speed <= 0.1) speed = 0.1;
+            velocity = direction.clone().multiply(speed);
+
             if (ticks >= maxDistanceTicks) {
                 returning = true;
             }
         } else {
-            Vector toPlayer = thrower.getEyeLocation().toVector().subtract(loc.toVector());
-            if (toPlayer.length() < 1.6) {
+            Vector toPlayer = thrower.getEyeLocation().toVector().subtract(currentLocation.toVector());
+            double dist = toPlayer.length();
+
+            if (dist < 2.0) {
                 finish(10, true);
                 return;
             }
-            velocity = velocity.add(toPlayer.normalize().multiply(0.25)).normalize().multiply(1.3);
+
+            speed += 0.12;
+            if (speed > 1.8) speed = 1.8;
+
+            double pull = Math.max(0.4, 3.0 / Math.max(1.0, dist));
+            velocity = velocity.add(toPlayer.normalize().multiply(pull)).normalize().multiply(speed);
         }
 
-        loc.add(velocity);
-        loc.setDirection(velocity);
-        display.teleport(loc);
+        currentLocation.add(velocity);
 
-        rotationAngle += 0.9f;
-
-        Quaternionf flatRotation = new Quaternionf(new AxisAngle4f((float) Math.toRadians(90), 1, 0, 0));
-        Quaternionf spinRotation = new Quaternionf(new AxisAngle4f(rotationAngle, 0, 1, 0));
-
-        Transformation transformation = display.getTransformation();
-        transformation.getLeftRotation().set(flatRotation.mul(spinRotation));
-        display.setTransformation(transformation);
-
-        if (!loc.getBlock().isPassable()) {
-            finish(20, false);
-            return;
+        if (currentLocation.getBlock().getType().isSolid()) {
+            if (!returning) {
+                returning = true;
+            } else {
+                currentLocation.subtract(velocity);
+                finish(20, false);
+                return;
+            }
         }
 
-        Collection<Entity> nearby = loc.getWorld().getNearbyEntities(loc, 0.7, 0.7, 0.7);
-        for (Entity entity : nearby) {
+        rotationAngle += 0.8f;
+
+        display.setInterpolationDelay(0);
+        display.setInterpolationDuration(3);
+
+        Transformation transform = display.getTransformation();
+        transform.getLeftRotation().rotationX((float) Math.PI / 2f).rotateZ(rotationAngle);
+        display.setTransformation(transform);
+
+        display.setTeleportDuration(3);
+        display.teleport(currentLocation);
+
+        for (Entity entity : currentLocation.getWorld().getNearbyEntities(currentLocation, 1.2, 1.2, 1.2)) {
             if (entity instanceof LivingEntity target && !entity.equals(thrower)) {
                 handler.handleHit(thrower, target, boomerangItem);
+                thrower.playSound(thrower.getLocation(), Sound.ITEM_TRIDENT_HIT, 0.3f, 1.6f);
             }
         }
 
@@ -126,13 +139,14 @@ public class BoomerangFlightTask extends Task {
         }
 
         if (giveToPlayer) {
+            thrower.playSound(thrower.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1f);
             if (thrower.getInventory().firstEmpty() != -1) {
                 thrower.getInventory().addItem(boomerangItem);
             } else {
                 thrower.getWorld().dropItemNaturally(thrower.getLocation(), boomerangItem);
             }
         } else {
-            thrower.getWorld().dropItemNaturally(display.getLocation(), boomerangItem);
+            thrower.getWorld().dropItemNaturally(currentLocation, boomerangItem);
         }
 
         cleanup();
