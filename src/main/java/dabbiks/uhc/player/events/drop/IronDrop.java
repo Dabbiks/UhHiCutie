@@ -31,9 +31,9 @@ public class IronDrop extends DropItem {
         if (!TARGET_BLOCKS.contains(block)) return 0.0;
 
         double base = switch (pickaxe) {
-            case STONE_PICKAXE -> 0.1196;
-            case IRON_PICKAXE -> 0.04485;
-            case DIAMOND_PICKAXE -> 0.0598;
+            case STONE_PICKAXE -> 0.1296;
+            case IRON_PICKAXE -> 0.06485;
+            case DIAMOND_PICKAXE -> 0.0798;
             case NETHERITE_PICKAXE -> 0.0897;
             default -> 0.0;
         };

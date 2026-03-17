@@ -96,8 +96,9 @@ public class ChampionMenu extends FastInv {
             return;
         }
 
+        data.removeStats(PersistentStats.COINS, cost);
+
         if (!unlocked) {
-            data.removeStats(PersistentStats.COINS, cost);
             data.addUnlockedChampion(champion.getId());
             player.sendMessage("§aZakupiono klasę " + champion.getName() + "!");
         } else {

@@ -31,7 +31,7 @@ public class DiamondDrop extends DropItem {
         if (!TARGET_BLOCKS.contains(block)) return 0.0;
 
         double base = switch (pickaxe) {
-            case IRON_PICKAXE -> 0.00874;
+            case IRON_PICKAXE -> 0.00974;
             case GOLDEN_PICKAXE -> 0.01495;
             case DIAMOND_PICKAXE -> 0.01265;
             case NETHERITE_PICKAXE -> 0.01564;
