@@ -101,10 +101,7 @@ public class DeathHandler {
     }
 
     private void dropItemEntity(World world, Location loc, ItemStack itemStack) {
-        Item droppedItem = world.dropItemNaturally(loc, itemStack);
-        droppedItem.setGravity(false);
-        droppedItem.setUnlimitedLifetime(true);
-        droppedItem.setVelocity(new Vector(0, -0.25, 0));
+        world.dropItemNaturally(loc, itemStack);
     }
 
     private void dropFullInventory(Player player) {
@@ -119,7 +116,7 @@ public class DeathHandler {
         player.getInventory().clear();
 
         ItemStack cursorItem = player.getItemOnCursor();
-        if (cursorItem != null && cursorItem.getType() != Material.AIR) {
+        if (cursorItem.getType() != Material.AIR) {
             if (!isPersonalItem(cursorItem)) dropItemEntity(world, loc, cursorItem);
             player.setItemOnCursor(null);
         }

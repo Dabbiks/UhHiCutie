@@ -27,10 +27,7 @@ public abstract class DropItem {
         int amount = ThreadLocalRandom.current().nextInt(getMinAmount(), getMaxAmount() + 1);
 
         if (fortuneLevel > 0) {
-            amount *= ThreadLocalRandom.current().nextInt(1, 3);
-            if (ThreadLocalRandom.current().nextDouble() <= (0.3 * fortuneLevel)) {
-                amount *= 2;
-            }
+            amount *= 2;
         }
 
         Material finalMaterial = isSmelted && getSmeltedMaterial() != null ? getSmeltedMaterial() : getMaterial();

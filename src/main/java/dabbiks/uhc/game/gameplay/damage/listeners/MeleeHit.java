@@ -111,15 +111,6 @@ public class MeleeHit implements Listener {
         double baseDamage = event.getDamage();
         if (event.isCritical()) baseDamage /= 1.5;
 
-        if (((LivingEntity) damager).getEquipment() != null) {
-            ItemStack weapon = ((LivingEntity) damager).getEquipment().getItemInMainHand();
-            if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
-                baseDamage *= 0.5;
-                if (baseDamage > 16.0) {
-                    baseDamage = 16.0;
-                }
-            }
-        }
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;
@@ -158,13 +149,6 @@ public class MeleeHit implements Listener {
         double baseDamage = event.getDamage();
         if (event.isCritical()) baseDamage /= 1.5;
 
-        ItemStack weapon = damager.getInventory().getItemInMainHand();
-        if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
-            baseDamage *= 0.5;
-            if (baseDamage > 16.0) {
-                baseDamage = 16.0;
-            }
-        }
         double damage = baseDamage;
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
@@ -201,13 +185,6 @@ public class MeleeHit implements Listener {
         double baseDamage = event.getDamage();
         if (event.isCritical()) baseDamage /= 1.5;
 
-        ItemStack weapon = damager.getInventory().getItemInMainHand();
-        if (weapon != null && weapon.getType().name().endsWith("_SPEAR")) {
-            baseDamage *= 0.5;
-            if (baseDamage > 16.0) {
-                baseDamage = 16.0;
-            }
-        }
         double damage = baseDamage;
 
         if (parryingHandler.handle(victim, event)) return;

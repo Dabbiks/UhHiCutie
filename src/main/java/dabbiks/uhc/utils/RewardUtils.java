@@ -131,9 +131,9 @@ public class RewardUtils {
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
         assert persistentData != null;
-        persistentData.addStats(PersistentStats.COINS, 1);
-        persistentData.addStats(PersistentStats.TOTAL_COINS, 1);
-        sessionData.addStats(SessionStats.TIMECOINS, 1);
+        persistentData.addStats(PersistentStats.COINS, 2);
+        persistentData.addStats(PersistentStats.TOTAL_COINS, 2);
+        sessionData.addStats(SessionStats.TIMECOINS, 2);
 
         PersistentDataManager.saveData(player.getUniqueId());
     }
