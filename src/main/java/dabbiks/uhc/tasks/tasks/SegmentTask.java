@@ -56,21 +56,21 @@ public class SegmentTask extends Task {
             switch (SegmentConfig.actualSegment) {
                 case 10:
                     messages = new String[]{
-                            "§c§lETAP I",
+                            "§c§lETAP II",
                             "§fGranica ruszyła",
                             "§fPvP zostało włączone"
                     };
                     break;
                 case 15:
                     messages = new String[]{
-                            "§c§lETAP II",
+                            "§c§lETAP III",
                             "§fGranica zatrzymała się",
                             "§fRadar na pasku namierza graczy"
                     };
                     break;
                 case 20:
                     messages = new String[]{
-                            "§c§lETAP III",
+                            "§c§lETAP IV",
                             "§fGranica ruszyła"
                     };
                     break;

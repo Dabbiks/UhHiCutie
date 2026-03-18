@@ -65,6 +65,20 @@ public class StartManager implements Listener {
                     soundU.playSoundToPlayers(players, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.8f, 1);
                     TeamUtils.removeCages();
                     HandlerList.unregisterAll(StartManager.this);
+
+                    String[] messages;
+                    messages = new String[]{
+                            "§c§lETAP I",
+                            "§fZdobywaj surowce i twórz przedmioty,",
+                            "§fPvP zostaje włączone w Etapie II.",
+                            "§fOstatnia drużyna wygrywa! Powodzenia"
+                    };
+                    messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
+                    for (String msg : messages) {
+                        messageU.sendMessageToPlayers(playerListU.getAllPlayers(), msg);
+                    }
+                    messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
+
                     this.cancel();
                 }
             }
