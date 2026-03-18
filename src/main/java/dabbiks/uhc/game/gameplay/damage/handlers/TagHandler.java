@@ -10,8 +10,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class TagHandler {
+
+    private static final Map<UUID, BukkitTask> pikemanTasks = new HashMap<>();
 
     public double handle(Entity damager, Entity victim, double damage) {
         double modifier = 0;
@@ -57,15 +64,22 @@ public class TagHandler {
                     if (pData != null) {
                         int level = pData.getChampionLevel("pikeman");
                         double speedPercent = 0.10 + (level * 0.02);
-
                         float defaultSpeed = 0.2f;
+
                         damager.setWalkSpeed((float) (defaultSpeed * (1.0 + speedPercent)));
 
-                        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                        if (pikemanTasks.containsKey(damager.getUniqueId())) {
+                            pikemanTasks.get(damager.getUniqueId()).cancel();
+                        }
+
+                        BukkitTask task = Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
                             if (damager.isOnline()) {
                                 damager.setWalkSpeed(defaultSpeed);
                             }
+                            pikemanTasks.remove(damager.getUniqueId());
                         }, 40L);
+
+                        pikemanTasks.put(damager.getUniqueId(), task);
                     }
                 }
             }

@@ -35,13 +35,18 @@ public class ParryingHandler {
         if (angle > 30) return false;
 
         ItemUtils itemUtils = new ItemUtils();
+        ItemStack hand = player.getInventory().getItemInMainHand();
+
+        if (hand.isEmpty() || hand.getType().isAir()) return false;
+
         Bukkit.getScheduler().runTask(plugin, () -> {
-            ItemStack hand = player.getInventory().getItemInMainHand();
             hand.resetData(DataComponentTypes.BLOCKS_ATTACKS);
             player.setCooldown(hand, 30);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                itemUtils.addParryingComponent(hand);
+                if (hand.hasItemMeta() && (hand.getType().name().endsWith("_SWORD") || hand.getType().name().endsWith("_AXE") || hand.getType().name().endsWith("_SPEAR"))) {
+                    itemUtils.addParryingComponent(hand);
+                }
             }, 30L);
         });
 
@@ -56,5 +61,4 @@ public class ParryingHandler {
         player.setVelocity(direction);
         return true;
     }
-
 }
