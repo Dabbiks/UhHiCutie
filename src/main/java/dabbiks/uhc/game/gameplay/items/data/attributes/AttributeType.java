@@ -8,8 +8,8 @@ public enum AttributeType {
     SIZE(                symbolU.SIZE,                 "Rozmiar",               AttributeOperation.INCREASE, 0.3,  Attribute.SCALE, false),
     SIZE_PERCENT(        symbolU.SIZE,                 "Rozmiar",               AttributeOperation.INCREASE, 0.3,  Attribute.SCALE, true),
 
-    ARMOR(               symbolU.ARMOR,                "Pancerz",               AttributeOperation.INCREASE, 0.2,  Attribute.ARMOR, false),
-    ARMOR_PERCENT(       symbolU.ARMOR,                "Pancerz",               AttributeOperation.INCREASE, 0.2,  Attribute.ARMOR, true),
+    ARMOR(               symbolU.ARMOR,                "Pancerz",               AttributeOperation.ROUND, 1.0,  Attribute.ARMOR, false),
+    ARMOR_PERCENT(       symbolU.ARMOR,                "Pancerz",               AttributeOperation.ROUND, 1.0,  Attribute.ARMOR, true),
 
     LIFE_STEAL(          symbolU.LIFE_STEAL,           "Wampiryzm",             AttributeOperation.INCREASE, 0.05, null, false),
     LIFE_STEAL_PERCENT(  symbolU.LIFE_STEAL,           "Wampiryzm",             AttributeOperation.INCREASE, 0.05, null, true),
@@ -29,14 +29,14 @@ public enum AttributeType {
     HEALTH_BOOST(        symbolU.HEALTH_BOOST,         "Zdrowie",               AttributeOperation.INCREASE, 2.0,  Attribute.MAX_HEALTH, false),
     HEALTH_BOOST_PERCENT(symbolU.HEALTH_BOOST,         "Zdrowie",               AttributeOperation.INCREASE, 2.0,  Attribute.MAX_HEALTH, true),
 
-    ATTACK_DAMAGE(       symbolU.ATTACK_DAMAGE,        "Obrażenia",             AttributeOperation.INCREASE, 0.15, Attribute.ATTACK_DAMAGE, false),
-    ATTACK_DAMAGE_PERCENT(symbolU.ATTACK_DAMAGE,       "Obrażenia",             AttributeOperation.INCREASE, 0.15, Attribute.ATTACK_DAMAGE, true),
+    ATTACK_DAMAGE(       symbolU.ATTACK_DAMAGE,        "Obrażenia",             AttributeOperation.ROUND, 1.0, Attribute.ATTACK_DAMAGE, false),
+    ATTACK_DAMAGE_PERCENT(symbolU.ATTACK_DAMAGE,       "Obrażenia",             AttributeOperation.ROUND, 1.0, Attribute.ATTACK_DAMAGE, true),
 
     ARMOR_PENETRATION(   symbolU.ARMOR_PENETRATION,    "Przebicie pancerza",    AttributeOperation.INCREASE, 0.1,  null, false),
     ARMOR_PENETRATION_PERCENT(symbolU.ARMOR_PENETRATION, "Przebicie pancerza",  AttributeOperation.INCREASE, 0.1,  null, true),
 
-    CRIT_DAMAGE(         symbolU.CRITICAL_DAMAGE,      "Obrażenia krytyczne",   AttributeOperation.INCREASE, 0.25, null, false),
-    CRIT_DAMAGE_PERCENT( symbolU.CRITICAL_DAMAGE,      "Obrażenia krytyczne",   AttributeOperation.INCREASE, 0.25, null, true),
+    CRIT_DAMAGE(         symbolU.CRITICAL_DAMAGE,      "Obrażenia krytyczne",   AttributeOperation.COMPARE, 1.0, null, false),
+    CRIT_DAMAGE_PERCENT( symbolU.CRITICAL_DAMAGE,      "Obrażenia krytyczne",   AttributeOperation.COMPARE, 1.0, null, true),
 
     BURNING_TIME(        symbolU.BURNING_TIME,         "Czas płonięcia",        AttributeOperation.COMPARE,  1.0,  Attribute.BURNING_TIME, false),
     BURNING_TIME_PERCENT(symbolU.BURNING_TIME,         "Czas płonięcia",        AttributeOperation.COMPARE,  1.0,  Attribute.BURNING_TIME, true),

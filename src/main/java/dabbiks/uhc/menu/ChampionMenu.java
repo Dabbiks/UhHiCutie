@@ -10,12 +10,10 @@ import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static dabbiks.uhc.Main.soundU;
@@ -40,10 +38,7 @@ public class ChampionMenu extends FastInv {
     }
 
     private void render() {
-
-        int[] slots = {
-                10, 12, 14, 16
-        };
+        int[] slots = {10, 12, 14, 16};
 
         int index = 0;
         for (Champion champion : champions) {
@@ -61,29 +56,17 @@ public class ChampionMenu extends FastInv {
             });
         }
 
-        if (previewMode) {
-            ItemStack backBtn = new ItemStack(Material.ARROW);
-            ItemMeta meta = backBtn.getItemMeta();
-            if (meta != null) {
-                meta.setDisplayName("§cWróć do wyboru klas");
-                backBtn.setItemMeta(meta);
-            }
-            setItem(22, backBtn, e -> {
-                previewMode = false;
-                render();
-            });
-        } else {
-            ItemStack previewBtn = new ItemStack(Material.ENDER_EYE);
-            ItemMeta meta = previewBtn.getItemMeta();
-            if (meta != null) {
-                meta.setDisplayName("§ePodejrzyj rozwój klas");
-                previewBtn.setItemMeta(meta);
-            }
-            setItem(31, previewBtn, e -> {
-                previewMode = true;
-                render();
-            });
+        ItemStack toggleBtn = new ItemStack(previewMode ? Material.ENDER_PEARL : Material.ENDER_EYE);
+        ItemMeta toggleMeta = toggleBtn.getItemMeta();
+        if (toggleMeta != null) {
+            toggleMeta.setDisplayName(previewMode ? "§cPokaż swoje klasy" : "§ePodejrzyj wymaksowane klasy");
+            toggleBtn.setItemMeta(toggleMeta);
         }
+
+        setItem(31, toggleBtn, e -> {
+            previewMode = !previewMode;
+            render();
+        });
     }
 
     private ItemStack createIcon(Champion champion) {
@@ -95,10 +78,10 @@ public class ChampionMenu extends FastInv {
 
         if (meta != null) {
             if (previewMode) {
-                meta.setDisplayName("§c§l" + champion.getName() + " §7(Poziom " + getRomanNumeral(champion.getMaxLevel()) + ")");
+                meta.setDisplayName("§c§l" + champion.getName() + " §8(Poziom " + getRomanNumeral(champion.getMaxLevel()) + ")");
                 meta.setLore(champion.getPreviewLore());
             } else {
-                meta.setDisplayName("§c§l" + champion.getName() + " §7(Poziom " + getRomanNumeral(displayLevel) + ")");
+                meta.setDisplayName("§c§l" + champion.getName() + " §8(Poziom " + getRomanNumeral(displayLevel) + ")");
                 meta.setLore(champion.getLore(data, displayLevel));
             }
 

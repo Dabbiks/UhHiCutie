@@ -9,8 +9,8 @@ public enum Cage {
     STONE("Kamienna Klatka", Material.STONE, CosmeticTier.COMMON, 10000, 2000),
     DIRT("Ziemista Klatka", Material.DIRT, CosmeticTier.COMMON, 10000, 2000),
     COBBLESTONE("Brukowa Klatka", Material.COBBLESTONE, CosmeticTier.COMMON, 10000, 2000),
-    SAND("Piaskowa Klatka", Material.SAND, CosmeticTier.COMMON, 10000, 2000),
-    GRAVEL("Żwirowa Klatka", Material.GRAVEL, CosmeticTier.COMMON, 10000, 2000),
+    SAND("Piaskowa Klatka", Material.SANDSTONE, CosmeticTier.COMMON, 10000, 2000),
+    GRAVEL("Żwirowa Klatka", Material.TUFF, CosmeticTier.COMMON, 10000, 2000),
 
     IRON("Żelazna Klatka", Material.IRON_BLOCK, CosmeticTier.RARE, 25000, 5000),
     GOLD("Złota Klatka", Material.GOLD_BLOCK, CosmeticTier.RARE, 25000, 5000),
@@ -33,7 +33,7 @@ public enum Cage {
 
     BEACON("Klatka Magicznej Latarni", Material.BEACON, CosmeticTier.LEGENDARY, 250000, 50000),
     END_PORTAL("Klatka Portalu Kresu", Material.END_PORTAL_FRAME, CosmeticTier.LEGENDARY, 250000, 50000),
-    DRAGON_EGG("Klatka Smoczego Jaja", Material.DRAGON_EGG, CosmeticTier.LEGENDARY, 250000, 50000),
+    DRAGON_EGG("Klatka Smoczego Jaja", Material.OBSIDIAN, CosmeticTier.LEGENDARY, 250000, 50000),
     LODESTONE("Magnetyczna Klatka", Material.LODESTONE, CosmeticTier.LEGENDARY, 250000, 50000),
     BARRIER("Niewidzialna Klatka", Material.BARRIER, CosmeticTier.LEGENDARY, 250000, 50000);
 

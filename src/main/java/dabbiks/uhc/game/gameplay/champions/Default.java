@@ -104,7 +104,7 @@ public class Default extends Champion {
             desc.add(" §e» §fPod wpływem absorpcji otrzymujesz §c12.5% §fmniej obrażeń");
         } else if (level == 10) {
             desc.add(" §e» §fPod wpływem absorpcji otrzymujesz §c25% §fmniej obrażeń");
-            desc.add(" §e» §fTwoja bazowa regeneracja jest §cazwiększona §fo §cpół serca");
+            desc.add(" §e» §fTwoja bazowa regeneracja jest §czwiększona §fo §cpół serca");
         }
 
         return desc;
