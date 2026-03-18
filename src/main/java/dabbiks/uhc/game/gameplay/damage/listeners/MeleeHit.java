@@ -40,6 +40,7 @@ public class MeleeHit implements Listener {
     public void onDamage(EntityDamageEvent event) {
         if (!event.getEntity().getWorld().getName().equals(WorldConfig.worldName)) return;
         if (GameData.isEnding) { event.setCancelled(true); return; }
+
         if (!(event instanceof EntityDamageByEntityEvent) && event.getEntity() instanceof Player) {
             processEnvironmentDamage(event);
             return;
@@ -51,14 +52,16 @@ public class MeleeHit implements Listener {
 
         if (entityEvent.getDamager() instanceof Projectile) return;
 
-        if (!(entityEvent.getDamager() instanceof Player) && !(entityEvent.getEntity() instanceof Player)) return;
-
-        if (entityEvent.getEntity() instanceof Player && !(entityEvent.getDamager() instanceof Player)) {
-            processDamageByMonster(entityEvent);
-        } else if (!(entityEvent.getEntity() instanceof Player) && entityEvent.getDamager() instanceof Player) {
+        if (entityEvent.getEntity() instanceof Player) {
+            if (entityEvent.getDamager() instanceof Player) {
+                processPlayerDamage(entityEvent);
+            } else if (entityEvent.getDamager() instanceof LivingEntity) {
+                processDamageByMonster(entityEvent);
+            } else {
+                processEnvironmentDamage(entityEvent);
+            }
+        } else if (entityEvent.getDamager() instanceof Player) {
             processDamageToMonster(entityEvent);
-        } else {
-            processPlayerDamage(entityEvent);
         }
     }
 

@@ -1,7 +1,10 @@
 package dabbiks.uhc.game.gameplay.damage.listeners;
 
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
 import dabbiks.uhc.tasks.TaskManager;
 import dabbiks.uhc.tasks.tasks.BoomerangFlightTask;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -13,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.function.Function;
+
 public class BoomerangLaunch implements Listener {
 
     @EventHandler
@@ -20,10 +25,10 @@ public class BoomerangLaunch implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
-        if (item == null || item.getType() != Material.WOODEN_SWORD || !event.getAction().name().contains("RIGHT")) return;
+        if (item == null || item.getType() == Material.AIR || !event.getAction().name().contains("RIGHT")) return;
 
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasCustomModelData() || meta.getCustomModelData() != 11) return;
+        String enchantSlotString = NBT.get(item, (Function<ReadableItemNBT, String>) nbt -> nbt.getString("ENCHANT_SLOT"));
+        if (enchantSlotString == null || !enchantSlotString.equals(EnchantSlot.BOOMERANG.name())) return;
 
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock != null && clickedBlock.getType().isInteractable() && !player.isSneaking()) {
@@ -31,8 +36,8 @@ public class BoomerangLaunch implements Listener {
         }
 
         event.setCancelled(true);
-        if (player.hasCooldown(Material.WOODEN_SWORD)) return;
-        player.setCooldown(Material.WOODEN_SWORD, 10);
+        if (player.hasCooldown(item.getType())) return;
+        player.setCooldown(item.getType(), 10);
 
         ItemStack thrownItem = item.clone();
         thrownItem.setAmount(1);

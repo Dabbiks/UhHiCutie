@@ -14,6 +14,7 @@ import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
 import dabbiks.uhc.game.teams.*;
 import dabbiks.uhc.game.world.WorldGen;
+import dabbiks.uhc.game.world.events.CenterBuilderManager;
 import dabbiks.uhc.game.world.events.Cobweb;
 import dabbiks.uhc.game.world.events.LavaCollect;
 import dabbiks.uhc.game.world.events.WorldBorder;
@@ -115,6 +116,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ParryingBlocker(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CenterBuilderManager(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new Grinding(), this);

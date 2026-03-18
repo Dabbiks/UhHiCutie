@@ -25,11 +25,9 @@ public class AttributeManager {
         AttributeInstance instance = entity.getAttribute(attribute);
         if (instance == null) return;
 
-        // UUID generowane deterministycznie z nazwy, aby unikać duplikatów
         UUID uuid = UUID.nameUUIDFromBytes(name.getBytes());
         AttributeModifier modifier = new AttributeModifier(uuid, name, amount, operation);
 
-        // Usuń stary modyfikator o tym samym UUID, jeśli istnieje, aby nadpisać
         if (instance.getModifier(uuid) != null) {
             instance.removeModifier(uuid);
         }
@@ -100,7 +98,7 @@ public class AttributeManager {
             }
 
             NBTItem nbt = new NBTItem(item);
-            String key = type.getName();
+            String key = type.name();
 
             if (!nbt.hasKey(key)) {
                 continue;

@@ -55,7 +55,7 @@ public class RecipeRemover {
             Material.GOLDEN_SPEAR, Material.DIAMOND_SPEAR, Material.NETHERITE_SPEAR,
             Material.COPPER_SPEAR,
 
-            Material.FISHING_ROD, Material.BOW, Material.CROSSBOW, Material.MACE
+            Material.FISHING_ROD, Material.BOW, Material.CROSSBOW, Material.MACE, Material.SHIELD
     );
 
     public void removeVanillaRecipes() {

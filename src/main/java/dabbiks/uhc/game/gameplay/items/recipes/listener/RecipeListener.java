@@ -74,51 +74,65 @@ public class RecipeListener implements Listener {
         }
 
         int maxAllowed = recipe.getMaxCraftsPerPlayer();
-        if (maxAllowed <= 0) return;
+        int remainingLimit = Integer.MAX_VALUE;
 
-        int alreadyCrafted = tracker.getCraftCount(player, recipeId);
-        int remainingLimit = maxAllowed - alreadyCrafted;
+        if (maxAllowed > 0) {
+            int alreadyCrafted = tracker.getCraftCount(player, recipeId);
+            remainingLimit = maxAllowed - alreadyCrafted;
 
-        if (remainingLimit <= 0) {
+            if (remainingLimit <= 0) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.RED + "Limit wyczerpany!");
+                player.updateInventory();
+                return;
+            }
+        }
+
+        if (event.isShiftClick()) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Limit wyczerpany!");
-            player.updateInventory();
-            return;
-        }
 
-        int maxPossibleByMaterials = getMaxCraftTimes(event.getInventory());
-        int amountToCraft = event.isShiftClick() ? maxPossibleByMaterials : 1;
+            int maxPossibleByMaterials = getMaxCraftTimes(event.getInventory());
+            int amountToCraft = Math.min(maxPossibleByMaterials, remainingLimit);
 
-        if (amountToCraft <= remainingLimit) {
+            if (amountToCraft <= 0) return;
+
+            reduceMatrix(event.getInventory(), amountToCraft);
+
+            ItemStack resultItemTemplate = event.getRecipe().getResult().clone();
+            List<ItemStack> itemsToGive = new ArrayList<>();
             for (int i = 0; i < amountToCraft; i++) {
+                itemsToGive.add(resultItemTemplate.clone());
+            }
+
+            HashMap<Integer, ItemStack> leftovers = player.getInventory().addItem(itemsToGive.toArray(new ItemStack[0]));
+
+            if (!leftovers.isEmpty()) {
+                for (ItemStack item : leftovers.values()) {
+                    player.getWorld().dropItem(player.getLocation(), item);
+                }
+                player.sendMessage(ChatColor.YELLOW + "Ekwipunek pełny! Przedmioty upadły na ziemię.");
+            }
+
+            if (maxAllowed > 0) {
+                for (int i = 0; i < amountToCraft; i++) {
+                    tracker.increment(player, recipeId);
+                }
+                if (amountToCraft == remainingLimit) {
+                    player.sendMessage(ChatColor.YELLOW + "Wytworzono ostatnie możliwe sztuki (Limit).");
+                }
+            }
+
+            event.getInventory().setResult(null);
+            Bukkit.getScheduler().runTask(plugin, player::updateInventory);
+
+        } else {
+            if (maxAllowed > 0) {
                 tracker.increment(player, recipeId);
+                if (remainingLimit == 1) {
+                    player.sendMessage(ChatColor.YELLOW + "Wytworzono ostatnie możliwe sztuki (Limit).");
+                }
             }
-            return;
         }
-
-        event.setCancelled(true);
-
-        reduceMatrix(event.getInventory(), remainingLimit);
-
-        ItemStack resultItem = event.getRecipe().getResult().clone();
-        resultItem.setAmount(resultItem.getAmount() * remainingLimit);
-
-        HashMap<Integer, ItemStack> leftovers = player.getInventory().addItem(resultItem);
-
-        if (!leftovers.isEmpty()) {
-            for (ItemStack item : leftovers.values()) {
-                player.getWorld().dropItem(player.getLocation(), item);
-            }
-            player.sendMessage(ChatColor.YELLOW + "Ekwipunek pełny! Przedmioty upadły na ziemię.");
-        }
-
-        for (int i = 0; i < remainingLimit; i++) {
-            tracker.increment(player, recipeId);
-        }
-
-        event.getInventory().setResult(null);
-        player.sendMessage(ChatColor.YELLOW + "Wytworzono ostatnie możliwe sztuki (Limit).");
-        Bukkit.getScheduler().runTask(plugin, player::updateInventory);
     }
 
     private boolean validateIngredients(ItemStack[] matrix, RecipeInstance recipe) {

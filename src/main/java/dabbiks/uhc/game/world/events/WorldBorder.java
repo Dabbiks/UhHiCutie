@@ -113,8 +113,6 @@ public class WorldBorder {
             return;
         } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && borderSize > 80) {
             setBorderSize(2.4, 1000L);
-        } else if (borderSize <= 80) {
-            new CenterCleaner(Bukkit.getWorld(WorldConfig.worldName));
         }
 
         for (Player player : playerListU.getAllPlayers()) {

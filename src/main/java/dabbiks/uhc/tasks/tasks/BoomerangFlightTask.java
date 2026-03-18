@@ -3,9 +3,12 @@ package dabbiks.uhc.tasks.tasks;
 import dabbiks.uhc.game.gameplay.damage.handlers.BoomerangHandler;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.tasks.Task;
 import dabbiks.uhc.tasks.TaskManager;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -19,6 +22,7 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.function.Function;
 
 public class BoomerangFlightTask extends Task {
 
@@ -58,13 +62,10 @@ public class BoomerangFlightTask extends Task {
         display.setInterpolationDuration(3);
         display.setInterpolationDelay(0);
 
-        ItemMeta meta = boomerangItem.getItemMeta();
-        int cmd = (meta != null && meta.hasCustomModelData()) ? meta.getCustomModelData() : 11;
+        String enchantSlotString = NBT.get(boomerangItem, (Function<ReadableItemNBT, String>) nbt -> nbt.getString("ENCHANT_SLOT"));
+        boolean isBoomerang = enchantSlotString != null && enchantSlotString.equals(EnchantSlot.BOOMERANG.name());
 
-        this.maxDistanceTicks = switch (cmd) {
-            case 11 -> 30;
-            default -> 15;
-        };
+        this.maxDistanceTicks = isBoomerang ? 30 : 15;
     }
 
     @Override

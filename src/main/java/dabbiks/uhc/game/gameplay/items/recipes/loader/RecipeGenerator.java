@@ -153,7 +153,7 @@ public class RecipeGenerator {
 
     private void registerRanged() {
         List<AttributeData> attrs = List.of(
-                new AttributeData(AttributeType.RANGED_DAMAGE, 4.0)
+                new AttributeData(AttributeType.RANGED_DAMAGE, 6.0)
         );
         Map<Character, RecipeIngredient> bowIng = new HashMap<>();
         bowIng.put('S', createIngredient("STICK", 0));
