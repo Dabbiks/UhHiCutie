@@ -61,30 +61,29 @@ public class WorldGen {
     }
 
     private static void generateInvertedPyramid(World world) {
-        int baseY = 45;
+        int baseY = calculateBaseY(world);
         int maxSteps = 100;
         Random random = new Random();
-
         int totalRadius = 7 + (maxSteps * 2);
+
+        boolean[][] decorateMap = new boolean[totalRadius * 2 + 1][totalRadius * 2 + 1];
+        int[][] targetYMap = new int[totalRadius * 2 + 1][totalRadius * 2 + 1];
 
         for (int x = -totalRadius; x <= totalRadius; x++) {
             for (int z = -totalRadius; z <= totalRadius; z++) {
-
                 int maxDist = Math.max(Math.abs(x), Math.abs(z));
-                int step;
-
-                if (maxDist <= 7) {
-                    step = 0;
-                } else {
-                    step = (maxDist - 8) / 2 + 1;
-                }
+                int step = (maxDist <= 7) ? 0 : (maxDist - 8) / 2 + 1;
 
                 if (step > maxSteps) continue;
 
                 int targetY = baseY + step;
-                boolean shouldDecorate = false;
+                int mapX = x + totalRadius;
+                int mapZ = z + totalRadius;
+                targetYMap[mapX][mapZ] = targetY;
 
+                boolean shouldDecorate = false;
                 Material blockBelow = world.getBlockAt(x, targetY - 1, z).getType();
+
                 if (blockBelow != Material.AIR && !org.bukkit.Tag.LEAVES.isTagged(blockBelow)) {
                     shouldDecorate = true;
                 } else {
@@ -97,46 +96,61 @@ public class WorldGen {
                     }
                 }
 
+                decorateMap[mapX][mapZ] = shouldDecorate;
+
                 for (int y = 319; y >= targetY; y--) {
                     world.getBlockAt(x, y, z).setType(Material.AIR, false);
                 }
 
                 if (shouldDecorate) {
-                    setBiomeSpecificBlock(world, x, targetY - 1, z, random);
+                    setTerrainSurface(world, x, targetY - 1, z);
+                }
+            }
+        }
+
+        for (int x = -totalRadius; x <= totalRadius; x++) {
+            for (int z = -totalRadius; z <= totalRadius; z++) {
+                int mapX = x + totalRadius;
+                int mapZ = z + totalRadius;
+                if (decorateMap[mapX][mapZ]) {
+                    decorateSurface(world, x, targetYMap[mapX][mapZ] - 1, z, random);
                 }
             }
         }
     }
 
-    private static void setBiomeSpecificBlock(World world, int x, int y, int z, Random random) {
-        org.bukkit.block.Block block = world.getBlockAt(x, y, z);
-        org.bukkit.block.Biome biome = world.getBiome(x, y, z);
+    private static int calculateBaseY(World world) {
+        int y = world.getHighestBlockYAt(0, 0);
 
+        while (y > world.getMinHeight()) {
+            org.bukkit.block.Block block = world.getBlockAt(0, y, 0);
+            Material type = block.getType();
+            String typeName = type.name();
+
+            if (type.isAir() || typeName.contains("LEAVES") || typeName.contains("LOG") || typeName.contains("WOOD")) {
+                y--;
+            } else {
+                break;
+            }
+        }
+
+        return y - 10;
+    }
+
+    private static void setTerrainSurface(World world, int x, int y, int z) {
+        org.bukkit.block.Biome biome = world.getBiome(x, y, z);
         Material surfaceMaterial = Material.GRASS_BLOCK;
-        Material decorationMaterial = Material.AIR;
         String biomeName = biome.name();
 
         if (biomeName.contains("DESERT") || biomeName.contains("BADLANDS")) {
             surfaceMaterial = Material.SAND;
-            if (random.nextInt(10) == 0) decorationMaterial = Material.DEAD_BUSH;
         } else if (biomeName.contains("SNOW") || biomeName.contains("ICE")) {
             surfaceMaterial = Material.SNOW_BLOCK;
         } else if (biomeName.contains("MUSHROOM")) {
             surfaceMaterial = Material.MYCELIUM;
-            if (random.nextInt(15) == 0) decorationMaterial = random.nextBoolean() ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM;
-        } else if (biomeName.contains("JUNGLE")) {
-            surfaceMaterial = Material.GRASS_BLOCK;
-            if (random.nextInt(10) == 0) decorationMaterial = Material.JUNGLE_SAPLING;
-        } else {
-            surfaceMaterial = Material.GRASS_BLOCK;
-            if (random.nextInt(15) == 0) {
-                decorationMaterial = random.nextBoolean() ? Material.DANDELION : Material.POPPY;
-            } else if (random.nextInt(10) == 0) {
-                decorationMaterial = Material.SHORT_GRASS;
-            }
         }
 
-        block.setType(surfaceMaterial, false);
+        world.getBlockAt(x, y, z).setType(surfaceMaterial, false);
 
         for (int i = 1; i <= 20; i++) {
             org.bukkit.block.Block under = world.getBlockAt(x, y - i, z);
@@ -145,6 +159,27 @@ public class WorldGen {
             }
             Material underMat = surfaceMaterial == Material.SAND ? Material.SANDSTONE : Material.DIRT;
             under.setType(underMat, false);
+        }
+    }
+
+    private static void decorateSurface(World world, int x, int y, int z, Random random) {
+        org.bukkit.block.Biome biome = world.getBiome(x, y, z);
+        String biomeName = biome.name();
+        Material surfaceMaterial = world.getBlockAt(x, y, z).getType();
+        Material decorationMaterial = Material.AIR;
+
+        if (surfaceMaterial == Material.SAND) {
+            if (random.nextInt(10) == 0) decorationMaterial = Material.DEAD_BUSH;
+        } else if (surfaceMaterial == Material.MYCELIUM) {
+            if (random.nextInt(15) == 0) decorationMaterial = random.nextBoolean() ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM;
+        } else if (biomeName.contains("JUNGLE")) {
+            if (random.nextInt(10) == 0) decorationMaterial = Material.JUNGLE_SAPLING;
+        } else if (surfaceMaterial == Material.GRASS_BLOCK) {
+            if (random.nextInt(15) == 0) {
+                decorationMaterial = random.nextBoolean() ? Material.DANDELION : Material.POPPY;
+            } else if (random.nextInt(10) == 0) {
+                decorationMaterial = Material.SHORT_GRASS;
+            }
         }
 
         if (decorationMaterial != Material.AIR) {
