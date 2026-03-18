@@ -28,8 +28,10 @@ public class ChampionMenu extends FastInv {
     private final double championPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION, 1.0);
     private final double upgradePriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION_UPGRADE, 1.0);
 
+    private boolean previewMode = false;
+
     public ChampionMenu(Player player, PersistentData data) {
-        super(27, "Klasy postaci");
+        super(36, "Klasy postaci");
         this.player = player;
         this.data = data;
         this.champions = new ChampionManager().getChampions();
@@ -49,11 +51,37 @@ public class ChampionMenu extends FastInv {
 
             int slot = slots[index++];
             setItem(slot, createIcon(champion), e -> {
+                if (previewMode) return;
+
                 if (e.getClick().isRightClick()) {
                     handleUpgradeOrBuy(champion);
                 } else if (e.getClick().isLeftClick()) {
                     handleSelect(champion);
                 }
+            });
+        }
+
+        if (previewMode) {
+            ItemStack backBtn = new ItemStack(Material.ARROW);
+            ItemMeta meta = backBtn.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName("§cWróć do wyboru klas");
+                backBtn.setItemMeta(meta);
+            }
+            setItem(22, backBtn, e -> {
+                previewMode = false;
+                render();
+            });
+        } else {
+            ItemStack previewBtn = new ItemStack(Material.ENDER_EYE);
+            ItemMeta meta = previewBtn.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName("§ePodejrzyj rozwój klas");
+                previewBtn.setItemMeta(meta);
+            }
+            setItem(31, previewBtn, e -> {
+                previewMode = true;
+                render();
             });
         }
     }
@@ -66,8 +94,14 @@ public class ChampionMenu extends FastInv {
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName("§c§l" + champion.getName());
-            meta.setLore(champion.getLore(data, displayLevel));
+            if (previewMode) {
+                meta.setDisplayName("§c§l" + champion.getName() + " §7(Poziom " + getRomanNumeral(champion.getMaxLevel()) + ")");
+                meta.setLore(champion.getPreviewLore());
+            } else {
+                meta.setDisplayName("§c§l" + champion.getName() + " §7(Poziom " + getRomanNumeral(displayLevel) + ")");
+                meta.setLore(champion.getLore(data, displayLevel));
+            }
+
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
@@ -77,6 +111,12 @@ public class ChampionMenu extends FastInv {
         nbtItem.setInteger(ItemTags.UHC_ITEM.name(), 1);
 
         return nbtItem.getItem();
+    }
+
+    private String getRomanNumeral(int level) {
+        String[] romans = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        if (level >= 1 && level <= 10) return romans[level - 1];
+        return String.valueOf(level);
     }
 
     private void handleUpgradeOrBuy(Champion champion) {

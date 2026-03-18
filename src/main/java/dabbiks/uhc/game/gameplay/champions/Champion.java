@@ -90,6 +90,13 @@ public abstract class Champion {
         return lore;
     }
 
+    public List<String> getPreviewLore() {
+        List<String> lore = new ArrayList<>(getClassDescription());
+        lore.add("");
+        lore.addAll(getLevelDescription(getMaxLevel()));
+        return lore;
+    }
+
     public int getUpgradeCost(int cost, int level) {
         if (level + 1 == 5 || level + 1 == 10) {
             return cost;
