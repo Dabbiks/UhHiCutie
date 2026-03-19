@@ -62,8 +62,10 @@ public class BoomerangFlightTask extends Task {
         display.setInterpolationDuration(3);
         display.setInterpolationDelay(0);
 
-        String enchantSlotString = NBT.get(boomerangItem, (Function<ReadableItemNBT, String>) nbt -> nbt.getString("ENCHANT_SLOT"));
-        boolean isBoomerang = enchantSlotString != null && enchantSlotString.equals(EnchantSlot.BOOMERANG.name());
+        Integer isBoomerangValue = NBT.get(boomerangItem, (Function<ReadableItemNBT, Integer>) nbt -> {
+            return nbt.hasTag(EnchantSlot.BOOMERANG.name()) ? nbt.getInteger(EnchantSlot.BOOMERANG.name()) : 0;
+        });
+        boolean isBoomerang = isBoomerangValue != null && isBoomerangValue == 1;
 
         this.maxDistanceTicks = isBoomerang ? 30 : 15;
     }

@@ -103,7 +103,7 @@ public class Archer extends Champion {
             desc.add(" §e» §fTrafienie gracza z łuku przywraca §cpół serca");
         } else if (level == 10) {
             desc.add(" §e» §fTrafienie gracza z łuku przywraca §cjedno serce");
-            desc.add(" §e» §fTwoje strzały §ccniszczą pancerz o §c3 + 3% §faktualnych użyć");
+            desc.add(" §e» §fTwoje strzały §cniszczą pancerz o §c3 + 3% §faktualnych użyć");
         }
 
         return desc;

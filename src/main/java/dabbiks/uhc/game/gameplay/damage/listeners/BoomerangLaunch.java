@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.function.Function;
 
@@ -22,13 +22,21 @@ public class BoomerangLaunch implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) return;
+
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
         if (item == null || item.getType() == Material.AIR || !event.getAction().name().contains("RIGHT")) return;
 
-        String enchantSlotString = NBT.get(item, (Function<ReadableItemNBT, String>) nbt -> nbt.getString("ENCHANT_SLOT"));
-        if (enchantSlotString == null || !enchantSlotString.equals(EnchantSlot.BOOMERANG.name())) return;
+        Integer isBoomerang = NBT.get(item, (Function<ReadableItemNBT, Integer>) nbt -> {
+            if (nbt.hasTag(EnchantSlot.BOOMERANG.name())) {
+                return nbt.getInteger(EnchantSlot.BOOMERANG.name());
+            }
+            return 0;
+        });
+
+        if (isBoomerang == null || isBoomerang != 1) return;
 
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock != null && clickedBlock.getType().isInteractable() && !player.isSneaking()) {
@@ -41,7 +49,12 @@ public class BoomerangLaunch implements Listener {
 
         ItemStack thrownItem = item.clone();
         thrownItem.setAmount(1);
-        item.setAmount(item.getAmount() - 1);
+
+        if (item.getAmount() <= 1) {
+            player.getInventory().setItemInMainHand(null);
+        } else {
+            item.setAmount(item.getAmount() - 1);
+        }
 
         player.playSound(player.getLocation(), Sound.ENTITY_WIND_CHARGE_THROW, 0.6f, 1f);
 

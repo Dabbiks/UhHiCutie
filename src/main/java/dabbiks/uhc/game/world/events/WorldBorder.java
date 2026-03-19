@@ -111,7 +111,7 @@ public class WorldBorder {
             setBorderSize(3.2, 1000L);
         } else if (actualSegment > SegmentConfig.secondBorderStageSegment && actualSegment <= SegmentConfig.thirdBorderStageSegment && !isBorderGrowing) {
             return;
-        } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && borderSize > 80) {
+        } else if (actualSegment > SegmentConfig.thirdBorderStageSegment && !isBorderGrowing && borderSize > 15) {
             setBorderSize(2.4, 1000L);
         }
 
