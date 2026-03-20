@@ -36,7 +36,7 @@ public class ItemConverter {
         ItemMeta meta = item.getItemMeta();
         int power = enchantCalculator.convertVanillaToPower(meta);
 
-        if (power > 0) {
+        if (power > 1) {
             itemInstance.setEnchants(enchantCalculator.calculateEnchants(power, itemInstance.getEnchantSlot()));
         }
 

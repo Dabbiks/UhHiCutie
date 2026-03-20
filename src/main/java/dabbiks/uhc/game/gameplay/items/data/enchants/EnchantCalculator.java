@@ -25,11 +25,11 @@ public class EnchantCalculator {
             enchants = meta.getEnchants();
         }
 
-        if (enchants == null || enchants.isEmpty()) {
+        if (enchants.isEmpty()) {
             return 1;
         }
 
-        int totalPower = 0;
+        int totalPower = 1;
 
         for (Map.Entry<org.bukkit.enchantments.Enchantment, Integer> entry : enchants.entrySet()) {
             org.bukkit.enchantments.Enchantment enchant = entry.getKey();

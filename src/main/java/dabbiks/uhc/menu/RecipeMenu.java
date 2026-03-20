@@ -13,10 +13,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +36,9 @@ public class RecipeMenu extends FastInv {
     private int page = 0;
     private RecipeInstance selectedRecipe;
     private List<RecipeInstance> currentRecipes;
+
+    private BukkitTask animationTask;
+    private final Map<Integer, RecipeIngredient> animatedSlots = new HashMap<>();
 
     private static final int[] CATEGORY_SLOTS = {0, 9, 18, 27, 36};
     private static final int[] RECIPE_SLOTS = {
@@ -88,6 +94,14 @@ public class RecipeMenu extends FastInv {
         Bukkit.getScheduler().runTaskLater(dabbiks.uhc.Main.plugin, this::refresh, 1L);
     }
 
+    @Override
+    public void onClose(InventoryCloseEvent event) {
+        if (animationTask != null) {
+            animationTask.cancel();
+            animationTask = null;
+        }
+    }
+
     private void loadRecipes() {
         this.currentRecipes = recipeManager.getRecipesFromCategory(currentCategory);
         this.page = 0;
@@ -98,6 +112,11 @@ public class RecipeMenu extends FastInv {
     }
 
     private void refresh() {
+        if (animationTask != null) {
+            animationTask.cancel();
+            animationTask = null;
+        }
+
         for (int i = 0; i < getInventory().getSize(); i++) {
             removeItem(i);
         }
@@ -105,6 +124,7 @@ public class RecipeMenu extends FastInv {
         renderCategories();
         renderRecipeList();
         renderCraftingGrid();
+        startAnimation();
     }
 
     private void renderCategories() {
@@ -160,6 +180,8 @@ public class RecipeMenu extends FastInv {
             lore.add("");
 
             int maxAllowed = recipe.getMaxCraftsPerPlayer();
+            boolean addedInfo = false;
+
             if (maxAllowed > 0) {
                 int alreadyCrafted = limitTracker.getCraftCount(player, recipe.getId());
                 int remaining = Math.max(0, maxAllowed - alreadyCrafted);
@@ -169,6 +191,15 @@ public class RecipeMenu extends FastInv {
                 } else {
                     lore.add("§7Możesz stworzyć jeszcze: §a" + remaining);
                 }
+                addedInfo = true;
+            }
+
+            if (recipe.getRequiredTag() != null) {
+                lore.add("§7Wymagany tag " + recipe.getRequiredTag().getName());
+                addedInfo = true;
+            }
+
+            if (addedInfo) {
                 lore.add("");
             }
 
@@ -216,6 +247,7 @@ public class RecipeMenu extends FastInv {
     }
 
     private void renderCraftingGrid() {
+        animatedSlots.clear();
         if (selectedRecipe == null || !selectedRecipe.showInRecipeBook()) return;
 
         ItemStack resultItem = new ItemBuilder(selectedRecipe.getResult()).build();
@@ -248,7 +280,9 @@ public class RecipeMenu extends FastInv {
                 int gridIndex = targetRow * 3 + targetCol;
 
                 if (gridIndex >= 0 && gridIndex < GRID_SLOTS.length) {
-                    setItem(GRID_SLOTS[gridIndex], ingredient.build(), e -> e.setCancelled(true));
+                    int slot = GRID_SLOTS[gridIndex];
+                    setItem(slot, ingredient.build(), e -> e.setCancelled(true));
+                    animatedSlots.put(slot, ingredient);
                 }
             }
         }
@@ -258,15 +292,43 @@ public class RecipeMenu extends FastInv {
         List<RecipeIngredient> ingredientList = new ArrayList<>(ingredients.values());
 
         if (ingredientList.size() == 1) {
-            setItem(GRID_SLOTS[4], ingredientList.get(0).build(), e -> e.setCancelled(true));
+            int slot = GRID_SLOTS[4];
+            RecipeIngredient ingredient = ingredientList.get(0);
+            setItem(slot, ingredient.build(), e -> e.setCancelled(true));
+            animatedSlots.put(slot, ingredient);
             return;
         }
 
         int slotIdx = 0;
         for (RecipeIngredient ingredient : ingredientList) {
             if (slotIdx >= GRID_SLOTS.length) break;
-            setItem(GRID_SLOTS[slotIdx++], ingredient.build(), e -> e.setCancelled(true));
+            int slot = GRID_SLOTS[slotIdx++];
+            setItem(slot, ingredient.build(), e -> e.setCancelled(true));
+            animatedSlots.put(slot, ingredient);
         }
+    }
+
+    private void startAnimation() {
+        if (animatedSlots.isEmpty()) return;
+
+        animationTask = Bukkit.getScheduler().runTaskTimer(dabbiks.uhc.Main.plugin, new Runnable() {
+            int tick = 0;
+
+            @Override
+            public void run() {
+                for (Map.Entry<Integer, RecipeIngredient> entry : animatedSlots.entrySet()) {
+                    int slot = entry.getKey();
+                    RecipeIngredient ingredient = entry.getValue();
+                    List<Material> validMaterials = ingredient.getValidMaterials();
+
+                    if (validMaterials.size() > 1) {
+                        Material mat = validMaterials.get(tick % validMaterials.size());
+                        getInventory().setItem(slot, ingredient.build(mat));
+                    }
+                }
+                tick++;
+            }
+        }, 10L, 10L);
     }
 
     private int getCategoryModel(RecipeType type) {
@@ -274,7 +336,7 @@ public class RecipeMenu extends FastInv {
             case WEAPON -> 12;
             case ARMOR -> 11;
             case TOOL -> 13;
-            case CONSUMABLE -> 15;
+            case CHAMPION_SPECIFIC -> 15;
             case USABLE -> 14;
             default -> 10;
         };

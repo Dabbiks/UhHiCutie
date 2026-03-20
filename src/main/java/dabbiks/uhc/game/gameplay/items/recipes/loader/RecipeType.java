@@ -4,8 +4,8 @@ public enum RecipeType {
     ARMOR("pancerze"),
     WEAPON("bronie"),
     TOOL("narzędzia"),
-    USABLE("przedmioty specjalne"),
-    CONSUMABLE("jedzenie i dodatki");
+    USABLE("dodatki"),
+    CHAMPION_SPECIFIC("przedmioty klas");
 
     private String name;
 

@@ -2,6 +2,7 @@ package dabbiks.uhc.game.gameplay.items.recipes.data;
 
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
+import dabbiks.uhc.player.data.session.SessionTags;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class RecipeInstance {
     private int maxCraftsPerPlayer;
     private List<String> categories;
     private boolean showInRecipeBook;
+    private SessionTags requiredTag;
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -43,6 +45,9 @@ public class RecipeInstance {
 
     public boolean showInRecipeBook() { return showInRecipeBook; }
     public void setShowInRecipeBook(boolean showInRecipeBook) { this.showInRecipeBook = showInRecipeBook; }
+
+    public SessionTags getRequiredTag() { return requiredTag; }
+    public void setRequiredTag(SessionTags requiredTag) { this.requiredTag = requiredTag; }
 
     public ItemStack buildResult() {
         return new ItemBuilder(result).build();

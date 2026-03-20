@@ -4,6 +4,8 @@ import dabbiks.uhc.Main;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeIngredient;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,6 +47,14 @@ public class RecipeListener implements Listener {
         if (recipeOpt.isEmpty()) return;
         RecipeInstance recipe = recipeOpt.get();
 
+        if (recipe.getRequiredTag() != null) {
+            SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+            if (sessionData == null || !sessionData.hasTag(recipe.getRequiredTag())) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
+
         if (!validateIngredients(event.getInventory().getMatrix(), recipe)) {
             event.getInventory().setResult(null);
             return;
@@ -66,6 +76,15 @@ public class RecipeListener implements Listener {
         if (recipeOpt.isEmpty()) return;
 
         RecipeInstance recipe = recipeOpt.get();
+
+        if (recipe.getRequiredTag() != null) {
+            SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+            if (sessionData == null || !sessionData.hasTag(recipe.getRequiredTag())) {
+                event.setCancelled(true);
+                player.updateInventory();
+                return;
+            }
+        }
 
         if (!validateIngredients(event.getInventory().getMatrix(), recipe)) {
             event.setCancelled(true);
