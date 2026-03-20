@@ -240,35 +240,8 @@ public class RecipeListener implements Listener {
     }
 
     private boolean isItemMatchingIngredient(ItemStack item, RecipeIngredient ingredient) {
-        if (item == null || item.getType() == Material.AIR) return false;
-
-        Material requiredMat = ingredient.getMaterial();
-        Material itemMat = item.getType();
-
-        boolean materialMatches = false;
-
-        if (Tag.PLANKS.isTagged(requiredMat)) {
-            materialMatches = Tag.PLANKS.isTagged(itemMat);
-        } else if (Tag.WOOL.isTagged(requiredMat)) {
-            materialMatches = Tag.WOOL.isTagged(itemMat);
-        } else if (Tag.LOGS.isTagged(requiredMat)) {
-            materialMatches = Tag.LOGS.isTagged(itemMat);
-        } else if (requiredMat == Material.COBBLESTONE || requiredMat == Material.COBBLED_DEEPSLATE) {
-            materialMatches = (itemMat == Material.COBBLESTONE || itemMat == Material.COBBLED_DEEPSLATE);
-        } else if (requiredMat == Material.COAL || requiredMat == Material.CHARCOAL) {
-            materialMatches = (itemMat == Material.COAL || itemMat == Material.CHARCOAL);
-        } else {
-            materialMatches = (itemMat == requiredMat);
-        }
-
-        if (!materialMatches) return false;
-
-        ItemMeta meta = item.getItemMeta();
-
-        int requiredCMD = (ingredient.getCustomModelData() == null) ? 0 : ingredient.getCustomModelData();
-        int itemCMD = (meta != null && meta.hasCustomModelData()) ? meta.getCustomModelData() : 0;
-
-        return requiredCMD == itemCMD;
+        if (ingredient == null) return false;
+        return ingredient.matches(item);
     }
 
     private void reduceMatrix(CraftingInventory inv, int timesToCraft) {

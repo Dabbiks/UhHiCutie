@@ -281,7 +281,7 @@ public class RecipeMenu extends FastInv {
 
                 if (gridIndex >= 0 && gridIndex < GRID_SLOTS.length) {
                     int slot = GRID_SLOTS[gridIndex];
-                    setItem(slot, ingredient.build(), e -> e.setCancelled(true));
+                    setItem(slot, buildGridItem(ingredient, ingredient.getValidItems().get(0)), e -> e.setCancelled(true));
                     animatedSlots.put(slot, ingredient);
                 }
             }
@@ -294,7 +294,7 @@ public class RecipeMenu extends FastInv {
         if (ingredientList.size() == 1) {
             int slot = GRID_SLOTS[4];
             RecipeIngredient ingredient = ingredientList.get(0);
-            setItem(slot, ingredient.build(), e -> e.setCancelled(true));
+            setItem(slot, buildGridItem(ingredient, ingredient.getValidItems().get(0)), e -> e.setCancelled(true));
             animatedSlots.put(slot, ingredient);
             return;
         }
@@ -303,7 +303,7 @@ public class RecipeMenu extends FastInv {
         for (RecipeIngredient ingredient : ingredientList) {
             if (slotIdx >= GRID_SLOTS.length) break;
             int slot = GRID_SLOTS[slotIdx++];
-            setItem(slot, ingredient.build(), e -> e.setCancelled(true));
+            setItem(slot, buildGridItem(ingredient, ingredient.getValidItems().get(0)), e -> e.setCancelled(true));
             animatedSlots.put(slot, ingredient);
         }
     }
@@ -319,16 +319,31 @@ public class RecipeMenu extends FastInv {
                 for (Map.Entry<Integer, RecipeIngredient> entry : animatedSlots.entrySet()) {
                     int slot = entry.getKey();
                     RecipeIngredient ingredient = entry.getValue();
-                    List<Material> validMaterials = ingredient.getValidMaterials();
+                    List<ItemStack> validItems = ingredient.getValidItems();
 
-                    if (validMaterials.size() > 1) {
-                        Material mat = validMaterials.get(tick % validMaterials.size());
-                        getInventory().setItem(slot, ingredient.build(mat));
+                    if (validItems.size() > 1) {
+                        ItemStack item = validItems.get(tick % validItems.size());
+                        getInventory().setItem(slot, buildGridItem(ingredient, item));
                     }
                 }
                 tick++;
             }
         }, 10L, 10L);
+    }
+
+    private ItemStack buildGridItem(RecipeIngredient ingredient, ItemStack baseItem) {
+        ItemStack item = baseItem.clone();
+        if (ingredient.getName() != null && !ingredient.getName().isEmpty()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                List<String> lore = meta.getLore();
+                if (lore == null) lore = new ArrayList<>();
+                lore.add("§7Składnik: §f" + ingredient.getName());
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            }
+        }
+        return item;
     }
 
     private int getCategoryModel(RecipeType type) {

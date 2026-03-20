@@ -53,6 +53,40 @@ public class RecipeIngredient {
         return list;
     }
 
+    public List<ItemStack> getValidItems() {
+        Material base = getMaterial();
+        List<ItemStack> list = new ArrayList<>();
+
+//        if (base == Material.APPLE && customModelData == null) {
+//            list.add(build(Material.APPLE));
+//            list.add(createCustomApple("Banan", 1));
+//            list.add(createCustomApple("Truskawka", 2));
+//            list.add(createCustomApple("Pomarańcza", 3));
+//            list.add(createCustomApple("Gruszka", 4));
+//            list.add(createCustomApple("Winogrono", 5));
+//            list.add(createCustomApple("Arbuz", 6));
+//            list.add(createCustomApple("Śliwka", 7));
+//            return list;
+//        }
+
+        for (Material mat : getValidMaterials()) {
+            list.add(build(mat));
+        }
+
+        return list;
+    }
+
+    private ItemStack createCustomApple(String fruitName, int cmd) {
+        ItemStack item = new ItemStack(Material.APPLE);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setCustomModelData(cmd);
+            meta.setDisplayName("§f" + fruitName);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
     public ItemStack build(Material mat) {
         if (mat == null) mat = Material.BARRIER;
         ItemStack item = new ItemStack(mat);
@@ -71,7 +105,26 @@ public class RecipeIngredient {
     }
 
     public ItemStack build() {
-        return build(getValidMaterials().get(0));
+        return getValidItems().get(0);
     }
 
+    public boolean matches(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) return false;
+
+        for (ItemStack valid : getValidItems()) {
+            if (valid.getType() != item.getType()) continue;
+
+            ItemMeta validMeta = valid.getItemMeta();
+            ItemMeta itemMeta = item.getItemMeta();
+
+            boolean validHasCmd = validMeta != null && validMeta.hasCustomModelData();
+            boolean itemHasCmd = itemMeta != null && itemMeta.hasCustomModelData();
+
+            if (validHasCmd != itemHasCmd) continue;
+            if (validHasCmd && validMeta.getCustomModelData() != itemMeta.getCustomModelData()) continue;
+
+            return true;
+        }
+        return false;
+    }
 }
