@@ -19,6 +19,10 @@ public abstract class Champion {
     public abstract Material getIcon();
     public abstract int getMaxLevel();
 
+    public int getIconCustomModelData() {
+        return 0;
+    }
+
     public abstract void onStart(Player player, int level);
 
     protected abstract List<String> getClassDescription();

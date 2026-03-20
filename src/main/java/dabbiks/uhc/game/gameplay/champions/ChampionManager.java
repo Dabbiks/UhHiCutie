@@ -14,6 +14,8 @@ public class ChampionManager {
         register(new Miner());
         register(new Archer());
         register(new Pikeman());
+        register(new Fisherman());
+        register(new Hunter());
     }
 
     private void register(Champion champion) {

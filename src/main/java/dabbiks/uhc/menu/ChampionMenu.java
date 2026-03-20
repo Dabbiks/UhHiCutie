@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 import static dabbiks.uhc.Main.soundU;
+import static dabbiks.uhc.Main.symbolU;
 
 public class ChampionMenu extends FastInv {
 
@@ -29,7 +30,7 @@ public class ChampionMenu extends FastInv {
     private boolean previewMode = false;
 
     public ChampionMenu(Player player, PersistentData data) {
-        super(36, "Klasy postaci");
+        super(54, "\uF808\uF805" + symbolU.CHAMPION_MENU);
         this.player = player;
         this.data = data;
         this.champions = new ChampionManager().getChampions();
@@ -38,7 +39,7 @@ public class ChampionMenu extends FastInv {
     }
 
     private void render() {
-        int[] slots = {10, 12, 14, 16};
+        int[] slots = {10, 12, 14, 16, 20, 24};
 
         int index = 0;
         for (Champion champion : champions) {
@@ -63,7 +64,7 @@ public class ChampionMenu extends FastInv {
             toggleBtn.setItemMeta(toggleMeta);
         }
 
-        setItem(31, toggleBtn, e -> {
+        setItem(49, toggleBtn, e -> {
             previewMode = !previewMode;
             render();
         });
@@ -77,6 +78,10 @@ public class ChampionMenu extends FastInv {
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
+            if (champion.getIconCustomModelData() > 0) {
+                meta.setCustomModelData(champion.getIconCustomModelData());
+            }
+
             if (previewMode) {
                 meta.setDisplayName("§c§l" + champion.getName() + " §8(Poziom " + getRomanNumeral(champion.getMaxLevel()) + ")");
                 meta.setLore(champion.getPreviewLore());

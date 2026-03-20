@@ -1,14 +1,11 @@
 package dabbiks.uhc.game.gameplay.champions;
 
-import dabbiks.uhc.Main;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
-import dabbiks.uhc.game.gameplay.items.conversion.ItemConverter;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantData;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
-import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeType;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionTags;
@@ -40,6 +37,11 @@ public class Hunter extends Champion {
     @Override
     public Material getIcon() {
         return Material.WOODEN_SWORD;
+    }
+
+    @Override
+    public int getIconCustomModelData() {
+        return 11;
     }
 
     @Override
