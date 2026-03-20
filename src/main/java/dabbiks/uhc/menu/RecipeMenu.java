@@ -335,13 +335,6 @@ public class RecipeMenu extends FastInv {
         ItemStack item = baseItem.clone();
         if (ingredient.getName() != null && !ingredient.getName().isEmpty()) {
             ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                List<String> lore = meta.getLore();
-                if (lore == null) lore = new ArrayList<>();
-                lore.add("§7Składnik: §f" + ingredient.getName());
-                meta.setLore(lore);
-                item.setItemMeta(meta);
-            }
         }
         return item;
     }

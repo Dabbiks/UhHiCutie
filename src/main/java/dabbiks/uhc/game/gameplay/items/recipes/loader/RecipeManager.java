@@ -55,19 +55,24 @@ public class RecipeManager {
             shaped.shape(shape.toArray(new String[0]));
 
             for (Map.Entry<Character, RecipeIngredient> entry : recipe.getIngredients().entrySet()) {
-                shaped.setIngredient(entry.getKey(), getRecipeChoice(entry.getValue().getMaterial()));
+                shaped.setIngredient(entry.getKey(), getRecipeChoice(entry.getValue()));
             }
             Bukkit.addRecipe(shaped);
         } else {
             ShapelessRecipe shapeless = new ShapelessRecipe(key, result);
             for (RecipeIngredient ingredient : recipe.getIngredients().values()) {
-                shapeless.addIngredient(getRecipeChoice(ingredient.getMaterial()));
+                shapeless.addIngredient(getRecipeChoice(ingredient));
             }
             Bukkit.addRecipe(shapeless);
         }
     }
 
-    private RecipeChoice getRecipeChoice(Material material) {
+    private RecipeChoice getRecipeChoice(RecipeIngredient ingredient) {
+        if (ingredient.getCustomModelData() != null || (ingredient.getName() != null && !ingredient.getName().isEmpty())) {
+            return new RecipeChoice.ExactChoice(ingredient.getValidItems());
+        }
+
+        Material material = ingredient.getMaterial();
         if (Tag.PLANKS.isTagged(material)) {
             return new RecipeChoice.MaterialChoice(new ArrayList<>(Tag.PLANKS.getValues()));
         }
