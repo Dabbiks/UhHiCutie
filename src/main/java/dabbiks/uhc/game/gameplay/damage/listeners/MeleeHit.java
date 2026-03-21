@@ -70,17 +70,10 @@ public class MeleeHit implements Listener {
         if (stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
 
         double baseDamage = event.getDamage();
-
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) baseDamage /= 2;
-        if (event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) baseDamage /= 2;
-        if (baseDamage > 20) baseDamage = 20;
-
         double damage = baseDamage;
 
         damage += tagHandler.handle(victim, null, baseDamage);
         damage += meleeEnchantHandler.handle(victim, victim, damage, null, EnchantType.IRON_FEET);
-
-        damage = armorHandler.handle(null, victim, damage);
 
         double totalDamage = damage;
         double absorption = victim.getAbsorptionAmount();

@@ -106,6 +106,8 @@ public class StartManager implements Listener {
 
     private void preparePlayers() {
         ChampionManager championManager = new ChampionManager();
+        List<String> championMessage = new ArrayList<>();
+        championMessage.add("");
         for (Player player : playerListU.getAllPlayers()) {
             stateU.setPlayerState(player, PlayerState.ALIVE);
             RankManager.calculatePlayerModifier(player);
@@ -124,6 +126,10 @@ public class StartManager implements Listener {
             if (persistentData.getChampion() == null) persistentData.setChampion("default");
             Champion champion = championManager.getChampion(persistentData.getChampion());
             champion.onStart(player, persistentData.getChampionLevel(persistentData.getChampion()));
+            championMessage.add("§7» §f" + player.getName() + " §e" + champion.getName() + " §8(Poz. " + persistentData.getChampionLevel(champion.getId()) + ")");
         }
+        championMessage.add("");
+        List<Player> players = playerListU.getAllPlayers();
+        for (String string : championMessage) messageU.sendMessageToPlayers(players, string);
     }
 }
