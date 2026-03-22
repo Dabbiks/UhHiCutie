@@ -115,6 +115,12 @@ public class Mining implements Listener {
         }
 
         boolean droppedAnything = false;
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+        PersistentData pData = PersistentDataManager.getData(player.getUniqueId());
+
+        boolean hasMiner = sessionData != null && sessionData.hasTag(SessionTags.MINER);
+        int minerLevel = (hasMiner && pData != null) ? pData.getChampionLevel("miner") : 0;
+        double doubleChance = minerLevel * 0.02;
 
         for (DropItem dropItem : customDrops) {
             double chance = dropItem.getChance(pickaxe, blockType, biome);
@@ -123,6 +129,11 @@ public class Mining implements Listener {
                 droppedAnything = true;
 
                 ItemStack itemToDrop = dropItem.generateItem(fortuneLevel, isSmelted);
+
+                if (hasMiner && ThreadLocalRandom.current().nextDouble() <= doubleChance) {
+                    itemToDrop.setAmount(itemToDrop.getAmount() * 2);
+                }
+
                 block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), itemToDrop);
 
                 if (dropItem.getSound() != null) {

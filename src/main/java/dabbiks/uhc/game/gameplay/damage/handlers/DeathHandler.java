@@ -8,6 +8,7 @@ import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.data.session.SessionTags;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.*;
@@ -29,6 +30,31 @@ public class DeathHandler {
         if (GameData.isEnding) return;
 
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        if (sessionData.hasTag(SessionTags.IMMORTAL_EXPERIENCE)) {
+            sessionData.removeTag(SessionTags.IMMORTAL_EXPERIENCE);
+
+            int xpLevel = Math.min(player.getLevel(), 30);
+            double scale = xpLevel / 30.0;
+
+            player.setHealth(1.0);
+            player.setFireTicks(0);
+            player.playEffect(EntityEffect.TOTEM_RESURRECT);
+            player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 1.0f, 1.0f);
+
+            if (xpLevel > 0) {
+                int regenTicks = (int) (200 * scale);
+                int absTicks = (int) (880 * scale);
+                int absAmp = (int) Math.round(4 * scale);
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenTicks, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, absTicks, absAmp));
+            }
+
+            player.setLevel(0);
+            player.setExp(0);
+            return;
+        }
 
         dropFullInventory(player);
 
