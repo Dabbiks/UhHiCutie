@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 
 import static dabbiks.uhc.Main.indicatorManager;
 import static dabbiks.uhc.Main.stateU;
@@ -36,6 +37,30 @@ public class ProjectileHit implements Listener {
     private final ArmorHandler armorHandler = new ArmorHandler();
     private final TagHandler tagHandler = new TagHandler();
     private final DeathHandler deathHandler = new DeathHandler();
+
+    private double applyPotionModifiers(LivingEntity damager, LivingEntity victim, double currentDamage) {
+        double multiplier = 1.0;
+
+        if (damager != null) {
+            if (damager.hasPotionEffect(PotionEffectType.STRENGTH)) {
+                int amp = damager.getPotionEffect(PotionEffectType.STRENGTH).getAmplifier();
+                multiplier += (amp + 1) * 0.15;
+            }
+            if (damager.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                int amp = damager.getPotionEffect(PotionEffectType.WEAKNESS).getAmplifier();
+                multiplier -= (amp + 1) * 0.15;
+            }
+        }
+
+        if (victim != null) {
+            if (victim.hasPotionEffect(PotionEffectType.RESISTANCE)) {
+                int amp = victim.getPotionEffect(PotionEffectType.RESISTANCE).getAmplifier();
+                multiplier -= (amp + 1) * 0.15;
+            }
+        }
+
+        return Math.max(0.0, currentDamage * multiplier);
+    }
 
     @EventHandler
     public void onProjectileDamage(EntityDamageByEntityEvent event) {
@@ -95,6 +120,8 @@ public class ProjectileHit implements Listener {
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += projectileEnchantHandler.handle(projectile, victim, damage);
         damage += armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
+
+        damage = applyPotionModifiers(damager, victim, damage);
         damage = armorHandler.handle(damager, victim, damage);
 
         event.setDamage(damage);
@@ -114,6 +141,7 @@ public class ProjectileHit implements Listener {
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += projectileEnchantHandler.handle(projectile, victim, damage);
 
+        damage = applyPotionModifiers(damager, victim, damage);
         damage = armorHandler.handle(damager, victim, damage);
 
         event.setDamage(damage);

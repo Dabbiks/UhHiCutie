@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import static dabbiks.uhc.Main.indicatorManager;
 import static dabbiks.uhc.Main.stateU;
@@ -36,6 +37,30 @@ public class MeleeHit implements Listener {
 
     MeleeEnchantHandler meleeEnchantHandler = new MeleeEnchantHandler();
     ArmorEnchantHandler armorEnchantHandler = new ArmorEnchantHandler();
+
+    private double applyPotionModifiers(LivingEntity damager, LivingEntity victim, double currentDamage) {
+        double multiplier = 1.0;
+
+        if (damager != null) {
+            if (damager.hasPotionEffect(PotionEffectType.STRENGTH)) {
+                int amp = damager.getPotionEffect(PotionEffectType.STRENGTH).getAmplifier();
+                multiplier += (amp + 1) * 0.15;
+            }
+            if (damager.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                int amp = damager.getPotionEffect(PotionEffectType.WEAKNESS).getAmplifier();
+                multiplier -= (amp + 1) * 0.15;
+            }
+        }
+
+        if (victim != null) {
+            if (victim.hasPotionEffect(PotionEffectType.RESISTANCE)) {
+                int amp = victim.getPotionEffect(PotionEffectType.RESISTANCE).getAmplifier();
+                multiplier -= (amp + 1) * 0.15;
+            }
+        }
+
+        return Math.max(0.0, currentDamage * multiplier);
+    }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
@@ -69,6 +94,9 @@ public class MeleeHit implements Listener {
 
     public void processEnvironmentDamage(EntityDamageEvent event) {
         Player victim = (Player) event.getEntity();
+        if (SegmentConfig.actualSegment == 1) {
+            event.setCancelled(true); return;
+        }
         if (stateU.getPlayerState(victim) != PlayerState.ALIVE) return;
 
         double baseDamage = event.getDamage();
@@ -76,6 +104,8 @@ public class MeleeHit implements Listener {
 
         damage += tagHandler.handle(victim, null, baseDamage);
         damage += meleeEnchantHandler.handle(victim, victim, damage, null, EnchantType.IRON_FEET);
+
+        damage = applyPotionModifiers(null, victim, damage);
 
         double totalDamage = damage;
         double absorption = victim.getAbsorptionAmount();
@@ -114,6 +144,7 @@ public class MeleeHit implements Listener {
         if (parryingHandler.handle(victim, event)) return;
         damage += tagHandler.handle(damager, victim, baseDamage);
 
+        damage = applyPotionModifiers((LivingEntity) damager, victim, damage);
         damage = armorHandler.handle(null, victim, damage);
 
         double totalDamage = damage;
@@ -161,6 +192,7 @@ public class MeleeHit implements Listener {
         damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SHATTER);
         damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.UNSTABLE_CORE);
 
+        damage = applyPotionModifiers(damager, (LivingEntity) victim, damage);
         damage = armorHandler.handle(damager, (LivingEntity) victim, damage);
         attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.LIFE_STEAL);
 
@@ -211,6 +243,7 @@ public class MeleeHit implements Listener {
         damage += armorEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.THORNS);
         damage += armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
 
+        damage = applyPotionModifiers(damager, victim, damage);
         damage = armorHandler.handle(damager, victim, damage);
         attributeHandler.handle(damager, victim, damage, AttributeType.LIFE_STEAL);
 
