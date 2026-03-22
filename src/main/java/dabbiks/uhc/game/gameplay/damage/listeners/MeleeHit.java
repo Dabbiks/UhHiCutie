@@ -1,6 +1,7 @@
 package dabbiks.uhc.game.gameplay.damage.listeners;
 
 import dabbiks.uhc.game.GameData;
+import dabbiks.uhc.game.configs.SegmentConfig;
 import dabbiks.uhc.game.configs.WorldConfig;
 import dabbiks.uhc.game.gameplay.damage.handlers.*;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
@@ -39,6 +40,7 @@ public class MeleeHit implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (!event.getEntity().getWorld().getName().equals(WorldConfig.worldName)) return;
+        if (SegmentConfig.actualSegment == 1) return;
         if (GameData.isEnding) { event.setCancelled(true); return; }
 
         if (!(event instanceof EntityDamageByEntityEvent) && event.getEntity() instanceof Player) {
