@@ -118,6 +118,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ParryingBlocker(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtector(), this);
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CustomMobListener(), this);
         Bukkit.getPluginManager().registerEvents(new CenterBuilderManager(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);

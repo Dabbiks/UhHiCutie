@@ -137,6 +137,9 @@ public class MeleeHit implements Listener {
         if (!(damager instanceof LivingEntity)) return;
 
         double baseDamage = event.getDamage();
+        if (damager.getType() == org.bukkit.entity.EntityType.WARDEN) {
+            baseDamage *= 0.2;
+        }
         if (event.isCritical()) baseDamage /= 1.5;
 
         double damage = baseDamage;
