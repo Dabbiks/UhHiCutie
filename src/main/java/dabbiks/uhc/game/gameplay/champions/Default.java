@@ -107,6 +107,12 @@ public class Default extends Champion {
             desc.add(" §e» §fTwoja bazowa regeneracja jest §czwiększona §fo §cpół serca");
         }
 
+        if (level >= 3) {
+            desc.add("");
+            desc.add("§6Przepisy:");
+            desc.add(" §8■ §fTotem kontroli");
+        }
+
         return desc;
     }
 }

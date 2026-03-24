@@ -104,6 +104,12 @@ public class Pikeman extends Champion {
             desc.add(" §e» §fNegatywne efekty mikstur nie mają na Ciebie wpływu");
         }
 
+        if (level >= 3) {
+            desc.add("");
+            desc.add("§6Przepisy:");
+            desc.add(" §8■ §fKaeniczna powłoka");
+        }
+
         return desc;
     }
 }

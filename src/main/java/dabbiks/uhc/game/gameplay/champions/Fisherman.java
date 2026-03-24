@@ -69,6 +69,7 @@ public class Fisherman extends Champion {
                 player.getInventory().addItem(new ItemStack(Material.COD, 3));
                 sessionData.addTag(SessionTags.BIG_FISHING_ROD_KNOCKBACK);
                 sessionData.addTag(SessionTags.MORE_FISHING_DROPS);
+                sessionData.addTag(SessionTags.RECIPE_FISH_OIL);
             }
         }
     }
@@ -116,6 +117,12 @@ public class Fisherman extends Champion {
         } else if (level == 10) {
             desc.add(" §e» §fPrzyciąganie wędką jest silniejsze o 40%");
             desc.add(" §e» §fSzansa na wyłowienie użytecznych przedmiotów");
+        }
+
+        if (level >= 3) {
+            desc.add("");
+            desc.add("§6Przepisy:");
+            desc.add(" §8■ §fTran");
         }
 
         return desc;

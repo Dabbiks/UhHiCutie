@@ -104,6 +104,13 @@ public class Miner extends Champion {
             desc.add(" §e» §fPasek XP działa jednorazowo jak totem");
         }
 
+        if (level >= 3) {
+            desc.add("");
+            desc.add("§6Przepisy:");
+            desc.add(" §8■ §fPiec hutniczy");
+            desc.add(" §8■ §fTania sztabka netherytu");
+        }
+
         return desc;
     }
 }

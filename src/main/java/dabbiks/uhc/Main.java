@@ -11,6 +11,8 @@ import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeListener;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeLoader;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
+import dabbiks.uhc.game.gameplay.items.stations.grindstone.GrindstoneManager;
+import dabbiks.uhc.game.gameplay.items.stations.smithingtable.SmithingTableManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
 import dabbiks.uhc.game.teams.*;
 import dabbiks.uhc.game.world.WorldGen;
@@ -24,7 +26,6 @@ import dabbiks.uhc.player.Chat;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.player.events.BreakingLeaves;
 import dabbiks.uhc.player.events.Fishing;
-import dabbiks.uhc.player.events.Grinding;
 import dabbiks.uhc.player.events.Mining;
 import dabbiks.uhc.player.traffic.JoinEvent;
 import dabbiks.uhc.player.traffic.QuitEvent;
@@ -104,6 +105,8 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);
         Bukkit.getPluginManager().registerEvents(new EnchantingTableManager(), this);
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
+        Bukkit.getPluginManager().registerEvents(new SmithingTableManager(), this);
+        Bukkit.getPluginManager().registerEvents(new GrindstoneManager(), this);
 
         Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
@@ -121,7 +124,6 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CenterBuilderManager(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
-        Bukkit.getPluginManager().registerEvents(new Grinding(), this);
         Bukkit.getPluginManager().registerEvents(new BreakingLeaves(), this);
         Bukkit.getPluginManager().registerEvents(new Fishing(), this);
 

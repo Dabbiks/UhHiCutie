@@ -58,11 +58,15 @@ public class SmithingTableManager implements Listener {
             return;
         }
 
-        if (item.isEmpty() || item.getType().equals(Material.AIR)) return;
+        if (item.isEmpty() || item.getType().equals(Material.AIR)) {
+            soundU.playSoundAtLocation(event.getClickedBlock().getLocation(), Sound.ENTITY_VILLAGER_NO, 0.6f, 1);
+            return;
+        }
 
         boolean isDiamond = item.getType().name().startsWith("DIAMOND");
         if (!isDiamond) {
             player.sendMessage("§cTego przedmiotu nie da się ulepszyć");
+            soundU.playSoundAtLocation(event.getClickedBlock().getLocation(), Sound.ENTITY_VILLAGER_NO, 0.6f, 1);
             return;
         }
 
@@ -70,6 +74,7 @@ public class SmithingTableManager implements Listener {
 
         if (Material.getMaterial(netheriteMaterial) == null) {
             player.sendMessage("§cTego przedmiotu nie da się ulepszyć");
+            soundU.playSoundAtLocation(event.getClickedBlock().getLocation(), Sound.ENTITY_VILLAGER_NO, 0.6f, 1);
             return;
         }
 

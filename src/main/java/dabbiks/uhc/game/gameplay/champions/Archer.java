@@ -63,6 +63,7 @@ public class Archer extends Champion {
                 player.getInventory().addItem(new ItemStack(Material.COOKED_CHICKEN, 10));
                 sessionData.addTag(SessionTags.BIG_PROJECTILE_HIT_REGENERATION);
                 sessionData.addTag(SessionTags.PROJECTILE_HIT_ARMOR_CORROSION);
+                sessionData.addTag(SessionTags.RECIPE_CHAINMAIL_SET);
             }
         }
     }
@@ -104,6 +105,15 @@ public class Archer extends Champion {
         } else if (level == 10) {
             desc.add(" §e» §fTrafienie gracza z łuku przywraca §cjedno serce");
             desc.add(" §e» §fTwoje strzały §cniszczą pancerz o §c3 + 3% §faktualnych użyć");
+        }
+
+        if (level >= 3) {
+            desc.add("");
+            desc.add("§6Przepisy:");
+            desc.add(" §8■ §fKolczy hełm");
+            desc.add(" §8■ §fKolczy napierśnik");
+            desc.add(" §8■ §fKolcze nogawice");
+            desc.add(" §8■ §fKolcze buty");
         }
 
         return desc;

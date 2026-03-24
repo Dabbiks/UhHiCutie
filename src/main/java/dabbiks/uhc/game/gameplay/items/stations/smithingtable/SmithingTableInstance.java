@@ -26,7 +26,7 @@ public class SmithingTableInstance {
     }
 
     public void placeSmithingTable() {
-        slot = new SmithingTableSlot(location.clone().add(0.5, 1.05, 0.5), 30, 0);
+        slot = new SmithingTableSlot(location.clone().add(0.5, 1.05, 0.5), 30, 90);
     }
 
     public boolean fill() {
@@ -69,7 +69,7 @@ public class SmithingTableInstance {
         slot.itemDisplay.setTransformation(new Transformation(
                 new Vector3f(0f, 0f, 0f),
                 new Quaternionf(),
-                new Vector3f(1.2f, 1.2f, 1.2f),
+                new Vector3f(1f, 1f, 1f),
                 new Quaternionf()
         ));
     }
