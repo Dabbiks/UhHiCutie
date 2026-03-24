@@ -1,6 +1,5 @@
 package dabbiks.uhc.game.gameplay.items.stations.smithingtable;
 
-import dabbiks.uhc.game.gameplay.items.stations.table.TableInstance;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;

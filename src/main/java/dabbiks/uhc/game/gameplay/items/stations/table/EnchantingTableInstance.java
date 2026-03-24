@@ -13,22 +13,22 @@ import org.joml.Vector3f;
 
 import static dabbiks.uhc.Main.soundU;
 
-public class TableInstance {
+public class EnchantingTableInstance {
 
     public final Location location;
 
-    public Slot[] slots = new Slot[4];
+    public EnchantingTableSlot[] slots = new EnchantingTableSlot[4];
 
-    public TableInstance(Location location) {
+    public EnchantingTableInstance(Location location) {
         this.location = location;
         placeEnchantingTable();
     }
 
     public void placeEnchantingTable() {
-        slots[0] = new Slot(location.clone().add(0.1, 0.77, 0.1), 0, 90, 0.8f);
-        slots[1] = new Slot(location.clone().add(0.9, 0.77, 0.1), 90, 90, 1.0f);
-        slots[2] = new Slot(location.clone().add(0.1, 0.77, 0.9), 270, 90, 1.2f);
-        slots[3] = new Slot(location.clone().add(0.9, 0.77, 0.9), 180, 90, 1.4f);
+        slots[0] = new EnchantingTableSlot(location.clone().add(0.1, 0.77, 0.1), 0, 90, 0.8f);
+        slots[1] = new EnchantingTableSlot(location.clone().add(0.9, 0.77, 0.1), 90, 90, 1.0f);
+        slots[2] = new EnchantingTableSlot(location.clone().add(0.1, 0.77, 0.9), 270, 90, 1.2f);
+        slots[3] = new EnchantingTableSlot(location.clone().add(0.9, 0.77, 0.9), 180, 90, 1.4f);
 
     }
 
@@ -38,7 +38,7 @@ public class TableInstance {
             return false;
         }
 
-        for (Slot slot : slots) {
+        for (EnchantingTableSlot slot : slots) {
             if (!slot.filled) {
                 fillSlot(slot);
                 return true;
@@ -49,7 +49,7 @@ public class TableInstance {
 
     public void reset() {
         soundU.playSoundAtLocation(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.6f, 1);
-        for (Slot slot : slots) {
+        for (EnchantingTableSlot slot : slots) {
             slot.filled = false;
             if (slot.itemDisplay == null) continue;
             slot.itemDisplay.remove();
@@ -58,7 +58,7 @@ public class TableInstance {
     }
 
     public void destroy() {
-        for (Slot slot : slots) {
+        for (EnchantingTableSlot slot : slots) {
             if (slot.filled) slot.location.getWorld().dropItemNaturally(slot.location, new ItemStack(Material.LAPIS_LAZULI));
             if (slot.itemDisplay == null) continue;
             slot.itemDisplay.remove();
@@ -66,7 +66,7 @@ public class TableInstance {
         }
     }
 
-    private void fillSlot(Slot slot) {
+    private void fillSlot(EnchantingTableSlot slot) {
         int rotation1 = slot.rotation1;
         int rotation2 = slot.rotation2;
         float pitch = slot.pitch;
@@ -85,14 +85,14 @@ public class TableInstance {
         ));
     }
 
-    public class Slot {
+    public class EnchantingTableSlot {
         public Location location;
         public int rotation1, rotation2;
         public float pitch;
         public boolean filled;
         public ItemDisplay itemDisplay;
 
-        public Slot(Location location, int rotation1, int rotation2, float pitch) {
+        public EnchantingTableSlot(Location location, int rotation1, int rotation2, float pitch) {
             this.location = location;
             this.rotation1 = rotation1;
             this.rotation2 = rotation2;

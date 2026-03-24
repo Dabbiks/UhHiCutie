@@ -11,7 +11,7 @@ import dabbiks.uhc.game.gameplay.items.recipes.listener.RecipeListener;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeLoader;
 import dabbiks.uhc.game.gameplay.items.recipes.loader.RecipeManager;
 import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
-import dabbiks.uhc.game.gameplay.items.stations.table.TableManager;
+import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
 import dabbiks.uhc.game.teams.*;
 import dabbiks.uhc.game.world.WorldGen;
 import dabbiks.uhc.game.world.events.CenterBuilderManager;
@@ -19,7 +19,6 @@ import dabbiks.uhc.game.world.events.Cobweb;
 import dabbiks.uhc.game.world.events.LavaCollect;
 import dabbiks.uhc.game.world.events.WorldBorder;
 import dabbiks.uhc.lobby.LobbyItems;
-import dabbiks.uhc.lobby.LobbyTopManager;
 import dabbiks.uhc.lobby.SpawnProtector;
 import dabbiks.uhc.player.Chat;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
@@ -103,7 +102,7 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new RecipeListener(recipeManager, recipeLimitTracker), this);
         Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);
-        Bukkit.getPluginManager().registerEvents(new TableManager(), this);
+        Bukkit.getPluginManager().registerEvents(new EnchantingTableManager(), this);
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
 
         Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);

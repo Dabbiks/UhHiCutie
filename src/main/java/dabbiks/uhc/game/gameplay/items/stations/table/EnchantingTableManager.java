@@ -30,16 +30,16 @@ import java.util.function.Function;
 
 import static dabbiks.uhc.Main.soundU;
 
-public class TableManager implements Listener {
+public class EnchantingTableManager implements Listener {
 
-    private final Map<Location, TableInstance> tables = new HashMap<>();
+    private final Map<Location, EnchantingTableInstance> tables = new HashMap<>();
     private final EnchantCalculator enchantCalculator = new EnchantCalculator();
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Block block = event.getBlockPlaced();
         if (block.getType() != Material.ENCHANTING_TABLE) return;
-        tables.put(block.getLocation(), new TableInstance(block.getLocation()));
+        tables.put(block.getLocation(), new EnchantingTableInstance(block.getLocation()));
     }
 
     @EventHandler
@@ -51,7 +51,7 @@ public class TableManager implements Listener {
 
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
-        TableInstance table = tables.get(event.getClickedBlock().getLocation());
+        EnchantingTableInstance table = tables.get(event.getClickedBlock().getLocation());
         if (table == null) return;
 
         boolean filled = false;
@@ -123,7 +123,7 @@ public class TableManager implements Listener {
     public void onBreak(BlockBreakEvent event) {
         if (event.getBlock().getType() == Material.ENCHANTING_TABLE) {
             if (!tables.containsKey(event.getBlock().getLocation())) return;
-            TableInstance table = tables.get(event.getBlock().getLocation());
+            EnchantingTableInstance table = tables.get(event.getBlock().getLocation());
             table.destroy();
         }
     }
@@ -133,7 +133,7 @@ public class TableManager implements Listener {
         for (Block block : event.blockList()) {
             if (block.getType() == Material.ENCHANTING_TABLE) {
                 if (!tables.containsKey(block.getLocation())) return;
-                TableInstance table = tables.get(block.getLocation());
+                EnchantingTableInstance table = tables.get(block.getLocation());
                 table.destroy();
             }
         }
