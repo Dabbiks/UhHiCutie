@@ -16,14 +16,14 @@ public class EmeraldDrop extends DropItem {
             Material.DRIPSTONE_BLOCK, Material.TUFF
     );
 
-    @Override public Material getMaterial() { return Material.EMERALD; }
-    @Override public Material getSmeltedMaterial() { return Material.EMERALD; }
-    @Override public int getCustomModelData() { return 0; }
+    @Override public Material getMaterial() { return Material.PAPER; }
+    @Override public Material getSmeltedMaterial() { return Material.PAPER; }
+    @Override public int getCustomModelData() { return 21; }
     @Override public int getMinAmount() { return 1; }
     @Override public int getMaxAmount() { return 1; }
-    @Override public String getMessage() { return "§6+ §a§lEMERALD"; }
+    @Override public String getMessage() { return "§6+ §a§lSZMARAGD"; }
     @Override public Sound getSound() { return null; }
-    @Override public String getDisplayName() { return null; }
+    @Override public String getDisplayName() { return "§fŁupek szmaragdu"; }
     @Override public List<String> getLore() { return null; }
 
     @Override

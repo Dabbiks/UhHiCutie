@@ -16,14 +16,14 @@ public class LapisDrop extends DropItem {
             Material.DRIPSTONE_BLOCK, Material.TUFF
     );
 
-    @Override public Material getMaterial() { return Material.LAPIS_LAZULI; }
-    @Override public Material getSmeltedMaterial() { return Material.LAPIS_LAZULI; }
-    @Override public int getCustomModelData() { return 0; }
+    @Override public Material getMaterial() { return Material.PAPER; }
+    @Override public Material getSmeltedMaterial() { return Material.PAPER; }
+    @Override public int getCustomModelData() { return 22; }
     @Override public int getMinAmount() { return 1; }
     @Override public int getMaxAmount() { return 1; }
     @Override public String getMessage() { return "§6+ §9§lLAPIS"; }
     @Override public Sound getSound() { return null; }
-    @Override public String getDisplayName() { return null; }
+    @Override public String getDisplayName() { return "§fŁupek lapisu"; }
     @Override public List<String> getLore() { return null; }
 
     @Override

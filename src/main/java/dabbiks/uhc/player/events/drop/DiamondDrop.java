@@ -16,14 +16,14 @@ public class DiamondDrop extends DropItem {
             Material.DRIPSTONE_BLOCK, Material.TUFF
     );
 
-    @Override public Material getMaterial() { return Material.DIAMOND; }
-    @Override public Material getSmeltedMaterial() { return Material.DIAMOND; }
-    @Override public int getCustomModelData() { return 0; }
+    @Override public Material getMaterial() { return Material.PAPER; }
+    @Override public Material getSmeltedMaterial() { return Material.PAPER; }
+    @Override public int getCustomModelData() { return 20; }
     @Override public int getMinAmount() { return 1; }
     @Override public int getMaxAmount() { return 1; }
     @Override public String getMessage() { return "§6+ §b§lDIAMENT"; }
     @Override public Sound getSound() { return null; }
-    @Override public String getDisplayName() { return null; }
+    @Override public String getDisplayName() { return "§fŁupek diamentu"; }
     @Override public List<String> getLore() { return null; }
 
     @Override

@@ -44,7 +44,7 @@ public class CustomMobListener implements Listener {
             }
         } else if (event.getEntityType() == EntityType.WARDEN) {
             event.getDrops().clear();
-            event.setDroppedExp(160);
+            event.setDroppedExp(300);
 
             int obsidianCount = ThreadLocalRandom.current().nextInt(5, 11);
 
