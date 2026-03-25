@@ -50,7 +50,6 @@ public class ChatCensor {
         roots.put("pedał", "kolarz");
         roots.put("upośledz", "uzdolni");
         roots.put("czarnuch", "kominiarz");
-        roots.put("transfob", "tranzystor");
 
         roots.put("cwel", "łobuz");
         roots.put("suk", "psink");
