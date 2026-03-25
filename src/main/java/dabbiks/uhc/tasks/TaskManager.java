@@ -23,7 +23,6 @@ public class TaskManager extends BukkitRunnable {
         executors.add(new BossBarTask());
         executors.add(new LobbyTopTask());
         executors.add(new PlaytimeCoinsTask());
-        executors.add(new TrailTask());
         executors.add(new LobbyTeleportTask());
         executors.add(new PvpSwordTask());
         executors.add(new DaylightTask());

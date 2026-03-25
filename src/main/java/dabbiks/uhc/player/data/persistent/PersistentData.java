@@ -60,11 +60,6 @@ public class PersistentData {
     private List<String> unlockedPvpSwords = new ArrayList<>();
 
     @Expose
-    private String trail;
-    @Expose
-    private List<String> unlockedTrails = new ArrayList<>();
-
-    @Expose
     private String cage;
     @Expose
     private List<String> unlockedCages = new ArrayList<>();
@@ -138,11 +133,6 @@ public class PersistentData {
     public void setPvpSword(PvpSword pvpSword) { this.pvpSword = pvpSword.name(); }
     public void unlockPvpSword(PvpSword pvpSword) { unlockedPvpSwords.add(pvpSword.name()); }
     public boolean hasPvpSword(PvpSword pvpSword) { return unlockedPvpSwords.contains(pvpSword.name()); }
-
-    public ParticleTrail getTrail() { try { return trail == null ? null : ParticleTrail.valueOf(trail); } catch (Exception e) { return null; } }
-    public void setTrail(ParticleTrail trail) { this.trail = trail == null ? null : trail.name(); }
-    public void unlockTrail(ParticleTrail trail) { if (trail != null && !unlockedTrails.contains(trail.name())) unlockedTrails.add(trail.name()); }
-    public boolean hasTrail(ParticleTrail trail) { return trail == null || unlockedTrails.contains(trail.name()); }
 
     public Cage getCage() {
         if (cage == null) return null;

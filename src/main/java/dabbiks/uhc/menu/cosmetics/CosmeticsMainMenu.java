@@ -43,10 +43,6 @@ public class CosmeticsMainMenu extends FastInv {
         int discountSlot = 22;
         int powderSlot = 23;
 
-        setItem(trailSlot, createIcon(symbolU.MOUSE_LEFT + " §fSmugi lotu", Material.FIREWORK_ROCKET, null), e -> {
-            super.getInventory().close();
-            new TrailMenu(player, persistentData).open(player);
-        });
         setItem(killSoundSlot, createIcon(symbolU.MOUSE_LEFT + " §fDźwięki zabójstwa", Material.MUSIC_DISC_BLOCKS, null), e -> {
             super.getInventory().close();
             new KillSoundMenu(player, persistentData).open(player);
