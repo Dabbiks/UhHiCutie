@@ -34,7 +34,6 @@ public class LobbyTopManager {
         WINS("WYGRANE"),
         PLAYED("ROZEGRANE"),
         KILLS("ZABÓJSTWA"),
-        GLORY("CHWAŁA"),
         DONATIONS("WPŁATY");
 
         private final String title;
@@ -79,7 +78,6 @@ public class LobbyTopManager {
                 wins.put(name, (double) getStat(stats, "WINS"));
                 played.put(name, (double) getStat(stats, "PLAYED"));
                 kills.put(name, (double) getStat(stats, "KILLS"));
-                glory.put(name, (double) getStat(stats, "GLORY"));
 
                 double donationAmount = root.has("donations") && !root.get("donations").isJsonNull() ? root.get("donations").getAsDouble() : 0.0;
                 if (donationAmount > 0) {
@@ -96,7 +94,6 @@ public class LobbyTopManager {
         tops.put(TopCategory.WINS, sortByValueDescending(wins));
         tops.put(TopCategory.PLAYED, sortByValueDescending(played));
         tops.put(TopCategory.KILLS, sortByValueDescending(kills));
-        tops.put(TopCategory.GLORY, sortByValueDescending(glory));
         tops.put(TopCategory.DONATIONS, sortByValueDescending(donations));
     }
 
