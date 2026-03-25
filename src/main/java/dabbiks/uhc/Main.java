@@ -27,6 +27,7 @@ import dabbiks.uhc.player.data.persistent.PersistentDataJson;
 import dabbiks.uhc.player.events.BreakingLeaves;
 import dabbiks.uhc.player.events.Fishing;
 import dabbiks.uhc.player.events.Mining;
+import dabbiks.uhc.player.events.drop.MobDrop;
 import dabbiks.uhc.player.traffic.JoinEvent;
 import dabbiks.uhc.player.traffic.QuitEvent;
 import dabbiks.uhc.tasks.TaskManager;
@@ -122,6 +123,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MysteryChestListener(), this);
         Bukkit.getPluginManager().registerEvents(new CustomMobListener(), this);
         Bukkit.getPluginManager().registerEvents(new CenterBuilderManager(), this);
+        Bukkit.getPluginManager().registerEvents(new MobDrop(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new BreakingLeaves(), this);
