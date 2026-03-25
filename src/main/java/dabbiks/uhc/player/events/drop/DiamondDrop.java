@@ -38,7 +38,8 @@ public class DiamondDrop extends DropItem {
             default -> 0.0;
         };
 
-        if (base > 0.0 && block == Material.BASALT) base *= 1.3;
+        if (BiomeGroup.MOUNTAINS.contains(biome)) base *= 1.25;
+        if (BiomeGroup.PLAINS_AND_FORESTS.contains(biome)) base *= 0.8;
         return base;
     }
 }

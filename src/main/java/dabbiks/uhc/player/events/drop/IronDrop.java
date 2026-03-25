@@ -38,10 +38,9 @@ public class IronDrop extends DropItem {
             default -> 0.0;
         };
 
-        if (base > 0.0) {
-            if (block == Material.BASALT) base *= 1.2;
-            if (block == Material.DIORITE) base *= 1.3;
-        }
+        if (BiomeGroup.PLAINS_AND_FORESTS.contains(biome)) base *= 1.15;
+        if (BiomeGroup.DRY_AND_SWAMPS.contains(biome)) base *= 0.70;
+        if (block.equals(Material.DIORITE)) base *= 1.2;
         return base;
     }
 }

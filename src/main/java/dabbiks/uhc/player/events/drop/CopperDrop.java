@@ -8,20 +8,18 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public class GoldDrop extends DropItem {
+public class CopperDrop extends DropItem {
 
     private final Set<Material> TARGET_BLOCKS = EnumSet.of(
-            Material.STONE, Material.DIORITE, Material.ANDESITE,
-            Material.GRANITE, Material.BASALT, Material.DEEPSLATE,
-            Material.DRIPSTONE_BLOCK, Material.TUFF
+            Material.GRANITE
     );
 
-    @Override public Material getMaterial() { return Material.RAW_GOLD; }
-    @Override public Material getSmeltedMaterial() { return Material.GOLD_INGOT; }
+    @Override public Material getMaterial() { return Material.COAL; }
+    @Override public Material getSmeltedMaterial() { return Material.COAL; }
     @Override public int getCustomModelData() { return 0; }
     @Override public int getMinAmount() { return 1; }
     @Override public int getMaxAmount() { return 1; }
-    @Override public String getMessage() { return "§6+ §e§lZŁOTO"; }
+    @Override public String getMessage() { return "§6+ §8§lWĘGIEL"; }
     @Override public Sound getSound() { return null; }
     @Override public String getDisplayName() { return null; }
     @Override public List<String> getLore() { return null; }
@@ -31,16 +29,12 @@ public class GoldDrop extends DropItem {
         if (!TARGET_BLOCKS.contains(block)) return 0.0;
 
         double base = switch (pickaxe) {
-            case IRON_PICKAXE -> 0.0357;
-            case DIAMOND_PICKAXE -> 0.0575;
-            case NETHERITE_PICKAXE -> 0.07475;
+            case STONE_PICKAXE -> 0.0897;
+            case WOODEN_PICKAXE, IRON_PICKAXE, GOLDEN_PICKAXE, DIAMOND_PICKAXE, NETHERITE_PICKAXE -> 0.0495;
             default -> 0.0;
         };
 
-        if (BiomeGroup.DRY_AND_SWAMPS.contains(biome)) base *= 1.3;
-        if (biome.equals(Biome.BADLANDS)) base *= 1.8;
-        if (biome.equals(Biome.ERODED_BADLANDS)) base *= 1.8;
-        if (biome.equals(Biome.DEEP_DARK)) base *= 1.2;
+        if (BiomeGroup.TAIGA_AND_COLD.contains(biome)) base *= 1.5;
         return base;
     }
 }

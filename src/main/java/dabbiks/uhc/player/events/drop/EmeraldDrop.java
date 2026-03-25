@@ -38,10 +38,8 @@ public class EmeraldDrop extends DropItem {
             default -> 0.0;
         };
 
-        if (base > 0.0) {
-            if (block == Material.BASALT) base *= 1.2;
-            if (biome == Biome.JUNGLE || biome == Biome.SPARSE_JUNGLE || biome == Biome.BAMBOO_JUNGLE) base *= 1.5;
-        }
+        if (BiomeGroup.MOUNTAINS.contains(biome)) base *= 1.75;
+        if (BiomeGroup.JUNGLES_AND_SAVANNAS.contains(biome)) base *= 1.25;
         return base;
     }
 }
