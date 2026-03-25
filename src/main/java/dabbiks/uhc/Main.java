@@ -24,9 +24,9 @@ import dabbiks.uhc.lobby.LobbyItems;
 import dabbiks.uhc.lobby.SpawnProtector;
 import dabbiks.uhc.player.Chat;
 import dabbiks.uhc.player.data.persistent.PersistentDataJson;
-import dabbiks.uhc.player.events.BreakingLeaves;
 import dabbiks.uhc.player.events.Fishing;
 import dabbiks.uhc.player.events.Mining;
+import dabbiks.uhc.player.events.drop.FoodDrop;
 import dabbiks.uhc.player.events.drop.MobDrop;
 import dabbiks.uhc.player.traffic.JoinEvent;
 import dabbiks.uhc.player.traffic.QuitEvent;
@@ -126,7 +126,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MobDrop(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
-        Bukkit.getPluginManager().registerEvents(new BreakingLeaves(), this);
+        Bukkit.getPluginManager().registerEvents(new FoodDrop(), this);
         Bukkit.getPluginManager().registerEvents(new Fishing(), this);
 
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);

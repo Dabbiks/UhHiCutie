@@ -19,7 +19,6 @@ public class GammaTask extends Task {
     @Override
     protected void tick() {
         if (stateU.getGameState() != GameState.IN_GAME) return;
-        timeU.incrementTime();
 
         for (Player player : playerListU.getPlayingPlayers()) {
             PersistentData pData = PersistentDataManager.getData(player.getUniqueId());
