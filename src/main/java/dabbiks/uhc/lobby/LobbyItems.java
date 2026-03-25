@@ -3,6 +3,7 @@ package dabbiks.uhc.lobby;
 import dabbiks.uhc.game.gameplay.items.ItemTags;
 import dabbiks.uhc.menu.ChampionMenu;
 import dabbiks.uhc.menu.RecipeMenu;
+import dabbiks.uhc.menu.SettingsMenu;
 import dabbiks.uhc.menu.cosmetics.CosmeticsMainMenu;
 import dabbiks.uhc.menu.wiki.WikiMainMenu;
 import dabbiks.uhc.player.PlayerState;
@@ -102,5 +103,9 @@ public class LobbyItems implements Listener {
             player.teleport(playerListU.getPlayingPlayers().getFirst().getLocation());
             Bukkit.getScheduler().runTask(INSTANCE, player::updateInventory);
         }
-    }
+
+        if (Boolean.TRUE.equals(NBT.get(item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag("SETTINGS")))) {
+            event.setCancelled(true);
+            new SettingsMenu(player, data).open(player);
+        }    }
 }

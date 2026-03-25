@@ -28,6 +28,7 @@ public class TaskManager extends BukkitRunnable {
         executors.add(new PvpSwordTask());
         executors.add(new DaylightTask());
         executors.add(new HeartbeatTask());
+        executors.add(new GammaTask());
 
         runTaskTimer(plugin, 0, 1);
     }

@@ -141,7 +141,15 @@ public class Mining implements Listener {
                 }
 
                 if (dropItem.getMessage() != null) {
-                    player.sendMessage(dropItem.getMessage());
+                    int mode = pData != null ? pData.getOreMessageMode() : 0;
+                    if (mode == 0) {
+                        player.sendMessage(dropItem.getMessage());
+                    } else if (mode == 1) {
+                        if (dropItem instanceof DiamondDrop || dropItem instanceof QuartzDrop ||
+                                dropItem instanceof GoldDrop || dropItem instanceof IronDrop) {
+                            player.sendMessage(dropItem.getMessage());
+                        }
+                    }
                 }
             }
         }

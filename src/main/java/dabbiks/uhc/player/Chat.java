@@ -1,15 +1,12 @@
 package dabbiks.uhc.player;
 
 import dabbiks.uhc.Main;
-import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.champions.ChampionManager;
 import dabbiks.uhc.game.teams.TeamData;
 import dabbiks.uhc.game.teams.TeamLoader;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
-import dabbiks.uhc.player.data.session.SessionData;
-import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,13 +15,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.scoreboard.Team;
 
-import java.util.List;
-
 import static dabbiks.uhc.Main.*;
 
 public class Chat implements Listener {
 
     ChampionManager champions = new ChampionManager();
+    ChatCensor chatCensor = new ChatCensor();
 
     @EventHandler
     public void onChat(PlayerChatEvent event) {
@@ -39,14 +35,18 @@ public class Chat implements Listener {
             message = message.substring(1);
         }
 
+        String censoredMessage = chatCensor.censor(message);
+
         if (isTeamMessage && team != null) {
             for (String member : team.getEntries()) {
                 Player teamMember = Bukkit.getPlayer(member);
                 if (teamMember != null) {
-                    teamMember.sendMessage("§c[DRUŻYNA] §6"
-                            + champions.getChampion(persistentData.getChampion()).getName() + " §e" + player.getName() + "§f " + message);
-                }
+                    PersistentData targetData = PersistentDataManager.getData(teamMember.getUniqueId());
+                    String finalMessage = (targetData != null && targetData.getCensor()) ? censoredMessage : message;
 
+                    teamMember.sendMessage("§c[DRUŻYNA] §6"
+                            + champions.getChampion(persistentData.getChampion()).getName() + " §e" + player.getName() + "§f " + finalMessage);
+                }
             }
         } else {
             if (persistentData == null) return;
@@ -72,7 +72,15 @@ public class Chat implements Listener {
             }
 
             if (!prefix.isEmpty()) prefix.append(" ");
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), prefix + "§e" + player.getName() + "§f " + message);
+
+            String prefixStr = prefix.toString() + "§e" + player.getName() + "§f ";
+
+            for (Player target : playerListU.getAllPlayers()) {
+                PersistentData targetData = PersistentDataManager.getData(target.getUniqueId());
+                String finalMessage = (targetData != null && targetData.getCensor()) ? censoredMessage : message;
+
+                target.sendMessage(prefixStr + finalMessage);
+            }
         }
     }
 
