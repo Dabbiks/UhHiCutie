@@ -10,6 +10,7 @@ import dabbiks.uhc.player.data.persistent.PersistentStats;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionStats;
+import dabbiks.uhc.player.rank.RankType;
 import dabbiks.uhc.tasks.Task;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.entity.Player;
@@ -46,12 +47,15 @@ public class ScoreboardTask extends Task {
             SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
             if (stateU.getGameState() == GameState.WAITING || stateU.getGameState() == GameState.STARTING) {
+                int pr = persistentData.getStats().getOrDefault(PersistentStats.RANK_PR, 0);
+                if (pr < RankType.AMETHYST.getMinThreshold()) pr = pr % 100;
+                else { pr -= RankType.AMETHYST.getMinThreshold(); }
 
                 board.updateLines(
                         "",
                         "  §cTwój ranking",
                         "  §f" + persistentData.getRank().getIcon() + " §7" + persistentData.getRank().getName()
-                                + " §8(" + (persistentData.getStats().getOrDefault(PersistentStats.RANK_PR, 0) % 100) + "PR§8)",
+                                + " §8(" + pr + "PR§8)",
                         "",
                         "  §f" + symbolU.SCOREBOARD_GLORY + " ʜᴏɴᴏʀ: §e" + persistentData.getStats().getOrDefault(PersistentStats.GLORY, 0),
                         "  §f" + symbolU.SCOREBOARD_COIN + " ᴍᴏɴᴇᴛʏ: §e" + persistentData.getStats().getOrDefault(PersistentStats.COINS, 0),
