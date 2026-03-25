@@ -77,7 +77,7 @@ public class Miner extends Champion {
     @Override
     protected List<String> getLevelDescription(int level) {
         List<String> desc = new ArrayList<>();
-        int doubleOreChance = level * 2;
+        double doubleOreChance = level * 0.8;
 
         desc.add("§6Ekwipunek startowy:");
         if (level <= 4) {

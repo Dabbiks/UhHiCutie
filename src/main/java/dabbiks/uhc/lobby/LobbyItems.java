@@ -33,6 +33,7 @@ public class LobbyItems implements Listener {
     public static ItemStack wiki;
     public static ItemStack cosmetics;
     public static ItemStack spectator;
+    public static ItemStack settings;
 
     public LobbyItems() {
         init();
@@ -44,6 +45,7 @@ public class LobbyItems implements Listener {
         wiki = createLobbyItem(Material.FLOW_BANNER_PATTERN, "§f" + symbolU.MOUSE_RIGHT + " Wikipedia", 10000, "WIKI");
         cosmetics = createLobbyItem(Material.EMERALD, "§f" + symbolU.MOUSE_RIGHT + " Dodatki", 10000, "COSMETICS");
         spectator = createLobbyItem(Material.ENDER_EYE, "§f" + symbolU.MOUSE_RIGHT + " Dołącz jako obserwujący", 10000, "SPECTATOR");
+        settings = createLobbyItem(Material.SHEARS, "§f" + symbolU.MOUSE_RIGHT + " Ustawienia", 10000, "SETTINGS");
     }
 
     private ItemStack createLobbyItem(Material material, String name, int model, String id) {

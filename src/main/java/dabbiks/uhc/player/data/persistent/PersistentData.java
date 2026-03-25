@@ -81,6 +81,15 @@ public class PersistentData {
     @Expose
     private double donations;
 
+    @Expose
+    private int oreMessageMode;
+
+    @Expose
+    private boolean gamma;
+
+    @Expose
+    private boolean censor;
+
     public UUID getUUID() { return uuid; }
     public void setUUID(UUID uuid) { this.uuid = uuid; }
 
@@ -157,4 +166,13 @@ public class PersistentData {
 
     public double getDonations() { return donations; }
     public void setDonations(double donations) { this.donations = donations; }
+
+    public int getOreMessageMode() { return oreMessageMode; }
+    public void setOreMessageMode(int oreMessageMode) { this.oreMessageMode = oreMessageMode; }
+
+    public boolean getGamma() { return gamma; }
+    public void setGamma(boolean gamma) { this.gamma = gamma; }
+
+    public boolean getCensor() { return censor; }
+    public void setCensor(boolean enable) { censor = enable; }
 }

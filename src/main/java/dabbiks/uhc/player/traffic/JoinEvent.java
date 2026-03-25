@@ -124,7 +124,7 @@ public class JoinEvent implements Listener {
 
         player.getInventory().setItem(0, LobbyItems.champions);
         player.getInventory().setItem(1, LobbyItems.recipes);
-        player.getInventory().setItem(7, LobbyItems.wiki);
+        player.getInventory().setItem(7, LobbyItems.settings);
         player.getInventory().setItem(8, LobbyItems.cosmetics);
 
         if (stateU.getGameState() == GameState.IN_GAME) player.getInventory().setItem(2, LobbyItems.spectator);

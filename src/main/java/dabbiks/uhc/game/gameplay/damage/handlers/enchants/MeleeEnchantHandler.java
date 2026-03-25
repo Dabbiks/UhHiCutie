@@ -92,7 +92,7 @@ public class MeleeEnchantHandler {
 
     private void poison(int level, LivingEntity victim) {
         if (isOnHitProof(victim)) return;
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * level + 1, 0, false, true));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * level + 10, 0, false, true));
     }
 
     private void ignite(int level, LivingEntity victim) {

@@ -43,9 +43,9 @@ public class DeathHandler {
             player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 1.0f, 1.0f);
 
             if (xpLevel > 0) {
-                int regenTicks = (int) (200 * scale);
-                int absTicks = (int) (880 * scale);
-                int absAmp = (int) Math.round(4 * scale);
+                int regenTicks = 60 + (int) (140 * scale);
+                int absTicks = 20 + (int) (60 * scale);
+                int absAmp = 4;
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenTicks, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, absTicks, absAmp));

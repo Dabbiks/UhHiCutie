@@ -120,7 +120,7 @@ public class Mining implements Listener {
 
         boolean hasMiner = sessionData != null && sessionData.hasTag(SessionTags.MINER);
         int minerLevel = (hasMiner && pData != null) ? pData.getChampionLevel("miner") : 0;
-        double doubleChance = minerLevel * 0.02;
+        double doubleChance = minerLevel * 0.008;
 
         for (DropItem dropItem : customDrops) {
             double chance = dropItem.getChance(pickaxe, blockType, biome);
