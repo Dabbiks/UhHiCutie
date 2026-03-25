@@ -18,7 +18,8 @@ import static dabbiks.uhc.Main.soundU;
 public class SmithingTableInstance {
 
     public final Location location;
-    public SmithingTableSlot slot;
+    public SmithingTableSlot upgradeSlot;
+    public SmithingTableSlot ingotSlot;
 
     public SmithingTableInstance(Location location) {
         this.location = location;
@@ -26,35 +27,46 @@ public class SmithingTableInstance {
     }
 
     public void placeSmithingTable() {
-        slot = new SmithingTableSlot(location.clone().add(0.5, 1.05, 0.5), 30, 90);
+        upgradeSlot = new SmithingTableSlot(location.clone().add(0.3, 1.05, 0.3), 30, 90);
+        ingotSlot = new SmithingTableSlot(location.clone().add(0.7, 1.05, 0.7), 100, 90);
     }
 
-    public boolean fill() {
+    public boolean fill(SmithingTableSlot slot) {
         if (slot.filled) {
             soundU.playSoundAtLocation(location, Sound.ENTITY_VILLAGER_NO, 0.6f, 1);
             return false;
         }
 
-        fillSlot();
+        if (slot.equals(upgradeSlot)) fillSlot(upgradeSlot, Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
+        if (slot.equals(ingotSlot)) fillSlot(ingotSlot, Material.NETHERITE_INGOT);
         return true;
     }
 
     public void reset() {
         soundU.playSoundAtLocation(location, Sound.BLOCK_SMITHING_TABLE_USE, 0.8f, 1);
-        slot.filled = false;
-        if (slot.itemDisplay == null) return;
-        slot.itemDisplay.remove();
-        slot.itemDisplay = null;
+        upgradeSlot.filled = false;
+        if (upgradeSlot.itemDisplay == null) return;
+        upgradeSlot.itemDisplay.remove();
+        upgradeSlot.itemDisplay = null;
+
+        if (ingotSlot.itemDisplay == null) return;
+        ingotSlot.itemDisplay.remove();
+        ingotSlot.itemDisplay = null;
     }
 
     public void destroy() {
-        if (slot.filled) slot.location.getWorld().dropItemNaturally(slot.location, new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE));
-        if (slot.itemDisplay == null) return;
-        slot.itemDisplay.remove();
-        slot.itemDisplay = null;
+        if (upgradeSlot.filled) upgradeSlot.location.getWorld().dropItemNaturally(upgradeSlot.location, new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE));
+        if (upgradeSlot.itemDisplay == null) return;
+        upgradeSlot.itemDisplay.remove();
+        upgradeSlot.itemDisplay = null;
+
+        if (ingotSlot.filled) ingotSlot.location.getWorld().dropItemNaturally(ingotSlot.location, new ItemStack(Material.NETHERITE_INGOT));
+        if (ingotSlot.itemDisplay == null) return;
+        ingotSlot.itemDisplay.remove();
+        ingotSlot.itemDisplay = null;
     }
 
-    private void fillSlot() {
+    private void fillSlot(SmithingTableSlot slot, Material material) {
         Random random = new Random();
         int rotation1 = slot.rotation1 + random.nextInt(-30, 30);
         int rotation2 = slot.rotation2;
@@ -63,13 +75,13 @@ public class SmithingTableInstance {
         slot.filled = true;
         soundU.playSoundAtLocation(location, Sound.ITEM_AXE_SCRAPE, 0.8f, pitch);
         slot.itemDisplay = (ItemDisplay) location.getWorld().spawnEntity(slot.location, EntityType.ITEM_DISPLAY);
-        slot.itemDisplay.setItemStack(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE));
+        slot.itemDisplay.setItemStack(new ItemStack(material));
         slot.itemDisplay.setRotation(rotation1, rotation2);
         slot.itemDisplay.setBillboard(Display.Billboard.FIXED);
         slot.itemDisplay.setTransformation(new Transformation(
                 new Vector3f(0f, 0f, 0f),
                 new Quaternionf(),
-                new Vector3f(1f, 1f, 1f),
+                new Vector3f(0.5f, 0.6f, 0.5f),
                 new Quaternionf()
         ));
     }

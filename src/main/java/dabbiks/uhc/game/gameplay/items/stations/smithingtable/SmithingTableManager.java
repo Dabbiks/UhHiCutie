@@ -48,12 +48,23 @@ public class SmithingTableManager implements Listener {
         if (table == null) return;
 
         boolean filled = false;
-        if (item.getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) filled = table.fill();
+        if (item.getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) filled = table.fill(table.upgradeSlot);
         if (filled) item.setAmount(item.getAmount()-1);
         if (item.getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) return;
 
-        if (!table.slot.filled) {
-            player.sendMessage("§cPotrzebujesz szablonu ulepszenia!");
+        filled = false;
+        if (item.getType() == Material.NETHERITE_INGOT) filled = table.fill(table.ingotSlot);
+        if (filled) item.setAmount(item.getAmount()-1);
+        if (item.getType() == Material.NETHERITE_INGOT) return;
+
+        if (!table.upgradeSlot.filled) {
+            player.sendMessage("§cWłóż szablon ulepszenia!");
+            soundU.playSoundAtLocation(event.getClickedBlock().getLocation(), Sound.BLOCK_ANVIL_LAND, 0.6f, 2);
+            return;
+        }
+
+        if (!table.ingotSlot.filled) {
+            player.sendMessage("§cWłóż sztabkę netherytu!");
             soundU.playSoundAtLocation(event.getClickedBlock().getLocation(), Sound.BLOCK_ANVIL_LAND, 0.6f, 2);
             return;
         }
