@@ -40,7 +40,8 @@ public class StockData {
             .create();
 
     private static final String FILE_NAME = "stock_data.json";
-    private static final int MAX_HISTORY_SIZE = 20;
+    private static final int DISPLAY_HISTORY_SIZE = 30;
+    private static final int CALC_HISTORY_SIZE = 20;
     private static final double INITIAL_PRICE = 1000.0;
 
     private final File file;
@@ -65,6 +66,7 @@ public class StockData {
     public StockData(File dataFolder) {
         this.file = new File(dataFolder, FILE_NAME);
         load();
+
         Bukkit.getScheduler().runTaskLater(plugin, this::buildChart, 100L);
     }
 
@@ -107,7 +109,11 @@ public class StockData {
             return;
         }
 
-        double averagePlayers = gamesHistory.stream().mapToInt(Integer::intValue).average().orElse(0);
+        List<Integer> calcHistory = gamesHistory.size() > CALC_HISTORY_SIZE
+                ? gamesHistory.subList(gamesHistory.size() - CALC_HISTORY_SIZE, gamesHistory.size())
+                : gamesHistory;
+
+        double averagePlayers = calcHistory.stream().mapToInt(Integer::intValue).average().orElse(0);
         double difference = currentPlayers - averagePlayers;
 
         currentPrice = Math.max(0, currentPrice + (currentPrice * (difference / 100.0)));
@@ -115,8 +121,8 @@ public class StockData {
         gamesHistory.add(currentPlayers);
         priceHistory.add(currentPrice);
 
-        if (gamesHistory.size() > MAX_HISTORY_SIZE) gamesHistory.remove(0);
-        if (priceHistory.size() > MAX_HISTORY_SIZE) priceHistory.remove(0);
+        if (gamesHistory.size() > DISPLAY_HISTORY_SIZE) gamesHistory.remove(0);
+        if (priceHistory.size() > DISPLAY_HISTORY_SIZE) priceHistory.remove(0);
 
         save();
     }
@@ -128,7 +134,7 @@ public class StockData {
     public void setCurrentPrice(double price) {
         this.currentPrice = Math.max(0, price);
         priceHistory.add(this.currentPrice);
-        if (priceHistory.size() > MAX_HISTORY_SIZE) priceHistory.remove(0);
+        if (priceHistory.size() > DISPLAY_HISTORY_SIZE) priceHistory.remove(0);
         save();
     }
 
@@ -146,7 +152,7 @@ public class StockData {
             double val = priceHistory.get(i);
             double diff = (val - currentPrice) / 200.0;
 
-            offset -= 0.115;
+            offset -= 0.125;
 
             if (Math.abs(diff) > 2) continue;
 
@@ -199,7 +205,7 @@ public class StockData {
             Location next = chartLocations.get(i);
             boolean isUp = priceDirections.get(i - 1);
 
-            Location spawnLoc = isUp ? next.clone().add(0.005, 0, 0) : next;
+            Location spawnLoc = isUp ? next.clone().add(0.01, 0, 0) : next;
             spawnTextDisplay(spawnLoc, isUp ? "\uE0A2" : "\uE0A3");
 
             current = next;
