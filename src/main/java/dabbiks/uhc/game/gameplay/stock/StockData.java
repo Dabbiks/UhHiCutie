@@ -159,15 +159,15 @@ public class StockData {
     }
 
     private void spawnChartGrid() {
-        Location startLoc = new Location(Bukkit.getWorld("world"), 11.5, 105, -1.99);
+        Location startLoc = new Location(Bukkit.getWorld("world"), 15.5, 105, -1.99);
         double[] priceOffsets = {0, 100, 200, 300, -100, -200, -300};
         double[] heightOffsets = {0, 0.5, 1.0, 1.5, -0.5, -1.0, -1.5};
 
         for (int i = 0; i < priceOffsets.length; i++) {
             Location rowLoc = startLoc.clone().add(0, heightOffsets[i], 0);
-            spawnTextDisplay(rowLoc, String.format("§0%.1f§f \uE0DD", currentPrice + priceOffsets[i]));
+            spawnTextDisplay(rowLoc, String.format("§0%.1f§f " + symbolU.SCOREBOARD_COIN, currentPrice + priceOffsets[i]));
 
-            Location line1 = rowLoc.clone().add(-0.001, 0, 1.25);
+            Location line1 = rowLoc.clone().add(-4, 0, 0.001);
             spawnTextDisplay(line1, "§7--------------------§0");
 
             Location line2 = line1.clone().add(1.4, 0, 0);
@@ -197,7 +197,7 @@ public class StockData {
             boolean isUp = priceDirections.get(i - 1);
 
             Location spawnLoc = isUp ? next.clone().add(0.005, 0, 0) : next;
-            spawnTextDisplay(spawnLoc, isUp ? "\uE0E7" : "\uE0E6");
+            spawnTextDisplay(spawnLoc, isUp ? "\uE0A2" : "\uE0A3");
 
             current = next;
         }

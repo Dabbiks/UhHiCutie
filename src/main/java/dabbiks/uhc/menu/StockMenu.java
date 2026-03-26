@@ -62,7 +62,7 @@ public class StockMenu extends FastInv {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             meta.setDisplayName(name);
-            meta.setLore(List.of("§fCena§7: §e" + String.format("%.1f", cost) + "\uE0DD"));
+            meta.setLore(List.of("§fCena§7: §e" + String.format("%.1f", cost) + symbolU.SCOREBOARD_COIN));
             item.setItemMeta(meta);
         }
         return item;
