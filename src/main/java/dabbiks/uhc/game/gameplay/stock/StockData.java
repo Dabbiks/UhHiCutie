@@ -52,7 +52,7 @@ public class StockData {
     private final List<Boolean> priceDirections = new ArrayList<>();
 
     private final Transformation transformation = new Transformation(
-            new Vector3f(), new Quaternionf(), new Vector3f(0.4f, 0.4f, 0.4f), new Quaternionf()
+            new Vector3f(), new Quaternionf(), new Vector3f(0.6f, 0.6f, 0.6f), new Quaternionf()
     );
 
     private static class StockDTO {
@@ -64,6 +64,7 @@ public class StockData {
     public StockData(File dataFolder) {
         this.file = new File(dataFolder, FILE_NAME);
         load();
+        dabbiks.uhc.Main.stockData.buildChart();
     }
 
     private void load() {
@@ -167,7 +168,7 @@ public class StockData {
             Location rowLoc = startLoc.clone().add(0, heightOffsets[i], 0);
             spawnTextDisplay(rowLoc, String.format("§0%.1f§f " + symbolU.SCOREBOARD_COIN, currentPrice + priceOffsets[i]));
 
-            Location line1 = rowLoc.clone().add(-4, 0, 0.001);
+            Location line1 = rowLoc.clone().add(-3.95, 0, -0.001);
             spawnTextDisplay(line1, "§7--------------------§0");
 
             Location line2 = line1.clone().add(1.4, 0, 0);
