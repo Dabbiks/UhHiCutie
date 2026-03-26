@@ -12,7 +12,8 @@ public enum RewardType {
     CHEST("SKRZYNIA"),
     CHAMPION("KLASA"),
     SPECIAL_ITEM("KOLEKCJA"),
-    UPGRADE("ULEPSZENIE");
+    UPGRADE("ULEPSZENIE"),
+    STOCK("AKCJE");
 
     private String name;
 

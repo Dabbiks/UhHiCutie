@@ -1,5 +1,6 @@
 package dabbiks.uhc.tasks;
 
+import dabbiks.uhc.Main;
 import dabbiks.uhc.tasks.tasks.*;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,6 +29,7 @@ public class TaskManager extends BukkitRunnable {
         executors.add(new DaylightTask());
         executors.add(new HeartbeatTask());
         executors.add(new GammaTask());
+        executors.add(new StockTask(Main.stockData));
 
         runTaskTimer(plugin, 0, 1);
     }

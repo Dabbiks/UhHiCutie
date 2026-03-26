@@ -14,6 +14,8 @@ import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.grindstone.GrindstoneManager;
 import dabbiks.uhc.game.gameplay.items.stations.smithingtable.SmithingTableManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
+import dabbiks.uhc.game.gameplay.stock.StockData;
+import dabbiks.uhc.game.gameplay.stock.StockInteract;
 import dabbiks.uhc.game.teams.*;
 import dabbiks.uhc.game.world.WorldGen;
 import dabbiks.uhc.game.world.events.CenterBuilderManager;
@@ -62,6 +64,7 @@ public final class Main extends JavaPlugin {
     public static AttributeManager attributeManager;
     public static IndicatorManager indicatorManager;
 
+    public static StockData stockData;
     public static PersistentDataJson persistentDataJson;
     private RecipeManager recipeManager;
     private RecipeLimitTracker recipeLimitTracker;
@@ -101,6 +104,8 @@ public final class Main extends JavaPlugin {
         new RecipeLoader(recipeManager).loadRecipes();
 
         FastInvManager.register(this);
+        stockData = new StockData(getDataFolder());
+        Bukkit.getPluginManager().registerEvents(new StockInteract(), this);
 
         Bukkit.getPluginManager().registerEvents(new RecipeListener(recipeManager, recipeLimitTracker), this);
         Bukkit.getPluginManager().registerEvents(new AnvilManager(), this);

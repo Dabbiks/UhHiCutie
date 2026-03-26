@@ -17,5 +17,7 @@ public enum PersistentStats {
 
     RANK_PR,
     PREVIOUS_RANK_PR,
-    GLORY
+    GLORY,
+
+    STOCK
 }
