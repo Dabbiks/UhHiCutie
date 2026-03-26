@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dabbiks.uhc.Main.plugin;
 import static dabbiks.uhc.Main.symbolU;
 
 public class StockData {
@@ -64,7 +65,7 @@ public class StockData {
     public StockData(File dataFolder) {
         this.file = new File(dataFolder, FILE_NAME);
         load();
-        dabbiks.uhc.Main.stockData.buildChart();
+        Bukkit.getScheduler().runTaskLater(plugin, this::buildChart, 100L);
     }
 
     private void load() {
@@ -136,7 +137,7 @@ public class StockData {
         chartLocations.clear();
         priceDirections.clear();
 
-        Location baseLocation = new Location(Bukkit.getWorld("world"), 17.005, 109, 12.9);
+        Location baseLocation = new Location(Bukkit.getWorld("world"), 15, 105, -1.98);
         double offset = 0;
 
         chartLocations.add(baseLocation);
@@ -144,14 +145,15 @@ public class StockData {
         for (int i = priceHistory.size() - 1; i >= 0; i--) {
             double val = priceHistory.get(i);
             double diff = (val - currentPrice) / 200.0;
-            offset += 0.1;
+
+            offset -= 0.115;
 
             if (Math.abs(diff) > 2) continue;
 
-            chartLocations.add(baseLocation.clone().add(0, diff, offset));
+            chartLocations.add(baseLocation.clone().add(offset, diff, 0));
 
             if (i > 0) {
-                priceDirections.add(priceHistory.get(i) < priceHistory.get(i - 1));
+                priceDirections.add(priceHistory.get(i) > priceHistory.get(i - 1));
             }
         }
 
