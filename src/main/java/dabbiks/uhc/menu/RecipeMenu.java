@@ -195,7 +195,7 @@ public class RecipeMenu extends FastInv {
             }
 
             if (recipe.getRequiredTag() != null) {
-                lore.add("§7Wymagany tag " + recipe.getRequiredTag().getName());
+                lore.add("§7Wymagana klasa " + recipe.getRequiredTag().getName() + " na poziomie " + recipe.getRequiredTag().getLevel());
                 addedInfo = true;
             }
 

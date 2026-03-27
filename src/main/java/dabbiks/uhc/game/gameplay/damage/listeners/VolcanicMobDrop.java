@@ -13,7 +13,7 @@ import org.bukkit.attribute.Attribute;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CustomMobListener implements Listener {
+public class VolcanicMobDrop implements Listener {
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event) {

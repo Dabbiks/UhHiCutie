@@ -57,7 +57,7 @@ public class Fishing implements Listener {
             long cooldownMillis = cooldownSeconds * 1000L;
 
             if (currentTime - lastUsed >= cooldownMillis) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
                 regenCooldowns.put(player.getUniqueId(), currentTime);
             }
         }
