@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.stock;
+package dabbiks.uhc.lobby.stock;
 
 import dabbiks.uhc.menu.StockMenu;
 import dabbiks.uhc.player.data.persistent.PersistentData;

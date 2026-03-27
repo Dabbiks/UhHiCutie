@@ -16,7 +16,7 @@ import static dabbiks.uhc.Main.fireworkU;
 public class StockReward extends Reward {
 
     public enum Tier {
-        SMALL("§c§lAKCJE", 1, 1);
+        SMALL("§c§lAKCJE", 1, 4);
 
         private final String typePrefix;
         private final int min, max;
@@ -36,7 +36,10 @@ public class StockReward extends Reward {
     public StockReward(Tier tier) {
         this.tier = tier;
         this.amount = random.nextInt(tier.min, tier.max);
-        this.name = amount + " Akcji";
+        String name = "";
+        if (amount == 1) name = amount + " Akcja";
+        if (amount >= 2) name = amount + " Akcje";
+        this.name = name;
     }
 
     @Override

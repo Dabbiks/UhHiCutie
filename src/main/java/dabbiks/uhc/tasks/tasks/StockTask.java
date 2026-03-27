@@ -1,6 +1,6 @@
 package dabbiks.uhc.tasks.tasks;
 
-import dabbiks.uhc.game.gameplay.stock.StockData;
+import dabbiks.uhc.lobby.stock.StockData;
 import dabbiks.uhc.tasks.Task;
 
 public class StockTask extends Task {

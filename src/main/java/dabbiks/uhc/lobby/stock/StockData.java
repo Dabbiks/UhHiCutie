@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.stock;
+package dabbiks.uhc.lobby.stock;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

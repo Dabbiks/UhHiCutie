@@ -46,6 +46,7 @@ public class StartManager implements Listener {
         prepareTeams();
         prepareTab();
         preparePlayers();
+        stockData.updateStockPrice();
 
         Bukkit.getPluginManager().registerEvents(this, Main.plugin);
         TeamUtils.createCagesAndTeleport(200);

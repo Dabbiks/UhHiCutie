@@ -39,6 +39,7 @@ public class ChestRewardManager {
         addKeys(p, 10, 3, 1, 1, 1);
         addChampions(p, 0.3, 2.3);
         addChests(p, 10, 3, 1, 1, 1);
+        addStocks(p, 1.0);
     }
 
     private static void setupRare(RewardPool p) {
@@ -50,6 +51,7 @@ public class ChestRewardManager {
         addKeys(p, 8, 12, 3, 1, 1);
         addChampions(p, 0.6, 3.6);
         addChests(p, 8, 12, 3, 1, 1);
+        addStocks(p, 1.0);
     }
 
     private static void setupEpic(RewardPool p) {
@@ -61,6 +63,7 @@ public class ChestRewardManager {
         addKeys(p, 6, 12, 6, 2, 1);
         addChampions(p, 1.5, 3.5);
         addChests(p, 6, 12, 6, 2, 1);
+        addStocks(p, 2.0);
     }
 
     private static void setupMythic(RewardPool p) {
@@ -72,6 +75,7 @@ public class ChestRewardManager {
         addKeys(p, 5, 10, 12, 4, 2);
         addChampions(p, 3.0, 5.0);
         addChests(p, 5, 10, 12, 4, 2);
+        addStocks(p, 2.0);
     }
 
     private static void setupLegendary(RewardPool p) {
@@ -83,6 +87,11 @@ public class ChestRewardManager {
         addKeys(p, 4, 8, 15, 10, 5);
         addChampions(p, 5.0, 8.0);
         addChests(p, 4, 8, 15, 10, 5);
+        addStocks(p, 3.0);
+    }
+
+    private static void addStocks(RewardPool p, double weight) {
+        p.addReward(() -> new StockReward(StockReward.Tier.SMALL), weight);
     }
 
     private static void addCoins(RewardPool p, double w1, double w2, double w3, double w4, double w5) {

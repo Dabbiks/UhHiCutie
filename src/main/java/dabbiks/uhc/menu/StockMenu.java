@@ -1,6 +1,6 @@
 package dabbiks.uhc.menu;
 
-import dabbiks.uhc.game.gameplay.stock.StockData;
+import dabbiks.uhc.lobby.stock.StockData;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
 import fr.mrmicky.fastinv.FastInv;
