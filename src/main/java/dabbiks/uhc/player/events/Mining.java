@@ -18,6 +18,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -62,6 +64,7 @@ public class Mining implements Listener {
         customDrops.add(new LapisDrop());
         customDrops.add(new EmeraldDrop());
         customDrops.add(new DiamondDrop());
+        customDrops.add(new ObsidianDrop());
     }
 
     @EventHandler
@@ -97,6 +100,22 @@ public class Mining implements Listener {
 
         if (pickaxe == Material.AIR) return;
 
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+        PersistentData pData = PersistentDataManager.getData(player.getUniqueId());
+
+        if (sessionData != null && sessionData.hasTag(SessionTags.MINE_BUDDING_AMETHYST)) {
+            if (blockType == Material.SMALL_AMETHYST_BUD) {
+                event.setDropItems(false);
+                block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(Material.AMETHYST_SHARD, 1));
+            } else if (blockType == Material.MEDIUM_AMETHYST_BUD) {
+                event.setDropItems(false);
+                block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(Material.AMETHYST_SHARD, 2));
+            } else if (blockType == Material.LARGE_AMETHYST_BUD) {
+                event.setDropItems(false);
+                block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(Material.AMETHYST_SHARD, 3));
+            }
+        }
+
         if (STONE_TYPES.contains(blockType)) {
             player.giveExp(1);
         }
@@ -115,8 +134,6 @@ public class Mining implements Listener {
         }
 
         boolean droppedAnything = false;
-        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
-        PersistentData pData = PersistentDataManager.getData(player.getUniqueId());
 
         boolean hasMiner = sessionData != null && sessionData.hasTag(SessionTags.MINER);
         int minerLevel = (hasMiner && pData != null) ? pData.getChampionLevel("miner") : 0;
@@ -124,6 +141,15 @@ public class Mining implements Listener {
 
         for (DropItem dropItem : customDrops) {
             double chance = dropItem.getChance(pickaxe, blockType, biome);
+
+            if (dropItem instanceof ObsidianDrop) {
+                if (sessionData != null && sessionData.hasTag(SessionTags.OBSIDIAN_DROP) && STONE_TYPES.contains(blockType)) {
+                    int geoLevel = pData != null ? pData.getChampionLevel("geologist") : 1;
+                    chance = (0.3 + geoLevel * 0.05) / 100.0;
+                } else {
+                    chance = 0.0;
+                }
+            }
 
             if (chance > 0 && ThreadLocalRandom.current().nextDouble() <= chance) {
                 droppedAnything = true;
@@ -140,13 +166,18 @@ public class Mining implements Listener {
                     player.playSound(player.getLocation(), dropItem.getSound(), 1.0f, 1.0f);
                 }
 
+                if (dropItem instanceof DiamondDrop && sessionData != null && sessionData.hasTag(SessionTags.DIAMOND_HASTE)) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 12 * 20, 1));
+                }
+
                 if (dropItem.getMessage() != null) {
                     int mode = pData != null ? pData.getOreMessageMode() : 0;
                     if (mode == 0) {
                         player.sendMessage(dropItem.getMessage());
                     } else if (mode == 1) {
                         if (dropItem instanceof DiamondDrop || dropItem instanceof QuartzDrop ||
-                                dropItem instanceof GoldDrop || dropItem instanceof IronDrop) {
+                                dropItem instanceof GoldDrop || dropItem instanceof IronDrop ||
+                                dropItem instanceof ObsidianDrop) {
                             player.sendMessage(dropItem.getMessage());
                         }
                     }

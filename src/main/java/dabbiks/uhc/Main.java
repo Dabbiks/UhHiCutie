@@ -3,6 +3,7 @@ package dabbiks.uhc;
 import dabbiks.uhc.commands.RequiredPlayersCommand;
 import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
+import dabbiks.uhc.game.gameplay.champions.listeners.AlchemistListener;
 import dabbiks.uhc.game.gameplay.damage.listeners.*;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
@@ -113,6 +114,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
         Bukkit.getPluginManager().registerEvents(new SmithingTableManager(), this);
         Bukkit.getPluginManager().registerEvents(new GrindstoneManager(), this);
+        Bukkit.getPluginManager().registerEvents(new AlchemistListener(), plugin);
 
         Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
