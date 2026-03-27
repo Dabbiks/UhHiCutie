@@ -162,7 +162,7 @@ public class StockData {
             double val = priceHistory.get(i);
             double diff = (val - currentPrice) / 200.0;
 
-            offset -= 0.1238;
+            offset -= 0.12;
 
             if (Math.abs(diff) > 2) continue;
 
@@ -187,13 +187,13 @@ public class StockData {
             spawnTextDisplay(rowLoc, String.format("§0%.1f§f " + symbolU.SCOREBOARD_COIN, currentPrice + priceOffsets[i]));
 
             Location line1 = rowLoc.clone().add(-3.95, 0, -0.001);
-            spawnTextDisplay(line1, "§7--------------------§0");
+            spawnTextDisplay(line1, "§7§m--------------------§0");
 
             Location line2 = line1.clone().add(1.4, 0, 0);
-            spawnTextDisplay(line2, "§7---------------------------------§0");
+            spawnTextDisplay(line2, "§7§m---------------------------------§0");
 
-            Location line3 = line2.clone().add(2.0, 0, 0);
-            spawnTextDisplay(line3, "§7---------------------------------§0");
+            Location line3 = line2.clone().add(1.8, 0, 0);
+            spawnTextDisplay(line3, "§7§m-------§0");
         }
 
         Location titleLoc = new Location(Bukkit.getWorld("world"), 14.5, 104, 7.99);
@@ -215,7 +215,7 @@ public class StockData {
             Location next = chartLocations.get(i);
             boolean isUp = priceDirections.get(i - 1);
 
-            Location spawnLoc = isUp ? next.clone().add(0.01, 0, 0) : next;
+            Location spawnLoc = isUp ? next.clone().add(0, 0, 0.001) : next;
             spawnTextDisplay(spawnLoc, isUp ? "\uE0A2" : "\uE0A3");
 
             current = next;

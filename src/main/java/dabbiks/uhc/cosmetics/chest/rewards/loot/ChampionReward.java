@@ -50,7 +50,7 @@ public class ChampionReward extends Reward {
 
                 Player player = Bukkit.getPlayer(persistentData.getName());
                 if (player == null) return;
-                player.sendMessage("§7Otrzymujesz §f" + champion.getCost() / 8 + symbolU.SCOREBOARD_COIN + "§7 za §e" + champion.getName() + "a");
+                player.sendMessage("§7Otrzymujesz §f" + champion.getCost() / 8 + symbolU.SCOREBOARD_COIN + "§7 za §e" + champion.getName());
             } else {
                 persistentData.addUnlockedChampion(champion.getId());
             }
@@ -64,7 +64,7 @@ public class ChampionReward extends Reward {
         if (isFullUnlock) {
             return "§f" + champion.getName();
         } else {
-            return "§e" + shardAmount + "x §fOdłamek " + champion.getName() + "a";
+            return "§e" + shardAmount + "x §fOdłamek " + champion.getName();
         }
     }
 

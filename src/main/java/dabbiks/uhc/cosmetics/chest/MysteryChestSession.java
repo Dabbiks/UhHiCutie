@@ -273,7 +273,7 @@ public class MysteryChestSession {
                 }
                 activeSession = null;
             }
-        }.runTaskLater(plugin, delay + 100L);
+        }.runTaskLater(plugin, delay + 50L);
     }
 
     private void spawnChest(Location loc1, Location loc2, BlockFace face) {
