@@ -46,10 +46,16 @@ public class Fisherman extends Champion {
         sessionData.addTag(SessionTags.FISHERMAN);
 
         switch (level) {
-            case 1, 2, 3, 4 -> {
+            case 1, 2 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.FISHING_ROD)));
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_HELMET)));
                 player.getInventory().addItem(new ItemStack(Material.COD, 3));
+            }
+            case 3, 4 -> {
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.FISHING_ROD)));
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_HELMET)));
+                player.getInventory().addItem(new ItemStack(Material.COD, 3));
+                sessionData.addTag(SessionTags.RECIPE_FISH_OIL);
             }
             case 5, 6, 7, 8, 9 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.FISHING_ROD)));
@@ -57,6 +63,7 @@ public class Fisherman extends Champion {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_HELMET)));
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_CHESTPLATE)));
                 player.getInventory().addItem(new ItemStack(Material.COD, 3));
+                sessionData.addTag(SessionTags.RECIPE_FISH_OIL);
                 sessionData.addTag(SessionTags.SMALL_FISHING_ROD_KNOCKBACK);
             }
             case 10 -> {
@@ -67,6 +74,7 @@ public class Fisherman extends Champion {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_LEGGINGS)));
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_BOOTS)));
                 player.getInventory().addItem(new ItemStack(Material.COD, 3));
+                sessionData.addTag(SessionTags.RECIPE_FISH_OIL);
                 sessionData.addTag(SessionTags.BIG_FISHING_ROD_KNOCKBACK);
                 sessionData.addTag(SessionTags.MORE_FISHING_DROPS);
                 sessionData.addTag(SessionTags.RECIPE_FISH_OIL);

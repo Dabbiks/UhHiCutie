@@ -46,15 +46,23 @@ public class Miner extends Champion {
         sessionData.addTag(SessionTags.MINER);
 
         switch (level) {
-            case 1, 2, 3, 4 -> {
+            case 1, 2 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.STONE_PICKAXE)));
                 player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
+            }
+            case 3, 4 -> {
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.STONE_PICKAXE)));
+                player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
+                sessionData.addTag(SessionTags.RECIPE_CHEAP_NETHERITE);
+                sessionData.addTag(SessionTags.RECIPE_BLAST_FURNACE);
             }
             case 5, 6, 7, 8, 9 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.LEATHER_HELMET)));
                 player.getInventory().addItem(new ItemStack(Material.BREAD, 5));
                 sessionData.addTag(SessionTags.SMALL_ANVIL_DISCOUNT);
+                sessionData.addTag(SessionTags.RECIPE_CHEAP_NETHERITE);
+                sessionData.addTag(SessionTags.RECIPE_BLAST_FURNACE);
             }
             case 10 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.IRON_PICKAXE)));
@@ -62,6 +70,8 @@ public class Miner extends Champion {
                 player.getInventory().addItem(new ItemStack(Material.BREAD, 10));
                 sessionData.addTag(SessionTags.BIG_ANVIL_DISCOUNT);
                 sessionData.addTag(SessionTags.IMMORTAL_EXPERIENCE);
+                sessionData.addTag(SessionTags.RECIPE_CHEAP_NETHERITE);
+                sessionData.addTag(SessionTags.RECIPE_BLAST_FURNACE);
             }
         }
     }

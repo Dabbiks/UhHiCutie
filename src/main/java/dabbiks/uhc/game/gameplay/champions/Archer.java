@@ -46,21 +46,29 @@ public class Archer extends Champion {
         sessionData.addTag(SessionTags.ARCHER);
 
         switch (level) {
-            case 1, 2, 3, 4 -> {
+            case 1, 2 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.BOW)));
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 5));
                 player.getInventory().addItem(new ItemStack(Material.COOKED_CHICKEN, 5));
+            }
+            case 3, 4 -> {
+                player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.BOW)));
+                player.getInventory().addItem(new ItemStack(Material.ARROW, 5));
+                player.getInventory().addItem(new ItemStack(Material.COOKED_CHICKEN, 5));
+                sessionData.addTag(SessionTags.RECIPE_CHAINMAIL_SET);
             }
             case 5, 6, 7, 8, 9 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.BOW)));
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 15));
                 player.getInventory().addItem(new ItemStack(Material.COOKED_CHICKEN, 5));
+                sessionData.addTag(SessionTags.RECIPE_CHAINMAIL_SET);
                 sessionData.addTag(SessionTags.PROJECTILE_HIT_REGENERATION);
             }
             case 10 -> {
                 player.getInventory().addItem(itemConverter.convert(new ItemStack(Material.BOW)));
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 35));
                 player.getInventory().addItem(new ItemStack(Material.COOKED_CHICKEN, 10));
+                sessionData.addTag(SessionTags.RECIPE_CHAINMAIL_SET);
                 sessionData.addTag(SessionTags.BIG_PROJECTILE_HIT_REGENERATION);
                 sessionData.addTag(SessionTags.PROJECTILE_HIT_ARMOR_CORROSION);
                 sessionData.addTag(SessionTags.RECIPE_CHAINMAIL_SET);
