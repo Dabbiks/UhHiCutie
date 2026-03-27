@@ -40,7 +40,7 @@ public class StockData {
             .create();
 
     private static final String FILE_NAME = "stock_data.json";
-    private static final int DISPLAY_HISTORY_SIZE = 30;
+    private static final int DISPLAY_HISTORY_SIZE = 33;
     private static final int CALC_HISTORY_SIZE = 20;
     private static final double INITIAL_PRICE = 1000.0;
 
@@ -79,8 +79,18 @@ public class StockData {
             StockDTO dto = GSON.fromJson(reader, StockDTO.class);
             if (dto != null) {
                 this.currentPrice = dto.currentPrice;
-                if (dto.gamesHistory != null) this.gamesHistory = dto.gamesHistory;
-                if (dto.priceHistory != null) this.priceHistory = dto.priceHistory;
+                if (dto.gamesHistory != null) {
+                    this.gamesHistory = dto.gamesHistory;
+                    if (this.gamesHistory.size() > DISPLAY_HISTORY_SIZE) {
+                        this.gamesHistory = new ArrayList<>(this.gamesHistory.subList(this.gamesHistory.size() - DISPLAY_HISTORY_SIZE, this.gamesHistory.size()));
+                    }
+                }
+                if (dto.priceHistory != null) {
+                    this.priceHistory = dto.priceHistory;
+                    if (this.priceHistory.size() > DISPLAY_HISTORY_SIZE) {
+                        this.priceHistory = new ArrayList<>(this.priceHistory.subList(this.priceHistory.size() - DISPLAY_HISTORY_SIZE, this.priceHistory.size()));
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,8 +131,8 @@ public class StockData {
         gamesHistory.add(currentPlayers);
         priceHistory.add(currentPrice);
 
-        if (gamesHistory.size() > DISPLAY_HISTORY_SIZE) gamesHistory.remove(0);
-        if (priceHistory.size() > DISPLAY_HISTORY_SIZE) priceHistory.remove(0);
+        while (gamesHistory.size() > DISPLAY_HISTORY_SIZE) gamesHistory.remove(0);
+        while (priceHistory.size() > DISPLAY_HISTORY_SIZE) priceHistory.remove(0);
 
         save();
     }
@@ -134,7 +144,7 @@ public class StockData {
     public void setCurrentPrice(double price) {
         this.currentPrice = Math.max(0, price);
         priceHistory.add(this.currentPrice);
-        if (priceHistory.size() > DISPLAY_HISTORY_SIZE) priceHistory.remove(0);
+        while (priceHistory.size() > DISPLAY_HISTORY_SIZE) priceHistory.remove(0);
         save();
     }
 
@@ -152,7 +162,7 @@ public class StockData {
             double val = priceHistory.get(i);
             double diff = (val - currentPrice) / 200.0;
 
-            offset -= 0.125;
+            offset -= 0.1238;
 
             if (Math.abs(diff) > 2) continue;
 
