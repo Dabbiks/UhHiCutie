@@ -32,6 +32,18 @@ public enum SessionTags {
     MORE_FISHING_DROPS("Wędkarz", "I"),
     RECIPE_FISH_OIL("Wędkarz", "III"),
 
+    ALCHEMIST("Alchemik", "I"),
+    CAN_USE_BREWING_STAND("Alchemik", "I"),
+    POTION_SHARING("Alchemik", "I"),
+    ALCHEMIST_MAGICAL_HIT("Alchemik", "I"),
+    RECIPE_ALCHEMIST("Alchemik", "I"),
+
+    GEOLOGIST("Geolog", "I"),
+    OBSIDIAN_DROP("Geolog", "I"),
+    MINE_BUDDING_AMETHYST("Geolog", "I"),
+    DIAMOND_HASTE("Geolog", "I"),
+    RECIPE_GEOLOGIST("Geolog", "III"),
+
     HUNTER("Łowca", "I"),
     BOOMERANG_LOOTING("Łowca", "I"),
     BOOMERANG_EXECUTE("Łowca", "I"),

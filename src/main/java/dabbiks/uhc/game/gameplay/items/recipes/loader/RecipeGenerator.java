@@ -25,13 +25,13 @@ public class RecipeGenerator {
         registerTier("WOODEN", Material.OAK_PLANKS, 4.0, 0.0, 0);
         registerTier("STONE", Material.COBBLESTONE, 5.0, 0.0, 0);
         registerTier("COPPER", Material.COPPER_INGOT, 5.0, 1.5, 0);
-        registerTier("GOLDEN", Material.GOLD_INGOT, 4.0, 1.0, 0);
+        registerTier("GOLDEN", Material.GOLD_INGOT, 6.0, 2.0, 0);
         registerTier("IRON", Material.IRON_INGOT, 6.0, 2.0, 0);
         registerTier("DIAMOND", Material.DIAMOND, 7.0, 3.0, 0);
-        registerTier("NETHERITE", Material.NETHERITE_INGOT, 8.0, 3.0, 0);
+        registerTier("NETHERITE", Material.WARDEN_SPAWN_EGG, 8.0, 3.5, 0);
 
         registerArmorSet("LEATHER", Material.LEATHER, 1.0, 0);
-        registerArmorSet("CHAINMAIL", Material.FIRE_CHARGE, 2.5, 0);
+        registerArmorSet("CHAINMAIL", Material.AXOLOTL_SPAWN_EGG, 2.5, 0);
 
         registerSpears();
         registerMace();

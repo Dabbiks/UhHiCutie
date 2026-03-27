@@ -39,7 +39,7 @@ public class ChampionMenu extends FastInv {
     }
 
     private void render() {
-        int[] slots = {10, 12, 14, 16, 20, 24};
+        int[] slots = {10, 12, 14, 16, 20, 24, 28, 34};
 
         int index = 0;
         for (Champion champion : champions) {

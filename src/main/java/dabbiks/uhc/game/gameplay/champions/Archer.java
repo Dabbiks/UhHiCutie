@@ -112,8 +112,6 @@ public class Archer extends Champion {
             desc.add("§6Przepisy:");
             desc.add(" §8■ §fKolczy hełm");
             desc.add(" §8■ §fKolczy napierśnik");
-            desc.add(" §8■ §fKolcze nogawice");
-            desc.add(" §8■ §fKolcze buty");
         }
 
         return desc;
