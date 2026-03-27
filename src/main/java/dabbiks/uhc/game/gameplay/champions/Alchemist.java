@@ -110,7 +110,7 @@ public class Alchemist extends Champion {
             desc.add(" §e  §na sojuszników w zasięgu §c" + effectSharingRange + "§f kratek");
         } else if (level == 10) {
             desc.add(" §e» §fPrzy wypiciu mikstury duplikuje jej efekty");
-            desc.add(" §e  §na sojuszników w zasięgu §c" + effectSharingRange + "§f kratek");
+            desc.add(" §e  §fna sojuszników w zasięgu §c" + effectSharingRange + "§f kratek");
             desc.add(" §e» §f25% zadawanych obrażeń jest traktowane jak obrażenia magiczne");
         }
 
