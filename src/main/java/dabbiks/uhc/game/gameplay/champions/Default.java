@@ -77,7 +77,7 @@ public class Default extends Champion {
     @Override
     protected List<String> getLevelDescription(int level) {
         List<String> desc = new ArrayList<>();
-        double bonusSwordDamage = level * 0.1;
+        double bonusSwordDamage = level * 0.05;
 
         desc.add("§6Ekwipunek startowy:");
         if (level <= 4) {

@@ -1,11 +1,14 @@
 package dabbiks.uhc.player.traffic;
 
+import dabbiks.uhc.Main;
 import dabbiks.uhc.cosmetics.Cage;
 import dabbiks.uhc.cosmetics.KillSound;
 import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
+import dabbiks.uhc.game.gameplay.champions.Champion;
+import dabbiks.uhc.game.gameplay.champions.ChampionManager;
 import dabbiks.uhc.game.gameplay.items.ItemBuilder;
 import dabbiks.uhc.game.gameplay.items.ItemInstance;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeData;
@@ -44,6 +47,7 @@ public class JoinEvent implements Listener {
     public static Map<Player, FastBoard> boards = new HashMap<>();
     List<NamespacedKey> toRemove = new RecipeRemover().getRemovedRecipeKeys();
     private final PrefixManager prefixManager = INSTANCE.getPrefixManager();
+    private final ChampionManager championManager = new ChampionManager();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -71,6 +75,11 @@ public class JoinEvent implements Listener {
         if (data.getUnlockedChampions() == null || data.getUnlockedChampions().isEmpty()) {
             data.addUnlockedChampion("default");
             data.setChampion("default");
+        }
+
+        for (Champion champion : championManager.getChampions()) {
+            if (data.getUnlockedChampions().contains(champion.getId())) continue;
+            data.addUnlockedChampion(champion.getId());
         }
 
         if (data.getKillSound() == null) {

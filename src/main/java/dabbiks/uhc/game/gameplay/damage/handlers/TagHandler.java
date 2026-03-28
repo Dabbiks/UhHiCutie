@@ -52,7 +52,7 @@ public class TagHandler {
                     PersistentData pData = PersistentDataManager.getData(damager.getUniqueId());
                     if (pData != null) {
                         int level = pData.getChampionLevel("default");
-                        bonus += level * 0.1;
+                        bonus += level * 0.05;
                     }
                 }
             }

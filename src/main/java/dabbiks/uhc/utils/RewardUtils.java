@@ -1,5 +1,6 @@
 package dabbiks.uhc.utils;
 
+import dabbiks.uhc.game.configs.SegmentConfig;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -7,6 +8,7 @@ import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
 import dabbiks.uhc.player.data.session.SessionStats;
 import dabbiks.uhc.player.rank.RankManager;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -25,6 +27,11 @@ public class RewardUtils {
     private final int ASSIST_RANK_POINTS = 5;
     private final int DEATH_RANK_POINTS = -18;
 
+    private final int BASE_WIN_MASTERY = 100;
+    private final int MASTERY_PER_KILL_WIN = 35;
+    private final int BASE_KILL_MASTERY = 30;
+    private final int BASE_ASSIST_MASTERY = 10;
+
     public double multiplier = 1;
 
     public void win(Player player) {
@@ -39,6 +46,16 @@ public class RewardUtils {
         persistentData.addStats(PersistentStats.WINS, 1);
         persistentData.addStats(PersistentStats.SEASON_WINS, 1);
         sessionData.addStats(SessionStats.WINCOINS, (int) (WIN_COINS * multiplier));
+
+        String champion = persistentData.getChampion();
+        if (champion != null) {
+            int sessionKills = sessionData.getStats(SessionStats.KILLS);
+            int segmentBonus = SegmentConfig.actualSegment * 5;
+
+            int masteryPoints = (int) ((BASE_WIN_MASTERY + (sessionKills * MASTERY_PER_KILL_WIN) + segmentBonus) * multiplier);
+            persistentData.addChampionMastery(champion, masteryPoints);
+            sessionData.addStats(SessionStats.MASTERY, masteryPoints);
+        }
 
         double rankModifier = sessionData.getModifier();
 
@@ -66,6 +83,17 @@ public class RewardUtils {
 
         sessionData.addStats(SessionStats.KILLS, 1);
 
+        String champion = persistentData.getChampion();
+        if (champion != null) {
+            double maxHealth = player.getMaxHealth();
+            double healthPercent = player.getHealth() / maxHealth;
+            int healthBonus = (int) ((1.0 - healthPercent) * 30);
+
+            int masteryPoints = (int) ((BASE_KILL_MASTERY + healthBonus) * multiplier);
+            persistentData.addChampionMastery(champion, masteryPoints);
+            sessionData.addStats(SessionStats.MASTERY, masteryPoints);
+        }
+
         double rankModifier = sessionData.getModifier();
 
         int pointsToChange = (int) (KILL_RANK_POINTS * rankModifier);
@@ -89,6 +117,17 @@ public class RewardUtils {
         persistentData.addStats(PersistentStats.ASSISTS, 1);
         persistentData.addStats(PersistentStats.SEASON_ASSISTS, 1);
         sessionData.addStats(SessionStats.KILLCOINS, (int) (ASSIST_COINS * multiplier));
+
+        String champion = persistentData.getChampion();
+        if (champion != null) {
+            double maxHealth = player.getMaxHealth();
+            double healthPercent = player.getHealth() / maxHealth;
+            int healthBonus = (int) ((1.0 - healthPercent) * 10);
+
+            int masteryPoints = (int) ((BASE_ASSIST_MASTERY + healthBonus) * multiplier);
+            persistentData.addChampionMastery(champion, masteryPoints);
+            sessionData.addStats(SessionStats.MASTERY, masteryPoints);
+        }
 
         double rankModifier = sessionData.getModifier();
 
@@ -154,6 +193,13 @@ public class RewardUtils {
                 sessionData.getStats(SessionStats.WINCOINS);
         summary.add("  §e+ " + totalCoins + " §7(Łącznie)");
         summary.add("");
+
+        int masteryGained = sessionData.getStats(SessionStats.MASTERY);
+        String champion = persistentData.getChampion();
+        if (champion != null && masteryGained > 0) {
+            summary.add("  §d+ " + masteryGained + " §7(Punkty Maestrii - " + champion + ")");
+            summary.add("");
+        }
 
         int gamesPlayed = persistentData.getStats().getOrDefault(PersistentStats.SEASON_PLAYED, 0);
         if (gamesPlayed <= 5) {

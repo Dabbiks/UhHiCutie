@@ -8,5 +8,6 @@ public enum SessionStats {
     MOBCOINS,
     WINCOINS,
     PD,
-    RANKING;
+    RANKING,
+    MASTERY;
 }
