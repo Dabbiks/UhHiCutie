@@ -32,27 +32,9 @@ public abstract class Champion {
         List<String> desc = new ArrayList<>();
         int playerCoins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
 
-        final double championPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION, 1.0);
         final double upgradePriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.CHAMPION_UPGRADE, 1.0);
 
-        if (!persistentData.hasUnlockedChampion(getId())) {
-            int originalCost = getCost();
-            int discountedCost = (int) (originalCost * championPriceMultiplier);
-
-            if (playerCoins >= discountedCost) {
-                desc.add(symbolU.MOUSE_RIGHT + " §aKliknij, aby zakupić klasę!");
-            } else {
-                desc.add(symbolU.MOUSE_RIGHT + " §7Potrzebujesz jeszcze §c" + (discountedCost - playerCoins) + " monet");
-                desc.add("§7lub §c" + (10 - persistentData.getChampionShards(getId())) + " odłamków §7żeby odblokować tę klasę!");
-            }
-
-            if (championPriceMultiplier != 1.0) {
-                desc.add(" §8• §7Koszt: §6§m" + originalCost + "§r §4" + discountedCost + " monet");
-            } else {
-                desc.add(" §8• §7Koszt: §6" + originalCost + " monet");
-            }
-
-        } else if (persistentData.getChampionLevel(getId()) < getMaxLevel()) {
+        if (persistentData.getChampionLevel(getId()) < getMaxLevel()) {
             int originalUpgradeCost = getUpgradeCost(getCost(), level);
             int discountedUpgradeCost = (int) (originalUpgradeCost * upgradePriceMultiplier);
 
@@ -64,17 +46,14 @@ public abstract class Champion {
             }
 
             if (upgradePriceMultiplier != 1.0) {
-                desc.add(" §8• §7Koszt: §6§m" + originalUpgradeCost + "§r §4" + discountedUpgradeCost + " monet");
-            } else {
-                desc.add(" §8• §7Koszt: §6" + originalUpgradeCost + " monet");
+                desc.add(" §8• §7Promocja: §c-" + (originalUpgradeCost - discountedUpgradeCost) + "§7 monet");
             }
 
-        } else {
-            desc.add("§6§lMAESTRIA");
-            desc.add(" §8• §7Punkty: §e" + persistentData.getChampionMastery(getId()));
-            desc.add("");
-            desc.add("§8" + symbolU.MOUSE_RIGHT + " §7Osiągnięto maksymalny poziom.");
         }
+
+        desc.add("");
+        desc.add("§6§lMAESTRIA");
+        desc.add(" §8• §7Punkty: §e" + persistentData.getChampionMastery(getId()));
 
         desc.add("");
         if (!persistentData.getChampion().equals(getId())) {

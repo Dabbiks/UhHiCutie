@@ -140,11 +140,6 @@ public class ChampionMenu extends FastInv {
     }
 
     private void handleSelect(Champion champion) {
-        if (!data.hasUnlockedChampion(champion.getId())) {
-            soundU.playSoundToPlayer(player, Sound.ENTITY_VILLAGER_NO, 1, 1);
-            return;
-        }
-
         data.setChampion(champion.getId());
         player.sendMessage("§aWybrano klasę: " + champion.getName());
         soundU.playSoundToPlayer(player, Sound.UI_BUTTON_CLICK, 1, 1);
