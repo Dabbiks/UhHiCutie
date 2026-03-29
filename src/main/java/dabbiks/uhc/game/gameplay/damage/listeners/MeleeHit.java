@@ -38,6 +38,19 @@ public class MeleeHit implements Listener {
     MeleeEnchantHandler meleeEnchantHandler = new MeleeEnchantHandler();
     ArmorEnchantHandler armorEnchantHandler = new ArmorEnchantHandler();
 
+    private double stripVanillaPotionEffects(LivingEntity damager, double damage) {
+        if (damager != null) {
+            if (damager.hasPotionEffect(PotionEffectType.STRENGTH)) {
+                int amp = damager.getPotionEffect(PotionEffectType.STRENGTH).getAmplifier();
+                damage -= (amp + 1) * 3.0;
+            }
+            if (damager.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                damage += 4.0;
+            }
+        }
+        return Math.max(0.0, damage);
+    }
+
     private double applyPotionModifiers(LivingEntity damager, LivingEntity victim, double currentDamage) {
         double multiplier = 1.0;
 
@@ -125,6 +138,7 @@ public class MeleeHit implements Listener {
         event.setDamage(damage);
         if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         if (event.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.RESISTANCE)) event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE, 0);
 
         indicatorManager.spawnDamageIndicator(victim, totalDamage, false);
     }
@@ -137,6 +151,8 @@ public class MeleeHit implements Listener {
         if (!(damager instanceof LivingEntity)) return;
 
         double baseDamage = event.getDamage();
+        baseDamage = stripVanillaPotionEffects((LivingEntity) damager, baseDamage);
+
         if (damager.getType() == org.bukkit.entity.EntityType.WARDEN) {
             baseDamage *= 0.2;
         }
@@ -168,6 +184,7 @@ public class MeleeHit implements Listener {
         event.setDamage(damage);
         if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         if (event.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.RESISTANCE)) event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE, 0);
 
         indicatorManager.spawnDamageIndicator(victim, totalDamage, event.isCritical());
     }
@@ -179,6 +196,7 @@ public class MeleeHit implements Listener {
         if (!(victim instanceof LivingEntity)) return;
 
         double baseDamage = event.getDamage();
+        baseDamage = stripVanillaPotionEffects(damager, baseDamage);
         if (event.isCritical()) baseDamage /= 1.5;
 
         double damage = baseDamage;
@@ -201,6 +219,8 @@ public class MeleeHit implements Listener {
 
         event.setDamage(damage);
         event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.RESISTANCE)) event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE, 0);
+
         damage = event.getFinalDamage();
         indicatorManager.spawnDamageIndicator(victim, damage, event.isCritical());
     }
@@ -216,6 +236,7 @@ public class MeleeHit implements Listener {
         sessionData.setDamager(victim, damager);
 
         double baseDamage = event.getDamage();
+        baseDamage = stripVanillaPotionEffects(damager, baseDamage);
         if (event.isCritical()) baseDamage /= 1.5;
 
         double damage = baseDamage;
@@ -268,6 +289,7 @@ public class MeleeHit implements Listener {
         event.setDamage(damage);
         if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
         if (event.isApplicable(EntityDamageEvent.DamageModifier.ABSORPTION)) event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+        if (event.isApplicable(EntityDamageEvent.DamageModifier.RESISTANCE)) event.setDamage(EntityDamageEvent.DamageModifier.RESISTANCE, 0);
 
         indicatorManager.spawnDamageIndicator(victim, totalDamage, event.isCritical());
     }
