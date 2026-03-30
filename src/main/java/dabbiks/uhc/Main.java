@@ -4,9 +4,6 @@ import dabbiks.uhc.commands.RequiredPlayersCommand;
 import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
 import dabbiks.uhc.game.gameplay.champions.alchemist.AlchemistListener;
-import dabbiks.uhc.game.gameplay.champions.alchemist.BrewingManager;
-import dabbiks.uhc.game.gameplay.champions.alchemist.BrewingRecipe;
-import dabbiks.uhc.game.gameplay.champions.alchemist.BrewingRecipeLoader;
 import dabbiks.uhc.game.gameplay.damage.listeners.*;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
@@ -67,7 +64,6 @@ public final class Main extends JavaPlugin {
     public static TabManager tabManager;
     public static AttributeManager attributeManager;
     public static IndicatorManager indicatorManager;
-    public static BrewingManager brewingManager;
 
     public static StockData stockData;
     public static PersistentDataJson persistentDataJson;
@@ -105,10 +101,8 @@ public final class Main extends JavaPlugin {
         worldBorder = new WorldBorder();
         recipeManager = new RecipeManager();
         recipeLimitTracker = new RecipeLimitTracker();
-        brewingManager = new BrewingManager();
 
         new RecipeLoader(recipeManager).loadRecipes();
-        BrewingRecipeLoader.load(brewingManager);
 
         FastInvManager.register(this);
         stockData = new StockData(getDataFolder());
@@ -120,7 +114,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
         Bukkit.getPluginManager().registerEvents(new SmithingTableManager(), this);
         Bukkit.getPluginManager().registerEvents(new GrindstoneManager(), this);
-        Bukkit.getPluginManager().registerEvents(new AlchemistListener(brewingManager), this);
+        Bukkit.getPluginManager().registerEvents(new AlchemistListener(), this);
 
         Bukkit.getPluginManager().registerEvents(new MeleeHit(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileHit(), this);
