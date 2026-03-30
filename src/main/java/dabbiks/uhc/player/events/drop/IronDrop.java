@@ -32,7 +32,7 @@ public class IronDrop extends DropItem {
 
         double base = switch (pickaxe) {
             case STONE_PICKAXE -> 0.1296;
-            case IRON_PICKAXE -> 0.06085;
+            case IRON_PICKAXE -> 0.07085;
             case DIAMOND_PICKAXE -> 0.0698;
             case NETHERITE_PICKAXE -> 0.0897;
             default -> 0.0;

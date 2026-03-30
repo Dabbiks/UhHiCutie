@@ -155,7 +155,17 @@ public class Mining implements Listener {
             if (chance > 0 && ThreadLocalRandom.current().nextDouble() <= chance) {
                 droppedAnything = true;
 
-                ItemStack itemToDrop = dropItem.generateItem(fortuneLevel, isSmelted);
+                ItemStack itemToDrop = dropItem.generateItem(0, isSmelted);
+                int amount = itemToDrop.getAmount();
+
+                for (int i = 1; i <= fortuneLevel; i++) {
+                    double fChance = (fortuneLevel - i + 1) * 0.25;
+                    if (ThreadLocalRandom.current().nextDouble() <= fChance) {
+                        amount++;
+                    }
+                }
+
+                itemToDrop.setAmount(amount);
 
                 if (hasMiner && ThreadLocalRandom.current().nextDouble() <= doubleChance) {
                     itemToDrop.setAmount(itemToDrop.getAmount() * 2);

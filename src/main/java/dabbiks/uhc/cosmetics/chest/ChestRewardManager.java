@@ -32,62 +32,62 @@ public class ChestRewardManager {
 
     private static void setupCommon(RewardPool p) {
         addCoins(p, 100, 40, 3, 0.1, 0.005);
-        addPowder(p, 80, 30, 3, 0.1, 0.005);
+        addPowder(p, 40, 30, 3, 0.1, 0.005);
         addSwords(p, 3.0, 0.5, 0.025, 0.01, 0.001);
         addCages(p, 3.0, 0.5, 0.025, 0.01, 0.001);
         addKillSounds(p, 1.5, 0.5, 0.02, 0.005, 0.001);
         addKeys(p, 10, 3, 1, 1, 1);
         addChampions(p, 0.3, 2.3);
         addChests(p, 10, 3, 1, 1, 1);
-        addStocks(p, 4);
+        addStocks(p, 1.5);
     }
 
     private static void setupRare(RewardPool p) {
         addCoins(p, 65, 85, 12, 1, 0.05);
-        addPowder(p, 60, 70, 8, 0.5, 0.05);
+        addPowder(p, 30, 70, 8, 0.5, 0.05);
         addSwords(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addCages(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addKillSounds(p, 2.5, 1.5, 0.1, 0.05, 0.005);
         addKeys(p, 8, 12, 3, 1, 1);
         addChampions(p, 0.6, 3.6);
         addChests(p, 8, 12, 3, 1, 1);
-        addStocks(p, 6);
+        addStocks(p, 3);
     }
 
     private static void setupEpic(RewardPool p) {
         addCoins(p, 60, 90, 12, 1.5, 0.1);
-        addPowder(p, 50, 80, 15, 2, 0.1);
+        addPowder(p, 25, 50, 15, 2, 0.1);
         addSwords(p, 4.5, 2.5, 0.5, 0.05, 0.01);
         addCages(p, 4.5, 2.5, 0.5, 0.05, 0.01);
         addKillSounds(p, 3.0, 2.0, 0.4, 0.08, 0.01);
         addKeys(p, 6, 12, 6, 2, 1);
         addChampions(p, 1.5, 3.5);
         addChests(p, 6, 12, 6, 2, 1);
-        addStocks(p, 8);
+        addStocks(p, 5);
     }
 
     private static void setupMythic(RewardPool p) {
         addCoins(p, 70, 75, 12, 2.5, 0.2);
-        addPowder(p, 60, 65, 15, 3, 0.2);
+        addPowder(p, 30, 45, 15, 3, 0.2);
         addSwords(p, 4.0, 3.5, 1.2, 0.25, 0.05);
         addCages(p, 4.0, 3.5, 1.2, 0.25, 0.05);
         addKillSounds(p, 2.5, 3.0, 1.0, 0.2, 0.05);
         addKeys(p, 5, 10, 12, 4, 2);
         addChampions(p, 3.0, 5.0);
         addChests(p, 5, 10, 12, 4, 2);
-        addStocks(p, 10);
+        addStocks(p, 8);
     }
 
     private static void setupLegendary(RewardPool p) {
         addCoins(p, 70, 70, 20, 5.5, 0.5);
-        addPowder(p, 60, 60, 25, 6, 0.5);
+        addPowder(p, 30, 40, 30, 6, 0.5);
         addSwords(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addCages(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addKillSounds(p, 2.0, 3.5, 2.2, 0.6, 0.2);
         addKeys(p, 4, 8, 15, 10, 5);
         addChampions(p, 5.0, 8.0);
         addChests(p, 4, 8, 15, 10, 5);
-        addStocks(p, 10);
+        addStocks(p, 8);
     }
 
     private static void addStocks(RewardPool p, double weight) {

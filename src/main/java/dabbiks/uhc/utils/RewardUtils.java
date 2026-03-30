@@ -1,6 +1,7 @@
 package dabbiks.uhc.utils;
 
 import dabbiks.uhc.game.configs.SegmentConfig;
+import dabbiks.uhc.game.gameplay.champions.ChampionManager;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.persistent.PersistentStats;
@@ -33,6 +34,8 @@ public class RewardUtils {
     private final int BASE_ASSIST_MASTERY = 10;
 
     public double multiplier = 1;
+
+    private final ChampionManager championManager = new ChampionManager();
 
     public void win(Player player) {
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
@@ -170,9 +173,33 @@ public class RewardUtils {
         SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
 
         assert persistentData != null;
-        persistentData.addStats(PersistentStats.COINS, 2);
-        persistentData.addStats(PersistentStats.TOTAL_COINS, 2);
-        sessionData.addStats(SessionStats.TIMECOINS, 2);
+        persistentData.addStats(PersistentStats.COINS, 6);
+        persistentData.addStats(PersistentStats.TOTAL_COINS, 6);
+        sessionData.addStats(SessionStats.TIMECOINS, 6);
+
+        PersistentDataManager.saveData(player.getUniqueId());
+    }
+
+    public void spectating(Player player) {
+        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        assert persistentData != null;
+        persistentData.addStats(PersistentStats.COINS, 4);
+        persistentData.addStats(PersistentStats.TOTAL_COINS, 4);
+        sessionData.addStats(SessionStats.TIMECOINS, 4);
+
+        PersistentDataManager.saveData(player.getUniqueId());
+    }
+
+    public void mobKill(Player player) {
+        PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+
+        assert persistentData != null;
+        persistentData.addStats(PersistentStats.COINS, 3);
+        persistentData.addStats(PersistentStats.TOTAL_COINS, 3);
+        sessionData.addStats(SessionStats.TIMECOINS, 3);
 
         PersistentDataManager.saveData(player.getUniqueId());
     }
@@ -190,6 +217,7 @@ public class RewardUtils {
         int totalCoins = sessionData.getStats(SessionStats.KILLCOINS) +
                 sessionData.getStats(SessionStats.ASSISTCOINS) +
                 sessionData.getStats(SessionStats.TIMECOINS) +
+                sessionData.getStats(SessionStats.MOBCOINS) +
                 sessionData.getStats(SessionStats.WINCOINS);
         summary.add("  §e+ " + totalCoins + " §7(Łącznie)");
         summary.add("");
@@ -197,7 +225,7 @@ public class RewardUtils {
         int masteryGained = sessionData.getStats(SessionStats.MASTERY);
         String champion = persistentData.getChampion();
         if (champion != null && masteryGained > 0) {
-            summary.add("  §d+ " + masteryGained + " §7(Punkty Maestrii - " + champion + ")");
+            summary.add("  §d+ " + masteryGained + " §7(Punkty Maestrii - " + championManager.getChampion(champion).getName() + ")");
             summary.add("");
         }
 
@@ -224,6 +252,9 @@ public class RewardUtils {
         }
         if (sessionData.getStats(SessionStats.ASSISTCOINS) > 0) {
             summary.add("  §e+ " + sessionData.getStats(SessionStats.ASSISTCOINS) + " §7(Asysty)");
+        }
+        if (sessionData.getStats(SessionStats.MOBCOINS) > 0) {
+            summary.add("  §e+ " + sessionData.getStats(SessionStats.WINCOINS) + " §7(Potwory)");
         }
         if (sessionData.getStats(SessionStats.TIMECOINS) > 0) {
             summary.add("  §e+ " + sessionData.getStats(SessionStats.TIMECOINS) + " §7(Czas gry)");

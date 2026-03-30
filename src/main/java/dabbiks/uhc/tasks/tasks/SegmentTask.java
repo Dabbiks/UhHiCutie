@@ -83,6 +83,13 @@ public class SegmentTask extends Task {
                 }
                 messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
             }
+
+            for (Player player : playerListU.getPlayingPlayers()) {
+                rewardU.playing(player);
+            }
+            for (Player player : playerListU.getSpectatingPlayers()) {
+                rewardU.spectating(player);
+            }
         }
     }
 
