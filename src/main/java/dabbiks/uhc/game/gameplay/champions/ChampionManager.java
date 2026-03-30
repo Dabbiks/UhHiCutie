@@ -1,5 +1,7 @@
 package dabbiks.uhc.game.gameplay.champions;
 
+import dabbiks.uhc.game.gameplay.champions.alchemist.Alchemist;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

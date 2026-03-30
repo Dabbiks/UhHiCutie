@@ -1,5 +1,6 @@
-package dabbiks.uhc.game.gameplay.champions;
+package dabbiks.uhc.game.gameplay.champions.alchemist;
 
+import dabbiks.uhc.game.gameplay.champions.Champion;
 import dabbiks.uhc.game.gameplay.items.conversion.ItemConverter;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
