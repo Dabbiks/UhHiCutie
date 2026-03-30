@@ -65,6 +65,7 @@ public class Mining implements Listener {
         customDrops.add(new EmeraldDrop());
         customDrops.add(new DiamondDrop());
         customDrops.add(new ObsidianDrop());
+        customDrops.add(new CopperDrop());
     }
 
     @EventHandler

@@ -13,7 +13,6 @@ public enum KillSound {
     MYSTBLOOM("Mistyczny Rozkwit", "mystbloom", Material.MUSIC_DISC_WARD, CosmeticTier.MYTHIC, 27500, 5500),
     PROTOCOL("Protokół 781-A", "protocol", Material.MUSIC_DISC_PRECIPICE, CosmeticTier.MYTHIC, 27500, 5500),
     CHAMPIONS2024("Czempion 2024", "champions2024", Material.MUSIC_DISC_CREATOR, CosmeticTier.MYTHIC, 27500, 5500),
-    CHAMPIONS2022("Czempion 2022", "champions2022", Material.MUSIC_DISC_5, CosmeticTier.MYTHIC, 27500, 5500),
 
     ION("Jon", "ion", Material.MUSIC_DISC_FAR, CosmeticTier.EPIC, 22500, 4500),
     CHRONOVOID("Chronopustka", "chronovoid", Material.MUSIC_DISC_BLOCKS, CosmeticTier.EPIC, 22500, 4500),

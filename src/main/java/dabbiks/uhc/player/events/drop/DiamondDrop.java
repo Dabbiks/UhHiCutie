@@ -22,7 +22,7 @@ public class DiamondDrop extends DropItem {
     @Override public int getMinAmount() { return 1; }
     @Override public int getMaxAmount() { return 1; }
     @Override public String getMessage() { return "§6+ §b§lDIAMENT"; }
-    @Override public Sound getSound() { return null; }
+    @Override public Sound getSound() { return Sound.ENTITY_GLOW_SQUID_AMBIENT; }
     @Override public String getDisplayName() { return "§fŁupek diamentu"; }
     @Override public List<String> getLore() { return null; }
 

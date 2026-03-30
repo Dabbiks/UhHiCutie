@@ -21,8 +21,8 @@ public class ObsidianDrop extends DropItem {
     @Override public int getCustomModelData() { return 0; }
     @Override public int getMinAmount() { return 1; }
     @Override public int getMaxAmount() { return 1; }
-    @Override public String getMessage() { return "§6+ §5Obsydian"; }
-    @Override public Sound getSound() { return Sound.ENTITY_EXPERIENCE_ORB_PICKUP; }
+    @Override public String getMessage() { return "§6+ §5§lOBSYDIAN"; }
+    @Override public Sound getSound() { return Sound.BLOCK_PORTAL_TRIGGER; }
     @Override public String getDisplayName() { return null; }
     @Override public List<String> getLore() { return null; }
 

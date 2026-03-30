@@ -34,10 +34,9 @@ public class CosmeticsMainMenu extends FastInv {
 
     private void render() {
 
-        int trailSlot = 10;
-        int killSoundSlot = 12;
-        int pvpSwordSlot = 14;
-        int cageSlot = 16;
+        int killSoundSlot = 11;
+        int pvpSwordSlot = 13;
+        int cageSlot = 15;
 
         int coinSlot = 21;
         int discountSlot = 22;

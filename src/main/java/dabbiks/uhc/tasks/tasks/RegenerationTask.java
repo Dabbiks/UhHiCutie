@@ -18,7 +18,7 @@ public class RegenerationTask extends Task {
     protected void tick() {
         if (timeU.getTime() % 15 != 0) return;
         for (Player player : playerListU.getPlayingPlayers()) {
-            double regen = 2 + attributeManager.getAttributeValue(player, AttributeType.REGENERATION, 1);
+            double regen = 1.0 + attributeManager.getAttributeValue(player, AttributeType.REGENERATION, 1);
 
             SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
             if (sessionData != null && sessionData.hasTag(SessionTags.ADDITIONAL_REGENERATION)) {
