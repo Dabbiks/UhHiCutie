@@ -36,10 +36,10 @@ public class VolcanicMobDrop implements Listener {
             event.getDrops().add(new ItemStack(Material.COAL, coalCount));
             event.getDrops().add(new ItemStack(Material.GOLD_INGOT, goldCount));
 
-            if (ThreadLocalRandom.current().nextDouble() <= 0.50) {
+            if (ThreadLocalRandom.current().nextDouble() <= 0.75) {
                 event.getDrops().add(new ItemStack(Material.NETHERITE_SCRAP, 1));
             }
-            if (ThreadLocalRandom.current().nextDouble() <= 0.25) {
+            if (ThreadLocalRandom.current().nextDouble() <= 0.5) {
                 event.getDrops().add(new ItemStack(Material.NETHERITE_SCRAP, 1));
             }
         } else if (event.getEntityType() == EntityType.WARDEN) {

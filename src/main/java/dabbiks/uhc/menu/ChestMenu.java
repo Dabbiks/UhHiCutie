@@ -30,7 +30,7 @@ public class ChestMenu extends FastInv {
     private final double keyPriceMultiplier = Discount.getDiscounts().getOrDefault(DiscountType.KEY, 1.0);
 
     public ChestMenu(Player player, PersistentData persistentData) {
-        super(27, "Magiczna skrzynia");
+        super(36, "Magiczna skrzynia");
         this.player = player;
         this.persistentData = persistentData;
 
@@ -43,6 +43,7 @@ public class ChestMenu extends FastInv {
         int epicChest = 13;
         int mythicChest = 14;
         int legendaryChest = 15;
+        int easterChest = 22;
 
         setItem(commonChest, createIcon(ChestType.COMMON), e -> {
             if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) handleChestBuy(ChestType.COMMON);
@@ -69,6 +70,7 @@ public class ChestMenu extends FastInv {
             if (e.getClick().isShiftClick() && e.getClick().isRightClick()) handleKeyBuy(KeyType.LEGENDARY);
             if (!e.getClick().isShiftClick() && e.getClick().isLeftClick()) openChest(ChestType.LEGENDARY);
         });
+
     }
 
     private ItemStack createIcon(ChestType type) {

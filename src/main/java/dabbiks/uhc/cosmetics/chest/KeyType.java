@@ -7,7 +7,8 @@ public enum KeyType {
     RARE(CosmeticTier.RARE.getIcon() + "Klucz", 1, 400, 1),
     EPIC(CosmeticTier.EPIC.getIcon() + "Klucz", 1, 675, 2),
     MYTHIC(CosmeticTier.MYTHIC.getIcon() + "Klucz", 1, 975, 3),
-    LEGENDARY(CosmeticTier.LEGENDARY.getIcon() + "Klucz", 1, 1225, 4);
+    LEGENDARY(CosmeticTier.LEGENDARY.getIcon() + "Klucz", 1, 1225, 4),
+    EASTER("§e§lE §r§fKlucz", 1, 450, 5);
 
     private final String name;
     private final int model;

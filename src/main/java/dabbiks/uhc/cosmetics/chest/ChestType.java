@@ -7,7 +7,8 @@ public enum ChestType {
     RARE("§fSkrzynia §b§lRZADKA", 2, 14, 675, 1),
     EPIC("§fSkrzynia §a§lEPICKA", 3, 16, 950, 2),
     MYTHIC("§fSkrzynia §d§lMITYCZNA", 4, 18, 1200, 3),
-    LEGENDARY("§fSkrzynia §5§lLEGENDARNA", 5, 20, 1825, 4);
+    LEGENDARY("§fSkrzynia §5§lLEGENDARNA", 5, 20, 1825, 4),
+    EASTER("§fSkrzynia §e§lWIELKANOCNA", 3, 51, 850, 5);
 
     private final String name;
     private final int chests;
