@@ -65,13 +65,13 @@ public class PersistentData {
     private List<String> unlockedCages = new ArrayList<>();
 
     @Expose
-    private int[] chests = new int[5];
+    private int[] chests = new int[6];
 
     @Expose
-    private int[] keys = new int[5];
+    private int[] keys = new int[6];
 
     @Expose
-    private int[] keyFragments = new int[5];
+    private int[] keyFragments = new int[6];
 
     @Expose
     private double donations;
@@ -142,17 +142,23 @@ public class PersistentData {
     public void unlockCage(Cage cage) { unlockedCages.add(cage.name()); }
     public boolean hasCage(Cage cage) { return unlockedCages.contains(cage.name()); }
 
-    public int getChests(int index) { return chests[index]; }
-    public void setChests(int index, int amount) { chests[index] = amount; }
-    public void addChests(int index, int amount) { chests[index] += amount; }
+    private void ensureArraySizes() {
+        if (chests.length < 6) chests = Arrays.copyOf(chests, 6);
+        if (keys.length < 6) keys = Arrays.copyOf(keys, 6);
+        if (keyFragments.length < 6) keyFragments = Arrays.copyOf(keyFragments, 6);
+    }
 
-    public int getKeys(int index) { return keys[index]; }
-    public void setKeys(int index, int amount) { keys[index] = amount; }
-    public void addKeys(int index, int amount) { keys[index] += amount; }
+    public int getChests(int index) { ensureArraySizes(); return chests[index]; }
+    public void setChests(int index, int amount) { ensureArraySizes(); chests[index] = amount; }
+    public void addChests(int index, int amount) { ensureArraySizes(); chests[index] += amount; }
 
-    public int getKeyFragments(int index) { return keyFragments[index]; }
-    public void setKeyFragments(int index, int amount) { keyFragments[index] = amount; }
-    public void addKeyFragments(int index, int amount) { keyFragments[index] += amount; }
+    public int getKeys(int index) { ensureArraySizes(); return keys[index]; }
+    public void setKeys(int index, int amount) { ensureArraySizes(); keys[index] = amount; }
+    public void addKeys(int index, int amount) { ensureArraySizes(); keys[index] += amount; }
+
+    public int getKeyFragments(int index) { ensureArraySizes(); return keyFragments[index]; }
+    public void setKeyFragments(int index, int amount) { ensureArraySizes(); keyFragments[index] = amount; }
+    public void addKeyFragments(int index, int amount) { ensureArraySizes(); keyFragments[index] += amount; }
 
     public double getDonations() { return donations; }
     public void setDonations(double donations) { this.donations = donations; }

@@ -70,7 +70,11 @@ public class ChestMenu extends FastInv {
             if (e.getClick().isShiftClick() && e.getClick().isRightClick()) handleKeyBuy(KeyType.LEGENDARY);
             if (!e.getClick().isShiftClick() && e.getClick().isLeftClick()) openChest(ChestType.LEGENDARY);
         });
-
+        setItem(easterChest, createIcon(ChestType.EASTER), e -> {
+            if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) handleChestBuy(ChestType.EASTER);
+            if (e.getClick().isShiftClick() && e.getClick().isRightClick()) handleKeyBuy(KeyType.EASTER);
+            if (!e.getClick().isShiftClick() && e.getClick().isLeftClick()) openChest(ChestType.EASTER);
+        });
     }
 
     private ItemStack createIcon(ChestType type) {
@@ -95,7 +99,10 @@ public class ChestMenu extends FastInv {
             lore.add("§7Fragmenty kluczy §e" + persistentData.getKeyFragments(type.getIndex()) + "/3");
             lore.add("");
 
-            int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
+            boolean isEaster = type == ChestType.EASTER;
+            PersistentStats currencyStat = isEaster ? PersistentStats.POWDER : PersistentStats.COINS;
+            String currencySymbol = isEaster ? symbolU.SCOREBOARD_POWDER : symbolU.SCOREBOARD_COIN;
+            int balance = persistentData.getStats().getOrDefault(currencyStat, 0);
 
             int originalChestPrice = type.getPrice();
             int discountedChestPrice = (int) (originalChestPrice * chestPriceMultiplier);
@@ -103,30 +110,30 @@ public class ChestMenu extends FastInv {
             int originalKeyPrice = keyType.getPrice();
             int discountedKeyPrice = (int) (originalKeyPrice * keyPriceMultiplier);
 
-            boolean hasCoinsForChest = coins >= discountedChestPrice;
-            boolean hasCoinsForKey = coins >= discountedKeyPrice;
+            boolean hasCoinsForChest = balance >= discountedChestPrice;
+            boolean hasCoinsForKey = balance >= discountedKeyPrice;
             boolean hasChestAndKey = persistentData.getChests(type.getIndex()) > 0 && persistentData.getKeys(type.getIndex()) > 0;
 
             lore.add(hasChestAndKey ? symbolU.MOUSE_LEFT + "§a Otwórz skrzynię!" : symbolU.MOUSE_LEFT + "§c Musisz posiadać skrzynię i klucz!");
 
             if (hasCoinsForChest) {
                 if (chestPriceMultiplier != 1.0) {
-                    lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a§m" + originalChestPrice + "§r §4" + discountedChestPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                    lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a§m" + originalChestPrice + "§r §4" + discountedChestPrice + "§f" + currencySymbol);
                 } else {
-                    lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + originalChestPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                    lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Kup skrzynię za §a" + originalChestPrice + "§f" + currencySymbol);
                 }
             } else {
-                lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (discountedChestPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do skrzyni");
+                lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (discountedChestPrice - balance) + "§f" + currencySymbol + "§7 do skrzyni");
             }
 
             if (hasCoinsForKey) {
                 if (keyPriceMultiplier != 1.0) {
-                    lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a§m" + originalKeyPrice + "§r §4" + discountedKeyPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                    lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a§m" + originalKeyPrice + "§r §4" + discountedKeyPrice + "§f" + currencySymbol);
                 } else {
-                    lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + originalKeyPrice + "§f" + symbolU.SCOREBOARD_COIN);
+                    lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Kup klucz za §a" + originalKeyPrice + "§f" + currencySymbol);
                 }
             } else {
-                lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (discountedKeyPrice - coins) + "§f" + symbolU.SCOREBOARD_COIN + "§7 do klucza");
+                lore.add(symbolU.MOUSE_RIGHT + " + " + symbolU.SHIFT + "§7 Brakuje §c" + (discountedKeyPrice - balance) + "§f" + currencySymbol + "§7 do klucza");
             }
 
             meta.setLore(lore);
@@ -142,14 +149,15 @@ public class ChestMenu extends FastInv {
 
     private void handleChestBuy(ChestType chestType) {
         int cost = (int) (chestType.getPrice() * chestPriceMultiplier);
-        int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
+        PersistentStats currencyStat = (chestType == ChestType.EASTER) ? PersistentStats.POWDER : PersistentStats.COINS;
+        int balance = persistentData.getStats().getOrDefault(currencyStat, 0);
 
-        if (coins < cost) {
+        if (balance < cost) {
             soundU.playSoundToPlayer(player, Sound.ENTITY_VILLAGER_NO, 1, 1);
             return;
         }
 
-        persistentData.removeStats(PersistentStats.COINS, cost);
+        persistentData.removeStats(currencyStat, cost);
         persistentData.addChests(chestType.getIndex(), 1);
         PersistentDataManager.saveData(player.getUniqueId());
         player.sendMessage("§aZakupiono skrzynię!");
@@ -159,14 +167,15 @@ public class ChestMenu extends FastInv {
 
     private void handleKeyBuy(KeyType keyType) {
         int cost = (int) (keyType.getPrice() * keyPriceMultiplier);
-        int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
+        PersistentStats currencyStat = (keyType == KeyType.EASTER) ? PersistentStats.POWDER : PersistentStats.COINS;
+        int balance = persistentData.getStats().getOrDefault(currencyStat, 0);
 
-        if (coins < cost) {
+        if (balance < cost) {
             soundU.playSoundToPlayer(player, Sound.ENTITY_VILLAGER_NO, 1, 1);
             return;
         }
 
-        persistentData.removeStats(PersistentStats.COINS, cost);
+        persistentData.removeStats(currencyStat, cost);
         persistentData.addKeys(keyType.getIndex(), 1);
         PersistentDataManager.saveData(player.getUniqueId());
         player.sendMessage("§aZakupiono klucz!");

@@ -31,6 +31,7 @@ public class ChestReward extends Reward {
             case EPIC -> "§a";
             case MYTHIC -> "§d";
             case LEGENDARY -> "§5";
+            case EASTER -> "§e";
         };
         return color + "§lSKRZYNIA";
     }
@@ -64,6 +65,7 @@ public class ChestReward extends Reward {
             case EPIC -> Color.GREEN;
             case MYTHIC -> Color.FUCHSIA;
             case LEGENDARY -> Color.PURPLE;
+            case EASTER -> Color.YELLOW;
         };
         fireworkU.spawnBurst(loc, color);
     }
