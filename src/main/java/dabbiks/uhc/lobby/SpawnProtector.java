@@ -5,6 +5,7 @@ import dabbiks.uhc.game.gameplay.damage.handlers.CriticalHitHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.ParryingHandler;
 import dabbiks.uhc.tasks.tasks.PvpSwordTask;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -95,6 +96,22 @@ public class SpawnProtector implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getPlayer().hasPermission("*")) return;
         if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("world")) return;
+
+        if (event.getItem() != null) {
+            Material itemType = event.getItem().getType();
+            if (itemType == Material.FISHING_ROD || itemType == Material.SPYGLASS) {
+                return;
+            }
+        }
+
+        if (event.getClickedBlock() != null) {
+            Material blockType = event.getClickedBlock().getType();
+            String name = blockType.name();
+            if (name.contains("BUTTON") || name.equals("LEVER") || name.contains("DOOR")) {
+                return;
+            }
+        }
+
         event.setCancelled(true);
     }
 
