@@ -25,7 +25,7 @@ public class CosmeticsMainMenu extends FastInv {
     private final PersistentData persistentData;
 
     public CosmeticsMainMenu(Player player, PersistentData persistentData) {
-        super(27, "Dodatki");
+        super(36, "Dodatki");
         this.player = player;
         this.persistentData = persistentData;
 
@@ -34,9 +34,10 @@ public class CosmeticsMainMenu extends FastInv {
 
     private void render() {
 
-        int killSoundSlot = 11;
-        int pvpSwordSlot = 13;
-        int cageSlot = 15;
+        int killSoundSlot = 10;
+        int pvpSwordSlot = 12;
+        int cageSlot = 14;
+        int wardrobeSlot = 16;
 
         int coinSlot = 21;
         int discountSlot = 22;
@@ -53,6 +54,10 @@ public class CosmeticsMainMenu extends FastInv {
         setItem(cageSlot, createIcon(symbolU.MOUSE_LEFT + " §fKlatki startowe", Material.GLASS, null), e -> {
             super.getInventory().close();
             new CageMenu(player, persistentData).open(player);
+        });
+        setItem(wardrobeSlot, createIcon(symbolU.MOUSE_LEFT + " §fGarderoba", Material.LEATHER_CHESTPLATE, null), e -> {
+            super.getInventory().close();
+            new WardrobeMenu(player, persistentData).open(player);
         });
 
         List<String> discountLore = new ArrayList<>();

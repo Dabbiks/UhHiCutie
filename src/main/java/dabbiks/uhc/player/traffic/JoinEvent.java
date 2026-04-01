@@ -3,8 +3,8 @@ package dabbiks.uhc.player.traffic;
 import dabbiks.uhc.Main;
 import dabbiks.uhc.cosmetics.Cage;
 import dabbiks.uhc.cosmetics.KillSound;
-import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
+import dabbiks.uhc.cosmetics.Wardrobe;
 import dabbiks.uhc.game.GameState;
 import dabbiks.uhc.game.configs.LobbyConfig;
 import dabbiks.uhc.game.gameplay.champions.Champion;
@@ -33,11 +33,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static dabbiks.uhc.Main.*;
 import static dabbiks.uhc.game.gameplay.bossbar.SegmentBossBar.mainBossBar;
@@ -62,7 +70,7 @@ public class JoinEvent implements Listener {
 
         handleInitialData(player, data);
         setupPlayerUI(player);
-        setupPlayerState(player);
+        setupPlayerState(player, data);
         setupPvpSword(player, data);
 
         player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5));
@@ -120,7 +128,7 @@ public class JoinEvent implements Listener {
         }, 3L);
     }
 
-    private void setupPlayerState(Player player) {
+    private void setupPlayerState(Player player, PersistentData data) {
         stateU.setPlayerState(player, PlayerState.LOBBY);
         player.setGameMode(GameMode.ADVENTURE);
         playerU.cleanseState(player);
@@ -132,6 +140,60 @@ public class JoinEvent implements Listener {
         player.getInventory().setItem(8, LobbyItems.cosmetics);
 
         if (stateU.getGameState() == GameState.IN_GAME) player.getInventory().setItem(2, LobbyItems.spectator);
+
+        Wardrobe h = data.getWardrobeHelmet();
+        if (h != null) {
+            if (h.getHeadTexture() != null && !h.getHeadTexture().isEmpty()) {
+                ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+                SkullMeta meta = (SkullMeta) item.getItemMeta();
+                PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID());
+                PlayerTextures textures = profile.getTextures();
+
+                try {
+                    String decoded = new String(Base64.getDecoder().decode(h.getHeadTexture()));
+                    String url = decoded.split("\"url\":\"")[1].split("\"")[0];
+                    textures.setSkin(new URL(url));
+                    profile.setTextures(textures);
+                    meta.setOwnerProfile(profile);
+                } catch (Exception ignored) {}
+
+                item.setItemMeta(meta);
+                player.getInventory().setHelmet(item);
+            } else if (h.getHelmetColor() != null) {
+                ItemStack item = new ItemStack(Material.LEATHER_HELMET);
+                LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+                meta.setColor(h.getHelmetColor());
+                item.setItemMeta(meta);
+                player.getInventory().setHelmet(item);
+            }
+        }
+
+        Wardrobe c = data.getWardrobeChestplate();
+        if (c != null && c.getChestplateColor() != null) {
+            ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE);
+            LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+            meta.setColor(c.getChestplateColor());
+            item.setItemMeta(meta);
+            player.getInventory().setChestplate(item);
+        }
+
+        Wardrobe l = data.getWardrobeLeggings();
+        if (l != null && l.getLeggingsColor() != null) {
+            ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS);
+            LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+            meta.setColor(l.getLeggingsColor());
+            item.setItemMeta(meta);
+            player.getInventory().setLeggings(item);
+        }
+
+        Wardrobe b = data.getWardrobeBoots();
+        if (b != null && b.getBootsColor() != null) {
+            ItemStack item = new ItemStack(Material.LEATHER_BOOTS);
+            LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+            meta.setColor(b.getBootsColor());
+            item.setItemMeta(meta);
+            player.getInventory().setBoots(item);
+        }
     }
 
     private void setupPvpSword(Player player, PersistentData persistentData) {

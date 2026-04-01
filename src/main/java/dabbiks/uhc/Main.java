@@ -15,6 +15,7 @@ import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.grindstone.GrindstoneManager;
 import dabbiks.uhc.game.gameplay.items.stations.smithingtable.SmithingTableManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
+import dabbiks.uhc.lobby.easter.EasterEggManager;
 import dabbiks.uhc.lobby.stock.StockData;
 import dabbiks.uhc.lobby.stock.StockInteract;
 import dabbiks.uhc.game.teams.*;
@@ -113,6 +114,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EnchantingTableManager(), this);
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
         Bukkit.getPluginManager().registerEvents(new SmithingTableManager(), this);
+        Bukkit.getPluginManager().registerEvents(new EasterEggManager(), this);
         Bukkit.getPluginManager().registerEvents(new GrindstoneManager(), this);
         Bukkit.getPluginManager().registerEvents(new AlchemistListener(), this);
 

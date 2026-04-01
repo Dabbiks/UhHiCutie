@@ -38,6 +38,7 @@ public class ChestMessage {
             case EPIC -> string = "§7skrzynię §a§lEPICKĄ";
             case MYTHIC -> string = "§7skrzynię §d§lMITYCZNĄ";
             case LEGENDARY -> string = "§7skrzynię §5§lLEGENDARNĄ";
+            case EASTER -> string = "§7skrzynię §e§lWIELKANOCNĄ";
         }
         if (!rewards) return string;
         switch (chestType) {
@@ -46,6 +47,7 @@ public class ChestMessage {
             case EPIC -> string = "§a§lEPICKIEJ";
             case MYTHIC -> string = "§d§lMITYCZNEJ";
             case LEGENDARY -> string = "§5§lLEGENDARNEJ";
+            case EASTER -> string = "§e§lWIELKANOCNEJ";
         }
         return string;
     }

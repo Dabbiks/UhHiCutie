@@ -37,8 +37,9 @@ public class ChestRewardManager {
         addSwords(p, 3.0, 0.5, 0.025, 0.01, 0.001);
         addCages(p, 3.0, 0.5, 0.025, 0.01, 0.001);
         addKillSounds(p, 1.5, 0.5, 0.02, 0.005, 0.001);
+        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
         addKeys(p, 10, 3, 1, 1, 1);
-        addChampions(p, 0.0, 1.3);
+        addChampions(p, 0.3, 2.3);
         addChests(p, 10, 3, 1, 1, 1);
         addStocks(p, 1.5);
     }
@@ -49,8 +50,9 @@ public class ChestRewardManager {
         addSwords(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addCages(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addKillSounds(p, 2.5, 1.5, 0.1, 0.05, 0.005);
+        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
         addKeys(p, 8, 12, 3, 1, 1);
-        addChampions(p, 0.0, 2.6);
+        addChampions(p, 0.6, 3.6);
         addChests(p, 8, 12, 3, 1, 1);
         addStocks(p, 2);
     }
@@ -61,8 +63,9 @@ public class ChestRewardManager {
         addSwords(p, 4.5, 2.5, 0.5, 0.05, 0.01);
         addCages(p, 4.5, 2.5, 0.5, 0.05, 0.01);
         addKillSounds(p, 3.0, 2.0, 0.4, 0.08, 0.01);
+        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
         addKeys(p, 6, 12, 6, 2, 1);
-        addChampions(p, 0.0, 3.0);
+        addChampions(p, 1.5, 3.5);
         addChests(p, 6, 12, 6, 2, 1);
         addStocks(p, 3);
     }
@@ -73,8 +76,9 @@ public class ChestRewardManager {
         addSwords(p, 4.0, 3.5, 1.2, 0.25, 0.05);
         addCages(p, 4.0, 3.5, 1.2, 0.25, 0.05);
         addKillSounds(p, 2.5, 3.0, 1.0, 0.2, 0.05);
+        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
         addKeys(p, 5, 10, 12, 4, 2);
-        addChampions(p, 0.0, 4.0);
+        addChampions(p, 3.0, 5.0);
         addChests(p, 5, 10, 12, 4, 2);
         addStocks(p, 4);
     }
@@ -85,21 +89,25 @@ public class ChestRewardManager {
         addSwords(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addCages(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addKillSounds(p, 2.0, 3.5, 2.2, 0.6, 0.2);
+        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
         addKeys(p, 4, 8, 15, 10, 5);
-        addChampions(p, 0.0, 5.0);
+        addChampions(p, 5.0, 8.0);
         addChests(p, 4, 8, 15, 10, 5);
         addStocks(p, 4);
     }
 
     private static void setupEaster(RewardPool p) {
-        addCoins(p, 65, 85, 12, 1, 0.05);
-        addPowder(p, 30, 70, 8, 0.5, 0.05);
+        addCoins(p, 65, 85, 12, 1, 0.15);
+        addPowder(p, 30, 70, 8, 1, 0.15);
         addSwords(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addCages(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addKillSounds(p, 2.5, 1.5, 0.1, 0.05, 0.005);
-        addChampions(p, 0.0, 2.6);
-        p.addReward(() -> new KeyReward(KeyType.EASTER), 7);
-        p.addReward(() -> new ChestReward(ChestType.EASTER), 7);
+        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
+        p.addReward(() -> new WardrobeReward(CosmeticTier.EASTER), 5.5);
+        p.addReward(() -> new KeyReward(KeyType.EASTER), 8);
+        addChampions(p, 0.0, 3.5);
+        p.addReward(() -> new ChestReward(ChestType.EASTER), 8);
+        addStocks(p, 2);
     }
 
     private static void addStocks(RewardPool p, double weight) {
@@ -144,6 +152,14 @@ public class ChestRewardManager {
         p.addReward(() -> new KillSoundReward(CosmeticTier.EPIC), w3);
         p.addReward(() -> new KillSoundReward(CosmeticTier.MYTHIC), w4);
         p.addReward(() -> new KillSoundReward(CosmeticTier.LEGENDARY), w5);
+    }
+
+    private static void addWardrobes(RewardPool p, double w1, double w2, double w3, double w4, double w5) {
+        p.addReward(() -> new WardrobeReward(CosmeticTier.COMMON), w1);
+        p.addReward(() -> new WardrobeReward(CosmeticTier.RARE), w2);
+        p.addReward(() -> new WardrobeReward(CosmeticTier.EPIC), w3);
+        p.addReward(() -> new WardrobeReward(CosmeticTier.MYTHIC), w4);
+        p.addReward(() -> new WardrobeReward(CosmeticTier.LEGENDARY), w5);
     }
 
     private static void addKeys(RewardPool p, double w1, double w2, double w3, double w4, double w5) {

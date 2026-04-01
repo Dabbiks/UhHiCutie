@@ -5,6 +5,7 @@ public class SymbolUtils {
     // * INVENTORIES
     public final String RECIPE_MENU = "§f\uE085";
     public final String CHAMPION_MENU = "§f\uE0A1";
+    public final String WARDROBE_MENU = "§f\uE0A4";
 
     // * RANKS
     public final String RANK_MANAGER = "§f\uE085";

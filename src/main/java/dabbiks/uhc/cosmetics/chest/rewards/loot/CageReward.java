@@ -45,6 +45,7 @@ public class CageReward extends Reward {
             case MYTHIC -> "§c";
             case LEGENDARY -> "§6";
             case PRESTIGE -> "§4BŁĄD";
+            case EASTER -> "§e";
         };
         return color + "§lKLATKA";
     }

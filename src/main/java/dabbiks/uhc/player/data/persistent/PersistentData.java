@@ -1,11 +1,10 @@
 package dabbiks.uhc.player.data.persistent;
 
 import com.google.gson.annotations.Expose;
-import dabbiks.uhc.Main;
 import dabbiks.uhc.cosmetics.KillSound;
-import dabbiks.uhc.cosmetics.ParticleTrail;
 import dabbiks.uhc.cosmetics.PvpSword;
 import dabbiks.uhc.cosmetics.Cage;
+import dabbiks.uhc.cosmetics.Wardrobe;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.player.rank.RankType;
 
@@ -13,77 +12,42 @@ import java.util.*;
 
 public class PersistentData {
 
-    @Expose
-    private UUID uuid;
+    @Expose private UUID uuid;
+    @Expose private String name;
+    @Expose private Map<PersistentStats, Integer> stats = new HashMap<>();
+    @Expose private boolean isManager;
+    @Expose private RankType rank;
+    @Expose private String recipeCategory;
+    @Expose private RecipeInstance recipe;
+    @Expose private String champion;
+    @Expose private List<String> unlockedChampions = new ArrayList<>();
+    @Expose private Map<String, Integer> championMastery = new HashMap<>();
+    @Expose private Map<String, Integer> championLevel = new HashMap<>();
+    @Expose private Map<String, Integer> championShards = new HashMap<>();
+    @Expose private String killSound;
+    @Expose private List<String> unlockedKillSounds = new ArrayList<>();
+    @Expose private String pvpSword;
+    @Expose private List<String> unlockedPvpSwords = new ArrayList<>();
+    @Expose private String cage;
+    @Expose private List<String> unlockedCages = new ArrayList<>();
 
-    @Expose
-    private String name;
+    @Expose private String wardrobeHelmet;
+    @Expose private String wardrobeChestplate;
+    @Expose private String wardrobeLeggings;
+    @Expose private String wardrobeBoots;
 
-    @Expose
-    private Map<PersistentStats, Integer> stats = new HashMap<>();
+    @Expose private List<String> unlockedWardrobeHelmets = new ArrayList<>();
+    @Expose private List<String> unlockedWardrobeChestplates = new ArrayList<>();
+    @Expose private List<String> unlockedWardrobeLeggings = new ArrayList<>();
+    @Expose private List<String> unlockedWardrobeBoots = new ArrayList<>();
 
-    @Expose
-    private boolean isManager;
-
-    @Expose
-    private RankType rank;
-
-    @Expose
-    private String recipeCategory;
-
-    @Expose
-    private RecipeInstance recipe;
-
-    @Expose
-    private String champion;
-
-    @Expose
-    private List<String> unlockedChampions = new ArrayList<>();
-
-    @Expose
-    private Map<String, Integer> championMastery = new HashMap<>();
-
-    @Expose
-    private Map<String, Integer> championLevel = new HashMap<>();
-
-    @Expose
-    private Map<String, Integer> championShards = new HashMap<>();
-
-    @Expose
-    private String killSound;
-    @Expose
-    private List<String> unlockedKillSounds = new ArrayList<>();
-
-    @Expose
-    private String pvpSword;
-    @Expose
-    private List<String> unlockedPvpSwords = new ArrayList<>();
-
-    @Expose
-    private String cage;
-    @Expose
-    private List<String> unlockedCages = new ArrayList<>();
-
-    @Expose
-    private int[] chests = new int[6];
-
-    @Expose
-    private int[] keys = new int[6];
-
-    @Expose
-    private int[] keyFragments = new int[6];
-
-    @Expose
-    private double donations;
-
-    @Expose
-    private int oreMessageMode;
-
-    @Expose
-    private boolean gamma;
-
-    @Expose
-    private boolean censor;
+    @Expose private int[] chests = new int[5];
+    @Expose private int[] keys = new int[5];
+    @Expose private int[] keyFragments = new int[5];
+    @Expose private double donations;
+    @Expose private int oreMessageMode;
+    @Expose private boolean gamma;
+    @Expose private boolean censor;
 
     public UUID getUUID() { return uuid; }
     public void setUUID(UUID uuid) { this.uuid = uuid; }
@@ -142,23 +106,46 @@ public class PersistentData {
     public void unlockCage(Cage cage) { unlockedCages.add(cage.name()); }
     public boolean hasCage(Cage cage) { return unlockedCages.contains(cage.name()); }
 
-    private void ensureArraySizes() {
-        if (chests.length < 6) chests = Arrays.copyOf(chests, 6);
-        if (keys.length < 6) keys = Arrays.copyOf(keys, 6);
-        if (keyFragments.length < 6) keyFragments = Arrays.copyOf(keyFragments, 6);
+    public Wardrobe getWardrobeHelmet() { return getWardrobeSafe(wardrobeHelmet); }
+    public void setWardrobeHelmet(Wardrobe w) { this.wardrobeHelmet = (w == null) ? null : w.name(); }
+
+    public Wardrobe getWardrobeChestplate() { return getWardrobeSafe(wardrobeChestplate); }
+    public void setWardrobeChestplate(Wardrobe w) { this.wardrobeChestplate = (w == null) ? null : w.name(); }
+
+    public Wardrobe getWardrobeLeggings() { return getWardrobeSafe(wardrobeLeggings); }
+    public void setWardrobeLeggings(Wardrobe w) { this.wardrobeLeggings = (w == null) ? null : w.name(); }
+
+    public Wardrobe getWardrobeBoots() { return getWardrobeSafe(wardrobeBoots); }
+    public void setWardrobeBoots(Wardrobe w) { this.wardrobeBoots = (w == null) ? null : w.name(); }
+
+    private Wardrobe getWardrobeSafe(String name) {
+        if (name == null) return null;
+        try { return Wardrobe.valueOf(name); } catch (Exception e) { return null; }
     }
 
-    public int getChests(int index) { ensureArraySizes(); return chests[index]; }
-    public void setChests(int index, int amount) { ensureArraySizes(); chests[index] = amount; }
-    public void addChests(int index, int amount) { ensureArraySizes(); chests[index] += amount; }
+    public void unlockWardrobeHelmet(Wardrobe w) { unlockedWardrobeHelmets.add(w.name()); }
+    public boolean hasWardrobeHelmet(Wardrobe w) { return unlockedWardrobeHelmets.contains(w.name()); }
 
-    public int getKeys(int index) { ensureArraySizes(); return keys[index]; }
-    public void setKeys(int index, int amount) { ensureArraySizes(); keys[index] = amount; }
-    public void addKeys(int index, int amount) { ensureArraySizes(); keys[index] += amount; }
+    public void unlockWardrobeChestplate(Wardrobe w) { unlockedWardrobeChestplates.add(w.name()); }
+    public boolean hasWardrobeChestplate(Wardrobe w) { return unlockedWardrobeChestplates.contains(w.name()); }
 
-    public int getKeyFragments(int index) { ensureArraySizes(); return keyFragments[index]; }
-    public void setKeyFragments(int index, int amount) { ensureArraySizes(); keyFragments[index] = amount; }
-    public void addKeyFragments(int index, int amount) { ensureArraySizes(); keyFragments[index] += amount; }
+    public void unlockWardrobeLeggings(Wardrobe w) { unlockedWardrobeLeggings.add(w.name()); }
+    public boolean hasWardrobeLeggings(Wardrobe w) { return unlockedWardrobeLeggings.contains(w.name()); }
+
+    public void unlockWardrobeBoots(Wardrobe w) { unlockedWardrobeBoots.add(w.name()); }
+    public boolean hasWardrobeBoots(Wardrobe w) { return unlockedWardrobeBoots.contains(w.name()); }
+
+    public int getChests(int index) { return chests[index]; }
+    public void setChests(int index, int amount) { chests[index] = amount; }
+    public void addChests(int index, int amount) { chests[index] += amount; }
+
+    public int getKeys(int index) { return keys[index]; }
+    public void setKeys(int index, int amount) { keys[index] = amount; }
+    public void addKeys(int index, int amount) { keys[index] += amount; }
+
+    public int getKeyFragments(int index) { return keyFragments[index]; }
+    public void setKeyFragments(int index, int amount) { keyFragments[index] = amount; }
+    public void addKeyFragments(int index, int amount) { keyFragments[index] += amount; }
 
     public double getDonations() { return donations; }
     public void setDonations(double donations) { this.donations = donations; }
