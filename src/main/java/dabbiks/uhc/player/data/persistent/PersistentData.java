@@ -41,9 +41,9 @@ public class PersistentData {
     @Expose private List<String> unlockedWardrobeLeggings = new ArrayList<>();
     @Expose private List<String> unlockedWardrobeBoots = new ArrayList<>();
 
-    @Expose private int[] chests = new int[5];
-    @Expose private int[] keys = new int[5];
-    @Expose private int[] keyFragments = new int[5];
+    @Expose private int[] chests = new int[6];
+    @Expose private int[] keys = new int[6];
+    @Expose private int[] keyFragments = new int[6];
     @Expose private double donations;
     @Expose private int oreMessageMode;
     @Expose private boolean gamma;
@@ -135,17 +135,44 @@ public class PersistentData {
     public void unlockWardrobeBoots(Wardrobe w) { unlockedWardrobeBoots.add(w.name()); }
     public boolean hasWardrobeBoots(Wardrobe w) { return unlockedWardrobeBoots.contains(w.name()); }
 
-    public int getChests(int index) { return chests[index]; }
-    public void setChests(int index, int amount) { chests[index] = amount; }
-    public void addChests(int index, int amount) { chests[index] += amount; }
+    public int getChests(int index) {
+        if (index >= chests.length) chests = Arrays.copyOf(chests, index + 1);
+        return chests[index];
+    }
+    public void setChests(int index, int amount) {
+        if (index >= chests.length) chests = Arrays.copyOf(chests, index + 1);
+        chests[index] = amount;
+    }
+    public void addChests(int index, int amount) {
+        if (index >= chests.length) chests = Arrays.copyOf(chests, index + 1);
+        chests[index] += amount;
+    }
 
-    public int getKeys(int index) { return keys[index]; }
-    public void setKeys(int index, int amount) { keys[index] = amount; }
-    public void addKeys(int index, int amount) { keys[index] += amount; }
+    public int getKeys(int index) {
+        if (index >= keys.length) keys = Arrays.copyOf(keys, index + 1);
+        return keys[index];
+    }
+    public void setKeys(int index, int amount) {
+        if (index >= keys.length) keys = Arrays.copyOf(keys, index + 1);
+        keys[index] = amount;
+    }
+    public void addKeys(int index, int amount) {
+        if (index >= keys.length) keys = Arrays.copyOf(keys, index + 1);
+        keys[index] += amount;
+    }
 
-    public int getKeyFragments(int index) { return keyFragments[index]; }
-    public void setKeyFragments(int index, int amount) { keyFragments[index] = amount; }
-    public void addKeyFragments(int index, int amount) { keyFragments[index] += amount; }
+    public int getKeyFragments(int index) {
+        if (index >= keyFragments.length) keyFragments = Arrays.copyOf(keyFragments, index + 1);
+        return keyFragments[index];
+    }
+    public void setKeyFragments(int index, int amount) {
+        if (index >= keyFragments.length) keyFragments = Arrays.copyOf(keyFragments, index + 1);
+        keyFragments[index] = amount;
+    }
+    public void addKeyFragments(int index, int amount) {
+        if (index >= keyFragments.length) keyFragments = Arrays.copyOf(keyFragments, index + 1);
+        keyFragments[index] += amount;
+    }
 
     public double getDonations() { return donations; }
     public void setDonations(double donations) { this.donations = donations; }
