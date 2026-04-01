@@ -57,6 +57,8 @@ public class KillSoundMenu extends FastInv {
                         handleBuy(killSound, true);
                     } else if (e.getClick().isRightClick()) {
                         handleBuy(killSound, false);
+                    } else if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) {
+                        handlePlay(killSound);
                     }
                 }
             });
@@ -79,10 +81,14 @@ public class KillSoundMenu extends FastInv {
             boolean selected = persistentData.getKillSound() == killSound;
 
             if (selected) {
+                lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + " Odtwórz dźwięk");
                 lore.add(symbolU.MOUSE_LEFT + "§a Wybrany dźwięk");
             } else if (unlocked) {
+                lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + " Odtwórz dźwięk");
                 lore.add(symbolU.MOUSE_LEFT + "§e Wybierz dźwięk");
             } else {
+                lore.add(symbolU.MOUSE_LEFT + " + " + symbolU.SHIFT + " Odtwórz dźwięk");
+
                 int coins = persistentData.getStats().getOrDefault(PersistentStats.COINS, 0);
                 int powder = persistentData.getStats().getOrDefault(PersistentStats.POWDER, 0);
 
@@ -144,6 +150,10 @@ public class KillSoundMenu extends FastInv {
         player.sendMessage("§aZakupiono dźwięk " + killSound.getName() + "!");
 
         render();
+    }
+
+    private void handlePlay(KillSound killSound) {
+        player.playSound(player, "sounds:" + killSound.getSound(), 0.8f, 1f);
     }
 
     private void handleSelect(KillSound killSound) {
