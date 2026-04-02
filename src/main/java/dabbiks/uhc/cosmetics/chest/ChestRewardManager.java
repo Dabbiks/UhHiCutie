@@ -97,13 +97,13 @@ public class ChestRewardManager {
     }
 
     private static void setupEaster(RewardPool p) {
-        addCoins(p, 65, 85, 12, 1, 0.15);
+        addCoins(p, 65, 85, 12, 0.7, 0.05);
         addPowder(p, 30, 70, 8, 1, 0.15);
         addSwords(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addCages(p, 4.0, 1.5, 0.125, 0.01, 0.005);
         addKillSounds(p, 2.5, 1.5, 0.1, 0.05, 0.005);
         addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
-        p.addReward(() -> new WardrobeReward(CosmeticTier.EASTER), 5.5);
+        p.addReward(() -> new WardrobeReward(CosmeticTier.EASTER), 4.5);
         p.addReward(() -> new KeyReward(KeyType.EASTER), 8);
         addChampions(p, 0.0, 3.5);
         p.addReward(() -> new ChestReward(ChestType.EASTER), 8);

@@ -17,6 +17,7 @@ import dabbiks.uhc.game.gameplay.items.stations.grindstone.GrindstoneManager;
 import dabbiks.uhc.game.gameplay.items.stations.smithingtable.SmithingTableManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
 import dabbiks.uhc.lobby.easter.EasterEggManager;
+import dabbiks.uhc.lobby.easter.EasterLocationData;
 import dabbiks.uhc.lobby.stock.StockData;
 import dabbiks.uhc.lobby.stock.StockInteract;
 import dabbiks.uhc.game.teams.*;
@@ -146,6 +147,10 @@ public final class Main extends JavaPlugin {
 
         getCommand("setteamsize").setExecutor(new TeamSizeCommand());
         getCommand("setminplayers").setExecutor(new RequiredPlayersCommand());
+
+        EasterLocationData.load();
+        EasterEggManager.clearAllEggs();
+        EasterEggManager.spawnRandomEgg();
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
             teamManager.deleteTeams();
