@@ -80,7 +80,7 @@ public class ChestRewardManager {
         addKeys(p, 5, 10, 12, 4, 2);
         addChampions(p, 3.0, 5.0);
         addChests(p, 5, 10, 12, 4, 2);
-        addMounts(p, 0.125, 0.01, 0.01, 0.005, 0.001);
+        addMounts(p, 0.03, 0.005, 0.002, 0.0005, 0.0001);
         addStocks(p, 4);
     }
 
@@ -94,7 +94,7 @@ public class ChestRewardManager {
         addKeys(p, 4, 8, 15, 10, 5);
         addChampions(p, 5.0, 8.0);
         addChests(p, 4, 8, 15, 10, 5);
-        addMounts(p, 0.125, 0.01, 0.01, 0.005, 0.001);
+        addMounts(p, 0.03, 0.005, 0.002, 0.0005, 0.0001);
         addStocks(p, 4);
     }
 
@@ -109,7 +109,7 @@ public class ChestRewardManager {
         p.addReward(() -> new KeyReward(KeyType.EASTER), 8);
         addChampions(p, 0.0, 3.5);
         p.addReward(() -> new ChestReward(ChestType.EASTER), 8);
-        addMounts(p, 0.085, 0.005, 0.005, 0.002, 0.0005);
+        addMounts(p, 0.03, 0.005, 0.002, 0.0005, 0.0001);
         addStocks(p, 2);
     }
 
