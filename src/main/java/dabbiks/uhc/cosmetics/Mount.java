@@ -12,7 +12,7 @@ public enum Mount {
     STRIDER("Strider", EntityType.STRIDER, Material.STRIDER_SPAWN_EGG, CosmeticTier.MYTHIC, 600000, 375000),
     CAMEL("Wielbłąd", EntityType.CAMEL, Material.CAMEL_SPAWN_EGG, CosmeticTier.MYTHIC, 600000, 375000),
     SKELETON_HORSE("Szkieletowy Koń", EntityType.SKELETON_HORSE, Material.SKELETON_HORSE_SPAWN_EGG, CosmeticTier.MYTHIC, 600000, 375000),
-    NAUTILUS("Nautilus", EntityType.DOLPHIN, Material.NAUTILUS_SHELL, CosmeticTier.LEGENDARY, 1000000, 600000),
+    NAUTILUS("Nautilus", EntityType.NAUTILUS, Material.NAUTILUS_SHELL, CosmeticTier.LEGENDARY, 1000000, 600000),
     BLACK_HORSE("Czarny Koń", EntityType.HORSE, Material.BLACK_DYE, CosmeticTier.LEGENDARY, 1000000, 600000),
     WHITE_HORSE("Biały Koń", EntityType.HORSE, Material.WHITE_DYE, CosmeticTier.LEGENDARY, 1000000, 600000),
     ENDER_DRAGON("Smok Kresu", EntityType.ENDER_DRAGON, Material.ENDER_DRAGON_SPAWN_EGG, CosmeticTier.LEGENDARY, 10000000, 6000000);
