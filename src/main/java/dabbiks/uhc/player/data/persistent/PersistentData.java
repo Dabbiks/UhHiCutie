@@ -5,6 +5,7 @@ import dabbiks.uhc.cosmetics.KillSound;
 import dabbiks.uhc.cosmetics.PvpSword;
 import dabbiks.uhc.cosmetics.Cage;
 import dabbiks.uhc.cosmetics.Wardrobe;
+import dabbiks.uhc.cosmetics.Mount;
 import dabbiks.uhc.game.gameplay.items.recipes.data.RecipeInstance;
 import dabbiks.uhc.player.rank.RankType;
 
@@ -30,6 +31,8 @@ public class PersistentData {
     @Expose private List<String> unlockedPvpSwords = new ArrayList<>();
     @Expose private String cage;
     @Expose private List<String> unlockedCages = new ArrayList<>();
+    @Expose private String mount;
+    @Expose private List<String> unlockedMounts = new ArrayList<>();
 
     @Expose private String wardrobeHelmet;
     @Expose private String wardrobeChestplate;
@@ -105,6 +108,14 @@ public class PersistentData {
     public void setCage(Cage cage) { this.cage = cage.name(); }
     public void unlockCage(Cage cage) { unlockedCages.add(cage.name()); }
     public boolean hasCage(Cage cage) { return unlockedCages.contains(cage.name()); }
+
+    public Mount getMount() {
+        if (mount == null) return null;
+        try { return Mount.valueOf(mount); } catch (Exception e) { return null; }
+    }
+    public void setMount(Mount mount) { this.mount = (mount == null) ? null : mount.name(); }
+    public void unlockMount(Mount mount) { unlockedMounts.add(mount.name()); }
+    public boolean hasMount(Mount mount) { return unlockedMounts.contains(mount.name()); }
 
     public Wardrobe getWardrobeHelmet() { return getWardrobeSafe(wardrobeHelmet); }
     public void setWardrobeHelmet(Wardrobe w) { this.wardrobeHelmet = (w == null) ? null : w.name(); }

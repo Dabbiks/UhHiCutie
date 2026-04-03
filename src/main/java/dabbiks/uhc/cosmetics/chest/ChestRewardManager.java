@@ -80,6 +80,7 @@ public class ChestRewardManager {
         addKeys(p, 5, 10, 12, 4, 2);
         addChampions(p, 3.0, 5.0);
         addChests(p, 5, 10, 12, 4, 2);
+        addMounts(p, 0.125, 0.01, 0.01, 0.005, 0.001);
         addStocks(p, 4);
     }
 
@@ -89,10 +90,11 @@ public class ChestRewardManager {
         addSwords(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addCages(p, 3.5, 4.5, 2.5, 0.75, 0.25);
         addKillSounds(p, 2.0, 3.5, 2.2, 0.6, 0.2);
-        addWardrobes(p, 3.0, 1.5, 0.125, 0.01, 0.005);
+        addWardrobes(p, 3.0, 1.5, 0.2, 0.05, 0.03);
         addKeys(p, 4, 8, 15, 10, 5);
         addChampions(p, 5.0, 8.0);
         addChests(p, 4, 8, 15, 10, 5);
+        addMounts(p, 0.125, 0.01, 0.01, 0.005, 0.001);
         addStocks(p, 4);
     }
 
@@ -107,6 +109,7 @@ public class ChestRewardManager {
         p.addReward(() -> new KeyReward(KeyType.EASTER), 8);
         addChampions(p, 0.0, 3.5);
         p.addReward(() -> new ChestReward(ChestType.EASTER), 8);
+        addMounts(p, 0.085, 0.005, 0.005, 0.002, 0.0005);
         addStocks(p, 2);
     }
 
@@ -181,6 +184,14 @@ public class ChestRewardManager {
         p.addReward(() -> new ChestReward(ChestType.EPIC), w3);
         p.addReward(() -> new ChestReward(ChestType.MYTHIC), w4);
         p.addReward(() -> new ChestReward(ChestType.LEGENDARY), w5);
+    }
+
+    private static void addMounts(RewardPool p, double w1, double w2, double w3, double w4, double w5) {
+        p.addReward(() -> new MountReward(CosmeticTier.COMMON), w1);
+        p.addReward(() -> new MountReward(CosmeticTier.RARE), w2);
+        p.addReward(() -> new MountReward(CosmeticTier.EPIC), w3);
+        p.addReward(() -> new MountReward(CosmeticTier.MYTHIC), w4);
+        p.addReward(() -> new MountReward(CosmeticTier.LEGENDARY), w5);
     }
 
     public static Reward drawReward(ChestType type) {

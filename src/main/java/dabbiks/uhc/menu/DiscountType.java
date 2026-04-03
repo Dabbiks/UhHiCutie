@@ -6,6 +6,7 @@ public enum DiscountType {
     PVP_SWORD("Miecze PvP"),
     CHAMPION("Klasy"),
     CHAMPION_UPGRADE("Ulepszenia klas"),
+    MOUNT("Mounty"),
     CHEST("Skrzynie"),
     KEY("Klucze");
 
