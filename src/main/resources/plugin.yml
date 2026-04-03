@@ -11,3 +11,6 @@ commands:
     description: Zmienia minimalna liczbe graczy wymagana do startu.
     permission: uhc.admin
     usage: /setminplayers <int>
+  kara:
+    description: Zarzadzanie karami
+    permission: uhc.admin

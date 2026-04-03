@@ -8,6 +8,7 @@ import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.data.persistent.PersistentData;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.rank.RankType;
+import dabbiks.uhc.player.punishments.PunishmentManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,12 +26,26 @@ public class Chat implements Listener {
     @EventHandler
     public void onChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
-        Team team = TeamUtils.getPlayerTeam(player);
+
+        if (PunishmentManager.isMutedAll(player.getUniqueId())) {
+            player.sendMessage("§cJesteś wyciszony na wszystkich czatach. Pozostały czas: §e" + PunishmentManager.getRemainingMuteAll(player.getUniqueId()));
+            event.setCancelled(true);
+            return;
+        }
+
         String message = event.getMessage();
+        boolean isTeamMessage = message.startsWith("!");
+
+        if (!isTeamMessage && PunishmentManager.isMutedGlobal(player.getUniqueId())) {
+            player.sendMessage("§cJesteś wyciszony na czacie globalnym. Pozostały czas: §e" + PunishmentManager.getRemainingMuteGlobal(player.getUniqueId()) + "\n§cMożesz pisać tylko do drużyny używając '!'.");
+            event.setCancelled(true);
+            return;
+        }
+
+        Team team = TeamUtils.getPlayerTeam(player);
         event.setCancelled(true);
         PersistentData persistentData = PersistentDataManager.getData(player.getUniqueId());
 
-        boolean isTeamMessage = message.startsWith("!");
         if (isTeamMessage) {
             message = message.substring(1);
         }
@@ -106,5 +121,4 @@ public class Chat implements Listener {
         }
         return "";
     }
-
 }

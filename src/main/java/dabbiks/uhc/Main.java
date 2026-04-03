@@ -16,6 +16,7 @@ import dabbiks.uhc.game.gameplay.items.stations.anvil.AnvilManager;
 import dabbiks.uhc.game.gameplay.items.stations.grindstone.GrindstoneManager;
 import dabbiks.uhc.game.gameplay.items.stations.smithingtable.SmithingTableManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
+import dabbiks.uhc.game.gameplay.mobs.NautilusHoverManager;
 import dabbiks.uhc.lobby.easter.EasterEggManager;
 import dabbiks.uhc.lobby.easter.EasterLocationData;
 import dabbiks.uhc.lobby.stock.StockData;
@@ -107,6 +108,7 @@ public final class Main extends JavaPlugin {
 
         new RecipeLoader(recipeManager).loadRecipes();
 
+        new NautilusHoverManager(this);
         FastInvManager.register(this);
         stockData = new StockData(getDataFolder());
         Bukkit.getPluginManager().registerEvents(new StockInteract(), this);
@@ -147,6 +149,9 @@ public final class Main extends JavaPlugin {
 
         getCommand("setteamsize").setExecutor(new TeamSizeCommand());
         getCommand("setminplayers").setExecutor(new RequiredPlayersCommand());
+        getCommand("kara").setExecutor(new dabbiks.uhc.commands.PunishmentCommand());
+
+        dabbiks.uhc.player.punishments.PunishmentManager.init();
 
         EasterLocationData.load();
         EasterEggManager.clearAllEggs();
@@ -164,6 +169,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         teamManager.deleteTeams();
+        dabbiks.uhc.player.punishments.PunishmentManager.save();
     }
 
     public WorldBorder getWorldBorder() {

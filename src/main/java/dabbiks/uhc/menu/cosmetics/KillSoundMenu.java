@@ -53,12 +53,12 @@ public class KillSoundMenu extends FastInv {
                 if (unlocked) {
                     handleSelect(killSound);
                 } else {
-                    if (e.getClick().isLeftClick()) {
+                    if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) {
+                        handlePlay(killSound);
+                    } else if (e.getClick().isLeftClick() && !e.getClick().isShiftClick()) {
                         handleBuy(killSound, true);
                     } else if (e.getClick().isRightClick()) {
                         handleBuy(killSound, false);
-                    } else if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) {
-                        handlePlay(killSound);
                     }
                 }
             });
