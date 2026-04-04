@@ -150,6 +150,7 @@ public final class Main extends JavaPlugin {
         getCommand("setteamsize").setExecutor(new TeamSizeCommand());
         getCommand("setminplayers").setExecutor(new RequiredPlayersCommand());
         getCommand("kara").setExecutor(new dabbiks.uhc.commands.PunishmentCommand());
+        getCommand("skrzynka").setExecutor(new dabbiks.uhc.commands.ChestCommand());
 
         dabbiks.uhc.player.punishments.PunishmentManager.init();
 

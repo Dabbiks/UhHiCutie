@@ -26,7 +26,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ public class MountManager implements Listener {
     private static MountManager instance;
     private final NamespacedKey mountKey = new NamespacedKey(plugin, "is_mount");
     private final Map<UUID, Entity> activeMounts = new HashMap<>();
+    private final Map<UUID, List<Entity>> activeSeats = new HashMap<>();
     private final Map<UUID, Mount> activeMountTypes = new HashMap<>();
     private final Map<UUID, PersistentData> activeData = new HashMap<>();
     private final Map<Location, BlockState> originalBlocks = new HashMap<>();
@@ -139,7 +142,14 @@ public class MountManager implements Listener {
                     dolphin.setInvulnerable(true);
                 }
             }
-            case ENDER_DRAGON, SNIFFER -> {
+            case SNIFFER -> {
+                player.getInventory().setItem(6, new ItemStack(Material.CARROT_ON_A_STICK));
+            }
+            case ENDER_DRAGON -> {
+                if (entity instanceof EnderDragon dragon) {
+                    dragon.setAI(false);
+                    dragon.setPhase(EnderDragon.Phase.HOVER);
+                }
                 player.getInventory().setItem(6, new ItemStack(Material.CARROT_ON_A_STICK));
             }
         }
@@ -150,17 +160,35 @@ public class MountManager implements Listener {
         activeMountTypes.put(player.getUniqueId(), mountType);
         activeData.put(player.getUniqueId(), data);
 
-        entity.addPassenger(player);
+        if (mountType == Mount.ENDER_DRAGON) {
+            ArmorStand seat = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+            seat.setVisible(false);
+            seat.setGravity(false);
+            seat.getPersistentDataContainer().set(mountKey, PersistentDataType.BYTE, (byte) 1);
+            seat.addPassenger(player);
+            activeSeats.put(player.getUniqueId(), Collections.singletonList(seat));
+        } else {
+            entity.addPassenger(player);
+        }
     }
 
     public void removeMount(Player player) {
         UUID uuid = player.getUniqueId();
         Entity entity = activeMounts.remove(uuid);
+        List<Entity> seats = activeSeats.remove(uuid);
         activeMountTypes.remove(uuid);
         activeData.remove(uuid);
 
         if (entity != null && entity.isValid()) {
             entity.remove();
+        }
+
+        if (seats != null) {
+            for (Entity seat : seats) {
+                if (seat != null && seat.isValid()) {
+                    seat.remove();
+                }
+            }
         }
 
         ItemStack rod = player.getInventory().getItem(6);
@@ -248,18 +276,33 @@ public class MountManager implements Listener {
 
                     Mount mountType = activeMountTypes.get(uuid);
 
-                    if (mountType == Mount.ENDER_DRAGON || mountType == Mount.SNIFFER) {
+                    if (mountType == Mount.ENDER_DRAGON) {
+                        List<Entity> seats = activeSeats.get(uuid);
+                        if (seats == null || seats.isEmpty()) continue;
+
+                        ArmorStand seat = (ArmorStand) seats.get(0);
+                        ItemStack mainHand = player.getInventory().getItemInMainHand();
+
+                        if (mainHand.getType() == Material.CARROT_ON_A_STICK) {
+                            Vector dir = player.getLocation().getDirection();
+                            seat.setVelocity(dir.multiply(1.5));
+                        } else {
+                            seat.setVelocity(seat.getVelocity().multiply(0.8));
+                        }
+
+                        Location target = seat.getLocation().clone().subtract(0, 2.8, 0);
+                        target.setYaw(player.getLocation().getYaw() + 180f);
+                        target.setPitch(-player.getLocation().getPitch());
+                        mount.teleport(target);
+
+                    } else if (mountType == Mount.SNIFFER) {
                         mount.setRotation(player.getLocation().getYaw(), player.getLocation().getPitch());
                         ItemStack mainHand = player.getInventory().getItemInMainHand();
 
                         if (mainHand.getType() == Material.CARROT_ON_A_STICK) {
                             Vector dir = player.getLocation().getDirection();
-                            if (mountType == Mount.SNIFFER) {
-                                dir.setY(0).normalize().multiply(0.4);
-                                mount.setVelocity(new Vector(dir.getX(), mount.getVelocity().getY(), dir.getZ()));
-                            } else {
-                                mount.setVelocity(dir.multiply(1.5));
-                            }
+                            dir.setY(0).normalize().multiply(0.4);
+                            mount.setVelocity(new Vector(dir.getX(), mount.getVelocity().getY(), dir.getZ()));
                         }
                     }
                 }

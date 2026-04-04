@@ -14,3 +14,7 @@ commands:
   kara:
     description: Zarzadzanie karami
     permission: uhc.admin
+  skrzynka:
+    description: Daje graczowi skrzynke i klucz.
+    permission: uhc.admin
+    usage: /skrzynka <nick> <typ_skrzynki>
