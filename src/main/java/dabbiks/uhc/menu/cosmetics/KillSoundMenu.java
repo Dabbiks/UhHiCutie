@@ -49,13 +49,16 @@ public class KillSoundMenu extends FastInv {
 
             int slot = slots[index++];
             setItem(slot, createIcon(killSound), e -> {
+                if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) {
+                    handlePlay(killSound);
+                    return;
+                }
+
                 boolean unlocked = persistentData.hasKillSound(killSound);
                 if (unlocked) {
                     handleSelect(killSound);
                 } else {
-                    if (e.getClick().isShiftClick() && e.getClick().isLeftClick()) {
-                        handlePlay(killSound);
-                    } else if (e.getClick().isLeftClick() && !e.getClick().isShiftClick()) {
+                    if (e.getClick().isLeftClick()) {
                         handleBuy(killSound, true);
                     } else if (e.getClick().isRightClick()) {
                         handleBuy(killSound, false);
@@ -153,7 +156,7 @@ public class KillSoundMenu extends FastInv {
     }
 
     private void handlePlay(KillSound killSound) {
-        player.playSound(player, "sounds:" + killSound.getSound(), 0.8f, 1f);
+        player.playSound(player.getLocation(), "sounds:" + killSound.getSound(), 0.8f, 1f);
     }
 
     private void handleSelect(KillSound killSound) {
