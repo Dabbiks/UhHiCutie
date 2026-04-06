@@ -104,15 +104,15 @@ public class Enchanter extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fTwoja drużyna ma " + additionalEnchantChance + "% szans na dodatkowe");
-        desc.add("   §fzaklęcie z tieru wyżej niż maksymalny w danym momencie");
+        desc.add(" §e» §fTwoja drużyna ma " + additionalEnchantChance + "% na dodatkowe zaklęcie");
+        desc.add("   §fz tieru wyżej niż maksymalny w danym momencie");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fPo użyciu stołu każdy lapis ma §c15% szans§f na pozostanie w stole");
+            desc.add(" §e» §7Po użyciu stołu każdy lapis ma 15% na pozostanie w stole");
         } else if (level == 10) {
-            desc.add(" §e» §fPo użyciu stołu każdy lapis ma §c25% szans§f na pozostanie w stole");
-            desc.add(" §e» §fZaklinanie przedmiotów §codbiera pół serca§f maksymalnego zdrowia, zabójstwa");
-            desc.add("   §cregenerują §fi §cdodają maksymalnie zdrowie §fw zależności od ilości doświadczenia ofiary");
+            desc.add(" §e» §fPo użyciu stołu każdy lapis ma 25% na pozostanie w stole");
+            desc.add(" §e» §fZaklinanie przedmiotów odbiera pół serca maksymalnego zdrowia, zabójstwa");
+            desc.add("   §fregenerują i dodają maksymalnie zdrowie w zależności od ilości doświadczenia ofiary");
         }
 
         if (level >= 3) {

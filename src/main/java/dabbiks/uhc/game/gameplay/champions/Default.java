@@ -95,19 +95,19 @@ public class Default extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fZadajesz dodatkowo §c" + bonusSwordDamage + " §fobrażeń mieczami");
+        desc.add(" §e» §fZadajesz dodatkowo " + bonusSwordDamage + " obrażeń mieczami");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fPod wpływem absorpcji otrzymujesz §c12.5% §fmniej obrażeń");
+            desc.add(" §e» §7Pod wpływem absorpcji otrzymujesz 12.5% mniej obrażeń");
         } else if (level == 10) {
-            desc.add(" §e» §fPod wpływem absorpcji otrzymujesz §c25% §fmniej obrażeń");
-            desc.add(" §e» §fTwoja bazowa regeneracja jest §czwiększona §fo §cpół serca");
+            desc.add(" §e» §7Pod wpływem absorpcji otrzymujesz 25% mniej obrażeń");
+            desc.add(" §e» §fTwoja bazowa regeneracja jest zwiększona o pół serca");
         }
 
         if (level >= 3) {
             desc.add("");
             desc.add("§6Przepisy:");
-            desc.add(" §8■ §fTotem kontroli");
+            desc.add(" §8■ §fPsia zbroja");
         }
 
         return desc;

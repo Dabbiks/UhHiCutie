@@ -95,12 +95,12 @@ public class Pikeman extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fTrafienie włócznią przyspiesza o §c" + onHitMovementBuff + "% §fna dwie sekundy");
+        desc.add(" §e» §fTrafienie włócznią przyspiesza o " + onHitMovementBuff + "% §fna dwie sekundy");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fWrogie efekty przy trafieniu nie mają na Ciebie wpływu");
+            desc.add(" §e» §7Wrogie efekty przy trafieniu nie mają na Ciebie wpływu");
         } else if (level == 10) {
-            desc.add(" §e» §fWrogie efekty przy trafieniu nie mają na Ciebie wpływu");
+            desc.add(" §e» §7Wrogie efekty przy trafieniu nie mają na Ciebie wpływu");
             desc.add(" §e» §fNegatywne efekty mikstur nie mają na Ciebie wpływu");
         }
 

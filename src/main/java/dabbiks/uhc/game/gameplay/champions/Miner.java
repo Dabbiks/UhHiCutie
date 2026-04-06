@@ -105,12 +105,12 @@ public class Miner extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fMasz §c" + doubleOreChance + "% §fszansy na podwojenie dropu");
+        desc.add(" §e» §fMasz " + doubleOreChance + "% §fszansy na podwojenie dropu");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fUżycie kowadła jest §ctańsze §fo §c30%");
+            desc.add(" §e» §7Użycie kowadła jest tańsze o 30%");
         } else if (level == 10) {
-            desc.add(" §e» §fUżycie kowadła jest §ctańsze §fo §c50%");
+            desc.add(" §e» §7Użycie kowadła jest tańsze o 50%");
             desc.add(" §e» §fPasek XP działa jednorazowo jak totem");
         }
 

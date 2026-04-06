@@ -110,12 +110,12 @@ public class Pyromaniac extends Champion {
         desc.add("   §fkażde 5 pozostałych ticków płonięcia");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fTrafienia krytyczne podpalają Cię. Kolejne trafienia zwiększają czas płonięcia");
+            desc.add(" §e» §7Trafienia krytyczne podpalają Cię. Kolejne trafienia zwiększają czas płonięcia");
             desc.add(" §e» §fObrażenia od podpalenia nie przerywają sprintowania");
         } else if (level == 10) {
-            desc.add(" §e» §fTrafienia krytyczne podpalają Cię. Kolejne trafienia zwiększają czas płonięcia");
+            desc.add(" §e» §7Trafienia krytyczne podpalają Cię. Kolejne trafienia zwiększają czas płonięcia");
             desc.add(" §e» §fObrażenia od podpalenia nie przerywają sprintowania");
-            desc.add(" §e» §fPotrafi rzucać kulami ognia");
+            desc.add(" §e» §7Potrafi rzucać kulami ognia");
         }
 
         if (level >= 3) {

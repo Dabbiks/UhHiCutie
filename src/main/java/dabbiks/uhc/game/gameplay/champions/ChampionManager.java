@@ -20,6 +20,8 @@ public class ChampionManager {
         register(new Hunter());
         register(new Alchemist());
         register(new Geologist());
+        register(new Pyromaniac());
+        register(new Enchanter());
     }
 
     private void register(Champion champion) {

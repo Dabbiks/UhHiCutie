@@ -106,13 +106,13 @@ public class Archer extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fMasz §c" + arrowDropChance + "% §fna strzały ze żwiru");
+        desc.add(" §e» §fMasz " + arrowDropChance + "% na strzały ze żwiru");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fTrafienie gracza z łuku przywraca §cpół serca");
+            desc.add(" §e» §7Trafienie gracza z łuku przywraca pół serca");
         } else if (level == 10) {
-            desc.add(" §e» §fTrafienie gracza z łuku przywraca §cjedno serce");
-            desc.add(" §e» §fTwoje strzały §cniszczą pancerz o §c3 + 3% §faktualnych użyć");
+            desc.add(" §e» §7Trafienie gracza z łuku przywraca jedno serce");
+            desc.add(" §e» §fTwoje strzały niszczą pancerz o 3 + 3% aktualnych użyć");
         }
 
         if (level >= 3) {

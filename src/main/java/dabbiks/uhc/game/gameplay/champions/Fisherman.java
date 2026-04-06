@@ -118,12 +118,12 @@ public class Fisherman extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fOtrzymujesz §cRegenerację II §fprzy wejściu do wody §8(Odnowienie " + regenCooldown + "s)");
+        desc.add(" §e» §fOtrzymujesz Regenerację II przy wejściu do wody §8(Odnowienie " + regenCooldown + "s)");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fPrzyciąganie wędką jest silniejsze o 20%");
+            desc.add(" §e» §7Przyciąganie wędką jest silniejsze o 20%");
         } else if (level == 10) {
-            desc.add(" §e» §fPrzyciąganie wędką jest silniejsze o 40%");
+            desc.add(" §e» §7Przyciąganie wędką jest silniejsze o 40%");
             desc.add(" §e» §fSzansa na wyłowienie użytecznych przedmiotów");
         }
 

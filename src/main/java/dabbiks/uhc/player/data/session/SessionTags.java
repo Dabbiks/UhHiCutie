@@ -13,7 +13,7 @@ public enum SessionTags {
     ABSORPTION_REDUCTION("Cywil", "I"),
     BIG_ABSORPTION_REDUCTION("Cywil", "I"),
     ADDITIONAL_REGENERATION("Cywil", "I"),
-    RECIPE_TOTEM_OF_CONTROL("Cywil", "III"),
+    RECIPE_DOG_ARMOR("Cywil", "III"),
 
     ARCHER("Łucznik", "I"),
     PROJECTILE_HIT_REGENERATION("Łucznik", "I"),

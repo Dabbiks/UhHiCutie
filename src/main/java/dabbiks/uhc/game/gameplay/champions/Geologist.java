@@ -102,12 +102,12 @@ public class Geologist extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fPrzy wykopaniu kamienia ma §c" + obsidianChance + "% §fszansy na obsydian");
+        desc.add(" §e» §fPrzy wykopaniu kamienia ma " + obsidianChance + "% §fszansy na obsydian");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fPotrafi wydobyć ametyst z niewyrośniętych zarodków");
+            desc.add(" §e» §7Potrafi wydobyć ametyst z niewyrośniętych zarodków");
         } else if (level == 10) {
-            desc.add(" §e» §fPotrafi wydobyć ametyst z niewyrośniętych zarodków");
+            desc.add(" §e» §7Potrafi wydobyć ametyst z niewyrośniętych zarodków");
             desc.add(" §e» §fOtrzymuje pośpiech II na 12 sekund po wydobyciu diamentu");
         }
 

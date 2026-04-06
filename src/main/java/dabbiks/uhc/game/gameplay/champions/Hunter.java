@@ -124,14 +124,14 @@ public class Hunter extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fZadając obrażenia bumerangiem masz §c" + stealChance + "% §fna kradzież");
+        desc.add(" §e» §fZadając obrażenia bumerangiem masz " + stealChance + "% §fna kradzież");
         desc.add("   §flosowego przedmiotu przeciwnika z poza głównego paska");
 
         if (level >= 5 && level <= 9) {
-            desc.add(" §e» §fZabicie moba bumerangiem podwaja jego drop");
+            desc.add(" §e» §7Zabicie moba bumerangiem podwaja jego drop");
         } else if (level == 10) {
-            desc.add(" §e» §fZabicie moba bumerangiem podwaja jego drop");
-            desc.add(" §e» §fBumerangi §cwykańczają §fgraczy poniżej §c2 serc");
+            desc.add(" §e» §7Zabicie moba bumerangiem podwaja jego drop");
+            desc.add(" §e» §fBumerangi wykańczają graczy poniżej 2 serc");
         }
 
         if (level >= 3) {
