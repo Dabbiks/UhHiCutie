@@ -49,6 +49,12 @@ public enum SessionTags {
     BOOMERANG_EXECUTE("Łowca", "I"),
     RECIPE_EXPLOSIVE_BOOMERANG("Łowca", "III"),
 
+    PYROMANIAC("Piroman", "I"),
+    SELF_BURN("Piroman", "I"),
+    STRONG_SELF_BURN("Piroman", "I"),
+    FIRE_IMMUNITY_TICKS("Piroman", "I"),
+    RECIPE_PYROMANIAC("Piroman", "III"),
+
     SLUDGE("Szlam", "I");
 
     private final String name;
