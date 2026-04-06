@@ -49,7 +49,7 @@ public class StartManager implements Listener {
         stockData.updateStockPrice();
 
         Bukkit.getPluginManager().registerEvents(this, Main.plugin);
-        TeamUtils.createCagesAndTeleport(200);
+        TeamUtils.createCagesAndTeleport(300);
 
         new BukkitRunnable() {
             int time = 20;

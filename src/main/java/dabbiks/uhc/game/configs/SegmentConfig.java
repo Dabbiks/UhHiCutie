@@ -2,7 +2,7 @@ package dabbiks.uhc.game.configs;
 
 public class SegmentConfig {
     public static int actualSegment = 1;
-    public static final int eachSegmentTime = 50; // Seconds
+    public static final int eachSegmentTime = 50;
 
     public static final int firstBorderStageSegment = 9;
     public final static int pvpStageSegment = 9;
