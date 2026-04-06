@@ -3,8 +3,9 @@ package dabbiks.uhc;
 import dabbiks.uhc.commands.RequiredPlayersCommand;
 import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
-import dabbiks.uhc.game.gameplay.champions.alchemist.AlchemistListener;
-import dabbiks.uhc.game.gameplay.champions.alchemist.BrewingListener;
+import dabbiks.uhc.game.gameplay.champions.listeners.AlchemistListener;
+import dabbiks.uhc.game.gameplay.champions.listeners.BrewingListener;
+import dabbiks.uhc.game.gameplay.champions.listeners.PyromaniacListener;
 import dabbiks.uhc.game.gameplay.damage.listeners.*;
 import dabbiks.uhc.game.gameplay.items.ItemUtils;
 import dabbiks.uhc.game.gameplay.items.conversion.ConversionManager;
@@ -138,6 +139,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CenterBuilderManager(), this);
         Bukkit.getPluginManager().registerEvents(new MobDrop(), this);
         Bukkit.getPluginManager().registerEvents(new BrewingListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PyromaniacListener(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new FoodDrop(), this);

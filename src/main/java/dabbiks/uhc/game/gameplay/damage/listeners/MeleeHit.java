@@ -10,8 +10,10 @@ import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
+import dabbiks.uhc.player.data.persistent.PersistentDataManager;
 import dabbiks.uhc.player.data.session.SessionData;
 import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.data.session.SessionTags;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,7 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import static dabbiks.uhc.Main.indicatorManager;
@@ -115,6 +116,26 @@ public class MeleeHit implements Listener {
         double baseDamage = event.getDamage();
         double damage = baseDamage;
 
+        if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+            SessionData sessionData = SessionDataManager.getData(victim.getUniqueId());
+            if (sessionData.hasTag(SessionTags.FIRE_IMMUNITY_TICKS)) {
+                event.setCancelled(true);
+                double absorption = victim.getAbsorptionAmount();
+                if (damage >= victim.getHealth() + absorption) {
+                    deathHandler.handle(victim);
+                } else {
+                    if (absorption > 0) {
+                        double absorbed = Math.min(damage, absorption);
+                        victim.setAbsorptionAmount(absorption - absorbed);
+                        damage -= absorbed;
+                    }
+                    victim.setHealth(victim.getHealth() - damage);
+                    indicatorManager.spawnDamageIndicator(victim, baseDamage, false);
+                }
+                return;
+            }
+        }
+
         damage += tagHandler.handle(victim, null, baseDamage);
         damage += meleeEnchantHandler.handle(victim, victim, damage, null, EnchantType.IRON_FEET);
 
@@ -203,8 +224,14 @@ public class MeleeHit implements Listener {
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
-        damage += attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.ELECTRIC_DAMAGE);
 
+        SessionData damagerSession = SessionDataManager.getData(damager.getUniqueId());
+        if (damager.getFireTicks() > 0 && damagerSession.hasTag(SessionTags.PYROMANIAC)) {
+            int level = PersistentDataManager.getData(damager.getUniqueId()).getChampionLevel("pyromaniac");
+            damage += baseDamage * (level / 100.0) + baseDamage * ((damager.getFireTicks() / 5.0) * 0.03);
+        }
+
+        damage += attributeHandler.handle(damager, (LivingEntity) victim, damage, AttributeType.ELECTRIC_DAMAGE);
         damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SHARPNESS);
         damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SUNDER);
         damage += meleeEnchantHandler.handle(damager, (LivingEntity) victim, baseDamage, event, EnchantType.SLUDGE);
@@ -249,6 +276,13 @@ public class MeleeHit implements Listener {
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
+
+        SessionData damagerSession = SessionDataManager.getData(damager.getUniqueId());
+        if (damager.getFireTicks() > 0 && damagerSession.hasTag(SessionTags.PYROMANIAC)) {
+            int level = PersistentDataManager.getData(damager.getUniqueId()).getChampionLevel("pyromaniac");
+            damage += baseDamage * (level / 100.0) + baseDamage * ((damager.getFireTicks() / 5.0) * 0.03);
+        }
+
         damage += attributeHandler.handle(damager, victim, damage, AttributeType.ELECTRIC_DAMAGE);
         damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SHARPNESS);
         damage += meleeEnchantHandler.handle(damager, victim, baseDamage, event, EnchantType.SUNDER);

@@ -11,13 +11,15 @@ import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.util.Random;
+
 import static dabbiks.uhc.Main.soundU;
 
 public class EnchantingTableInstance {
 
     public final Location location;
-
     public EnchantingTableSlot[] slots = new EnchantingTableSlot[4];
+    private final Random random = new Random();
 
     public EnchantingTableInstance(Location location) {
         this.location = location;
@@ -29,7 +31,6 @@ public class EnchantingTableInstance {
         slots[1] = new EnchantingTableSlot(location.clone().add(0.9, 0.77, 0.1), 90, 90, 1.0f);
         slots[2] = new EnchantingTableSlot(location.clone().add(0.1, 0.77, 0.9), 270, 90, 1.2f);
         slots[3] = new EnchantingTableSlot(location.clone().add(0.9, 0.77, 0.9), 180, 90, 1.4f);
-
     }
 
     public boolean fill() {
@@ -47,14 +48,21 @@ public class EnchantingTableInstance {
         return false;
     }
 
-    public void reset() {
+    public void reset(double keepChance) {
         soundU.playSoundAtLocation(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.6f, 1);
         for (EnchantingTableSlot slot : slots) {
+            if (keepChance > 0 && random.nextDouble() < keepChance) {
+                continue;
+            }
             slot.filled = false;
             if (slot.itemDisplay == null) continue;
             slot.itemDisplay.remove();
             slot.itemDisplay = null;
         }
+    }
+
+    public void reset() {
+        reset(0.0);
     }
 
     public void destroy() {

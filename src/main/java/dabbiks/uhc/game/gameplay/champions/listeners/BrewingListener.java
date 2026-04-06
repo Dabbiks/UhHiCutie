@@ -1,4 +1,4 @@
-package dabbiks.uhc.game.gameplay.champions.alchemist;
+package dabbiks.uhc.game.gameplay.champions.listeners;
 
 import dabbiks.uhc.Main;
 import org.bukkit.Bukkit;

@@ -12,6 +12,7 @@ import dabbiks.uhc.player.data.session.SessionTags;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -79,6 +80,17 @@ public class DeathHandler {
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 1));
 
                 SessionData killerSessionData = SessionDataManager.getData(killer.getUniqueId());
+
+                if (killerSessionData.hasTag(SessionTags.ENCHANTED_DUELIST)) {
+                    int levels = Math.min(player.getLevel(), 30);
+                    int bonusHealthChunks = levels / 5;
+                    if (bonusHealthChunks > 0) {
+                        double currentMaxHealth = killer.getAttribute(Attribute.MAX_HEALTH).getBaseValue();
+                        double healthToAdd = bonusHealthChunks * 1.0;
+                        killer.getAttribute(Attribute.MAX_HEALTH).setBaseValue(currentMaxHealth + healthToAdd);
+                        playerU.addHealth(killer, healthToAdd);
+                    }
+                }
 
                 long currentTime = timeU.getTime();
                 if (currentTime - killerSessionData.getLastKillTime() < 60) {

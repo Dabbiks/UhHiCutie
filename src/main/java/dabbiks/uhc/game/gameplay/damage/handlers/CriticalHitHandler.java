@@ -1,6 +1,9 @@
 package dabbiks.uhc.game.gameplay.damage.handlers;
 
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
+import dabbiks.uhc.player.data.session.SessionData;
+import dabbiks.uhc.player.data.session.SessionDataManager;
+import dabbiks.uhc.player.data.session.SessionTags;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -10,6 +13,12 @@ public class CriticalHitHandler {
 
     public double handle(Player player, double damage, boolean critical) {
         if (!critical) return 0.0;
+
+        SessionData sessionData = SessionDataManager.getData(player.getUniqueId());
+        if (sessionData.hasTag(SessionTags.SELF_BURN) || sessionData.hasTag(SessionTags.STRONG_SELF_BURN)) {
+            int addTicks = sessionData.hasTag(SessionTags.STRONG_SELF_BURN) ? 60 : 40;
+            player.setFireTicks(player.getFireTicks() > 0 ? player.getFireTicks() + addTicks : addTicks);
+        }
 
         double originalDamage = damage;
 

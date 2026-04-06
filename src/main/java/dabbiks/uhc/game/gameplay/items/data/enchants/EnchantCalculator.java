@@ -56,6 +56,10 @@ public class EnchantCalculator {
     }
 
     public List<EnchantData> calculateEnchants(int power, EnchantSlot itemSlot) {
+        return calculateEnchants(power, itemSlot, false);
+    }
+
+    public List<EnchantData> calculateEnchants(int power, EnchantSlot itemSlot, boolean bonusEnchant) {
         List<EnchantData> result = new ArrayList<>();
         int modifiedLevel = power + random.nextInt(Math.max(1, power / 3)) + 2;
 
@@ -78,9 +82,10 @@ public class EnchantCalculator {
         }
 
         if (firstEnchant != null) {
-            result.add(createEnchantData(firstEnchant, modifiedLevel));
+            result.add(createEnchantData(firstEnchant, modifiedLevel, bonusEnchant));
             EnchantType finalFirstEnchant = firstEnchant;
             allCompatible.removeIf(e -> e == finalFirstEnchant);
+            bonusEnchant = false;
         }
 
         int currentChance = modifiedLevel * 2;
@@ -89,7 +94,7 @@ public class EnchantCalculator {
             EnchantType extraEnchant = pickWeightedEnchant(allCompatible);
 
             if (extraEnchant != null) {
-                result.add(createEnchantData(extraEnchant, modifiedLevel));
+                result.add(createEnchantData(extraEnchant, modifiedLevel, false));
                 EnchantType finalExtra = extraEnchant;
                 allCompatible.removeIf(e -> e == finalExtra);
             }
@@ -145,10 +150,14 @@ public class EnchantCalculator {
         return candidates.get(0);
     }
 
-    private EnchantData createEnchantData(EnchantType type, int modifiedLevel) {
+    private EnchantData createEnchantData(EnchantType type, int modifiedLevel, boolean bonus) {
         double percentage = (modifiedLevel + random.nextInt(10)) / 45.0;
         int calculatedLevel = (int) Math.ceil(percentage * type.getMaxLevel());
         calculatedLevel = Math.max(1, Math.min(calculatedLevel, type.getMaxLevel()));
+
+        if (bonus) {
+            calculatedLevel++;
+        }
 
         return new EnchantData(type, calculatedLevel);
     }
