@@ -71,6 +71,7 @@ public class Pyromaniac extends Champion {
                 player.getInventory().addItem(new ItemStack(Material.COOKED_RABBIT, 8));
                 sessionData.addTag(SessionTags.RECIPE_PYROMANIAC);
                 sessionData.addTag(SessionTags.FIRE_IMMUNITY_TICKS);
+                sessionData.addTag(SessionTags.FIRE_CHARGE_DISPENSER);
                 sessionData.addTag(SessionTags.STRONG_SELF_BURN);
             }
         }
@@ -79,15 +80,14 @@ public class Pyromaniac extends Champion {
     @Override
     protected List<String> getClassDescription() {
         List<String> desc = new ArrayList<>();
-        desc.add("§7Klasa zasięgowa ułatwiająca");
-        desc.add("§7walkę za pomocą łuku i kuszy.");
+        desc.add("§7Klasa oparta na dynamicznej");
+        desc.add("§7walce, czerpiąca siłę z ognia.");
         return desc;
     }
 
     @Override
     protected List<String> getLevelDescription(int level) {
         List<String> desc = new ArrayList<>();
-        double damageBuff = 1.5 * level;
 
         desc.add("§6Ekwipunek startowy:");
         if (level <= 4) {
@@ -106,15 +106,16 @@ public class Pyromaniac extends Champion {
 
         desc.add("");
         desc.add("§6Bonusy pasywne:");
-        desc.add(" §e» §fGdy jesteś podpalony zadajesz dodatkowo " + damageBuff + "% obrażeń + 1% obrażeń za");
+        desc.add(" §e» §fGdy jesteś podpalony zadajesz dodatkowo " + level + "% obrażeń + 3% obrażeń za");
         desc.add("   §fkażde 5 pozostałych ticków płonięcia");
 
         if (level >= 5 && level <= 9) {
             desc.add(" §e» §fTrafienia krytyczne podpalają Cię. Kolejne trafienia zwiększają czas płonięcia");
             desc.add(" §e» §fObrażenia od podpalenia nie przerywają sprintowania");
         } else if (level == 10) {
-            desc.add(" §e» §fTrafienia krytyczne podpalają Cię. Kolejne trafienia mocno zwiększają czas płonięcia");
+            desc.add(" §e» §fTrafienia krytyczne podpalają Cię. Kolejne trafienia zwiększają czas płonięcia");
             desc.add(" §e» §fObrażenia od podpalenia nie przerywają sprintowania");
+            desc.add(" §e» §fPotrafi rzucać kulami ognia");
         }
 
         if (level >= 3) {

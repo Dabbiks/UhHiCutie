@@ -52,8 +52,8 @@ public abstract class Champion {
         }
 
         desc.add("");
-        desc.add("§6§lMAESTRIA");
-        desc.add(" §8• §7Punkty: §e" + persistentData.getChampionMastery(getId()));
+        desc.add("§6§lPunkty maestrii");
+        desc.add(" §8• §e" + persistentData.getChampionMastery(getId()));
 
         desc.add("");
         if (!persistentData.getChampion().equals(getId())) {
@@ -83,6 +83,8 @@ public abstract class Champion {
     public int getUpgradeCost(int cost, int level) {
         if (level + 1 == 5 || level + 1 == 10) {
             return cost;
+        } else if (level + 1 >= 5) {
+            return cost / 2;
         }
         return cost / 5;
     }

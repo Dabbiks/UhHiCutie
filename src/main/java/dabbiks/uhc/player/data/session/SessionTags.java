@@ -53,7 +53,14 @@ public enum SessionTags {
     SELF_BURN("Piroman", "I"),
     STRONG_SELF_BURN("Piroman", "I"),
     FIRE_IMMUNITY_TICKS("Piroman", "I"),
+    FIRE_CHARGE_DISPENSER("Piroman", "I"),
     RECIPE_PYROMANIAC("Piroman", "III"),
+
+    ENCHANTER("Zaklinacz", "I"),
+    SMALL_LAPIS_CHANCE("Zaklinacz", "I"),
+    BIG_LAPIS_CHANCE("Zaklinacz", "I"),
+    ENCHANTED_DUELIST("Zaklinacz", "I"),
+    RECIPE_ENCHANTER("Piroman", "III"),
 
     SLUDGE("Szlam", "I");
 
