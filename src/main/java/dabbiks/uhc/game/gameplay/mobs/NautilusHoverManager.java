@@ -29,11 +29,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static dabbiks.uhc.Main.symbolU;
+
 public class NautilusHoverManager extends PacketListenerAbstract implements Listener {
 
     private final Map<UUID, Long> lastClicks = new ConcurrentHashMap<>();
     private final Map<UUID, Long> dashCooldown = new ConcurrentHashMap<>();
-    private final String itemName = "§6" + "\u231A" + " Jedź do przodu";
+    private final String itemName = symbolU.MOUSE_RIGHT + " Jedź do przodu";
 
     public NautilusHoverManager(Plugin plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
