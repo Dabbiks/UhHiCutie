@@ -7,6 +7,8 @@ import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ProjectileEnchantHandler;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import dabbiks.uhc.game.gameplay.recipes.AbsorptionAbsorberLogic;
+import dabbiks.uhc.game.gameplay.recipes.BurningAttackLogic;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.session.SessionData;
@@ -121,6 +123,9 @@ public class ProjectileHit implements Listener {
         damage += projectileEnchantHandler.handle(projectile, victim, damage);
         damage += armorEnchantHandler.handle(damager, victim, damage, event, EnchantType.INVULNERABILITY);
 
+        AbsorptionAbsorberLogic.handle(damager, victim);
+        BurningAttackLogic.handle(damager, victim);
+
         damage = applyPotionModifiers(damager, victim, damage);
         damage = armorHandler.handle(damager, victim, damage);
 
@@ -140,6 +145,8 @@ public class ProjectileHit implements Listener {
 
         damage += tagHandler.handle(damager, victim, baseDamage);
         damage += projectileEnchantHandler.handle(projectile, victim, damage);
+
+        BurningAttackLogic.handle(damager, victim);
 
         damage = applyPotionModifiers(damager, victim, damage);
         damage = armorHandler.handle(damager, victim, damage);

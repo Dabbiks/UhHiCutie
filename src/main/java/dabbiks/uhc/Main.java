@@ -18,6 +18,9 @@ import dabbiks.uhc.game.gameplay.items.stations.grindstone.GrindstoneManager;
 import dabbiks.uhc.game.gameplay.items.stations.smithingtable.SmithingTableManager;
 import dabbiks.uhc.game.gameplay.items.stations.table.EnchantingTableManager;
 import dabbiks.uhc.game.gameplay.mobs.NautilusHoverManager;
+import dabbiks.uhc.game.gameplay.recipes.BurningAttackLogic;
+import dabbiks.uhc.game.gameplay.recipes.FlareListener;
+import dabbiks.uhc.game.gameplay.recipes.UpgradeCrystalLogic;
 import dabbiks.uhc.lobby.easter.EasterEggManager;
 import dabbiks.uhc.lobby.easter.EasterLocationData;
 import dabbiks.uhc.lobby.stock.StockData;
@@ -140,6 +143,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MobDrop(), this);
         Bukkit.getPluginManager().registerEvents(new BrewingListener(), this);
         Bukkit.getPluginManager().registerEvents(new PyromaniacListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BurningAttackLogic(), this);
+        Bukkit.getPluginManager().registerEvents(new FlareListener(), this);
+        Bukkit.getPluginManager().registerEvents(new UpgradeCrystalLogic(), this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new FoodDrop(), this);

@@ -8,6 +8,8 @@ import dabbiks.uhc.game.gameplay.damage.handlers.enchants.ArmorEnchantHandler;
 import dabbiks.uhc.game.gameplay.damage.handlers.enchants.MeleeEnchantHandler;
 import dabbiks.uhc.game.gameplay.items.data.attributes.AttributeType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
+import dabbiks.uhc.game.gameplay.recipes.AbsorptionAbsorberLogic;
+import dabbiks.uhc.game.gameplay.recipes.BurningAttackLogic;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.player.PlayerState;
 import dabbiks.uhc.player.data.persistent.PersistentDataManager;
@@ -225,6 +227,8 @@ public class MeleeHit implements Listener {
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
 
+        BurningAttackLogic.handle(damager, (LivingEntity) victim);
+
         SessionData damagerSession = SessionDataManager.getData(damager.getUniqueId());
         if (damager.getFireTicks() > 0 && damagerSession.hasTag(SessionTags.PYROMANIAC)) {
             int level = PersistentDataManager.getData(damager.getUniqueId()).getChampionLevel("pyromaniac");
@@ -276,6 +280,9 @@ public class MeleeHit implements Listener {
 
         damage += criticalHitHandler.handle(damager, baseDamage, event.isCritical());
         damage += tagHandler.handle(damager, victim, baseDamage);
+
+        AbsorptionAbsorberLogic.handle(damager, victim);
+        BurningAttackLogic.handle(damager, victim);
 
         SessionData damagerSession = SessionDataManager.getData(damager.getUniqueId());
         if (damager.getFireTicks() > 0 && damagerSession.hasTag(SessionTags.PYROMANIAC)) {
