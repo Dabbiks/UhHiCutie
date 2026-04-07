@@ -1,12 +1,23 @@
 package dabbiks.uhc.game.world;
 
 import dabbiks.uhc.game.configs.WorldConfig;
+import dabbiks.uhc.game.gameplay.items.conversion.ItemConverter;
+import dabbiks.uhc.game.gameplay.setpieces.SetPieceFileManager;
+import dabbiks.uhc.game.gameplay.setpieces.SetPieceGraveLoot;
 import org.bukkit.*;
+import org.bukkit.entity.ItemDisplay;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Transformation;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.popcraft.chunky.api.ChunkyAPI;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import static dabbiks.uhc.Main.INSTANCE;
 import static dabbiks.uhc.Main.plugin;
 import static org.bukkit.Bukkit.getLogger;
 
@@ -56,7 +67,10 @@ public class WorldGen {
         chunky.startTask(WorldConfig.worldName, "square", 0, 0, 400, 400, "region");
         chunky.onGenerationComplete(event -> {
             WorldConfig.isWorldGenerated = true;
-            Bukkit.getScheduler().runTask(plugin, () -> generateInvertedPyramid(world));
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                generateInvertedPyramid(world);
+                generateGraves(world);
+            });
         });
     }
 
@@ -234,5 +248,106 @@ public class WorldGen {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+
+    private static boolean canGenerateGrave(Location location) {
+        World world = location.getWorld();
+        if (!location.clone().add(0,-1,0).getBlock().isSolid()) return false;
+        for (int x = location.getBlockX() - 2; x <= location.getBlockX() + 2; x++) {
+            for (int z = location.getBlockZ() - 2; z <= location.getBlockZ() + 2; z++) {
+                if (!world.getBlockAt(x,location.getBlockY()-1,z).isSolid()) return false;
+                for (int y = location.getBlockY(); y <= location.getBlockY() + 1; y++) {
+                    if (world.getBlockAt(x, y, z).getType().isSolid()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static void generateGraves(World world) {
+        INSTANCE.gravesFileManager.load();
+        List<List<ItemStack>> deadPlayersItems = new ArrayList<>(INSTANCE.gravesFileManager.deadPlayersItems.values());
+        Random random = new Random();
+        SetPieceGraveLoot randomGraveLoot = new SetPieceGraveLoot();
+        for (int i = 0; i < random.nextInt(8, 15); i++) {
+            deadPlayersItems.add(randomGraveLoot.getRandomItems());
+        }
+        int size = (int) WorldConfig.worldBorderSize;
+        for (List<ItemStack> items : deadPlayersItems) {
+            boolean[][] safeLocations = {
+                    {true,true,true,true,true},
+                    {true,true,true,true,true},
+                    {true,true,false,true,true},
+                    {true,true,true,true,true},
+                    {true,true,true,true,true}
+            };
+            boolean accepted = false;
+            int attempts = 0;
+            while (!accepted && attempts < 50) {
+                attempts++;
+                int x = random.nextInt(-size, size);
+                int z = random.nextInt(-size, size);
+                int y = world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES) + 1;
+                Location loc = new Location(world, x, y, z);
+                if (!canGenerateGrave(loc)) continue;
+                accepted = true;
+                Bukkit.getLogger().info("Grob na: x "+x+", y "+y+", z "+z);
+                ItemStack bone = new ItemConverter().convert(new ItemStack(Material.BONE));
+                ItemStack rottenFlesh = new ItemConverter().convert(new ItemStack(Material.ROTTEN_FLESH));
+                items.add(bone.clone());
+                items.add(bone.clone());
+                items.add(rottenFlesh.clone());
+                if (random.nextDouble() > 0.30) items.add(rottenFlesh.clone());
+                if (random.nextDouble() > 0.70) items.add(rottenFlesh.clone());
+                for (ItemStack item : items) {
+                    Location displayLoc = loc.clone();
+                    boolean ac = false;
+                    int tries = 0;
+                    while (!ac && tries < 20) {
+                        int[] offset = {random.nextInt(0,5),random.nextInt(0,5)};
+                        if (!safeLocations[offset[0]][offset[1]]) {
+                            tries++;
+                            continue;
+                        }
+                        ac = true;
+                        displayLoc.add(offset[0]-2,0,offset[1]-2);
+                        safeLocations[offset[0]][offset[1]] = false;
+                    }
+                    if (tries >= 20) {
+                        continue;
+                    }
+                    ItemDisplay itemDisplay = world.spawn(displayLoc, ItemDisplay.class);
+                    itemDisplay.setItemStack(item);
+                    if (SetPieceFileManager.shouldBeStuckInGround(item.getType())) {
+                        itemDisplay.setTransformation(new Transformation(
+                                new Vector3f(random.nextFloat(-0.2F,0.2F), 0.2F,
+                                        random.nextFloat(-0.2F,0.2F)),
+                                new Quaternionf(
+                                        (float) random.nextInt(-60, 60) / 100,
+                                        (float) random.nextInt(-60, 60) / 100,
+                                        1,
+                                        (float) random.nextInt(0, 60) / 100
+                                ).normalize(),
+                                new Vector3f(1, 1, 1),
+                                new Quaternionf(0, 0, 0, 1)
+                        ));
+                    } else {
+                        itemDisplay.setTransformation(new Transformation(
+                                new Vector3f(random.nextFloat(-0.2F,0.2F), 0,
+                                        random.nextFloat(-0.2F,0.2F)),
+                                new Quaternionf(1, 0, 0, 1).normalize(),
+                                new Vector3f(0.7F, 0.7F, 1.6F),
+                                new Quaternionf(0, 0, (float) random.nextInt(-200, 200) / 100, 1).normalize()
+                        ));
+                    }
+                    INSTANCE.gravePickupHandler.addItemDisplay(itemDisplay);
+                }
+                loc.getBlock().setType(Material.SKELETON_SKULL);
+            }
+        }
+        INSTANCE.gravesFileManager.deadPlayersItems.clear();
     }
 }

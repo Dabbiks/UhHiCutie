@@ -18,3 +18,7 @@ commands:
     description: Daje graczowi skrzynke i klucz.
     permission: uhc.admin
     usage: /skrzynka <nick> <typ_skrzynki>
+  createsetpiece:
+    description: Tworzy nowy setpiece.
+    permission: uhc.admin
+    usage: /createsetpiece <string> <string>

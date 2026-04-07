@@ -151,6 +151,8 @@ public class DeathHandler {
             if (item == null || item.getType() == Material.AIR || isPersonalItem(item)) continue;
             dropItemEntity(world, loc, item);
         }
+
+        INSTANCE.gravesFileManager.add(player.getUniqueId(), player.getInventory().getContents());
         player.getInventory().clear();
 
         ItemStack cursorItem = player.getItemOnCursor();

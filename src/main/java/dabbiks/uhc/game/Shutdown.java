@@ -11,6 +11,7 @@ import static dabbiks.uhc.game.gameplay.bossbar.SegmentBossBar.mainBossBar;
 public class Shutdown {
 
     public static void shutdownServer() {
+        INSTANCE.gravesFileManager.save();
         new BukkitRunnable() {
             int counter = 20;
             @Override

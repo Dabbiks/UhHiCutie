@@ -1,6 +1,7 @@
 package dabbiks.uhc;
 
 import dabbiks.uhc.commands.RequiredPlayersCommand;
+import dabbiks.uhc.commands.SetPieceCommand;
 import dabbiks.uhc.commands.TeamSizeCommand;
 import dabbiks.uhc.cosmetics.chest.MysteryChestListener;
 import dabbiks.uhc.game.gameplay.champions.listeners.AlchemistListener;
@@ -21,6 +22,8 @@ import dabbiks.uhc.game.gameplay.mobs.NautilusHoverManager;
 import dabbiks.uhc.game.gameplay.recipes.BurningAttackLogic;
 import dabbiks.uhc.game.gameplay.recipes.FlareListener;
 import dabbiks.uhc.game.gameplay.recipes.UpgradeCrystalLogic;
+import dabbiks.uhc.game.gameplay.setpieces.SetPieceFileManager;
+import dabbiks.uhc.game.gameplay.setpieces.SetPiecePickUpHandler;
 import dabbiks.uhc.lobby.easter.EasterEggManager;
 import dabbiks.uhc.lobby.easter.EasterLocationData;
 import dabbiks.uhc.lobby.stock.StockData;
@@ -80,6 +83,8 @@ public final class Main extends JavaPlugin {
     private WorldBorder worldBorder;
     private TeamManager teamManager;
     private PrefixManager prefixManager;
+    public SetPieceFileManager gravesFileManager;
+    public SetPiecePickUpHandler gravePickupHandler;
 
     @Override
     public void onEnable() {
@@ -109,6 +114,8 @@ public final class Main extends JavaPlugin {
         worldBorder = new WorldBorder();
         recipeManager = new RecipeManager();
         recipeLimitTracker = new RecipeLimitTracker();
+        gravesFileManager = new SetPieceFileManager(getDataFolder());
+        gravePickupHandler = new SetPiecePickUpHandler();
 
         new RecipeLoader(recipeManager).loadRecipes();
 
@@ -146,6 +153,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BurningAttackLogic(), this);
         Bukkit.getPluginManager().registerEvents(new FlareListener(), this);
         Bukkit.getPluginManager().registerEvents(new UpgradeCrystalLogic(), this);
+        Bukkit.getPluginManager().registerEvents(gravePickupHandler, this);
 
         Bukkit.getPluginManager().registerEvents(new Mining(), this);
         Bukkit.getPluginManager().registerEvents(new FoodDrop(), this);
@@ -159,6 +167,7 @@ public final class Main extends JavaPlugin {
         getCommand("setminplayers").setExecutor(new RequiredPlayersCommand());
         getCommand("kara").setExecutor(new dabbiks.uhc.commands.PunishmentCommand());
         getCommand("skrzynka").setExecutor(new dabbiks.uhc.commands.ChestCommand());
+        getCommand("createsetpiece").setExecutor(new SetPieceCommand());
 
         dabbiks.uhc.player.punishments.PunishmentManager.init();
 

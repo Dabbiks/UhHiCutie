@@ -4,6 +4,7 @@ import dabbiks.uhc.game.gameplay.damage.handlers.BoomerangHandler;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantManager;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantType;
 import dabbiks.uhc.game.gameplay.items.data.enchants.EnchantSlot;
+import dabbiks.uhc.game.gameplay.items.data.perks.PerkType;
 import dabbiks.uhc.game.teams.TeamUtils;
 import dabbiks.uhc.tasks.Task;
 import dabbiks.uhc.tasks.TaskManager;
@@ -46,6 +47,9 @@ public class BoomerangFlightTask extends Task {
     private int returnTimer = -1;
     private boolean restoredDurability = false;
 
+    private final boolean hasContactExplosion;
+    private boolean hasExploded = false;
+
     public BoomerangFlightTask(Player thrower, ItemDisplay display, ItemStack boomerangItem) {
         this.thrower = thrower;
         this.display = display;
@@ -66,6 +70,11 @@ public class BoomerangFlightTask extends Task {
             return nbt.hasTag(EnchantSlot.BOOMERANG.name()) ? nbt.getInteger(EnchantSlot.BOOMERANG.name()) : 0;
         });
         boolean isBoomerang = isBoomerangValue != null && isBoomerangValue == 1;
+
+        Integer ceValue = NBT.get(boomerangItem, (Function<ReadableItemNBT, Integer>) nbt -> {
+            return nbt.hasTag(PerkType.CONTACT_EXPLOSION.name()) ? nbt.getInteger(PerkType.CONTACT_EXPLOSION.name()) : 0;
+        });
+        this.hasContactExplosion = ceValue != null && ceValue == 1;
 
         this.maxDistanceTicks = isBoomerang ? 30 : 15;
     }
@@ -110,6 +119,11 @@ public class BoomerangFlightTask extends Task {
         currentLocation.add(velocity);
 
         if (currentLocation.getBlock().getType().isSolid()) {
+            if (hasContactExplosion && !hasExploded && !returning) {
+                currentLocation.getWorld().createExplosion(currentLocation, 5.0f, false, true, thrower);
+                hasExploded = true;
+            }
+
             if (!returning) {
                 returning = true;
             } else {
