@@ -24,8 +24,6 @@ import dabbiks.uhc.game.gameplay.recipes.FlareListener;
 import dabbiks.uhc.game.gameplay.recipes.UpgradeCrystalLogic;
 import dabbiks.uhc.game.gameplay.setpieces.SetPieceFileManager;
 import dabbiks.uhc.game.gameplay.setpieces.SetPiecePickUpHandler;
-import dabbiks.uhc.lobby.easter.EasterEggManager;
-import dabbiks.uhc.lobby.easter.EasterLocationData;
 import dabbiks.uhc.lobby.stock.StockData;
 import dabbiks.uhc.lobby.stock.StockInteract;
 import dabbiks.uhc.game.teams.*;
@@ -129,7 +127,6 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EnchantingTableManager(), this);
         Bukkit.getPluginManager().registerEvents(new ConversionManager(), this);
         Bukkit.getPluginManager().registerEvents(new SmithingTableManager(), this);
-        Bukkit.getPluginManager().registerEvents(new EasterEggManager(), this);
         Bukkit.getPluginManager().registerEvents(new GrindstoneManager(), this);
         Bukkit.getPluginManager().registerEvents(new AlchemistListener(), this);
 
@@ -170,10 +167,6 @@ public final class Main extends JavaPlugin {
         getCommand("createsetpiece").setExecutor(new SetPieceCommand());
 
         dabbiks.uhc.player.punishments.PunishmentManager.init();
-
-        EasterLocationData.load();
-        EasterEggManager.clearAllEggs();
-        EasterEggManager.spawnRandomEgg();
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
             teamManager.deleteTeams();

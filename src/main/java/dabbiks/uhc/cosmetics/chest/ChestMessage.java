@@ -13,20 +13,22 @@ public class ChestMessage {
 
     public void send(ChestType chestType, UUID uuid, List<String> rewards) {
         Player player = Bukkit.getPlayer(uuid);
+        List<Player> players = playerListU.getAllPlayers();
+        players.removeIf(player1 -> !player1.getWorld().getName().equals("world"));
         if (player == null) return;
         if (rewards == null) {
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "§e" + player.getName() + " §7otwiera");
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), getChestString(chestType, false));
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
+            messageU.sendMessageToPlayers(players, "");
+            messageU.sendMessageToPlayers(players, "§e" + player.getName() + " §7otwiera");
+            messageU.sendMessageToPlayers(players, getChestString(chestType, false));
+            messageU.sendMessageToPlayers(players, "");
         } else {
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "§e" + player.getName() + " §7znajduje");
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "§7w skrzyni " + getChestString(chestType, true));
+            messageU.sendMessageToPlayers(players, "");
+            messageU.sendMessageToPlayers(players, "§e" + player.getName() + " §7znajduje");
+            messageU.sendMessageToPlayers(players, "§7w skrzyni " + getChestString(chestType, true));
             for (String string : rewards) {
-                messageU.sendMessageToPlayers(playerListU.getAllPlayers(), string);
+                messageU.sendMessageToPlayers(players, string);
             }
-            messageU.sendMessageToPlayers(playerListU.getAllPlayers(), "");
+            messageU.sendMessageToPlayers(players, "");
         }
     }
 
